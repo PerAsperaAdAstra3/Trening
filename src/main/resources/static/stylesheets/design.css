@@ -1,0 +1,73 @@
+table {
+	border-collapse: collapse;	
+	width:100%;
+}
+
+table, th, td {
+	border: 1px solid black;
+}
+
+table tr.highlighted{
+	background: #89C4F4;	
+}
+
+table tr:not(.header){
+	cursor:pointer;
+}
+
+table tr.header{
+	background: #67809F;
+	font-size: 125%;	
+}
+
+div.panel{
+	margin-top:2em;
+	border:solid 1px;
+}
+
+td.idCell{
+ 	visibility: hidden; 
+ 	max-width: 0px;
+}
+
+div.formContainer{
+	margin:2em;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li.group-start{
+    margin-left: 25px;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    cursor:pointer;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+form label, form input{
+	margin-left:1em;
+}
+
+form label{
+	width:3em;
+	display:inline-block
+}
