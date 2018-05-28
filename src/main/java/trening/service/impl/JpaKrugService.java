@@ -2,45 +2,52 @@ package trening.service.impl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import trening.model.Krug;
+import trening.repository.KrugRepository;
 import trening.service.KrugService;
 
 public class JpaKrugService implements KrugService {
 
+	@Autowired
+	private KrugRepository krugRepository;
+	
 	@Override
 	public Krug findOne(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return krugRepository.findOne(id);
 	}
 
 	@Override
 	public List<Krug> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return krugRepository.findAll();
 	}
 
 	@Override
 	public Krug save(Krug krug) {
-		// TODO Auto-generated method stub
-		return null;
+		return krugRepository.save(krug) ;
 	}
 
 	@Override
 	public List<Krug> save(List<Krug> krugovi) {
-		// TODO Auto-generated method stub
-		return null;
+		return krugRepository.save(krugovi) ;
 	}
 
 	@Override
 	public Krug delete(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Krug krug = krugRepository.findOne(id);
+		if(krug == null) {
+			throw new IllegalStateException("Krug ne postoji");
+		}
+		krugRepository.delete(krug);
+		return krug;
 	}
 
 	@Override
 	public void delete(List<Long> ids) {
-		// TODO Auto-generated method stub
-		
+		for(Long id : ids) {
+			this.delete(id);
+		}
 	}
 
 }

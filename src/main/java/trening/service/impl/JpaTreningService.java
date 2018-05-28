@@ -21,7 +21,12 @@ public class JpaTreningService implements TreningService {
 	public Trening findOne(Long id) {
 		return treningRepository.findOne(id);
 	}
-	
+
+	@Override
+	public List<Trening> findAll() {
+		return treningRepository.findAll();
+	}
+
 	@Override
 	public Trening save(Trening trening) {
 		return treningRepository.save(trening);
@@ -34,25 +39,18 @@ public class JpaTreningService implements TreningService {
 
 	@Override
 	public Trening delete(Long id) {
-		Trening country = treningRepository.findOne(id);
-		if(country == null){
-			throw new IllegalArgumentException("Tried to delete"
-					+ "non-existant country");
+		Trening trening = treningRepository.findOne(id);
+		if (trening == null) {
+			throw new IllegalArgumentException("Trening ne postoji");
 		}
-		treningRepository.delete(country);
-		return country;
+		treningRepository.delete(trening);
+		return trening;
 	}
 
 	@Override
 	public void delete(List<Long> ids) {
-		for(Long id : ids){
+		for (Long id : ids) {
 			this.delete(id);
 		}
-	}
-
-	@Override
-	public List<Trening> findAll() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

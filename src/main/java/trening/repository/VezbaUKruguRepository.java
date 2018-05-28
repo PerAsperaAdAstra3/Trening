@@ -2,8 +2,8 @@ package trening.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import trening.model.Vezba;
+import trening.model.VezbaUKrugu;
 
-public interface VezbaUKruguRepository extends JpaRepository<Vezba,Long> {
+public interface VezbaUKruguRepository extends JpaRepository<VezbaUKrugu,Long> {
 
 }
