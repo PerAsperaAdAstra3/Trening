@@ -10,27 +10,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import training.model.Exercise;
-import training.service.ExerciseService;
+import training.model.Client;
+import training.service.ClientService;
 
 @RestController
-@RequestMapping(path = "api/exercise")
-public class ExerciseController {
+@RequestMapping(path = "api/client")
+public class ClientController {
 
 	@Autowired
-	private ExerciseService exerciseService;
-
+	ClientService clientService;
+	
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<List<Exercise>> getExercises() {
-		List<Exercise> exercises = exerciseService.findAll();
-		return new ResponseEntity<>(exercises, HttpStatus.OK);
+	public ResponseEntity<List<Client>> findClients(){
+		List<Client> clients = clientService.findAll();
+		return new ResponseEntity<>(clients, HttpStatus.OK);
 	}
-
+	
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<Exercise> addCity(@RequestBody Exercise exercise) {
-
-		exerciseService.save(exercise);
-		return new ResponseEntity<>(exercise, HttpStatus.OK);
+	public ResponseEntity<Client> addClient(@RequestBody Client client){
+		clientService.save(client);
+		return new ResponseEntity<>(client, HttpStatus.OK);
 	}
-
 }
