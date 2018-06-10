@@ -3,11 +3,15 @@ package training.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import training.model.Exercise;
 import training.repository.ExerciseRepository;
 import training.service.ExerciseService;
 
+@Service
+@Transactional
 public class JpaExerciseService implements ExerciseService {
 
 	@Autowired

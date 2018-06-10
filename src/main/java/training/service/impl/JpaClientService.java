@@ -3,11 +3,15 @@ package training.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import training.model.Client;
 import training.repository.ClientRepository;
 import training.service.ClientService;
 
+@Service
+@Transactional
 public class JpaClientService implements ClientService {
 
 	@Autowired

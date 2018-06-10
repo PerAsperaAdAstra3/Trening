@@ -3,10 +3,12 @@ package training.model;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Entity(name = "Training")
 public class Training {
 
 	@Id
@@ -19,7 +21,7 @@ public class Training {
 	@Column(name="NumberOfTrainings")
 	private Integer numberOfTrainings;
 	
-	private Task task;
+//	private Task task;
 	
 	public Date getDate() {
 		return date;
@@ -33,13 +35,11 @@ public class Training {
 	public void setNumberOfTrainings(Integer numberOfTrainings) {
 		this.numberOfTrainings = numberOfTrainings;
 	}
-	public Task getTask() {
+/*	public Task getTask() {
 		return task;
 	}
 	public void setTask(Task task) {
 		this.task = task;
-	}
-	
-	
+	}*/
 	
 }

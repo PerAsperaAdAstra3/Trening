@@ -5,8 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity(name="Exercise")
 public class Exercise {
@@ -21,9 +19,9 @@ public class Exercise {
 	@Column(name="Description", columnDefinition="VARCHAR(100)")
 	private String description;
 
-	@ManyToOne
+/*	@ManyToOne
 	@JoinColumn(name="grExercise_id", referencedColumnName="exercise_Id", nullable=false)
-	private ExerciseGroup grExercise;
+	private ExerciseGroup grExercise;*/
 
 	public String getName() {
 		return name;
@@ -41,12 +39,18 @@ public class Exercise {
 		this.description = description;
 	}
 
-	public ExerciseGroup getGrExercise() {
+/*	public ExerciseGroup getGrExercise() {
 		return grExercise;
 	}
 
 	public void setGrExercise(ExerciseGroup grExercise) {
 		this.grExercise = grExercise;
+	}*/
+
+	public Exercise(String name, String description) {
+		super();
+		this.name = name;
+		this.description = description;
 	}
 	
 	

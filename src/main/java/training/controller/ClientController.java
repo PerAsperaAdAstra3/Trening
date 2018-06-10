@@ -20,7 +20,7 @@ public class ClientController {
 	@Autowired
 	ClientService clientService;
 	
-	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+	@RequestMapping(value = "getClients", method = RequestMethod.GET)
 	public ResponseEntity<List<Client>> findClients(){
 		List<Client> clients = clientService.findAll();
 		return new ResponseEntity<>(clients, HttpStatus.OK);
