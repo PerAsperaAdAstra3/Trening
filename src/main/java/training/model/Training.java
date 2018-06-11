@@ -19,7 +19,7 @@ public class Training {
 	private Date date;
 	
 	@Column(name="NumberOfTrainings")
-	private Integer numberOfTrainings;
+	private int numberOfTrainings;
 	
 //	private Task task;
 	
@@ -29,10 +29,10 @@ public class Training {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	public Integer getNumberOfTrainings() {
+	public int getNumberOfTrainings() {
 		return numberOfTrainings;
 	}
-	public void setNumberOfTrainings(Integer numberOfTrainings) {
+	public void setNumberOfTrainings(int numberOfTrainings) {
 		this.numberOfTrainings = numberOfTrainings;
 	}
 /*	public Task getTask() {
@@ -41,5 +41,10 @@ public class Training {
 	public void setTask(Task task) {
 		this.task = task;
 	}*/
+	public Training(Date date, int numberOfTrainings) {
+		super();
+		this.date = date;
+		this.numberOfTrainings = numberOfTrainings;
+	}
 	
 }

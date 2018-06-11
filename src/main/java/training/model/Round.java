@@ -12,6 +12,6 @@ public class Round {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	private Integer roundSequenceNumber;
+	private int roundSequenceNumber;
 	
 }
