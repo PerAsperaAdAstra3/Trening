@@ -13,5 +13,20 @@ public class Round {
 	private Long id;
 	
 	private int roundSequenceNumber;
+
+	public int getRoundSequenceNumber() {
+		return roundSequenceNumber;
+	}
+
+	public void setRoundSequenceNumber(int roundSequenceNumber) {
+		this.roundSequenceNumber = roundSequenceNumber;
+	}
+
+	public Round() {}
+	
+	public Round(int roundSequenceNumber) {
+		super();
+		this.roundSequenceNumber = roundSequenceNumber;
+	}
 	
 }

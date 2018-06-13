@@ -41,6 +41,9 @@ public class Training {
 	public void setTask(Task task) {
 		this.task = task;
 	}*/
+	
+	public Training() {}
+	
 	public Training(Date date, int numberOfTrainings) {
 		super();
 		this.date = date;

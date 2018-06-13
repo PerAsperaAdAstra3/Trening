@@ -35,7 +35,9 @@ public class Client {
 		this.name = name;
 	}
 
-	public Client(Long id, String name, String familyName) {
+	public Client() {}
+	
+	public Client(String name, String familyName) {
 		super();
 		this.name = name;
 		this.familyName = familyName;

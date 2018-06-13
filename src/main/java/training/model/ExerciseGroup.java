@@ -38,6 +38,8 @@ public class ExerciseGroup {
 		this.exerciseGroup = exerciseGroup;
 	}*/
 
+	public ExerciseGroup() {}
+	
 	public ExerciseGroup(String name, Set<Exercise> exerciseGroup) {
 		super();
 		this.name = name;

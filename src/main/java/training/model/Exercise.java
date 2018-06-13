@@ -53,5 +53,6 @@ public class Exercise {
 		this.description = description;
 	}
 	
+	public Exercise() {}
 	
 }

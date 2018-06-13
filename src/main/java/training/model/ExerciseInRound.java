@@ -49,6 +49,8 @@ public class ExerciseInRound {
 		this.difficulty = difficulty;
 	}
 
+
+
 /*	public List<Long> getExec_id() {
 		return exec_id;
 	}
@@ -57,6 +59,12 @@ public class ExerciseInRound {
 		this.exec_id = exec_id;
 	}*/
 	
+	public ExerciseInRound() {}
 	
+	public ExerciseInRound(int numberOfRepetitions, String difficulty) {
+		super();
+		this.numberOfRepetitions = numberOfRepetitions;
+		this.difficulty = difficulty;
+	}
 	
 }
