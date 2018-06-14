@@ -1,6 +1,6 @@
 package training.dto;
 
-public class CleintDTO {
+public class ClientDTO {
 
 	private String name;
 	
@@ -22,7 +22,7 @@ public class CleintDTO {
 		this.familyName = familyName;
 	}
 
-	public CleintDTO(String name, String familyName) {
+	public ClientDTO(String name, String familyName) {
 		super();
 		this.name = name;
 		this.familyName = familyName;

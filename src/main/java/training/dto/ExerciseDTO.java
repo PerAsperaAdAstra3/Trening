@@ -6,7 +6,7 @@ public class ExerciseDTO {
 	private String name;
 	private String description;
 	
-	
+	public ExerciseDTO() {}
 	
 	public ExerciseDTO(String name, String description) {
 		super();
@@ -31,6 +31,4 @@ public class ExerciseDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
 }
