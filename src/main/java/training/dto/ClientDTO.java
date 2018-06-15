@@ -21,6 +21,8 @@ public class ClientDTO {
 	public void setFamilyName(String familyName) {
 		this.familyName = familyName;
 	}
+	
+	public ClientDTO(){}
 
 	public ClientDTO(String name, String familyName) {
 		super();

@@ -52,4 +52,14 @@ public class JpaExerciseService implements ExerciseService {
 		for(Long id : ids)
 			this.delete(id);
 	}
+	
+	@Override
+	public Exercise edit(Long id, Exercise exercise) {
+		
+		Exercise exerciseOld = exerciseRepository.findOne(id);
+		exerciseOld.setName(exercise.getName());
+		exerciseOld.setDescription(exercise.getDescription());
+		exerciseRepository.save(exerciseOld);
+		return exerciseOld;
+	}
 }

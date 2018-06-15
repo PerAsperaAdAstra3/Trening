@@ -53,4 +53,13 @@ public class JpaClientService implements ClientService {
 			this.delete(id);
 		}
 	}
+	
+	@Override
+	public Client edit(Long id, Client client) {
+		Client oldClient = clientRepository.findOne(id);
+		oldClient.setName(client.getName());
+		oldClient.setFamilyName(client.getFamilyName());
+		clientRepository.save(oldClient);
+		return oldClient;
+	}
 }

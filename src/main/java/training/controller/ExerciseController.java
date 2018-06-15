@@ -2,6 +2,8 @@ package training.controller;
 
 import java.util.List;
 
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.codehaus.groovy.runtime.callsite.PogoGetPropertySite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +29,9 @@ public class ExerciseController {
 	private ExerciseService exerciseService;
 
 	@RequestMapping(value="/getExercises", method=RequestMethod.GET)
-	public ResponseEntity<List<Exercise>> getExercises() {
+	public ResponseEntity<List<ExerciseDTO>> getExercises() {
 		List<Exercise> exercises = exerciseService.findAll();
-		return new ResponseEntity<>(exercises, HttpStatus.OK);
+		return new ResponseEntity<>( exerciseToExerciseDTO.convert(exercises), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
@@ -40,15 +42,21 @@ public class ExerciseController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<Exercise> addCity(@RequestBody Exercise exercise) {
+	public ResponseEntity<ExerciseDTO> addCity(@RequestBody Exercise exercise) {
 		exerciseService.save(exercise);
-		return new ResponseEntity<>(exercise, HttpStatus.OK);
+		return new ResponseEntity<>(exerciseToExerciseDTO.convert(exercise), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<ExerciseDTO> delete(@PathVariable Long id){
 		Exercise exerciseDeleted = exerciseService.delete(id);
 		return new ResponseEntity<>(exerciseToExerciseDTO.convert(exerciseDeleted), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	public ResponseEntity<ExerciseDTO> edit(@PathVariable Long id, @RequestBody Exercise exercise){
+		exerciseService.edit(id, exercise);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

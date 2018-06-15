@@ -17,4 +17,6 @@ public interface ClientService {
 	Client delete(Long id);
 
 	void delete(List<Long> ids);
+	
+	Client edit(Long id, Client client);
 }

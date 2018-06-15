@@ -17,4 +17,6 @@ public interface ExerciseService {
 	Exercise delete(Long id);
 
 	void delete(List<Long> ids);
+	
+	Exercise edit(Long id, Exercise exercise);
 }

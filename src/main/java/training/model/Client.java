@@ -19,6 +19,14 @@ public class Client {
 	@Column(name = "FamilyName")
 	private String familyName;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getFamilyName() {
 		return familyName;
 	}
