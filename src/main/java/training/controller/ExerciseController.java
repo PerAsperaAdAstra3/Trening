@@ -2,8 +2,6 @@ package training.controller;
 
 import java.util.List;
 
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.codehaus.groovy.runtime.callsite.PogoGetPropertySite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +17,7 @@ import training.model.Exercise;
 import training.service.ExerciseService;
 
 @RestController
-@RequestMapping(value = "/api/exercise")
+@RequestMapping(value = "/api/exercises")
 public class ExerciseController {
 
 	@Autowired
@@ -28,7 +26,7 @@ public class ExerciseController {
 	@Autowired
 	private ExerciseService exerciseService;
 
-	@RequestMapping(value="/getExercises", method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<ExerciseDTO>> getExercises() {
 		List<Exercise> exercises = exerciseService.findAll();
 		return new ResponseEntity<>( exerciseToExerciseDTO.convert(exercises), HttpStatus.OK);

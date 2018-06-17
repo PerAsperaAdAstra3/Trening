@@ -17,11 +17,4 @@ public class Task {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-/*	@OneToMany(mappedBy="grVezbi")
-	private Set<ExerciseGroup> exerciseGroup = new HashSet<ExerciseGroup>();
-	
-	@Column(name="IsRoundExercise" , nullable = false)
-	private boolean isRoundExercise;
-	*/
-	
 }

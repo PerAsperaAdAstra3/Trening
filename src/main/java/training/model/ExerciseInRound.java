@@ -21,9 +21,6 @@ public class ExerciseInRound {
 	
 	@Column(name="Difficulty")
 	private String difficulty;
-	
-/*	@OneToMany(mappedBy="Exec_Id")
-	private List<Long> exec_id;*/
 
 	public Long getExecInRound_Id() {
 		return ExecInRound_Id;
@@ -48,16 +45,6 @@ public class ExerciseInRound {
 	public void setDifficulty(String difficulty) {
 		this.difficulty = difficulty;
 	}
-
-
-
-/*	public List<Long> getExec_id() {
-		return exec_id;
-	}
-
-	public void setExec_id(List<Long> exec_id) {
-		this.exec_id = exec_id;
-	}*/
 	
 	public ExerciseInRound() {}
 	

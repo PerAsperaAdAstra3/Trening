@@ -22,7 +22,7 @@ import training.repository.ClientRepository;
 import training.service.ClientService;
 
 @RestController
-@RequestMapping(path = "api/client")
+@RequestMapping(path = "api/clients")
 public class ClientController {
 
 	@Autowired
@@ -31,13 +31,13 @@ public class ClientController {
 	@Autowired
     ClientToClientDTO clientToClientDTO;
 
-	@RequestMapping(value = "getClients", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Client>> getClients() {
 		List<Client> clients = clientService.findAll();
 		return new ResponseEntity<>(clients, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "getClient", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ClientDTO> getClient(@PathVariable Long id) {
 		Client client = clientService.findOne(id);
 		return new ResponseEntity<>(clientToClientDTO.convert(client), HttpStatus.OK);

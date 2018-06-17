@@ -39,20 +39,12 @@ public class Exercise {
 		this.description = description;
 	}
 
-/*	public ExerciseGroup getGrExercise() {
-		return grExercise;
-	}
-
-	public void setGrExercise(ExerciseGroup grExercise) {
-		this.grExercise = grExercise;
-	}*/
-
+	public Exercise() {}
+	
 	public Exercise(String name, String description) {
 		super();
 		this.name = name;
 		this.description = description;
 	}
-	
-	public Exercise() {}
 	
 }
