@@ -3,11 +3,15 @@ package training.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import training.model.ExerciseInRound;
 import training.repository.ExerciseInRoundRepository;
 import training.service.ExerciseInRoundService;
 
+@Service
+@Transactional
 public class JpaExerciseInRoundService implements ExerciseInRoundService {
 
 	@Autowired

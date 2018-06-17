@@ -3,11 +3,15 @@ package training.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import training.model.Client;
 import training.repository.ClientRepository;
 import training.service.ClientService;
 
+@Service
+@Transactional
 public class JpaClientService implements ClientService {
 
 	@Autowired
@@ -48,5 +52,14 @@ public class JpaClientService implements ClientService {
 		for (Long id : ids) {
 			this.delete(id);
 		}
+	}
+	
+	@Override
+	public Client edit(Long id, Client client) {
+		Client oldClient = clientRepository.findOne(id);
+		oldClient.setName(client.getName());
+		oldClient.setFamilyName(client.getFamilyName());
+		clientRepository.save(oldClient);
+		return oldClient;
 	}
 }

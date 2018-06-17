@@ -19,6 +19,14 @@ public class Client {
 	@Column(name = "FamilyName")
 	private String familyName;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getFamilyName() {
 		return familyName;
 	}
@@ -35,7 +43,9 @@ public class Client {
 		this.name = name;
 	}
 
-	public Client(Long id, String name, String familyName) {
+	public Client() {}
+	
+	public Client(String name, String familyName) {
 		super();
 		this.name = name;
 		this.familyName = familyName;

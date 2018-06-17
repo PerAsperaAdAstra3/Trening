@@ -10,8 +10,8 @@ import training.model.Training;
 import training.repository.TrainingRepository;
 import training.service.TrainingService;
 
-@Transactional
 @Service
+@Transactional
 public class JpaTrainingService implements TrainingService {
 
 	@Autowired

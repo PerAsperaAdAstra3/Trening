@@ -3,11 +3,15 @@ package training.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import training.model.Exercise;
 import training.repository.ExerciseRepository;
 import training.service.ExerciseService;
 
+@Service
+@Transactional
 public class JpaExerciseService implements ExerciseService {
 
 	@Autowired
@@ -47,5 +51,15 @@ public class JpaExerciseService implements ExerciseService {
 	public void delete(List<Long> ids) {
 		for(Long id : ids)
 			this.delete(id);
+	}
+	
+	@Override
+	public Exercise edit(Long id, Exercise exercise) {
+		
+		Exercise exerciseOld = exerciseRepository.findOne(id);
+		exerciseOld.setName(exercise.getName());
+		exerciseOld.setDescription(exercise.getDescription());
+		exerciseRepository.save(exerciseOld);
+		return exerciseOld;
 	}
 }

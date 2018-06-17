@@ -3,11 +3,15 @@ package training.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import training.model.Task;
 import training.repository.TaskRepository;
 import training.service.TaskService;
 
+@Service
+@Transactional
 public class JpaTaskService implements TaskService {
 
 	@Autowired
