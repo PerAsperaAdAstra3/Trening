@@ -2,9 +2,12 @@ package training.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity(name="Exercise")
 public class Exercise {
@@ -19,9 +22,22 @@ public class Exercise {
 	@Column(name="Description", columnDefinition="VARCHAR(100)")
 	private String description;
 
-/*	@ManyToOne
-	@JoinColumn(name="grExercise_id", referencedColumnName="exercise_Id", nullable=false)
-	private ExerciseGroup grExercise;*/
+	@ManyToOne(fetch=FetchType.EAGER)
+//	@JoinColumn(name="grExercise_id")
+	@JoinColumn(name="exerInRound")
+	private ExerciseInRound exerciseInRound;
+
+	public ExerciseInRound getExerciseInRound() {
+		return exerciseInRound;
+	}
+
+	public void setExerciseInRound(ExerciseInRound exerciseInRound) {
+		this.exerciseInRound = exerciseInRound;
+	}
+
+	public Long getExercise_Id() {
+		return exercise_Id;
+	}
 
 	public String getName() {
 		return name;
@@ -46,5 +62,4 @@ public class Exercise {
 		this.name = name;
 		this.description = description;
 	}
-	
 }

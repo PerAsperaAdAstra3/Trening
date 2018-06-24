@@ -1,10 +1,15 @@
 package training.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ExerciseInRoundDTO {
 
 	private int numberOfRepetitions;
 
 	private String difficulty;
+	
+	private List<String> execNameList = new ArrayList<String>();
 
 	public int getNumberOfRepetitions() {
 		return numberOfRepetitions;
@@ -17,11 +22,21 @@ public class ExerciseInRoundDTO {
 	public String getDifficulty() {
 		return difficulty;
 	}
+	
+	public List<String> getExecNameList() {
+		return execNameList;
+	}
+
+	public void addExecName(String execName) {
+		this.execNameList.add(execName);
+	}
 
 	public void setDifficulty(String difficulty) {
 		this.difficulty = difficulty;
 	}
-
+	
+	public ExerciseInRoundDTO() {}
+	
 	public ExerciseInRoundDTO(int numberOfRepetitions, String difficulty) {
 		super();
 		this.numberOfRepetitions = numberOfRepetitions;

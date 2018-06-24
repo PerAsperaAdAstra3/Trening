@@ -50,7 +50,7 @@ public class ClientController {
 			return new ResponseEntity<String>(errors.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
 		}
 		Client newClient = clientService.save(client);
-		return new ResponseEntity<>(newClient, HttpStatus.OK);
+		return new ResponseEntity<>(clientToClientDTO.convert(newClient), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -64,6 +64,4 @@ public class ClientController {
 			clientService.edit(id, client);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-	
-	
 }
