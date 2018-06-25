@@ -11,6 +11,8 @@ public class ExerciseInRoundDTO {
 	
 	private List<String> execNameList = new ArrayList<String>();
 
+	private List<String> roundNameList = new ArrayList<String>();
+
 	public int getNumberOfRepetitions() {
 		return numberOfRepetitions;
 	}
@@ -23,6 +25,10 @@ public class ExerciseInRoundDTO {
 		return difficulty;
 	}
 	
+	public void setDifficulty(String difficulty) {
+		this.difficulty = difficulty;
+	}	
+	
 	public List<String> getExecNameList() {
 		return execNameList;
 	}
@@ -31,8 +37,12 @@ public class ExerciseInRoundDTO {
 		this.execNameList.add(execName);
 	}
 
-	public void setDifficulty(String difficulty) {
-		this.difficulty = difficulty;
+	public List<String> getRoundNameList() {
+		return roundNameList;
+	}
+
+	public void addRoundName(String roundName) {
+		this.roundNameList.add(roundName);
 	}
 	
 	public ExerciseInRoundDTO() {}

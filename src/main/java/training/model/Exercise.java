@@ -23,7 +23,6 @@ public class Exercise {
 	private String description;
 
 	@ManyToOne(fetch=FetchType.EAGER)
-//	@JoinColumn(name="grExercise_id")
 	@JoinColumn(name="exerInRound")
 	private ExerciseInRound exerciseInRound;
 

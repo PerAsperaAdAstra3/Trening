@@ -72,6 +72,6 @@ public class ExerciseInRoundController {
 			return new ResponseEntity<String>(errors.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
 		}
 		ExerciseInRound newExerciseInRound = exerciseInRoundService.save(exerciseInRound);
-		return new ResponseEntity<>( exerciseInRoundToExerciseInRoundDTO.convert(newExerciseInRound), HttpStatus.OK);
+		return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(newExerciseInRound), HttpStatus.OK);
 	}
 }

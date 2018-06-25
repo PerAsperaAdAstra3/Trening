@@ -27,6 +27,9 @@ public class ExerciseInRound {
 	@OneToMany(fetch=FetchType.LAZY, mappedBy = "exerciseInRound")	
 	private List<Exercise> exercises = new ArrayList<Exercise>();
 	
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "roundExerciseInRound")
+	private List<Round> rounds = new ArrayList<Round>();
+	
 	public Long getExecInRound_Id() {
 		return ExecInRound_Id;
 	}
@@ -40,6 +43,15 @@ public class ExerciseInRound {
 		exercises.add(exercise);
 	}
 
+	public List<Round> getRounds() {
+		return rounds;
+	}
+
+	public void addRounds(Round round) {
+		round.setExerciseInRound(this);
+		rounds.add(round);
+	}
+	
 	public void setExecInRound_Id(Long execInRound_Id) {
 		ExecInRound_Id = execInRound_Id;
 	}
