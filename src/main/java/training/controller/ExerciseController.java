@@ -53,8 +53,8 @@ public class ExerciseController {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<ExerciseDTO> edit(@PathVariable Long id, @RequestBody Exercise exercise){
-		exerciseService.edit(id, exercise);
-		return new ResponseEntity<>(HttpStatus.OK);
+		Exercise newExercise = exerciseService.edit(id, exercise);
+		return new ResponseEntity<>(exerciseToExerciseDTO.convert(newExercise),HttpStatus.OK);
 	}
 	
 }

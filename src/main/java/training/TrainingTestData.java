@@ -12,8 +12,10 @@ import training.model.Client;
 import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.service.ClientService;
+import training.service.ExerciseGroupService;
 import training.service.ExerciseInRoundService;
 import training.service.ExerciseService;
+import training.service.RoundService;
 
 @Component
 public class TrainingTestData {
@@ -26,6 +28,12 @@ public class TrainingTestData {
 	
 	@Autowired
 	private ExerciseInRoundService exerciseInRoundService;
+	
+	@Autowired
+	private ExerciseGroupService exerciseGroupService;
+	
+	@Autowired
+	private RoundService reoundService;
 
 	@PostConstruct
 	private void init() {
@@ -44,15 +52,9 @@ public class TrainingTestData {
 		Client client2 = new Client("Firstname1","Lastname1");
 		clientService.save(client2);
 		
-	
-	//	ExerciseInRound exerciseInRound1 = new ExerciseInRound();
         ExerciseInRound exerciseInRound1 = new ExerciseInRound(2,"First round");
 		exerciseInRoundService.save(exerciseInRound1);
 		
-	//	exercise1.setExerciseInRound(exerciseInRound1);
-	//	exercise2.setExerciseInRound(exerciseInRound1);		
-		
-	
 		exerciseInRound1.addExercise(exercise1);
 		exerciseInRound1.addExercise(exercise2);
 		
@@ -61,12 +63,6 @@ public class TrainingTestData {
 		
 		exerciseService.save(exercise3);
 		exerciseService.save(exercise4);
-		
-		
-		System.out.println("Baaaaaa");
-		//System.out.println("SIZE : " + exerciseInRound1.size());
-		System.out.println("First exerc :" + exerciseInRound1.getExercises().get(0).getName());
-		System.out.println("Second exerc :" + exerciseInRound1.getExercises().get(1).getName());
 		
 	}
 }

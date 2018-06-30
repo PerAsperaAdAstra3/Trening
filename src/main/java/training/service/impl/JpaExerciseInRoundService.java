@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.repository.ExerciseInRoundRepository;
 import training.service.ExerciseInRoundService;
@@ -51,6 +52,16 @@ public class JpaExerciseInRoundService implements ExerciseInRoundService {
 	public void delete(List<Long> ids) {
 		for(Long id : ids)
 			this.delete(id);
+	}
+	
+	public ExerciseInRound edit(Long id, ExerciseInRound exerciseInRound) {
+		ExerciseInRound newExerciseInRound = exerciseInRoundRepository.getOne(id);
+		newExerciseInRound.setDifficulty(exerciseInRound.getDifficulty());
+		newExerciseInRound.setNumberOfRepetitions(exerciseInRound.getNumberOfRepetitions());
+		for(Exercise exercise : exerciseInRound.getExercises()) {
+			newExerciseInRound.addExercise(exercise);
+		}
+		return newExerciseInRound;
 	}
 
 }

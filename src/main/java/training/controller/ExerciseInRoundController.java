@@ -21,7 +21,7 @@ import training.model.ExerciseInRound;
 import training.service.ExerciseInRoundService;
 
 @RestController
-@RequestMapping(path = "api/exercisesInRound")
+@RequestMapping(path = "/api/exercisesInRound")
 public class ExerciseInRoundController {
 		
 	@Autowired
@@ -33,35 +33,12 @@ public class ExerciseInRoundController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<ExerciseInRoundDTO>> getExercisesInRound(){
 			List<ExerciseInRound> execInRound = exerciseInRoundService.findAll();
-			System.out.println("Baaaaaa");
-			System.out.println("SIZE : " + execInRound.size());
-			System.out.println("First exerc :" + execInRound.get(0).getExercises().get(0).getName());
-			System.out.println("Second exerc :" + execInRound.get(0).getExercises().get(1).getName());
 		return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(execInRound), HttpStatus.OK);
-		
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ExerciseInRoundDTO> getExerciseInRound(@PathVariable Long id){
 			ExerciseInRound exerciseInRound =  exerciseInRoundService.findOne(id);
-		return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(exerciseInRound), HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public ResponseEntity<ExerciseInRoundDTO> edit(@PathVariable Long id, ExerciseInRound exerciseInRound){
-			ExerciseInRound exerciseInRoundOld = exerciseInRoundService.findOne(id);
-			exerciseInRoundOld.setDifficulty(exerciseInRound.getDifficulty());
-			exerciseInRoundOld.setNumberOfRepetitions(exerciseInRound.getNumberOfRepetitions());
-			
-			for(Exercise exercise : exerciseInRound.getExercises()) {
-				exerciseInRoundOld.addExercise(exercise);
-			}
-			return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(exerciseInRoundOld), HttpStatus.OK );
-	}
-	
-	@RequestMapping(value = "/{id}", method =  RequestMethod.POST)
-	public ResponseEntity<ExerciseInRoundDTO> delete(@PathVariable Long id){
-		ExerciseInRound exerciseInRound = exerciseInRoundService.delete(id);
 		return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(exerciseInRound), HttpStatus.OK);
 	}
 	
@@ -73,5 +50,17 @@ public class ExerciseInRoundController {
 		}
 		ExerciseInRound newExerciseInRound = exerciseInRoundService.save(exerciseInRound);
 		return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(newExerciseInRound), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/{id}", method =  RequestMethod.DELETE)
+	public ResponseEntity<ExerciseInRoundDTO> delete(@PathVariable Long id){
+		ExerciseInRound exerciseInRound = exerciseInRoundService.delete(id);
+		return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(exerciseInRound), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	public ResponseEntity<ExerciseInRoundDTO> edit(@PathVariable Long id, ExerciseInRound exerciseInRound){
+			ExerciseInRound exerciseInRoundOld = exerciseInRoundService.edit(id, exerciseInRound);
+			return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(exerciseInRoundOld), HttpStatus.OK );
 	}
 }

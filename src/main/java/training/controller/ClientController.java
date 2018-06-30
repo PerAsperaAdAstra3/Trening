@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import training.converter.ClientDTOtoClient;
 import training.converter.ClientToClientDTO;
 import training.dto.ClientDTO;
 import training.model.Client;
-import training.repository.ClientRepository;
 import training.service.ClientService;
 
 @RestController

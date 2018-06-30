@@ -52,4 +52,13 @@ public class JpaRoundService implements RoundService {
 		for(Long id : ids)
 			this.delete(id);
 	}
+	
+	@Override
+	public Round edit(Long id, Round round) {
+		Round oldRound = roundRepository.findOne(id);
+		oldRound.setRoundSequenceNumber(round.getRoundSequenceNumber());
+		oldRound.setExerciseInRound(round.getExerciseInRound());
+		roundRepository.save(oldRound);
+		return oldRound;
+	}
 }
