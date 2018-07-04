@@ -1,12 +1,18 @@
 package training.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity(name = "Training")
 public class Training {
@@ -21,17 +27,56 @@ public class Training {
 	@Column(name="NumberOfTrainings")
 	private int numberOfTrainings;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "trainingList")
+	private Client client;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "trainingTask")
+	private List<Task> tasks = new ArrayList<Task>();
+	
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trainingRound")
+	private List<Round> rounds = new ArrayList<Round>();
+	
 	public Date getDate() {
 		return date;
 	}
+	
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	
 	public int getNumberOfTrainings() {
 		return numberOfTrainings;
 	}
+	
 	public void setNumberOfTrainings(int numberOfTrainings) {
 		this.numberOfTrainings = numberOfTrainings;
+	}
+	
+	public Client getClient() {
+		return client;
+	}
+	
+	public void setClient(Client client) {
+		this.client = client;
+	}
+	
+	public List<Task> getTasks() {
+		return tasks;
+	}
+	
+	public void addTasks(Task task) {
+		task.setTraining(this);
+		tasks.add(task);
+	}
+	
+	public List<Round> getRound() {
+		return rounds;
+	}
+	
+	public void addRound(Round round) {
+		round.setTraining(this);
+		rounds.add(round);
 	}
 	
 	public Training() {}

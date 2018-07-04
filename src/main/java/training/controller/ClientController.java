@@ -59,7 +59,7 @@ public class ClientController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 		public ResponseEntity<ClientDTO> edit(@PathVariable Long id, @RequestBody Client client){
-			clientService.edit(id, client);
-			return new ResponseEntity<>(HttpStatus.OK);
+			Client newClient = clientService.edit(id, client);
+			return new ResponseEntity<>(clientToClientDTO.convert(newClient), HttpStatus.OK);
 		}
 }

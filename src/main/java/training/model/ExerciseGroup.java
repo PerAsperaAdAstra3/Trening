@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity(name = "ExerciseGroup")
 public class ExerciseGroup {
@@ -29,6 +30,10 @@ public class ExerciseGroup {
 				inverseJoinColumns = { @JoinColumn(name = "fk_exercise") })
 	private List<Exercise> exerciseList = new ArrayList<Exercise>();
 		
+	@ManyToOne
+	@JoinTable(name = "task")
+	private Task task;
+	
 	public Long getId() {
 		return id;
 	}
