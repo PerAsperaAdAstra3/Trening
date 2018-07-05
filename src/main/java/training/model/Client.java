@@ -1,10 +1,15 @@
 package training.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity(name = "Client")
 public class Client {
@@ -18,7 +23,10 @@ public class Client {
 
 	@Column(name = "FamilyName")
 	private String familyName;
-
+	
+	@OneToMany(mappedBy = "client")
+	private List<Training> trainingList = new ArrayList<Training>();
+	
 	public Long getId() {
 		return id;
 	}

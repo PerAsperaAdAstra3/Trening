@@ -17,4 +17,6 @@ public interface ExerciseGroupService {
 	ExerciseGroup delete(Long id);
 
 	void delete(List<Long> ids);
+	
+	ExerciseGroup edit(Long id, ExerciseGroup exerciseGroup);
 }

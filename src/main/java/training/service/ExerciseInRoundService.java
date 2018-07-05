@@ -17,4 +17,6 @@ public interface ExerciseInRoundService {
 	ExerciseInRound delete(Long id);
 
 	void delete(List<Long> ids);
+	
+	ExerciseInRound edit(Long id, ExerciseInRound exerciseInRound);
 }

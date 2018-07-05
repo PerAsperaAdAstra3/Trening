@@ -17,4 +17,6 @@ public interface RoundService {
 	Round delete(Long id);
 
 	void delete(List<Long> ids);
+	
+	Round edit(Long id, Round round);
 }

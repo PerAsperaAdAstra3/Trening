@@ -1,9 +1,11 @@
 package training.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,10 +24,34 @@ public class ExerciseInRound {
 	@Column(name="Difficulty")
 	private String difficulty;
 
+	@OneToMany(mappedBy = "exerciseInRound")	
+	private List<Exercise> exercises = new ArrayList<Exercise>();
+	
+	@OneToMany(mappedBy = "roundExerciseInRound")
+	private List<Round> rounds = new ArrayList<Round>();
+	
 	public Long getExecInRound_Id() {
 		return ExecInRound_Id;
 	}
 
+	public List<Exercise> getExercises() {
+		return exercises;
+	}
+
+	public void addExercise(Exercise exercise) {
+		exercise.setExerciseInRound(this);
+		exercises.add(exercise);
+	}
+
+	public List<Round> getRounds() {
+		return rounds;
+	}
+
+	public void addRounds(Round round) {
+		round.setExerciseInRound(this);
+		rounds.add(round);
+	}
+	
 	public void setExecInRound_Id(Long execInRound_Id) {
 		ExecInRound_Id = execInRound_Id;
 	}

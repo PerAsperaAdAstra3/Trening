@@ -53,4 +53,12 @@ public class JpaExerciseGroupService implements ExerciseGroupService {
 			this.delete(id);
 		}
 	}
+	
+	@Override
+	public ExerciseGroup edit(Long id, ExerciseGroup exerciseGroup) {
+		ExerciseGroup oldExerciseGroup = exerciseGroupRepository.findOne(id);
+		oldExerciseGroup.setName(oldExerciseGroup.getName());
+		exerciseGroupRepository.save(oldExerciseGroup);
+		return oldExerciseGroup;
+	}
 }

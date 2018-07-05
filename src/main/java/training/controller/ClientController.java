@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import training.converter.ClientDTOtoClient;
 import training.converter.ClientToClientDTO;
 import training.dto.ClientDTO;
 import training.model.Client;
-import training.repository.ClientRepository;
 import training.service.ClientService;
 
 @RestController
@@ -50,7 +48,7 @@ public class ClientController {
 			return new ResponseEntity<String>(errors.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
 		}
 		Client newClient = clientService.save(client);
-		return new ResponseEntity<>(newClient, HttpStatus.OK);
+		return new ResponseEntity<>(clientToClientDTO.convert(newClient), HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -61,9 +59,7 @@ public class ClientController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 		public ResponseEntity<ClientDTO> edit(@PathVariable Long id, @RequestBody Client client){
-			clientService.edit(id, client);
-			return new ResponseEntity<>(HttpStatus.OK);
+			Client newClient = clientService.edit(id, client);
+			return new ResponseEntity<>(clientToClientDTO.convert(newClient), HttpStatus.OK);
 		}
-	
-	
 }

@@ -17,4 +17,6 @@ public interface TrainingService {
 	Training delete(Long id);
 	
 	void delete(List<Long> ids);
+	
+	Training edit(Long id, Training training);
 }

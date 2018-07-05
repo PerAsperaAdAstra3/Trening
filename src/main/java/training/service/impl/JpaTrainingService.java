@@ -49,7 +49,16 @@ public class JpaTrainingService implements TrainingService {
 
 	@Override
 	public void delete(List<Long> ids) {
-		for(Long id : ids)
+		for(Long id : ids) {
 			this.delete(id);
+		}
+	}
+
+	@Override
+	public Training edit(Long id, Training training) {
+		Training newTraining = trainingRepository.findOne(id);
+		newTraining.setDate(training.getDate());
+		newTraining.setNumberOfTrainings(training.getNumberOfTrainings());
+		return newTraining;
 	}
 }

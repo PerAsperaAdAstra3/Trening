@@ -52,4 +52,14 @@ public class JpaTaskService implements TaskService {
 		for(Long id : ids)
 			this.delete(id);
 	}
+	
+	@Override
+	public Task edit(Long id, Task task) {
+		Task oldTask = taskRepository.findOne(id);
+		oldTask.setRound(task.isRound());
+		oldTask.setTraining(task.getTraining());
+		taskRepository.save(oldTask);
+		return oldTask;
+	}
+	
 }
