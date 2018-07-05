@@ -23,11 +23,11 @@ public class Task {
 	@Column(name = "ROUND")
 	private boolean round;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "trainingTask")
 	private Training trainingTask;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "task")
+	@OneToMany(mappedBy = "task")
 	private List<ExerciseGroup> exercisesGroup = new ArrayList<ExerciseGroup>();
 
 	public Long getId() {
@@ -54,9 +54,8 @@ public class Task {
 		return exercisesGroup;
 	}
 
-	public void addExercisesInRound(ExerciseGroup exerciseInRound) {
-	//	exercisesInRound.set
-		exercisesGroup.add(exerciseInRound);
+	public void addExercisesInRound(ExerciseGroup exerciseGroup) {
+		exercisesGroup.add(exerciseGroup);
 	}
 
 	public Task() {}

@@ -24,10 +24,10 @@ public class ExerciseInRound {
 	@Column(name="Difficulty")
 	private String difficulty;
 
-	@OneToMany(fetch=FetchType.LAZY, mappedBy = "exerciseInRound")	
+	@OneToMany(mappedBy = "exerciseInRound")	
 	private List<Exercise> exercises = new ArrayList<Exercise>();
 	
-	@OneToMany(fetch=FetchType.LAZY, mappedBy = "roundExerciseInRound")
+	@OneToMany(mappedBy = "roundExerciseInRound")
 	private List<Round> rounds = new ArrayList<Round>();
 	
 	public Long getExecInRound_Id() {

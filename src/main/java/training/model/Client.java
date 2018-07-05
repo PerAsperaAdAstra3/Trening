@@ -24,7 +24,7 @@ public class Client {
 	@Column(name = "FamilyName")
 	private String familyName;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "client")
+	@OneToMany(mappedBy = "client")
 	private List<Training> trainingList = new ArrayList<Training>();
 	
 	public Long getId() {

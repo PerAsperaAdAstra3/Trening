@@ -18,11 +18,11 @@ public class Round {
 	@JoinColumn(name = "RoundSeqNumber")
 	private int roundSequenceNumber;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "exerInRound")
 	private ExerciseInRound roundExerciseInRound;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "trainingRound")
 	private Training trainingRound;
 

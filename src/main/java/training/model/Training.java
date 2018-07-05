@@ -27,14 +27,14 @@ public class Training {
 	@Column(name="NumberOfTrainings")
 	private int numberOfTrainings;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "trainingList")
 	private Client client;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "trainingTask")
+	@OneToMany(mappedBy = "trainingTask")
 	private List<Task> tasks = new ArrayList<Task>();
 	
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "trainingRound")
+    @OneToMany(mappedBy = "trainingRound")
 	private List<Round> rounds = new ArrayList<Round>();
 	
 	public Date getDate() {

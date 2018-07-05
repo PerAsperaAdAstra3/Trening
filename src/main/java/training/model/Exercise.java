@@ -26,7 +26,7 @@ public class Exercise {
 	@Column(name="Description", columnDefinition="VARCHAR(100)")
 	private String description;
 
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name="exerInRound")
 	private ExerciseInRound exerciseInRound;
 
