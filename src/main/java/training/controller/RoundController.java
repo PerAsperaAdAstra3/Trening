@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import training.converter.RoundToRoundDTO;
 import training.dto.RoundDTO;
 import training.model.Round;
-import training.service.ClientService;
 import training.service.RoundService;
 
 @RestController

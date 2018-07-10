@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1"/>
+<title>Adding client</title>
+</head>
+<body>
+<h1>Adding new client : </h1>
+
+<form th:href="@{/addClient}" th:object="${clientDTO}" method="POST">
+	First Name : 
+	<input type="text" th:field="*{name}"/>
+	<br/>
+	Last Name :
+	<input type="text" th:field="*{familyName}"/>
+	<br/>
+	<input type="submit" value="Create"/>
+</form>
+</body>
+</html>

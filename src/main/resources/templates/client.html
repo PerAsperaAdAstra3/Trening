@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1"/>
+	<title>Insert title here</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<table border = "1">
+<tr>
+	<th>First name</th>
+	<th>Last name</th>
+</tr>
+<tr	th:each = "client : ${clients}">
+	<td th:utext="${client.name}"></td>
+	<td th:utext="${client.familyName}"></td>
+	<td><a th:href="@{/deleteClient}">Delete</a></td>
+</tr>
+
+</table>
+<p>Adding new client : </p>
+<a href="addClient">Add a new client</a>
+</body>
+</html>

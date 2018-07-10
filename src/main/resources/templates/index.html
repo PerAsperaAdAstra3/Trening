@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en
+		xmlns=http://www.w3.org/1999/xhtml"
+		xmlns:th="http://www.thymleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>Tymeleaf appication</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+	<form th:action="@{/clientList}">
+	<h1 th:text="${pageTitle}"></h1>
+	<p>Client page : 
+		<input type="submit" value="Client"/> 
+	</p>
+	</form>
+</body>
+</html>

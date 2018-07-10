@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import training.converter.ExerciseInRoundToExerciseInRoundDTO;
 import training.dto.ExerciseInRoundDTO;
-import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.service.ExerciseInRoundService;
 
