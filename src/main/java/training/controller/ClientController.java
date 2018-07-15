@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import training.converter.ClientDTOtoClient;
@@ -70,6 +71,7 @@ public class ClientController {
 		
 		ClientDTO clientDTO = new ClientDTO();
 		model.addAttribute("clientDTO", clientDTO);
+		System.out.println("REDIREKCIJA NA SAJT GDE CEMO UNETI NOVOG KLIJENTA");
 		return "addClient";
 	}
 	
@@ -84,15 +86,18 @@ public class ClientController {
 			Client client = new Client(name , familyName);
 		}
 		*/
+		System.out.println("DOVAVANJE KLIJENTA");
 		clientService.save(newClient);
 		
-		return "client";
+		return "redirect:/clientList";
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public String deleteClient(@PathVariable Long id) {
-		Client clientDeleted = clientService.delete(id);
-		return "client";
+	@RequestMapping(value = {"/deleteClient/{id}"}, method = RequestMethod.GET)
+	public String deleteClient(@PathVariable String id ) {
+		System.out.println("Client name : " + id);
+		clientService.delete(Long.parseLong(id));
+		System.out.println("POVRATAK!!");
+		return "redirect:/clientList";
 	}
 
 /*	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

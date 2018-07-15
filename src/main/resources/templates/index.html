@@ -4,15 +4,17 @@
 		xmlns:th="http://www.thymleaf.org">
 <head>
 	<meta charset="utf-8"/>
-	<title>Tymeleaf appication</title>
+	<title>Training</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
 	<form th:action="@{/clientList}">
 	<h1 th:text="${pageTitle}"></h1>
-	<p>Client page : 
+	<p>Klijenti : 
 		<input type="submit" value="Client"/> 
 	</p>
 	</form>
+	<a th:href="@{/exerciseList}">Exercises</a>
 </body>
 </html>

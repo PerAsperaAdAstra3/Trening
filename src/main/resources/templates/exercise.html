@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+	<title >Vežbe</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="alert alert-primary" role="alert">
+<h1 align = "center">Vežbe u sistemu : </h1>
+</div>
+<br/>
+<table class = "table table-hover">
+<thead>
+	<tr>
+		<th scope="col">Id</th>
+		<th scope="col">Naziv</th>
+		<th scope="col">Opis</th>
+		<th scope="col"></th>
+	</tr>
+</thead>
+<tbody>
+	<tr th:each = "exercise : ${exercises}">
+		<td th:utext="${exercise.id}"></td>
+		<td th:utext="${exercise.name}"></td>
+		<td th:utext="${exercise.description}"></td>
+		<td><a th:href="@{/deleteExercise/{id}(id=${exercise.id})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+	</tr>
+</tbody>
+</table>
+<br/>
+<p align="center">Adding new exercise : <a href="addExercise"><button type="button" class="btn btn-outline-primary">Add</button></a></p>
+</body>
+</html>

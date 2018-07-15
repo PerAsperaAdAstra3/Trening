@@ -1,24 +1,38 @@
 <!DOCTYPE html>
 <html  xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="ISO-8859-1"/>
-	<title>Insert title here</title>
+<meta charset="utf-8"/>
+	<title>Klijenti</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
-<table border = "1">
-<tr>
-	<th>First name</th>
-	<th>Last name</th>
-</tr>
-<tr	th:each = "client : ${clients}">
-	<td th:utext="${client.name}"></td>
-	<td th:utext="${client.familyName}"></td>
-	<td><a th:href="@{/deleteClient}">Delete</a></td>
-</tr>
-
+<div class="alert alert-primary" role="alert">
+<h1 align="center">Klijenti u sistemu :</h1>
+</div>
+<br/>
+<div class="form-group">
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Ime</th>
+			<th scope="col">Prezime</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	th:each = "client : ${clients}">
+			<td scope="row" th:utext="${client.id}"></td>
+			<td th:utext="${client.name}"></td>
+			<td th:utext="${client.familyName}"></td>
+			<td>
+			<a th:href="@{/deleteClient/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+		</tr>
+	</tbody>
 </table>
-<p>Adding new client : </p>
-<a href="addClient">Add a new client</a>
+<br/>
+<p align="center">Dodaj novog klijenta : <a href="addClient"><button type="button" class="btn btn-outline-primary">Dodaj</button></a></p>
+</div>
 </body>
 </html>

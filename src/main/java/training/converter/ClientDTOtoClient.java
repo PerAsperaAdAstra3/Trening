@@ -17,7 +17,7 @@ public class ClientDTOtoClient implements Converter<ClientDTO, Client> {
 		}
 
 		Client client = new Client();
-
+		client.setId(source.getId());
 		client.setName(source.getName());
 		client.setFamilyName(source.getFamilyName());
 		return client;
