@@ -1,17 +1,63 @@
 <!DOCTYPE html>
 <html  xmlns:th="http://www.thymeleaf.org">
 <head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
 <meta charset="utf-8"/>
 	<title>Klijenti</title>
+	<script src="scripts/functions.js"></script>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+
+	<script>
+	
+	$(document).on("click", "#tr-entity-list", function(event) {
+		highlightRow(this)
+	});
+	
+
+	
+	$(document).on("click", "#search", function(event) {
+		$("#hidden_input").css('display','table-row');
+	});
+
+	
+	function sync(item){
+		name = item.find(".clientName").html()
+	    familyName = item.find(".clientFamilyName").html()
+	    id = item.find(".clientId").html()
+	    $("#name").val(name);
+	    $("#familyName").val(familyName);
+	    $("#id").val(id);
+	}
+	</script>
 </head>
 <body>
 <div class="alert alert-primary" role="alert">
-<h1 align="center">Klijenti u sistemu :</h1>
+<h1 align="center">Klijenti u sistemu</h1>
 </div>
 <br/>
-<div class="form-group">
+<h2>Dodavanje i izmena klijenta</h2>
+
+<div class="panel">
+<form th:action="@{/addClient}" th:object="${clientDTO}" method="POST">
+
+	<table>
+	    <tr><td></td><td></td><td><input type="hidden" th:field="*{id}" id="id" /></td> </tr>
+		<tr><td></td><td> Ime :</td><td><input type="text" th:field="*{name}" id="name" /></td> </tr>
+		<tr><td></td><td>  Prezime :</td><td><input type="text" th:field="*{familyName}" id="familyName"/></td></tr>
+	</table>
+	
+	<p>
+	<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novog</button>
+	<button type="submit" class="btn btn-warning" name="mode" value="edit">Izmeni</button>
+	<button type="reset" class="btn btn-light">Iscisti</button>
+	</p>
+</form>
+</div>
+<br/>
+<div class="panel">
+	<button type="button" id="search" class="btn btn-dark">Pretraga</button>
+<form th:action="@{/filterClients}" th:object="${clientDTOSearch}" method="POST">
 <table class="table table-hover">
 	<thead>
 		<tr>
@@ -20,19 +66,25 @@
 			<th scope="col">Prezime</th>
 			<th scope="col"></th>
 		</tr>
+		<tr id="hidden_input">
+			<td><input /></td>	
+			<td><input th:field="*{name}"/></td>
+			<td><input th:field="*{familyName}"/></td>
+			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
+		</tr>
 	</thead>
 	<tbody>
-		<tr	th:each = "client : ${clients}">
-			<td scope="row" th:utext="${client.id}"></td>
-			<td th:utext="${client.name}"></td>
-			<td th:utext="${client.familyName}"></td>
+		<tr	id="tr-entity-list" th:each = "client : ${clients}">
+			<td scope="row" class="clientId" th:utext="${client.id}"></td>
+			<td class="clientName" th:utext="${client.name}"></td>
+			<td class="clientFamilyName" th:utext="${client.familyName}"></td>
 			<td>
 			<a th:href="@{/deleteClient/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 		</tr>
 	</tbody>
 </table>
+</form>
 <br/>
-<p align="center">Dodaj novog klijenta : <a href="addClient"><button type="button" class="btn btn-outline-primary">Dodaj</button></a></p>
 </div>
 </body>
 </html>

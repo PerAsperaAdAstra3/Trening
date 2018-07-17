@@ -3,13 +3,26 @@ h1 {
 }
  
 h2 {
-    color:#FF0000;
+    color:#00AA00;
+    margin-left: 35px;
 }
- 
+
+#hidden_input {display : none};
+
 table {
     border-collapse: collapse;
+}
+ 
+p {
+	margin-left: 35px
 }
  
 table th, table td {
     padding: 5px;
 }
+
+table {
+	    margin-left: 35px;
+}
+
+#search { float: right };

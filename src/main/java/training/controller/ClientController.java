@@ -2,22 +2,17 @@ package training.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import training.converter.ClientDTOtoClient;
 import training.converter.ClientToClientDTO;
@@ -45,11 +40,29 @@ public class ClientController {
 	@RequestMapping(value = { "/clientList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
 		List<Client> clients = clientService.findAll();
-	//	return new ResponseEntity<>(clients, HttpStatus.OK);
+		ClientDTO clientDTO = new ClientDTO();
+		ClientDTO clientDTOSearch = new ClientDTO();
+		model.addAttribute("clientDTOSearch", clientDTOSearch);
+		model.addAttribute("clientDTO", clientDTO);
 		model.addAttribute("clients", clientToClientDTO.convert(clients));
+		System.out.println("Client list je tu");
 		return "/client";
 	}
+	
+/*	@RequestMapping(value = {"search"}, method = RequestMethod.GET)
+	public String searchFields(Model model) {
+		ClientDTO clientDTOSearch
+	}*/
 
+	@RequestMapping(value = { "/filterClients" }, method = RequestMethod.POST)
+	public String filterClients(Model model, @ModelAttribute("clientDTOSearch") ClientDTO clientDTOSearch) {
+		System.out.println("IMEEEEEEEEEEEE : "+clientDTOSearch.getName());
+		model.addAttribute("clients", clientService.filter(clientDTOtoClient.convert(clientDTOSearch)));
+		model.addAttribute("clientDTOSearch", new ClientDTO());
+		model.addAttribute("clientDTO", new ClientDTO());
+		System.out.println("U FILTERU SMO");
+		return "/client";
+	}
 	/*
 	 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Client>> getClients() {
@@ -66,30 +79,28 @@ public class ClientController {
 	}
 	
 	//@RequestMapping(method = RequestMethod.POST, consumes="application/json")
-	@RequestMapping(value = {"/addClient"} , method = RequestMethod.GET)
+/*	@RequestMapping(value = {"/addClient"} , method = RequestMethod.GET)
 	public String goToAddClient(Model model){//@Valid @RequestBody Client client, Errors errors){
 		
 		ClientDTO clientDTO = new ClientDTO();
 		model.addAttribute("clientDTO", clientDTO);
 		System.out.println("REDIREKCIJA NA SAJT GDE CEMO UNETI NOVOG KLIJENTA");
 		return "addClient";
-	}
+	}*/
 	
 	@RequestMapping(value = {"/addClient"} , method = RequestMethod.POST)
-	public String addClient(Model model, @ModelAttribute("clientDTO") ClientDTO clientDTO){//@Valid @RequestBody Client client, Errors errors){
-		
-		Client newClient = clientDTOtoClient.convert(clientDTO);
-	/*	String name = clientDTO.getName();
-		String familyName = clientDTO.getFamilyName();
-		
-		if(name != null && name.length()>0 && familyName != null && familyName.length() >0) {
-			Client client = new Client(name , familyName);
+	public String addClient(Model model, @ModelAttribute("clientDTO") ClientDTO clientDTO, @RequestParam String mode){//@Valid @RequestBody Client client, Errors errors){
+		System.out.println("DUGME : " +mode);
+
+		if("add".equals(mode)) {
+			clientDTO.setId(null);
+			clientService.save(clientDTOtoClient.convert(clientDTO));
+		} else {
+			clientService.edit(clientDTO.getId(), clientDTOtoClient.convert(clientDTO));
 		}
-		*/
-		System.out.println("DOVAVANJE KLIJENTA");
-		clientService.save(newClient);
 		
 		return "redirect:/clientList";
+		//return "client";
 	}
 	
 	@RequestMapping(value = {"/deleteClient/{id}"}, method = RequestMethod.GET)
