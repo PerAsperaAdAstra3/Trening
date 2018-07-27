@@ -1,15 +1,11 @@
 package training.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity(name="Exercise")
@@ -17,7 +13,7 @@ public class Exercise {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long exercise_Id;
+	private Long id;
 	
 	@Column(name="Name", columnDefinition="VARCHAR(40)")
 	private String name;
@@ -29,9 +25,18 @@ public class Exercise {
 	@JoinColumn(name="exerInRound")
 	private ExerciseInRound exerciseInRound;
 
-	@ManyToMany(cascade = {CascadeType.ALL})
-	private List<ExerciseGroup> exerciseGroups;
+	@ManyToOne
+	@JoinColumn(name="exerciseGroup")
+	private ExerciseGroup exerciseGroup;
 	
+	public ExerciseGroup getExerciseGroup() {
+		return exerciseGroup;
+	}
+
+	public void setExerciseGroup(ExerciseGroup exerciseGroup) {
+		this.exerciseGroup = exerciseGroup;
+	}
+
 	public ExerciseInRound getExerciseInRound() {
 		return exerciseInRound;
 	}
@@ -40,8 +45,12 @@ public class Exercise {
 		this.exerciseInRound = exerciseInRound;
 	}
 
-	public Long getExercise_Id() {
-		return exercise_Id;
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {

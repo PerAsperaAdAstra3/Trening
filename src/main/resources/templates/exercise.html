@@ -1,35 +1,97 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/functions.js"></script>
 <meta charset="utf-8"/>
 	<title >Vežbe</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>	
+<script>
+	$(document).on("click", "#tr-entity-list", function(event) {
+		highlightRow(this)
+	});
+
+	$(document).on("click", "#search", function(event) {
+		$("#hidden_input").css('display','table-row');
+	});
+	
+	function sync(item){
+		name = item.find(".exerciseName").html()
+	    description = item.find(".exerciseDescription").html()
+	    id = item.find(".exerciseId").html()
+		   exerciseGroupId = item.find(".exerciseGroupId").html()
+	    alert(exerciseGroupId)
+	    $("#name").val(name);
+	    $("#description").val(description);
+	    $("#id").val(id);
+		$("#exerciseGroupId").val(exerciseGroupId).change();
+		
+		exerGID = item.find("#exerciseGroupId").html()
+		alert(exerGID)
+	}
+</script>
 </head>
-<body>
-<div class="alert alert-primary" role="alert">
+<body class="gradient">
+<div class="alert div1" role="alert">
 <h1 align = "center">Vežbe u sistemu : </h1>
 </div>
 <br/>
-<table class = "table table-hover">
-<thead>
-	<tr>
-		<th scope="col">Id</th>
-		<th scope="col">Naziv</th>
-		<th scope="col">Opis</th>
-		<th scope="col"></th>
-	</tr>
-</thead>
-<tbody>
-	<tr th:each = "exercise : ${exercises}">
-		<td th:utext="${exercise.id}"></td>
-		<td th:utext="${exercise.name}"></td>
-		<td th:utext="${exercise.description}"></td>
-		<td><a th:href="@{/deleteExercise/{id}(id=${exercise.id})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
-	</tr>
-</tbody>
-</table>
+<h2>Dodavanje i izmena vežbe</h2>
+
+<div class="panel">
+<form th:action="@{/addExercise}" th:object="${exerciseDTO}" method="POST">
+
+	<table>
+	    <tr><td></td><td></td><td><input type="hidden" th:field="*{id}" id="id" /></td> </tr>
+		<tr><td></td><td> Ime :</td><td><input type="text" th:field="*{name}" id="name" /></td> </tr>
+		<tr><td></td><td>Opis :</td><td><input type="text" th:field="*{description}" id="description"/></td></tr>
+		<tr><td></td><td>Grupa vežbi :</td><td>
+		<select class="selectpicker" data-live-search="true" th:field="*{exerciseGroupId}" id="exerciseGroupId">
+                         <option th:each="exerciseGroup : ${exerciseGroups}"
+                            th:value="${exerciseGroup.id}"
+                            th:utext="${exerciseGroup.name}"/>
+                  </select></td></tr>
+	</table>
+	<p>
+		<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novog</button>
+		<button type="submit" class="btn btn-warning" name="mode" value="edit">Izmeni</button>
+		<button type="reset" class="btn btn-light">Iscisti</button>
+	</p>
+</form>
+</div>
+	<button type="button" id="search" class="btn btn-dark">Pretraga</button>
 <br/>
-<p align="center">Adding new exercise : <a href="addExercise"><button type="button" class="btn btn-outline-primary">Add</button></a></p>
+<form th:action="@{/filterExercise}" th:object="${exerciseDTOSearch}" method="POST">
+<table class = "table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Naziv</th>
+			<th scope="col">Opis</th>
+			<th scope="col">Grupa vežbi</th>
+			<th scope="col"></th>
+		</tr>
+		<tr id="hidden_input">
+			<td><input/></td>	
+			<td><input th:field="*{name}"/></td>
+			<td><input th:field="*{description}"/></td>
+			<td><input th:field="*{exerciseGroup}"/></td>
+			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr id="tr-entity-list" th:each = "exercise : ${exercises}">
+			<td class="exerciseId" th:utext="${exercise.id}"></td>
+			<td class="exerciseName" th:utext="${exercise.name}"></td>
+			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
+			<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
+			<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}"></td>
+			<td><a th:href="@{/deleteExercise/{id}(id=${exercise.id})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+		</tr>
+	</tbody>
+</table>
+<input type="hidden" id="hiddenForId" th:value="${exerciseGroupId}"/>
+</form>
 </body>
 </html>

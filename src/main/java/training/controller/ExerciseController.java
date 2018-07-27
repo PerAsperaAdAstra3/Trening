@@ -1,24 +1,21 @@
 package training.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import training.converter.ExerciseDTOtoExercise;
+import training.converter.ExerciseGroupToExerciseGroupDTO;
 import training.converter.ExerciseToExerciseDTO;
 import training.dto.ExerciseDTO;
-import training.model.Exercise;
+import training.service.ExerciseGroupService;
 import training.service.ExerciseService;
 
-//@RestController
-//@RequestMapping(value = "/api/exercises")
 @Controller
 public class ExerciseController {
 
@@ -26,14 +23,24 @@ public class ExerciseController {
 	private ExerciseToExerciseDTO exerciseToExerciseDTO;
 	
 	@Autowired
+	private ExerciseDTOtoExercise ExerciseDTOtoExercise;
+	
+	@Autowired
+	private ExerciseGroupService exerciseGroupService;
+	
+	@Autowired
+	private ExerciseGroupToExerciseGroupDTO exerciseGroupToExerciseDTO;
+	
+	@Autowired
 	private ExerciseService exerciseService;
 
 	@RequestMapping(value = {"/exerciseList"}, method=RequestMethod.GET)
-	public String getExercises(Model model) {
-		List<Exercise> exercises = exerciseService.findAll();
-		System.out.println("Exercise controller");
-		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exercises));
-		//return new ResponseEntity<>( exerciseToExerciseDTO.convert(exercises), HttpStatus.OK);
+	public String getExercises(Model model) {		
+		model.addAttribute("exerciseDTO", new ExerciseDTO());
+		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
+		model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseGroupService.findAll()));
+		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
+		model.addAttribute("isExecGroupFiltered", 1);
 		return "exercise";
 	}
 	/*
@@ -44,29 +51,35 @@ public class ExerciseController {
 		return new ResponseEntity<>(exerciseToExerciseDTO.convert(exercise), HttpStatus.OK);
 	}
 */
-	@RequestMapping(value = "/addExercise", method = RequestMethod.GET)
-	public String gotToAddExercise(Model model) {
-		ExerciseDTO exerciseDTO = new ExerciseDTO();
-		model.addAttribute("exerciseDTO", exerciseDTO);
-		return "addExercise";
+	
+	@RequestMapping(value = {"/addExercise"}, method = RequestMethod.POST)
+	public String addExercise(Model model, @ModelAttribute("exerciseDTO") ExerciseDTO exerciseDTO, @RequestParam String mode) {
+		System.out.println("DUGME : " +mode);
+		System.out.println("ExerciseGroup ID " + exerciseDTO.getExerciseGroupId());
+		if("add".equals(mode)) {
+			System.out.println("Usli smo u add");
+			exerciseDTO.setId(null);
+			System.out.println("POSLE SET ID-a");
+			exerciseService.save(ExerciseDTOtoExercise.convert(exerciseDTO));
+			System.out.println("POSLE SAVE-a");
+		} else {
+			System.out.println("Usli smo u EDIT");
+			exerciseService.edit(exerciseDTO.getId() , ExerciseDTOtoExercise.convert(exerciseDTO));
+		}
+		return "redirect:/exerciseList";
+	}
+
+	@RequestMapping(value = {"/deleteExercise/{id}"}, method = RequestMethod.GET)
+	public String delete(@PathVariable String id){
+		exerciseService.delete(Long.parseLong(id));
+		return "redirect:/exerciseList";
 	}
 	
-	@RequestMapping(value = "/addExercise", method = RequestMethod.POST)
-	public ResponseEntity<ExerciseDTO> addExercise(@RequestBody Exercise exercise) {
-		exerciseService.save(exercise);
-		return new ResponseEntity<>(exerciseToExerciseDTO.convert(exercise), HttpStatus.OK);
+	@RequestMapping(value = {"/filterExercise"}, method = RequestMethod.POST)
+	public String filterExercises(Model model, @ModelAttribute("exerciseDTOSearch") ExerciseDTO exerciseDTOSearch) {
+		model.addAttribute("exerciseDTO", new ExerciseDTO());
+		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
+		model.addAttribute("exercises", exerciseService.filter( ExerciseDTOtoExercise.convert(exerciseDTOSearch)));
+		return "exercise";
 	}
-/*
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<ExerciseDTO> delete(@PathVariable Long id){
-		Exercise exerciseDeleted = exerciseService.delete(id);
-		return new ResponseEntity<>(exerciseToExerciseDTO.convert(exerciseDeleted), HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public ResponseEntity<ExerciseDTO> edit(@PathVariable Long id, @RequestBody Exercise exercise){
-		Exercise newExercise = exerciseService.edit(id, exercise);
-		return new ResponseEntity<>(exerciseToExerciseDTO.convert(newExercise),HttpStatus.OK);
-	}
-	*/
 }

@@ -3,7 +3,6 @@ package training.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -20,8 +19,12 @@ public class ExerciseToExerciseDTO implements Converter<Exercise, ExerciseDTO> {
 			return null;
 		}
 
-		ModelMapper modelMapper = new ModelMapper();
-		ExerciseDTO exerciseDTO = modelMapper.map(source, ExerciseDTO.class);
+		ExerciseDTO exerciseDTO = new ExerciseDTO();
+		exerciseDTO.setId(source.getId());
+		exerciseDTO.setName(source.getName());
+		exerciseDTO.setDescription(source.getDescription());
+		exerciseDTO.setExerciseGroup(source.getExerciseGroup().getName());
+		exerciseDTO.setExerciseGroupId(source.getExerciseGroup().getId());
 		return exerciseDTO;
 	}
 

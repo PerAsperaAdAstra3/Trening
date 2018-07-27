@@ -5,7 +5,9 @@ public class ExerciseDTO {
 	private Long id;
 	private String name;
 	private String description;
-	
+	private String exerciseGroup;
+	private Long exerciseGroupId;
+
 	public ExerciseDTO() {}
 	
 	public ExerciseDTO(String name, String description) {
@@ -30,5 +32,17 @@ public class ExerciseDTO {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public String getExerciseGroup() {
+		return exerciseGroup;
+	}
+	public void setExerciseGroup(String exerciseGroup) {
+		this.exerciseGroup = exerciseGroup;
+	}
+	public Long getExerciseGroupId() {
+		return exerciseGroupId;
+	}
+	public void setExerciseGroupId(Long exerciseGroupId) {
+		this.exerciseGroupId = exerciseGroupId;
 	}
 }

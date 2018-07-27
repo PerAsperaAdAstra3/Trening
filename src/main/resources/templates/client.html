@@ -2,25 +2,20 @@
 <html  xmlns:th="http://www.thymeleaf.org">
 <head>
 <script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/functions.js"></script>
 <meta charset="utf-8"/>
 	<title>Klijenti</title>
-	<script src="scripts/functions.js"></script>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-
-	<script>
-	
+<script>
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow(this)
 	});
-	
-
 	
 	$(document).on("click", "#search", function(event) {
 		$("#hidden_input").css('display','table-row');
 	});
 
-	
 	function sync(item){
 		name = item.find(".clientName").html()
 	    familyName = item.find(".clientFamilyName").html()
@@ -31,10 +26,10 @@
 	}
 	</script>
 </head>
-<body>
-<div class="alert alert-primary" role="alert">
-<h1 align="center">Klijenti u sistemu</h1>
-</div>
+<body class="gradient">
+	<div class="alert div1" role="alert">
+		<h1 align="center">Klijenti u sistemu</h1>
+	</div>
 <br/>
 <h2>Dodavanje i izmena klijenta</h2>
 
@@ -46,11 +41,10 @@
 		<tr><td></td><td> Ime :</td><td><input type="text" th:field="*{name}" id="name" /></td> </tr>
 		<tr><td></td><td>  Prezime :</td><td><input type="text" th:field="*{familyName}" id="familyName"/></td></tr>
 	</table>
-	
 	<p>
-	<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novog</button>
-	<button type="submit" class="btn btn-warning" name="mode" value="edit">Izmeni</button>
-	<button type="reset" class="btn btn-light">Iscisti</button>
+		<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
+		<button type="submit" class="btn btn-warning" name="mode" value="edit">Izmeni</button>
+		<button type="reset" class="btn btn-light">Iscisti</button>
 	</p>
 </form>
 </div>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script src="scripts/jquery-3.2.1.min.js"></script>
+	<script src="scripts/functions.js"></script>
+	<meta charset="utf-8"/>
+	<title>Grupa vežbi</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>	
+	<script>
+	$(document).on("click", "#tr-entity-list", function(event) {
+		highlightRow(this)
+	});
+
+	$(document).on("click", "#search", function(event) {
+		$("#hidden_input").css('display','table-row');
+	});
+	
+	function sync(item){
+		name = item.find(".exerciseGroupName").html()
+	    id = item.find(".exerciseGroupId").html()
+	    $("#name").val(name);
+	    $("#id").val(id);
+	}
+</script>
+</head>
+<body>
+
+<div class="alert alert-primary" role="alert">
+<h1 align = "center">Vežbe u sistemu : </h1>
+</div>
+<br/>
+<h2>Dodavanje i izmena vežbe</h2>
+
+<div class="panel">
+<form th:action="@{/addExerciseGroup}" th:object="${exerciseGroupDTO}" method="POST">
+
+	<table>
+	    <tr><td></td><td></td><td><input type="hidden" th:field="*{id}" id="id" /></td> </tr>
+		<tr><td></td><td> Ime :</td><td><input type="text" th:field="*{name}" id="name" /></td> </tr>
+	</table>
+	<p>
+		<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novog</button>
+		<button type="submit" class="btn btn-warning" name="mode" value="edit">Izmeni</button>
+		<button type="reset" class="btn btn-light">Iscisti</button>
+	</p>
+</form>
+</div>
+	<button type="button" id="search" class="btn btn-dark">Pretraga</button>
+<br/>
+
+<form th:action="@{/filterExerciseGroup}" th:object="${exerciseGroupDTOSearch}" method="POST">
+<table class = "table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Naziv</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+		<tr id="hidden_input">
+			<td><input/></td>	
+			<td><input th:field="*{name}"/></td>
+			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr id="tr-entity-list" th:each = "exerciseGroup : ${exerciseGroups}">
+			<td class="exerciseGroupId" th:utext="${exerciseGroup.id}"></td>
+			<td class="exerciseGroupName" th:utext="${exerciseGroup.name}"></td>
+			<td><a th:href="@{/deleteExerciseGroup/{id}(id=${exerciseGroup.id})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+			<td><a th:href="@{/filterExcerInGroup/{id}(id=${exerciseGroup.id})}"><button type="button" class="btn btn-danger">Check groups</button></a></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+</body>
+</html>

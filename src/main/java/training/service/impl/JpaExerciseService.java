@@ -62,4 +62,9 @@ public class JpaExerciseService implements ExerciseService {
 		exerciseRepository.save(exerciseOld);
 		return exerciseOld;
 	}
+
+	@Override
+	public List<Exercise> filter(Exercise exercise) {
+		return exerciseRepository.findByNameIgnoreCaseContainingAndDescriptionIgnoreCaseContaining(exercise.getName() , exercise.getDescription()) ;
+	}
 }

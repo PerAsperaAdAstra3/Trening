@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,8 +19,6 @@ import training.dto.ClientDTO;
 import training.model.Client;
 import training.service.ClientService;
 
-//@RestController
-//@RequestMapping(path = "api/clients")
 @Controller
 public class ClientController {
 
@@ -54,6 +51,7 @@ public class ClientController {
 		ClientDTO clientDTOSearch
 	}*/
 
+	
 	@RequestMapping(value = { "/filterClients" }, method = RequestMethod.POST)
 	public String filterClients(Model model, @ModelAttribute("clientDTOSearch") ClientDTO clientDTOSearch) {
 		System.out.println("IMEEEEEEEEEEEE : "+clientDTOSearch.getName());
@@ -89,7 +87,7 @@ public class ClientController {
 	}*/
 	
 	@RequestMapping(value = {"/addClient"} , method = RequestMethod.POST)
-	public String addClient(Model model, @ModelAttribute("clientDTO") ClientDTO clientDTO, @RequestParam String mode){//@Valid @RequestBody Client client, Errors errors){
+	public String addClient(Model model, @ModelAttribute("clientDTO") ClientDTO clientDTO, @RequestParam String mode){
 		System.out.println("DUGME : " +mode);
 
 		if("add".equals(mode)) {
@@ -98,16 +96,12 @@ public class ClientController {
 		} else {
 			clientService.edit(clientDTO.getId(), clientDTOtoClient.convert(clientDTO));
 		}
-		
 		return "redirect:/clientList";
-		//return "client";
 	}
 	
 	@RequestMapping(value = {"/deleteClient/{id}"}, method = RequestMethod.GET)
 	public String deleteClient(@PathVariable String id ) {
-		System.out.println("Client name : " + id);
 		clientService.delete(Long.parseLong(id));
-		System.out.println("POVRATAK!!");
 		return "redirect:/clientList";
 	}
 
@@ -117,20 +111,5 @@ public class ClientController {
 		return new ResponseEntity<>(clientToClientDTO.convert(clientDeleted), HttpStatus.OK);
 	}*/
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-		public ResponseEntity<ClientDTO> edit(@PathVariable Long id, @RequestBody Client client){
-			Client newClient = clientService.edit(id, client);
-			return new ResponseEntity<>(clientToClientDTO.convert(newClient), HttpStatus.OK);
-		}
-	
-	/*@RequestMapping(value= {"/message"}, method = RequestMethod.GET)
-	public String name(Model model) {
-		model.addAttribute("person", person);
-	}
-	
-	@RequestMapping(value = "/client", method = RequestMethod.GET)
-	public String message(Model model) {
-		model.addAttribute("message", message);
-		return "client";
-	} */
+
 }

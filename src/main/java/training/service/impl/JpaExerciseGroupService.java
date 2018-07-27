@@ -61,4 +61,9 @@ public class JpaExerciseGroupService implements ExerciseGroupService {
 		exerciseGroupRepository.save(oldExerciseGroup);
 		return oldExerciseGroup;
 	}
+
+	@Override
+	public List<ExerciseGroup> filter(ExerciseGroup exerciseGroup) {
+		return exerciseGroupRepository.findByNameIgnoreCaseContaining(exerciseGroup.getName());
+	}
 }
