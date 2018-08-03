@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/functions.js"></script>
+<meta charset="utf-8"/>
+	<title>Dodavanje treninga</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<script>
+	$(document).on("click", "#tr-entity-list", function(event) {
+		highlightRow(this)
+	});
+	
+	$(document).on("click", "#search", function(event) {
+		$("#hidden_input").css('display','table-row');
+	});
+
+	function sync(item){
+		name = item.find(".clientName").html()
+	    familyName = item.find(".clientFamilyName").html()
+	    id = item.find(".clientId").html()
+	    $("#name").val(name);
+	    $("#familyName").val(familyName);
+	    $("#id").val(id);
+	}
+	</script>
+</head>
+<body class="gradient">
+	<div class="alert div1" role="alert">
+		<h1 align="center">Dodavanje treninga</h1>
+	</div>
+<br/>
+<h2>Dodavanje i izmena treninga</h2>
+
+<p>Datum :  <input type="date"/> </p>
+<p>Redni broj :  <input type="text"/> </p>
+<p>Klijent : <input type="text"/> </p>
+<br/>
+<p>------------------------------------------------------------------------------------------------------------------------------</p>
+<button>Novi Krug</button>
+<br/>
+<br/>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>Krugovi</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-list" th:each = "client : ${clients}">
+			<td></td>
+		</tr>
+		<tr><td>Krug 1</td></tr>
+		<tr><td>Krug 2</td></tr>
+		<tr><td>Krug 3</td></tr>
+	</tbody>
+</table>
+<p>------------------------------------------------------------------------------------------------------------------------------</p>
+
+<p>Vežba : <input type="text"/></p> 
+<p>Napomena : <input type="text"/></p>
+
+<p>Broj ponavljanja : <input type="text"/></p> 
+<p>Tezina : <input type="text"/></p>
+
+<button>Dodaj</button>
+<br/>
+<br/>
+<form th:action="@{/filterExercise}" th:object="${exerciseDTOSearch}" method="POST">
+<table class = "table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Naziv</th>
+			<th scope="col">Opis</th>
+			<th scope="col">Grupa vežbi</th>
+			<th scope="col"></th>
+		</tr>
+		<tr id="hidden_input">
+			<td><input/></td>	
+			<td><input th:field="*{name}"/></td>
+			<td><input th:field="*{description}"/></td>
+			<td><input th:field="*{exerciseGroup}"/></td>
+			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr id="tr-entity-list" th:each = "exercise : ${exercises}">
+			<td class="exerciseId" th:utext="${exercise.id}"></td>
+			<td class="exerciseName" th:utext="${exercise.name}"></td>
+			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
+			<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
+			<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}"></td>
+			<td><a th:href="@{/deleteExercise/{id}/{hiddenExerciseGroupId}(id=${exercise.id}, hiddenExerciseGroupId=${hiddenExerciseGroupId})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+</body>
+</html>

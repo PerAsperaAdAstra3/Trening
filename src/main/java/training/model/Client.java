@@ -26,6 +26,15 @@ public class Client {
 	@OneToMany(mappedBy = "client")
 	private List<Training> trainingList = new ArrayList<Training>();
 	
+	public List<Training> getTrainingList() {
+		return trainingList;
+	}
+
+	public void setTrainingList(Training training) {
+		training.setClient(this);
+		this.trainingList.add(training);
+	}
+
 	public Long getId() {
 		return id;
 	}

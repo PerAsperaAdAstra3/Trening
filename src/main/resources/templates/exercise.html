@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<script src="scripts/jquery-3.2.1.min.js"></script>
-<script src="scripts/functions.js"></script>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/functions.js"></script>
 <meta charset="utf-8"/>
 	<title >Vežbe</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -21,14 +21,14 @@
 	    description = item.find(".exerciseDescription").html()
 	    id = item.find(".exerciseId").html()
 		   exerciseGroupId = item.find(".exerciseGroupId").html()
-	    alert(exerciseGroupId)
+		test = item.find("#hiddenExerciseGroupId").html()
+		
+		alert(test)
 	    $("#name").val(name);
 	    $("#description").val(description);
 	    $("#id").val(id);
 		$("#exerciseGroupId").val(exerciseGroupId).change();
-		
 		exerGID = item.find("#exerciseGroupId").html()
-		alert(exerGID)
 	}
 </script>
 </head>
@@ -58,6 +58,7 @@
 		<button type="submit" class="btn btn-warning" name="mode" value="edit">Izmeni</button>
 		<button type="reset" class="btn btn-light">Iscisti</button>
 	</p>
+	<input type="hidden" name="hiddenExerciseGroupId" th:value="${hiddenExerciseGroupId}"/>
 </form>
 </div>
 	<button type="button" id="search" class="btn btn-dark">Pretraga</button>
@@ -87,11 +88,11 @@
 			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
 			<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
 			<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}"></td>
-			<td><a th:href="@{/deleteExercise/{id}(id=${exercise.id})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+			<td><a th:href="@{/deleteExercise/{id}/{hiddenExerciseGroupId}(id=${exercise.id}, hiddenExerciseGroupId=${hiddenExerciseGroupId})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
 		</tr>
 	</tbody>
 </table>
-<input type="hidden" id="hiddenForId" th:value="${exerciseGroupId}"/>
+<input type="hidden" name="hiddenExerciseGroupId" th:value="${hiddenExerciseGroupId}"/>
 </form>
 </body>
 </html>

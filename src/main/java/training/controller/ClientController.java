@@ -46,6 +46,12 @@ public class ClientController {
 		return "/client";
 	}
 	
+	
+	@RequestMapping(value = { "/addTrainingToClient" }, method = RequestMethod.GET)
+	public String createTraining() {
+		return "redirect:/clientList";
+	}
+	
 /*	@RequestMapping(value = {"search"}, method = RequestMethod.GET)
 	public String searchFields(Model model) {
 		ClientDTO clientDTOSearch

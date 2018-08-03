@@ -1,5 +1,8 @@
 package training.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,8 @@ import training.converter.ExerciseDTOtoExercise;
 import training.converter.ExerciseGroupToExerciseGroupDTO;
 import training.converter.ExerciseToExerciseDTO;
 import training.dto.ExerciseDTO;
+import training.model.Exercise;
+import training.model.ExerciseGroup;
 import training.service.ExerciseGroupService;
 import training.service.ExerciseService;
 
@@ -23,7 +28,7 @@ public class ExerciseController {
 	private ExerciseToExerciseDTO exerciseToExerciseDTO;
 	
 	@Autowired
-	private ExerciseDTOtoExercise ExerciseDTOtoExercise;
+	private ExerciseDTOtoExercise exerciseDTOtoExercise;
 	
 	@Autowired
 	private ExerciseGroupService exerciseGroupService;
@@ -40,7 +45,7 @@ public class ExerciseController {
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseGroupService.findAll()));
 		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
-		model.addAttribute("isExecGroupFiltered", 1);
+		model.addAttribute("hiddenExerciseGroupId", "") ;
 		return "exercise";
 	}
 	/*
@@ -53,33 +58,94 @@ public class ExerciseController {
 */
 	
 	@RequestMapping(value = {"/addExercise"}, method = RequestMethod.POST)
-	public String addExercise(Model model, @ModelAttribute("exerciseDTO") ExerciseDTO exerciseDTO, @RequestParam String mode) {
-		System.out.println("DUGME : " +mode);
-		System.out.println("ExerciseGroup ID " + exerciseDTO.getExerciseGroupId());
+	public String addExercise(Model model, @ModelAttribute("exerciseDTO") ExerciseDTO exerciseDTO, @RequestParam String mode, @RequestParam String hiddenExerciseGroupId) {
+
+		System.out.println("Exercise group parameter : "+hiddenExerciseGroupId);
 		if("add".equals(mode)) {
-			System.out.println("Usli smo u add");
 			exerciseDTO.setId(null);
-			System.out.println("POSLE SET ID-a");
-			exerciseService.save(ExerciseDTOtoExercise.convert(exerciseDTO));
-			System.out.println("POSLE SAVE-a");
+			exerciseService.save(exerciseDTOtoExercise.convert(exerciseDTO));
 		} else {
 			System.out.println("Usli smo u EDIT");
-			exerciseService.edit(exerciseDTO.getId() , ExerciseDTOtoExercise.convert(exerciseDTO));
+			exerciseService.edit(exerciseDTO.getId() , exerciseDTOtoExercise.convert(exerciseDTO));
 		}
+		
+		if(!hiddenExerciseGroupId.equals("")){
+			List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
+			exerciseList.add(exerciseGroupService.findOne(exerciseDTO.getExerciseGroupId()));
+			model.addAttribute("exerciseDTO", new ExerciseDTO());
+			model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
+			model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseGroupService.findOne(exerciseDTO.getExerciseGroupId()).getExercises()));		
+			model.addAttribute("hiddenExerciseGroupId", exerciseDTO.getExerciseGroupId());
+			return "exercise";
+			
+	//		System.out.println("U add-u smo, usli smo u proveru da li smo dosli sa grupe");
+	//		return "filterExcerInGroup/{id}"; // "redirect:/filterExcerInGroup/?id="+hiddenExerciseGroupId; ///filterExcerInGroup/{id}
+		}
+		
 		return "redirect:/exerciseList";
 	}
+	
+	
 
-	@RequestMapping(value = {"/deleteExercise/{id}"}, method = RequestMethod.GET)
-	public String delete(@PathVariable String id){
+	@RequestMapping(value = {"/deleteExercise/{id}/{hiddenExerciseGroupId}"}, method = RequestMethod.GET)
+	public String delete(Model model, @PathVariable String id, @PathVariable String hiddenExerciseGroupId){
+		
+		System.out.println("+++ USLI SMO U DELETE +++");
+		
 		exerciseService.delete(Long.parseLong(id));
+
+		if(!hiddenExerciseGroupId.equals("")){
+			List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
+			exerciseList.add(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)));
+			
+			System.out.println("+++ USLI SMO U DELETE +++");
+			
+			model.addAttribute("exerciseDTO", new ExerciseDTO());
+			model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
+			List<ExerciseDTO> list = exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)).getExercises());
+			model.addAttribute("exercises", list);		
+			model.addAttribute("hiddenExerciseGroupId", hiddenExerciseGroupId);
+			return "exercise";
+			
+	//		System.out.println("U add-u smo, usli smo u proveru da li smo dosli sa grupe");
+	//		return "filterExcerInGroup/{id}"; // "redirect:/filterExcerInGroup/?id="+hiddenExerciseGroupId; ///filterExcerInGroup/{id}
+		}
 		return "redirect:/exerciseList";
 	}
 	
 	@RequestMapping(value = {"/filterExercise"}, method = RequestMethod.POST)
-	public String filterExercises(Model model, @ModelAttribute("exerciseDTOSearch") ExerciseDTO exerciseDTOSearch) {
+	public String filterExercises(Model model, @ModelAttribute("exerciseDTOSearch") ExerciseDTO exerciseDTOSearch, @RequestParam String hiddenExerciseGroupId) {
+		
+		if(!hiddenExerciseGroupId.equals("")){
+			List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
+			exerciseList.add(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)));
+			model.addAttribute("exerciseDTO", new ExerciseDTO());
+			model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
+	//		List<ExerciseDTO> exerciseListToFilter = exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)).getExercises());
+			List<ExerciseDTO> exerciseListToFilter = exerciseToExerciseDTO.convert(exerciseService.filter( exerciseDTOtoExercise.convert(exerciseDTOSearch)));
+		//	exerciseListToFilter ;
+			
+			List<ExerciseDTO> exerciseListToFilterRefined = new ArrayList<ExerciseDTO>();
+			for(ExerciseDTO exerciseDTO : exerciseListToFilter) {
+				if(exerciseDTO.getExerciseGroupId().equals(Long.parseLong(hiddenExerciseGroupId))) {
+					exerciseListToFilterRefined.add(exerciseDTO);
+				}
+			}
+
+			model.addAttribute("exercises", exerciseListToFilterRefined);		
+			
+			model.addAttribute("hiddenExerciseGroupId", hiddenExerciseGroupId);
+			return "exercise";
+		}	
+	//		System.out.println("U add-u smo, usli smo u proveru da li smo dosli sa grupe");
+	//		return "filterExcerInGroup/{id}"; // "redirect:/filterExcerInGroup/?id="+hiddenExerciseGroupId; ///filterExcerInGroup/{id}
+		
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
-		model.addAttribute("exercises", exerciseService.filter( ExerciseDTOtoExercise.convert(exerciseDTOSearch)));
+		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.filter( exerciseDTOtoExercise.convert(exerciseDTOSearch))));
 		return "exercise";
 	}
 }

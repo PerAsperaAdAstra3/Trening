@@ -18,7 +18,7 @@ public class indexController {
 			return "redirect:/clientList";
 		}
 
-		return "trainingList";
+		return "redirect:/trainingList";
 
 	}
 }

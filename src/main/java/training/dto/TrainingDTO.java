@@ -4,9 +4,31 @@ import java.util.Date;
 
 public class TrainingDTO {
 
+	private Long id;
+	
 	private Date date;
 	
 	private int numberOfTrainings;
+	
+	private String client;
+	
+	private String clientId;
+
+	public String getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Date getDate() {
 		return date;
@@ -24,7 +46,17 @@ public class TrainingDTO {
 		this.numberOfTrainings = numberOfTrainings;
 	}
 
-	public TrainingDTO(Date date, int numberOfTrainings) {
+	public String getClient() {
+		return client;
+	}
+
+	public void setClient(String client) {
+		this.client = client;
+	}
+
+	public TrainingDTO() {}
+	
+	public TrainingDTO(Long id, Date date, int numberOfTrainings) {
 		super();
 		this.date = date;
 		this.numberOfTrainings = numberOfTrainings;

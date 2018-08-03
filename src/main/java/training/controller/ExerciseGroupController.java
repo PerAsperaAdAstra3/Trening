@@ -57,7 +57,25 @@ public class ExerciseGroupController {
 		exerciseGroupService.delete(Long.parseLong(id));
 		return "redirect:/exerciseGroupList";
 	}
+
 	
+	@RequestMapping(value = {"/filterExcerInGroup/{id}"}, method = RequestMethod.GET)
+	public String filterExcerInGroup(Model model, @PathVariable String id){
+		System.out.println("Id koji je selektovan" + id);
+	
+		System.out.println("BROJ VEZBI :" +exerciseGroupService.findOne(Long.parseLong(id)).getExercises().size());
+		List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
+		exerciseList.add(exerciseGroupService.findOne(Long.parseLong(id)));
+		model.addAttribute("exerciseDTO", new ExerciseDTO());
+		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
+		model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
+		model.addAttribute("exercises",  exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(id)).getExercises()));		
+		model.addAttribute("hiddenExerciseGroupId", id) ;
+		return "exercise";
+	}
+	
+	/// #### PRIVREMENI TEST
+	/*
 	@RequestMapping(value = {"/filterExcerInGroup/{id}"}, method = RequestMethod.GET)
 	public String filterExcerInGroup(Model model, @PathVariable String id){
 		System.out.println("Id koji je selektovan" + id);
@@ -74,9 +92,11 @@ public class ExerciseGroupController {
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
 		model.addAttribute("exercises",  exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(localId)).getExercises()));		
-	//	model.addAttribute("exerciseGroupId", localId) ;
+		model.addAttribute("exerciseGroupId", localId) ;
 		return "exercise";
 	}
+	*/
+	/// #### PRIVREMENI TEST
 	
 	/*
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

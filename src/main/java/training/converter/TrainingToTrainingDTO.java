@@ -3,7 +3,6 @@ package training.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +17,14 @@ public class TrainingToTrainingDTO implements Converter<Training,TrainingDTO> {
 		if(source == null) {
 			return null;
 		}
-		
-		ModelMapper modelMapper = new ModelMapper();
+		TrainingDTO trainingDTO = new TrainingDTO(); 
+		trainingDTO.setId(source.getId());
+		trainingDTO.setDate(source.getDate());
+		trainingDTO.setNumberOfTrainings(source.getNumberOfTrainings());
+		trainingDTO.setClient(source.getClient().getName());
+	/*	ModelMapper modelMapper = new ModelMapper();
 		TrainingDTO modelDTO = modelMapper.map(source, TrainingDTO.class);
-		return modelDTO;
+		*/return trainingDTO;
 	}
 	
 	public List<TrainingDTO> convert(List<Training> trainings){

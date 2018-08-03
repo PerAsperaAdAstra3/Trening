@@ -1,5 +1,7 @@
 package training;
 
+import java.util.Date;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +11,12 @@ import training.model.Client;
 import training.model.Exercise;
 import training.model.ExerciseGroup;
 import training.model.ExerciseInRound;
+import training.model.Training;
 import training.service.ClientService;
 import training.service.ExerciseGroupService;
 import training.service.ExerciseInRoundService;
 import training.service.ExerciseService;
-import training.service.RoundService;
+import training.service.TrainingService;
 
 @Component
 public class TrainingTestData {
@@ -30,9 +33,19 @@ public class TrainingTestData {
 	@Autowired
 	private ExerciseGroupService exerciseGroupService;
 
+	@Autowired
+	private TrainingService trainingService;
+	
 	@PostConstruct
 	private void init() {
 
+		Training training1 = new Training();
+		
+		training1.setDate(new Date());
+		training1.setNumberOfTrainings(2);
+		
+
+		
 		Exercise exercise1 = new Exercise("Stomach", "Exercise for stomack");
 
 		Exercise exercise2 = new Exercise("Biceps", "Exercise for Bicepse");
@@ -42,7 +55,9 @@ public class TrainingTestData {
 		Exercise exercise4 = new Exercise("Triceps", "Exercise for triceps");
 		
 		Client client1 = new Client("Firstname","Lastname");
+		client1.setTrainingList(training1);
 		clientService.save(client1);
+		trainingService.save(training1);
 		
 		Client client2 = new Client("Firstname1","Lastname1");
 		clientService.save(client2);
@@ -64,6 +79,10 @@ public class TrainingTestData {
 		exerciseGroup2.setName("Goup2");
 		
 //		ExerciseGroup exerciseGroup2 = new ExerciseGroup("Group2");
+		
+
+		
+		trainingService.save(training1);
 		
         ExerciseInRound exerciseInRound1 = new ExerciseInRound(2,"First round");
 		exerciseInRoundService.save(exerciseInRound1);

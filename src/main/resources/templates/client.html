@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <script src="scripts/jquery-3.2.1.min.js"></script>
 <script src="scripts/functions.js"></script>
@@ -59,12 +59,14 @@
 			<th scope="col">Ime</th>
 			<th scope="col">Prezime</th>
 			<th scope="col"></th>
+			<th scope="col"></th>
 		</tr>
 		<tr id="hidden_input">
 			<td><input /></td>	
 			<td><input th:field="*{name}"/></td>
 			<td><input th:field="*{familyName}"/></td>
 			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
+			<td></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -73,7 +75,9 @@
 			<td class="clientName" th:utext="${client.name}"></td>
 			<td class="clientFamilyName" th:utext="${client.familyName}"></td>
 			<td>
-			<a th:href="@{/deleteClient/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+				<a th:href="@{/deleteTraining/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+			<th>
+				<a th:href="@{/trainingCreationHandler}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></th>
 		</tr>
 	</tbody>
 </table>

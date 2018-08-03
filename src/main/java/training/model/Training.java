@@ -18,7 +18,7 @@ public class Training {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long training_Id;
+	private Long id;
 	
 	@Column(name="Date")
 	private Date date;
@@ -36,6 +36,16 @@ public class Training {
     @OneToMany(mappedBy = "trainingRound")
 	private List<Round> rounds = new ArrayList<Round>();
 	
+    
+    
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Date getDate() {
 		return date;
 	}
