@@ -1,11 +1,14 @@
 package training.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity(name = "Round")
 public class Round {
@@ -17,9 +20,9 @@ public class Round {
 	@JoinColumn(name = "RoundSeqNumber")
 	private int roundSequenceNumber;
 	
-	@ManyToOne
+	@OneToMany
 	@JoinColumn(name = "exerInRound")
-	private ExerciseInRound roundExerciseInRound;
+	private List<ExerciseInRound> roundExerciseInRound;
 	
 	@ManyToOne
 	@JoinColumn(name = "trainingRound")
@@ -29,12 +32,13 @@ public class Round {
 		return id;
 	}
 	
-	public ExerciseInRound getExerciseInRound() {
+	public List<ExerciseInRound> getExerciseInRound() {
 		return roundExerciseInRound;
 	}
 
-	public void setExerciseInRound(ExerciseInRound roundExerciseInRound) {
-		this.roundExerciseInRound = roundExerciseInRound;
+	public void setExerciseInRound(ExerciseInRound exerciseInRound) {
+		exerciseInRound.setRound(this);
+		roundExerciseInRound.add(exerciseInRound);
 	}
 
 	public int getRoundSequenceNumber() {

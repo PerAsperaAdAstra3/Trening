@@ -76,8 +76,8 @@
 			<td class="clientFamilyName" th:utext="${client.familyName}"></td>
 			<td>
 				<a th:href="@{/deleteTraining/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
-			<th>
-				<a th:href="@{/trainingCreationHandler}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></th>
+			<td>
+				<a th:href="@{/trainingCreationHandler/{id}(id=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
 		</tr>
 	</tbody>
 </table>

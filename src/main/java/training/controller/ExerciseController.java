@@ -16,7 +16,6 @@ import training.converter.ExerciseDTOtoExercise;
 import training.converter.ExerciseGroupToExerciseGroupDTO;
 import training.converter.ExerciseToExerciseDTO;
 import training.dto.ExerciseDTO;
-import training.model.Exercise;
 import training.model.ExerciseGroup;
 import training.service.ExerciseGroupService;
 import training.service.ExerciseService;
@@ -68,6 +67,10 @@ public class ExerciseController {
 			System.out.println("Usli smo u EDIT");
 			exerciseService.edit(exerciseDTO.getId() , exerciseDTOtoExercise.convert(exerciseDTO));
 		}
+		
+		System.out.println("Ime : "+exerciseDTO.getName() );
+		System.out.println("Opis : "+exerciseDTO.getDescription() );
+		System.out.println("Exercise gorup ID : "+exerciseDTO.getExerciseGroupId());
 		
 		if(!hiddenExerciseGroupId.equals("")){
 			List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();

@@ -1,16 +1,14 @@
 package training.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-@Entity(name = "ExerciseInGroup")
+@Entity(name = "ExerciseInRound")
 public class ExerciseInRound {
 
 	@Id
@@ -23,32 +21,45 @@ public class ExerciseInRound {
 	@Column(name="Difficulty")
 	private String difficulty;
 
-	@OneToMany(mappedBy = "exerciseInRound")	
-	private List<Exercise> exercises = new ArrayList<Exercise>();
+	@Column(name="ExerciseID")
+	private Long exerciseID;
 	
-	@OneToMany(mappedBy = "roundExerciseInRound")
-	private List<Round> rounds = new ArrayList<Round>();
+	@Column(name="ExerciseName")
+	private String exerciseName;
 	
+//	@OneToMany(mappedBy = "roundExerciseInRound")
+//	private List<Round> rounds = new ArrayList<Round>();
+	
+	@ManyToOne
+	@JoinColumn(name="roundExerciseInRound")
+	private Round round;
+	
+	public String getExerciseName() {
+		return exerciseName;
+	}
+
+	public void setExerciseName(String exerciseName) {
+		this.exerciseName = exerciseName;
+	}
+
+	public Round getRound() {
+		return round;
+	}
+
+	public void setRound(Round round) {
+		this.round = round;
+	}
+
 	public Long getExecInRound_Id() {
 		return ExecInRound_Id;
 	}
 
-	public List<Exercise> getExercises() {
-		return exercises;
+	public Long getExerciseId() {
+		return exerciseID;
 	}
 
-	public void addExercise(Exercise exercise) {
-		exercise.setExerciseInRound(this);
-		exercises.add(exercise);
-	}
-
-	public List<Round> getRounds() {
-		return rounds;
-	}
-
-	public void addRounds(Round round) {
-		round.setExerciseInRound(this);
-		rounds.add(round);
+	public void setExerciseId(Long exercise) {
+		this.exerciseID = exercise;
 	}
 	
 	public void setExecInRound_Id(Long execInRound_Id) {

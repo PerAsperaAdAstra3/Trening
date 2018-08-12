@@ -19,7 +19,6 @@ import training.dto.ExerciseDTO;
 import training.dto.ExerciseGroupDTO;
 import training.model.ExerciseGroup;
 import training.service.ExerciseGroupService;
-import training.service.ExerciseService;
 
 @Controller
 public class ExerciseGroupController {
@@ -38,11 +37,6 @@ public class ExerciseGroupController {
 	
 	@Autowired
 	private ExerciseToExerciseDTO exerciseToExerciseDTO;
-	
-	@Autowired
-	private ExerciseService exerciseService;
-	
-	private String localId;
 	
 	@RequestMapping(value = {"/exerciseGroupList"}, method = RequestMethod.GET)
 	public String listAll(Model model) {

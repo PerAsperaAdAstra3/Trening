@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<script src="scripts/jquery-3.2.1.min.js"></script>
-<script src="scripts/functions.js"></script>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../scripts/functions.js"></script>
 <meta charset="utf-8"/>
 	<title>Dodavanje treninga</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -17,11 +18,13 @@
 	});
 
 	function sync(item){
-		name = item.find(".clientName").html()
-	    familyName = item.find(".clientFamilyName").html()
-	    id = item.find(".clientId").html()
-	    $("#name").val(name);
-	    $("#familyName").val(familyName);
+//		item.find( hiddenExerciseId)
+		
+	    id = item.find(".exerciseId").html()
+	    exerciseName = item.find(".exerciseName").html()
+	    
+	    $("#exerciseInRoundExerciseName").val(exerciseName);
+	    $("#exerciseInRoundExerciseId").val(id);
 	    $("#id").val(id);
 	}
 	</script>
@@ -32,42 +35,64 @@
 	</div>
 <br/>
 <h2>Dodavanje i izmena treninga</h2>
-
-<p>Datum :  <input type="date"/> </p>
-<p>Redni broj :  <input type="text"/> </p>
-<p>Klijent : <input type="text"/> </p>
-<br/>
+<form th:action="@{/filterClients}" th:object="${clientOfTheTraining}" method="POST">
+	<p>Datum :  <input type="date"/> </p>
+	<p>Redni broj :  <input type="text" name="trainingNumberOfTraining" th:value="${trainingNumberOfTraining}"/> </p>
+	<p>Klijent : <input type="text" th:field="*{name}" /></p>
+	<br/>
+</form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
-<button>Novi Krug</button>
+
+<form th:action="@{/addRound}" th:object="${clientOfTheTraining}" method="POST">
+	<button type="submit">Novi Krug</button>
+<input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
+</form>
 <br/>
 <br/>
+
+Postojeci krugovi : 
+
 <table class="table table-hover">
-	<thead>
-		<tr>
-			<th>Krugovi</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr	id="tr-entity-list" th:each = "client : ${clients}">
-			<td></td>
-		</tr>
-		<tr><td>Krug 1</td></tr>
-		<tr><td>Krug 2</td></tr>
-		<tr><td>Krug 3</td></tr>
-	</tbody>
+		<thead>
+			<tr>
+	 			<th>Id</th>
+				<th>Broj ponavljanja</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr	id="tr-entity-list" th:each = "round : ${roundsInTraining}">
+				<td th:utext="${round.id}"></td>
+				<td th:utext="${round.roundSequenceNumber}"></td>
+			</tr>
+		</tbody>
 </table>
+
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
-<p>Vežba : <input type="text"/></p> 
-<p>Napomena : <input type="text"/></p>
 
-<p>Broj ponavljanja : <input type="text"/></p> 
-<p>Tezina : <input type="text"/></p>
+<form  th:action="@{/addExerciseInRound}" th:object="${exerciseInRoundDTO}" method="POST">
+<p>Vežba : 
 
-<button>Dodaj</button>
-<br/>
-<br/>
-<form th:action="@{/filterExercise}" th:object="${exerciseDTOSearch}" method="POST">
+	<input type="text" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName"/>
+	<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
+</p>
+<!-- Trigger the modal with a button -->            
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+
 <table class = "table table-hover">
 	<thead>
 		<tr>
@@ -77,13 +102,7 @@
 			<th scope="col">Grupa vežbi</th>
 			<th scope="col"></th>
 		</tr>
-		<tr id="hidden_input">
-			<td><input/></td>	
-			<td><input th:field="*{name}"/></td>
-			<td><input th:field="*{description}"/></td>
-			<td><input th:field="*{exerciseGroup}"/></td>
-			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
-		</tr>
+
 	</thead>
 	<tbody>
 		<tr id="tr-entity-list" th:each = "exercise : ${exercises}">
@@ -92,7 +111,48 @@
 			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
 			<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
 			<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}"></td>
-			<td><a th:href="@{/deleteExercise/{id}/{hiddenExerciseGroupId}(id=${exercise.id}, hiddenExerciseGroupId=${hiddenExerciseGroupId})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+		</tr>
+	</tbody>
+</table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p>Napomena : <input type="text"  /></p>
+
+<p>Broj ponavljanja : <input type="text" th:field="*{numberOfRepetitions}"/></p>
+<p>Tezina : <input type="text" th:field="*{difficulty}"/></p>
+
+<button type="submit">Dodaj</button>
+
+<input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
+<input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
+
+</form>
+
+<br/>
+<br/>
+<form th:action="@{/filterExercise}" th:object="${exerciseDTOSearch}" method="POST">
+<table class = "table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Broj ponavljanja</th>
+			<th scope="col">Tezina</th>
+			<th scope="col">Naziv vezbe</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
+			<td class="exerciseId" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
+			<td class="exerciseName" th:utext="${exerciseInRound.difficulty}"></td>
+			<td></td>
 		</tr>
 	</tbody>
 </table>

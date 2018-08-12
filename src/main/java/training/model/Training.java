@@ -36,8 +36,6 @@ public class Training {
     @OneToMany(mappedBy = "trainingRound")
 	private List<Round> rounds = new ArrayList<Round>();
 	
-    
-    
 	public Long getId() {
 		return id;
 	}
@@ -79,7 +77,7 @@ public class Training {
 		tasks.add(task);
 	}
 	
-	public List<Round> getRound() {
+	public List<Round> getRounds() {
 		return rounds;
 	}
 	

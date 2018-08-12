@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import training.model.ExerciseInRound;
 import training.model.Round;
 import training.repository.RoundRepository;
 import training.service.RoundService;
@@ -57,7 +58,9 @@ public class JpaRoundService implements RoundService {
 	public Round edit(Long id, Round round) {
 		Round oldRound = roundRepository.findOne(id);
 		oldRound.setRoundSequenceNumber(round.getRoundSequenceNumber());
-		oldRound.setExerciseInRound(round.getExerciseInRound());
+		for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
+			oldRound.setExerciseInRound(exerciseInRound);
+		}
 		roundRepository.save(oldRound);
 		return oldRound;
 	}

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import training.dto.ExerciseDTO;
 import training.model.Exercise;
-import training.model.ExerciseGroup;
 import training.service.ExerciseGroupService;
 
 @Component
@@ -21,16 +20,15 @@ public class ExerciseDTOtoExercise implements Converter<ExerciseDTO,Exercise> {
 		if(source == null) {
 			return null;
 		}
-		Long exerciseGroupFindOneParam = 0l;
 		Exercise exercise = new Exercise();
 		exercise.setId(source.getId());
 		exercise.setName(source.getName());
 		exercise.setDescription(source.getDescription());
 		/*if(source.getExerciseGroupId() != null) {
 			exerciseGroupFindOneParam = source.getExerciseGroupId();
-		}
-		exercise.setExerciseGroup(exerciseGroupService.findOne(exerciseGroupFindOneParam));
-			*/	
+		}*/
+		exercise.setExerciseGroup(exerciseGroupService.findOne(source.getExerciseGroupId())); //exerciseGroupFindOneParam));
+			
 		return exercise;
 	}
 	

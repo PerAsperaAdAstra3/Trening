@@ -22,10 +22,6 @@ public class Exercise {
 	private String description;
 
 	@ManyToOne
-	@JoinColumn(name="exerInRound")
-	private ExerciseInRound exerciseInRound;
-
-	@ManyToOne
 	@JoinColumn(name="exerciseGroup")
 	private ExerciseGroup exerciseGroup;
 	
@@ -35,14 +31,6 @@ public class Exercise {
 
 	public void setExerciseGroup(ExerciseGroup exerciseGroup) {
 		this.exerciseGroup = exerciseGroup;
-	}
-
-	public ExerciseInRound getExerciseInRound() {
-		return exerciseInRound;
-	}
-
-	public void setExerciseInRound(ExerciseInRound exerciseInRound) {
-		this.exerciseInRound = exerciseInRound;
 	}
 
 	public Long getId() {

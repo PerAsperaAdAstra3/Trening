@@ -7,9 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import training.dto.ExerciseInRoundDTO;
-import training.model.Exercise;
 import training.model.ExerciseInRound;
-import training.model.Round;
 
 @Component
 public class ExerciseInRoundToExerciseInRoundDTO implements Converter<ExerciseInRound, ExerciseInRoundDTO> {
@@ -19,12 +17,15 @@ public class ExerciseInRoundToExerciseInRoundDTO implements Converter<ExerciseIn
 		ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
 		exerciseInRoundDTO.setNumberOfRepetitions(source.getNumberOfRepetitions());
 		exerciseInRoundDTO.setDifficulty(source.getDifficulty());
-		for(Exercise exercise : source.getExercises()) {
-			exerciseInRoundDTO.addExecName(exercise.getName());
-		}
-		for(Round round : source.getRounds()) {
-			exerciseInRoundDTO.addRoundName(String.valueOf(round.getRoundSequenceNumber()));
-		}
+		
+		exerciseInRoundDTO.setExerciseInRoundExerciseName(source.getExerciseName());
+	//	exerciseInRoundDTO.setExerciseId(source.getExercise().getId());
+		
+		exerciseInRoundDTO.setExerciseInRoundExerciseId(source.getExerciseId());
+		
+		exerciseInRoundDTO.setRoundId(source.getRound().getId());
+		
+		exerciseInRoundDTO.addRoundName(String.valueOf(source.getRound().getRoundSequenceNumber()));
 		return exerciseInRoundDTO;
 	}
 
