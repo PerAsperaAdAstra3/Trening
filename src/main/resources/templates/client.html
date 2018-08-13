@@ -34,18 +34,31 @@
 <h2>Dodavanje i izmena klijenta</h2>
 
 <div class="panel">
-<form th:action="@{/addClient}" th:object="${clientDTO}" method="POST">
+<form style="padding-left:3em" th:action="@{/addClient}" th:object="${clientDTO}" method="POST">
 
-	<table>
-	    <tr><td></td><td></td><td><input type="hidden" th:field="*{id}" id="id" /></td> </tr>
-		<tr><td></td><td> Ime :</td><td><input type="text" th:field="*{name}" id="name" /></td> </tr>
-		<tr><td></td><td>  Prezime :</td><td><input type="text" th:field="*{familyName}" id="familyName"/></td></tr>
-	</table>
-	<p>
-		<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
-		<button type="submit" class="btn btn-warning" name="mode" value="edit">Izmeni</button>
-		<button type="reset" class="btn btn-light">Iscisti</button>
-	</p>
+	<input type="hidden" th:field="*{id}" id="id" />
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="name">Ime:</label>
+			<input  type="text" th:field="*{name}" id="name" class="form-control" />
+		</div>
+  	</div>
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="*{familyName}">Prezime:</label>
+			<input  type="text" th:field="*{familyName}" id="*{familyName}" class="form-control" />
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
+			<button type="submit" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+			<button type="reset" class="btn btn-success">Iscisti</button>
+		</div>
+
+	</div>
+	
 </form>
 </div>
 <br/>
