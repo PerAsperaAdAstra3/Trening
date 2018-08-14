@@ -30,7 +30,7 @@ public class Client {
 		return trainingList;
 	}
 
-	public void setTrainingList(Training training) {
+	public void addTrainingList(Training training) {
 		training.setClient(this);
 		this.trainingList.add(training);
 	}

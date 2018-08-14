@@ -1,5 +1,6 @@
 package training.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ public class Round {
 	
 	@OneToMany
 	@JoinColumn(name = "exerInRound")
-	private List<ExerciseInRound> roundExerciseInRound;
+	private List<ExerciseInRound> roundExerciseInRound = new ArrayList<ExerciseInRound>();
 	
 	@ManyToOne
 	@JoinColumn(name = "trainingRound")

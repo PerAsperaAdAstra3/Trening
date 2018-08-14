@@ -13,13 +13,87 @@
 		highlightRow(this)
 	});
 	
-	$(document).on("click", "#search", function(event) {
-		$("#hidden_input").css('display','table-row');
+	$(document).on("click", "#round-id-sync", function(event) {
+		selectRoundIdOnRowClick(this)
 	});
+	
+	  /*<![CDATA[*/
+    
+	function myFunctionName() {
+	  var input, filter, table, tr, td, i;
+	  input = document.getElementById("myInputName");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("myTableExercises");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+	    td = tr[i].getElementsByTagName("td")[1];
+	    if (td) {
+	      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+	        tr[i].style.display = "";
+	      } else {
+	        tr[i].style.display = "none";
+	      }
+	    }       
+	  }
+	}
+	  
+	function myFunctionDescription() {
+		  var input, filter, table, tr, td, i;
+		  input = document.getElementById("myInputDescription");
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("myTableExercises");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[2];
+		    if (td) {
+		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }       
+		  }
+		}
+	  /*]]>*/
+ 
+	$(document).on("click", "#modal_button", function(event) {
+		var els = document.getElementsByClassName("modal-table-coloring");
+		Array.prototype.forEach.call(els, function(el) {
+		     el.style.backgroundColor = "red"
+	   		 console.log(el.tagName);
+		});
+	});
+	
+	$(document).on("click", "#hideTableRows", function(event) {
+		var els = document.getElementsByClassName("hidden_input");
+		Array.prototype.forEach.call(els, function(el) {
+		     el.style.visibility = 'hidden'
+	   		 console.log(el.tagName);
+		});
+	});
+	
+	function selectRoundIdOnRowClick(row){
+		 //ne reagujemo na klik na header tabele, samo obicne redove
+		 //this sadrzi red na koji se kliknulo
+		if(!$(row).hasClass("header")){
+	 		//klasa highlighted postavlja pozadinu na plavu
+	 		//njenim dodavanjem ili uklanjanjem oznacavamo da neki red
+	 		//dobija, odnosno gubi selekciju
+	 		//uklanjamo sa trenutno selektovanog
+	 		$(".highlighted").removeClass("highlighted");
+	 		//dodajemo na novi selektovani
+	   	$(row).addClass("highlighted");
+	   	//pozivamo sinhronizaciju, prosledjujemo dati red
+	   	sync1($(row));
+	   }
+	}
 
+	function sync1(item){
+	    roundId = item.find(".roundId").html()
+	    $("#hiddenRoundInTraining").val(roundId);
+	}
+	
 	function sync(item){
-//		item.find( hiddenExerciseId)
-		
 	    id = item.find(".exerciseId").html()
 	    exerciseName = item.find(".exerciseName").html()
 	    
@@ -61,8 +135,8 @@ Postojeci krugovi :
 			</tr>
 		</thead>
 		<tbody>
-			<tr	id="tr-entity-list" th:each = "round : ${roundsInTraining}">
-				<td th:utext="${round.id}"></td>
+			<tr	id="round-id-sync" th:each = "round : ${roundsInTraining}">
+				<td class="roundId" th:utext = "${round.id}"></td>
 				<td th:utext="${round.roundSequenceNumber}"></td>
 			</tr>
 		</tbody>
@@ -78,7 +152,7 @@ Postojeci krugovi :
 	<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
 </p>
 <!-- Trigger the modal with a button -->            
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+<button type="button" id="modal_button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
 
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
@@ -92,8 +166,9 @@ Postojeci krugovi :
       </div>
       <div class="modal-body">
         <p>Some text in the modal.</p>
-
-<table class = "table table-hover">
+<input type="text" id="myInputName" onkeyup="myFunctionName()" placeholder="Filtriranje po nazivu.."/>
+<input type="text" id="myInputDescription" onkeyup="myFunctionDescription()" placeholder="Filtriranje po opisu.."/>
+<table id = "myTableExercises" class = "table table-hover">
 	<thead>
 		<tr>
 			<th scope="col">Id</th>
@@ -105,7 +180,7 @@ Postojeci krugovi :
 
 	</thead>
 	<tbody>
-		<tr id="tr-entity-list" th:each = "exercise : ${exercises}">
+		<tr class="modal-table-coloring" id="tr-entity-list" th:each = "exercise : ${exercises}">
 			<td class="exerciseId" th:utext="${exercise.id}"></td>
 			<td class="exerciseName" th:utext="${exercise.name}"></td>
 			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
@@ -131,13 +206,15 @@ Postojeci krugovi :
 <button type="submit">Dodaj</button>
 
 <input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
-<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
-<input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
+<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}" id="hiddenClientTrainingId"/>
+<input type="text" name="roundInTraining" th:value="${roundInTraining}" id="hiddenRoundInTraining"/>
 
 </form>
+<button type="button" id="hideTableRows">GGG</button>
+<br/>
+<br/>
 
-<br/>
-<br/>
+
 <form th:action="@{/filterExercise}" th:object="${exerciseDTOSearch}" method="POST">
 <table class = "table table-hover">
 	<thead>
@@ -149,7 +226,15 @@ Postojeci krugovi :
 		</tr>
 	</thead>
 	<tbody>
-		<tr id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
+		<tr id="hidden_input">
+		<td>Fuck my life</td>
+
+		<td>Fuck my life</td>
+
+		<td>Fuck my life</td>
+
+		</tr>
+		<tr class="hidden_input" id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
 			<td class="exerciseId" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
 			<td class="exerciseName" th:utext="${exerciseInRound.difficulty}"></td>
 			<td></td>

@@ -1,12 +1,18 @@
 package training.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import training.model.Exercise;
+import training.model.ExerciseInRound;
+import training.model.Round;
 import training.model.Training;
+import training.repository.ClientRepository;
 import training.repository.TrainingRepository;
 import training.service.TrainingService;
 
@@ -16,7 +22,9 @@ public class JpaTrainingService implements TrainingService {
 
 	@Autowired
 	private TrainingRepository trainingRepository;
-
+	
+	//@Autowire
+	
 	@Override
 	public Training findOne(Long id) {
 		return trainingRepository.findOne(id);
@@ -60,5 +68,21 @@ public class JpaTrainingService implements TrainingService {
 		newTraining.setDate(training.getDate());
 		newTraining.setNumberOfTrainings(training.getNumberOfTrainings());
 		return newTraining;
+	}
+
+	@Override
+	public Map<Long, Integer> exercisesLastTraining(Long clientId) {
+		List<Training> lastTrainings = trainingRepository.findTop4ByClientId(clientId);
+		Map<Long,Integer> mapExercise = new HashMap<>();
+		int i =1;
+		for(Training training : lastTrainings) {
+			for(Round round : training.getRounds())
+				for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
+					if(!mapExercise.containsKey(exerciseInRound.getExerciseId()))
+						mapExercise.put(exerciseInRound.getExerciseId(), i);
+				}
+			i++;
+		}
+		return mapExercise;
 	}
 }
