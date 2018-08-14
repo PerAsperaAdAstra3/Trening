@@ -23,6 +23,7 @@ import training.dto.ExerciseDTO;
 import training.dto.ExerciseInRoundDTO;
 import training.dto.RoundDTO;
 import training.dto.TrainingDTO;
+import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
@@ -87,6 +88,8 @@ public class TrainingController {
 
 		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(id));
 		System.out.println("$$$$ INFO IZ MAPE $$$$ :" + mapOfExercisesForClient);
+		
+	//	model.addAttribute("mapOfExercisesForClient", mapOfExercisesForClient);
 		// List<Exercise> exercises = exerciseService.findAll();
 
 		trainingService.save(trainingDefaultId);// trainingDTOtoTraining.convert(newTraining));
@@ -116,7 +119,18 @@ public class TrainingController {
 		model.addAttribute("hiddenClientTrainingId", id);
 		model.addAttribute("hiddenTrainingId", trainingDefaultId.getId());
 
-		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
+		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
+		
+		for(ExerciseDTO exerciseDTO : exercisesForModal) {
+			System.out.println("Brojevi za : " + mapOfExercisesForClient.get(exerciseDTO.getId()));
+			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
+				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
+			} else {
+				exerciseDTO.setColorCode(60);
+			}
+		}
+		
+		model.addAttribute("exercises", exercisesForModal); //exerciseToExerciseDTO.convert(exerciseService.findAll()));
 		model.addAttribute("exercisesInRound", exercisesInRound);
 
 		model.addAttribute("clientOfTheTraining", clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));

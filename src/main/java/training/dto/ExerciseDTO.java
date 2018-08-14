@@ -7,6 +7,15 @@ public class ExerciseDTO {
 	private String description;
 	private String exerciseGroup;
 	private Long exerciseGroupId;
+	private Integer colorCode;
+
+	public Integer getColorCode() {
+		return colorCode;
+	}
+
+	public void setColorCode(Integer colorCode) {
+		this.colorCode = colorCode;
+	}
 
 	public ExerciseDTO() {}
 	
@@ -15,6 +24,7 @@ public class ExerciseDTO {
 		this.name = name;
 		this.description = description;
 	}
+	
 	public Long getId() {
 		return id;
 	}

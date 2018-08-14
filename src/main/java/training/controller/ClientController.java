@@ -43,7 +43,7 @@ public class ClientController {
 		model.addAttribute("clientDTO", clientDTO);
 		model.addAttribute("clients", clientToClientDTO.convert(clients));
 		System.out.println("Client list je tu");
-		return "/client";
+		return "client";
 	}
 	
 	
@@ -65,7 +65,7 @@ public class ClientController {
 		model.addAttribute("clientDTOSearch", new ClientDTO());
 		model.addAttribute("clientDTO", new ClientDTO());
 		System.out.println("U FILTERU SMO");
-		return "/client";
+		return "client";
 	}
 	/*
 	 	@RequestMapping(method = RequestMethod.GET)

@@ -58,9 +58,21 @@
  
 	$(document).on("click", "#modal_button", function(event) {
 		var els = document.getElementsByClassName("modal-table-coloring");
+		
+		var test = document.getElementsByClassName("exerciseColorCode");
+		
 		Array.prototype.forEach.call(els, function(el) {
-		     el.style.backgroundColor = "red"
-	   		 console.log(el.tagName);
+			var nooo = $(el).find(".exerciseColorCode").html(); 
+			if(nooo == 1){
+			 	el.style.backgroundColor = "red"
+			}
+			if(nooo == 2){
+			 	el.style.backgroundColor = "orange"
+			}
+			if(nooo == 3){
+			 	el.style.backgroundColor = "yellow"
+			}
+			 console.log(el.tagName);
 		});
 	});
 	
@@ -176,6 +188,7 @@ Postojeci krugovi :
 			<th scope="col">Opis</th>
 			<th scope="col">Grupa vežbi</th>
 			<th scope="col"></th>
+			<th scope="col">Color Code</th>
 		</tr>
 
 	</thead>
@@ -186,6 +199,7 @@ Postojeci krugovi :
 			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
 			<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
 			<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}"></td>
+			<td class="exerciseColorCode hidden_column" th:utext="${exercise.colorCode}"></td>
 		</tr>
 	</tbody>
 </table>
