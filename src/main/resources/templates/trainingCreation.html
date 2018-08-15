@@ -19,7 +19,7 @@
 	
 	  /*<![CDATA[*/
     
-	function myFunctionName() {
+	function filterByName() {
 	  var input, filter, table, tr, td, i;
 	  input = document.getElementById("myInputName");
 	  filter = input.value.toUpperCase();
@@ -37,7 +37,7 @@
 	  }
 	}
 	  
-	function myFunctionDescription() {
+	function filterByDescription() {
 		  var input, filter, table, tr, td, i;
 		  input = document.getElementById("myInputDescription");
 		  filter = input.value.toUpperCase();
@@ -251,8 +251,8 @@
       </div>
       <div class="modal-body">
         <p>Some text in the modal.</p>
-<input type="text" id="myInputName" onkeyup="myFunctionName()" placeholder="Filtriranje po nazivu.."/>
-<input type="text" id="myInputDescription" onkeyup="myFunctionDescription()" placeholder="Filtriranje po opisu.."/>
+<input type="text" id="myInputName" onkeyup="filterByName()" placeholder="Filtriranje po nazivu.."/>
+<input type="text" id="myInputDescription" onkeyup="filterByDescription()" placeholder="Filtriranje po opisu.."/>
 <table style="width:900px" id = "myTableExercises" class = "table table-hover">
 	<thead>
 		<tr>

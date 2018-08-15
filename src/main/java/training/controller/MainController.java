@@ -10,7 +10,7 @@ public class MainController {
 	
     @RequestMapping("/")
     public String index(Model model) {
-        model.addAttribute("pageTitle", "Welcome to Training management application!");
+        model.addAttribute("pageTitle", "Dobrodošli!");
         return "index";
     }
     
