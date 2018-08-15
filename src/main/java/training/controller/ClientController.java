@@ -2,25 +2,24 @@ package training.controller;
 
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import training.converter.ClientDTOtoClient;
 import training.converter.ClientToClientDTO;
 import training.dto.ClientDTO;
 import training.model.Client;
 import training.service.ClientService;
 
-@RestController
-@RequestMapping(path = "api/clients")
+@Controller
 public class ClientController {
 
 	@Autowired
@@ -28,38 +27,56 @@ public class ClientController {
 	
 	@Autowired
     ClientToClientDTO clientToClientDTO;
-
-	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Client>> getClients() {
+	
+	@Autowired
+	ClientDTOtoClient clientDTOtoClient;
+	
+	@RequestMapping(value = { "/clientList" }, method = RequestMethod.GET)
+	public String getClients(Model model) {
 		List<Client> clients = clientService.findAll();
-		return new ResponseEntity<>(clients, HttpStatus.OK);
+		ClientDTO clientDTO = new ClientDTO();
+		ClientDTO clientDTOSearch = new ClientDTO();
+		model.addAttribute("clientDTOSearch", clientDTOSearch);
+		model.addAttribute("clientDTO", clientDTO);
+		model.addAttribute("clients", clientToClientDTO.convert(clients));
+		return "client";
 	}
-
+	
+	
+	@RequestMapping(value = { "/addTrainingToClient" }, method = RequestMethod.GET)
+	public String createTraining() {
+		return "redirect:/clientList";
+	}
+	
+	@RequestMapping(value = { "/filterClients" }, method = RequestMethod.POST)
+	public String filterClients(Model model, @ModelAttribute("clientDTOSearch") ClientDTO clientDTOSearch) {
+		model.addAttribute("clients", clientService.filter(clientDTOtoClient.convert(clientDTOSearch)));
+		model.addAttribute("clientDTOSearch", new ClientDTO());
+		model.addAttribute("clientDTO", new ClientDTO());
+		return "client";
+	}
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<ClientDTO> getClient(@PathVariable Long id) {
 		Client client = clientService.findOne(id);
 		return new ResponseEntity<>(clientToClientDTO.convert(client), HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, consumes="application/json")
-	public ResponseEntity<?> addClient(@Valid @RequestBody Client client, Errors errors){
-		if(errors.hasErrors()) {
-			System.out.println(errors.getAllErrors());
-			return new ResponseEntity<String>(errors.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+	@RequestMapping(value = {"/addClient"} , method = RequestMethod.POST)
+	public String addClient(Model model, @ModelAttribute("clientDTO") ClientDTO clientDTO, @RequestParam String mode){
+
+		if("add".equals(mode)) {
+			clientDTO.setId(null);
+			clientService.save(clientDTOtoClient.convert(clientDTO));
+		} else {
+			clientService.edit(clientDTO.getId(), clientDTOtoClient.convert(clientDTO));
 		}
-		Client newClient = clientService.save(client);
-		return new ResponseEntity<>(clientToClientDTO.convert(newClient), HttpStatus.OK);
+		return "redirect:/clientList";
 	}
 	
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<ClientDTO> delete(@PathVariable Long id) {
-		Client clientDeleted = clientService.delete(id);
-		return new ResponseEntity<>(clientToClientDTO.convert(clientDeleted), HttpStatus.OK);
+	@RequestMapping(value = {"/deleteClient/{id}"}, method = RequestMethod.GET)
+	public String deleteClient(@PathVariable String id ) {
+		clientService.delete(Long.parseLong(id));
+		return "redirect:/clientList";
 	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-		public ResponseEntity<ClientDTO> edit(@PathVariable Long id, @RequestBody Client client){
-			Client newClient = clientService.edit(id, client);
-			return new ResponseEntity<>(clientToClientDTO.convert(newClient), HttpStatus.OK);
-		}
 }

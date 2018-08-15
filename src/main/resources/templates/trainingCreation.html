@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../scripts/functions.js"></script>
+<meta charset="utf-8"/>
+	<title>Dodavanje treninga</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<script>
+	$(document).on("click", "#tr-entity-list", function(event) {
+		highlightRow(this)
+	});
+	
+	$(document).on("click", "#round-id-sync", function(event) {
+		selectRoundIdOnRowClick(this)
+	});
+	
+	  /*<![CDATA[*/
+    
+	function filterByName() {
+	  var input, filter, table, tr, td, i;
+	  input = document.getElementById("myInputName");
+	  filter = input.value.toUpperCase();
+	  table = document.getElementById("myTableExercises");
+	  tr = table.getElementsByTagName("tr");
+	  for (i = 0; i < tr.length; i++) {
+	    td = tr[i].getElementsByTagName("td")[1];
+	    if (td) {
+	      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+	        tr[i].style.display = "";
+	      } else {
+	        tr[i].style.display = "none";
+	      }
+	    }       
+	  }
+	}
+	  
+	function filterByDescription() {
+		  var input, filter, table, tr, td, i;
+		  input = document.getElementById("myInputDescription");
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("myTableExercises");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[2];
+		    if (td) {
+		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }       
+		  }
+		}
+	  /*]]>*/
+ 
+	$(document).on("click", "#modal_button", function(event) {
+		var els = document.getElementsByClassName("modal-table-coloring");
+		
+		var test = document.getElementsByClassName("exerciseColorCode");
+		
+		Array.prototype.forEach.call(els, function(el) {
+			var nooo = $(el).find(".exerciseColorCode").html(); 
+			if(nooo == 1){
+			 	el.style.backgroundColor = "red"
+			}
+			if(nooo == 2){
+			 	el.style.backgroundColor = "orange"
+			}
+			if(nooo == 3){
+			 	el.style.backgroundColor = "yellow"
+			}
+			 console.log(el.tagName);
+		});
+	});
+	
+	$(document).on("click", "#hideTableRows", function(event) {
+		var els = document.getElementsByClassName("hidden_input");
+		Array.prototype.forEach.call(els, function(el) {
+		     el.style.visibility = 'hidden'
+	   		 console.log(el.tagName);
+		});
+	});
+	
+	function selectRoundIdOnRowClick(row){
+		 //ne reagujemo na klik na header tabele, samo obicne redove
+		 //this sadrzi red na koji se kliknulo
+		if(!$(row).hasClass("header")){
+	 		//klasa highlighted postavlja pozadinu na plavu
+	 		//njenim dodavanjem ili uklanjanjem oznacavamo da neki red
+	 		//dobija, odnosno gubi selekciju
+	 		//uklanjamo sa trenutno selektovanog
+	 		$(".highlighted").removeClass("highlighted");
+	 		//dodajemo na novi selektovani
+	   	$(row).addClass("highlighted");
+	   	//pozivamo sinhronizaciju, prosledjujemo dati red
+	   	sync1($(row));
+	   }
+	}
+
+	function sync1(item){
+	    roundId = item.find(".roundId").html()
+	    $("#hiddenRoundInTraining").val(roundId);
+	}
+	
+	function sync(item){
+	    id = item.find(".exerciseId").html()
+	    exerciseName = item.find(".exerciseName").html()
+	    
+	    $("#exerciseInRoundExerciseName").val(exerciseName);
+	    $("#exerciseInRoundExerciseId").val(id);
+	    $("#id").val(id);
+	}
+	</script>
+</head>
+<body class="gradient">
+	<div class="alert div1" role="alert">
+	
+	<a href="/" class="home">Početna</a>
+	
+		<h1 align="center">Dodavanje treninga</h1>
+	</div>
+<br/>
+
+
+<h2>Dodavanje i izmena treninga</h2>
+
+
+
+<form style="padding-left:3em" th:action="@{/filterClients}" th:object="${clientOfTheTraining}" method="POST">
+
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="trainingDate">Datum:</label>
+			<!-- TODO FALI FIELD OVOG INPUTA -->
+			<input type="date" id="trainingDate" class="form-control"/>
+		</div>
+  	</div>
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="trainingNumberOfTraining">Redni broj:</label>
+			<input type="text" id="trainingNumberOfTraining" class="form-control" name="trainingNumberOfTraining" th:value="${trainingNumberOfTraining}"/>
+		</div>
+  	</div>
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="trainingClient">Klijent:</label>
+			<input type="text" id="trainingClient" class="form-control" th:field="*{name}" />
+		</div>
+	</div>
+	
+</form>
+<p>------------------------------------------------------------------------------------------------------------------------------</p>
+
+<form  style="padding-left:3em" th:action="@{/addRound}" th:object="${clientOfTheTraining}" method="POST">
+ 	<div class="form-group row">
+		<div class="col-xs-2">
+			<button class="btn btn-success" type="submit">Novi krug</button>
+		</div>
+	</div>
+<input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
+</form>
+<br/>
+
+
+<h3 style="padding-left:1em">Postojeci krugovi</h3>
+ 
+
+<table style="margin-top:2em" class="table table-hover">
+		<thead>
+			<tr>
+	 			<th>Id</th>
+				<th>Broj ponavljanja</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr	id="round-id-sync" th:each = "round : ${roundsInTraining}">
+				<td class="roundId" th:utext = "${round.id}"></td>
+				<td th:utext="${round.roundSequenceNumber}"></td>
+			</tr>
+		</tbody>
+</table>
+
+<p>------------------------------------------------------------------------------------------------------------------------------</p>
+
+
+<form style="padding-left:3em"  th:action="@{/addExerciseInRound}" th:object="${exerciseInRoundDTO}" method="POST">
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="exerciseInRoundExerciseName">Vežba:</label>
+			<div class="form-row">
+			 	<div class="col">
+					<input type="text" class="form-control" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName"/>
+				</div>
+				<div class="col">
+					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Izbor</button>
+				</div>
+			</div>
+			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<!-- TODO NEMA FIELD -->
+			<label for="exerciseInRoundNote">Napomena:</label>
+			<input class="form-control" id="exerciseInRoundNote" type="text"  />
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="exerciseInRoundNumberOfRepetitions">Broj ponavljanja:</label>
+			<input type="text" class="form-control" id="exerciseInRoundNumberOfRepetitions" th:field="*{numberOfRepetitions}"/>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<!-- Ovde sam mislila na kilazu :) -->
+			<label for="exerciseInRoundDifficulty">Težina:</label>	
+			<input type="text" class="form-control" id="exerciseInRoundDifficulty" th:field="*{difficulty}"/>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button class="btn btn-success"  type="submit">Dodaj</button>
+		</div>
+	</div>
+
+<input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
+<input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
+
+
+</form>
+
+<br/>
+
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="min-width:1000px !important">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Vežbe</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+<input type="text" id="myInputName" onkeyup="filterByName()" placeholder="Filtriranje po nazivu.."/>
+<input type="text" id="myInputDescription" onkeyup="filterByDescription()" placeholder="Filtriranje po opisu.."/>
+<table style="width:900px" id = "myTableExercises" class = "table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Naziv</th>
+			<th scope="col">Opis</th>
+			<th scope="col">Grupa vežbi</th>
+			<th scope="col"></th>
+			<th scope="col">Color Code</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		<tr class="modal-table-coloring" id="tr-entity-list" th:each = "exercise : ${exercises}">
+			<td class="exerciseId" th:utext="${exercise.id}"></td>
+			<td class="exerciseName" th:utext="${exercise.name}"></td>
+			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
+			<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
+			<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}"></td>
+			<td class="exerciseColorCode hidden_column" th:utext="${exercise.colorCode}"></td>
+		</tr>
+	</tbody>
+</table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<br/>
+<br/>
+
+
+<form th:action="@{/filterExercise}" th:object="${exerciseDTOSearch}" method="POST">
+<table class = "table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Broj ponavljanja</th>
+			<th scope="col">Tezina</th>
+			<th scope="col">Naziv vezbe</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr id="hidden_input">
+		<td>Fuck my life</td>
+
+		<td>Fuck my life</td>
+
+		<td>Fuck my life</td>
+
+		</tr>
+		<tr class="hidden_input" id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
+			<td class="exerciseId" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
+			<td class="exerciseName" th:utext="${exerciseInRound.difficulty}"></td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+
+</body>
+</html>

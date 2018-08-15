@@ -9,10 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity(name = "ExerciseGroup")
 public class ExerciseGroup {
@@ -21,14 +20,11 @@ public class ExerciseGroup {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "Name", columnDefinition = "VARCHAR(40)")
+	@Column(name = "Name")
 	private String name;
 
-	@ManyToMany
-	@JoinTable(name = "ExerciseGroup_Exercise",
-				joinColumns = { @JoinColumn(name = "fk_exerciseGroup") },
-				inverseJoinColumns = { @JoinColumn(name = "fk_exercise") })
-	private List<Exercise> exerciseList = new ArrayList<Exercise>();
+	@OneToMany(mappedBy = "exerciseGroup")
+	private List<Exercise> exercises = new ArrayList<Exercise>();
 		
 	@ManyToOne
 	@JoinTable(name = "task")
@@ -37,13 +33,18 @@ public class ExerciseGroup {
 	public Long getId() {
 		return id;
 	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-	public List<Exercise> getExerciseList() {
-		return exerciseList;
+	public List<Exercise> getExercises() {
+		return exercises;
 	}
 
 	public void addExercise(Exercise exercise) {
-		this.exerciseList.add(exercise);
+		exercise.setExerciseGroup(this);
+		this.exercises.add(exercise);
 	}
 
 	public String getName() {

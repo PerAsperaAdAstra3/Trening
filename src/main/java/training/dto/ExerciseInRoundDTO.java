@@ -1,17 +1,34 @@
 package training.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ExerciseInRoundDTO {
 
 	private int numberOfRepetitions;
 
 	private String difficulty;
 	
-	private List<String> execNameList = new ArrayList<String>();
+	private String exerciseInRoundExerciseName;
+	
+	private Long exerciseInRoundExerciseId;
 
-	private List<String> roundNameList = new ArrayList<String>();
+	private String roundName;
+
+	private Long roundId;
+	
+	public Long getexerciseInRoundExerciseId() {
+		return exerciseInRoundExerciseId;
+	}
+
+	public void setExerciseInRoundExerciseId(Long exerciseId) {
+		this.exerciseInRoundExerciseId = exerciseId;
+	}
+
+	public Long getRoundId() {
+		return roundId;
+	}
+
+	public void setRoundId(Long roundId) {
+		this.roundId = roundId;
+	}
 
 	public int getNumberOfRepetitions() {
 		return numberOfRepetitions;
@@ -29,20 +46,20 @@ public class ExerciseInRoundDTO {
 		this.difficulty = difficulty;
 	}	
 	
-	public List<String> getExecNameList() {
-		return execNameList;
+	public String getExerciseInRoundExerciseName() {
+		return exerciseInRoundExerciseName;
 	}
 
-	public void addExecName(String execName) {
-		this.execNameList.add(execName);
+	public void setExerciseInRoundExerciseName(String exerciseName) {
+		this.exerciseInRoundExerciseName = exerciseName;
 	}
 
-	public List<String> getRoundNameList() {
-		return roundNameList;
+	public String getRoundNameList() {
+		return roundName;
 	}
 
 	public void addRoundName(String roundName) {
-		this.roundNameList.add(roundName);
+		this.roundName = roundName;
 	}
 	
 	public ExerciseInRoundDTO() {}

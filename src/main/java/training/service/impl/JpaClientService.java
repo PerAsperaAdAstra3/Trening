@@ -62,4 +62,9 @@ public class JpaClientService implements ClientService {
 		clientRepository.save(oldClient);
 		return oldClient;
 	}
+
+	@Override
+	public List<Client> filter(Client client) {
+		return clientRepository.findByNameIgnoreCaseContainingAndFamilyNameIgnoreCaseContaining(client.getName(), client.getFamilyName());
+	}
 }

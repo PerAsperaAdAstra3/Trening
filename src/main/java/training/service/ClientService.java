@@ -7,7 +7,9 @@ import training.model.Client;
 public interface ClientService {
 
 	Client findOne(Long id);
-
+	
+	List<Client> filter(Client client);
+	
 	List<Client> findAll();
 
 	Client save(Client client);

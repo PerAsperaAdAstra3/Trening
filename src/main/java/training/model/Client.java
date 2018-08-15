@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,6 +26,37 @@ public class Client {
 	@OneToMany(mappedBy = "client")
 	private List<Training> trainingList = new ArrayList<Training>();
 	
+	@Column(name = "Email")
+	private String email;
+	
+	@Column(name = "PhoneNumber")
+	private String phoneNumber;
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public List<Training> getTrainingList() {
+		return trainingList;
+	}
+
+	public void addTrainingList(Training training) {
+		training.setClient(this);
+		this.trainingList.add(training);
+	}
+
 	public Long getId() {
 		return id;
 	}

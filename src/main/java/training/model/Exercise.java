@@ -1,16 +1,11 @@
 package training.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity(name="Exercise")
@@ -18,31 +13,32 @@ public class Exercise {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long exercise_Id;
+	private Long id;
 	
-	@Column(name="Name", columnDefinition="VARCHAR(40)")
+	@Column(name="Name")
 	private String name;
 	
-	@Column(name="Description", columnDefinition="VARCHAR(100)")
+	@Column(name="Description")
 	private String description;
 
 	@ManyToOne
-	@JoinColumn(name="exerInRound")
-	private ExerciseInRound exerciseInRound;
-
-	@ManyToMany(cascade = {CascadeType.ALL})
-	private List<ExerciseGroup> exerciseGroups;
+	@JoinColumn(name="exerciseGroup")
+	private ExerciseGroup exerciseGroup;
 	
-	public ExerciseInRound getExerciseInRound() {
-		return exerciseInRound;
+	public ExerciseGroup getExerciseGroup() {
+		return exerciseGroup;
 	}
 
-	public void setExerciseInRound(ExerciseInRound exerciseInRound) {
-		this.exerciseInRound = exerciseInRound;
+	public void setExerciseGroup(ExerciseGroup exerciseGroup) {
+		this.exerciseGroup = exerciseGroup;
 	}
 
-	public Long getExercise_Id() {
-		return exercise_Id;
+	public Long getId() {
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {

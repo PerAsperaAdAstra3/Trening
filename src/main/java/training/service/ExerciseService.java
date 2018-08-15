@@ -8,6 +8,8 @@ public interface ExerciseService {
 
 	Exercise findOne(Long id);
 
+	List<Exercise> filter(Exercise exercise);
+	
 	List<Exercise> findAll();
 
 	Exercise save(Exercise exercise);

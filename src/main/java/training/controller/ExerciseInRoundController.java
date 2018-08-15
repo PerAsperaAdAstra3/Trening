@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import training.converter.ExerciseInRoundToExerciseInRoundDTO;
 import training.dto.ExerciseInRoundDTO;
-import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.service.ExerciseInRoundService;
 
@@ -45,7 +44,6 @@ public class ExerciseInRoundController {
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public ResponseEntity<?> add(@Valid @RequestBody ExerciseInRound exerciseInRound, Errors errors){
 		if(errors.hasErrors()) {
-			System.out.println(errors.getAllErrors());
 			return new ResponseEntity<String>(errors.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
 		}
 		ExerciseInRound newExerciseInRound = exerciseInRoundService.save(exerciseInRound);

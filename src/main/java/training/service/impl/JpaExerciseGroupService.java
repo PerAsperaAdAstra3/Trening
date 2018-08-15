@@ -57,8 +57,13 @@ public class JpaExerciseGroupService implements ExerciseGroupService {
 	@Override
 	public ExerciseGroup edit(Long id, ExerciseGroup exerciseGroup) {
 		ExerciseGroup oldExerciseGroup = exerciseGroupRepository.findOne(id);
-		oldExerciseGroup.setName(oldExerciseGroup.getName());
+		oldExerciseGroup.setName(exerciseGroup.getName());
 		exerciseGroupRepository.save(oldExerciseGroup);
 		return oldExerciseGroup;
+	}
+
+	@Override
+	public List<ExerciseGroup> filter(ExerciseGroup exerciseGroup) {
+		return exerciseGroupRepository.findByNameIgnoreCaseContaining(exerciseGroup.getName());
 	}
 }

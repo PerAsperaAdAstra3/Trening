@@ -1,0 +1,51 @@
+h1 {
+    color:#003600;
+}
+ 
+h2 {
+    color:#00AA00;
+    margin-left: 35px;
+}
+
+.home {
+
+	color:#000000;
+	margin-left:35px;
+	padding-bottom:10px;
+	font-weight:bold
+}
+
+
+
+#hidden_input {display : none};
+
+.hidden_column {display : none};
+
+table {
+    border-collapse: collapse;
+}
+ 
+p {
+	margin-left: 35px
+}
+ 
+table th, table td {
+    padding: 5px;
+}
+
+table {
+	    margin-left: 35px;
+}
+
+.button1 {width: 220px;
+		  height: 220px;
+		  background: #DD6624;;
+		  }
+
+.div1 { background: #00AA00}
+
+.gradient {background: linear-gradient(to top left, white 10%, orange 70%);}
+
+.gradient1 {background: linear-gradient(to left, white 10%, orange 70%);}
+
+#search { float: right };

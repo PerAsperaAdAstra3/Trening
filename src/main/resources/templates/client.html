@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/functions.js"></script>
+<meta charset="utf-8"/>
+	<title>Klijenti</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<script>
+	$(document).on("click", "#tr-entity-list", function(event) {
+		highlightRow(this)
+	});
+	
+	$(document).on("click", "#search", function(event) {
+		$("#hidden_input").css('display','table-row');
+	});
+
+	function sync(item){
+		name = item.find(".clientName").html()
+	    familyName = item.find(".clientFamilyName").html()
+	    id = item.find(".clientId").html()
+	    $("#name").val(name);
+	    $("#familyName").val(familyName);
+	    $("#id").val(id);
+	}
+	</script>
+</head>
+<body class="gradient">
+	<div class="alert div1" role="alert">
+		<a href="/" class="home">Početna</a>
+		<h1 align="center">Klijenti u sistemu</h1>
+		
+	</div>
+<br/>
+<h2>Dodavanje i izmena klijenta</h2>
+
+<div class="panel">
+<form style="padding-left:3em" th:action="@{/addClient}" th:object="${clientDTO}" method="POST">
+
+	<input type="hidden" th:field="*{id}" id="id" />
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="name">Ime:</label>
+			<input  type="text" th:field="*{name}" id="name" class="form-control" />
+		</div>
+  	</div>
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="*{familyName}">Prezime:</label>
+			<input  type="text" th:field="*{familyName}" id="*{familyName}" class="form-control" />
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
+			<button type="submit" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+			<button type="reset" class="btn btn-success">Iscisti</button>
+		</div>
+
+	</div>
+	
+</form>
+</div>
+<br/>
+<div class="panel">
+	<button type="button" id="search" class="btn btn-dark">Pretraga</button>
+<form th:action="@{/filterClients}" th:object="${clientDTOSearch}" method="POST">
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Ime</th>
+			<th scope="col">Prezime</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+		<tr id="hidden_input">
+			<td><input /></td>	
+			<td><input th:field="*{name}"/></td>
+			<td><input th:field="*{familyName}"/></td>
+			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-list" th:each = "client : ${clients}">
+			<td scope="row" class="clientId" th:utext="${client.id}"></td>
+			<td class="clientName" th:utext="${client.name}"></td>
+			<td class="clientFamilyName" th:utext="${client.familyName}"></td>
+			<td>
+				<a th:href="@{/deleteTraining/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+			<td>
+				<a th:href="@{/trainingCreationHandler/{id}(id=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+<br/>
+</div>
+</body>
+</html>
