@@ -59,6 +59,8 @@ public class JpaClientService implements ClientService {
 		Client oldClient = clientRepository.findOne(id);
 		oldClient.setName(client.getName());
 		oldClient.setFamilyName(client.getFamilyName());
+		oldClient.setEmail(client.getEmail());
+		oldClient.setPhoneNumber(client.getPhoneNumber());
 		clientRepository.save(oldClient);
 		return oldClient;
 	}
