@@ -117,29 +117,59 @@
 </head>
 <body class="gradient">
 	<div class="alert div1" role="alert">
+	
+	<a href="/" class="home">Početna</a>
+	
 		<h1 align="center">Dodavanje treninga</h1>
 	</div>
 <br/>
+
+
 <h2>Dodavanje i izmena treninga</h2>
-<form th:action="@{/filterClients}" th:object="${clientOfTheTraining}" method="POST">
-	<p>Datum :  <input type="date"/> </p>
-	<p>Redni broj :  <input type="text" name="trainingNumberOfTraining" th:value="${trainingNumberOfTraining}"/> </p>
-	<p>Klijent : <input type="text" th:field="*{name}" /></p>
-	<br/>
+
+
+
+<form style="padding-left:3em" th:action="@{/filterClients}" th:object="${clientOfTheTraining}" method="POST">
+
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="trainingDate">Datum:</label>
+			<!-- TODO FALI FIELD OVOG INPUTA -->
+			<input type="date" id="trainingDate" class="form-control"/>
+		</div>
+  	</div>
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="trainingNumberOfTraining">Redni broj:</label>
+			<input type="text" id="trainingNumberOfTraining" class="form-control" name="trainingNumberOfTraining" th:value="${trainingNumberOfTraining}"/>
+		</div>
+  	</div>
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="trainingClient">Klijent:</label>
+			<input type="text" id="trainingClient" class="form-control" th:field="*{name}" />
+		</div>
+	</div>
+	
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
-<form th:action="@{/addRound}" th:object="${clientOfTheTraining}" method="POST">
-	<button type="submit">Novi Krug</button>
+<form  style="padding-left:3em" th:action="@{/addRound}" th:object="${clientOfTheTraining}" method="POST">
+ 	<div class="form-group row">
+		<div class="col-xs-2">
+			<button class="btn btn-success" type="submit">Novi krug</button>
+		</div>
+	</div>
 <input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
 <input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
 </form>
 <br/>
-<br/>
 
-Postojeci krugovi : 
 
-<table class="table table-hover">
+<h3 style="padding-left:1em">Postojeci krugovi</h3>
+ 
+
+<table style="margin-top:2em" class="table table-hover">
 		<thead>
 			<tr>
 	 			<th>Id</th>
@@ -157,30 +187,73 @@ Postojeci krugovi :
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
 
-<form  th:action="@{/addExerciseInRound}" th:object="${exerciseInRoundDTO}" method="POST">
-<p>Vežba : 
+<form style="padding-left:3em"  th:action="@{/addExerciseInRound}" th:object="${exerciseInRoundDTO}" method="POST">
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="exerciseInRoundExerciseName">Vežba:</label>
+			<div class="form-row">
+			 	<div class="col">
+					<input type="text" class="form-control" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName"/>
+				</div>
+				<div class="col">
+					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Izbor</button>
+				</div>
+			</div>
+			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<!-- TODO NEMA FIELD -->
+			<label for="exerciseInRoundNote">Napomena:</label>
+			<input class="form-control" id="exerciseInRoundNote" type="text"  />
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="exerciseInRoundNumberOfRepetitions">Broj ponavljanja:</label>
+			<input type="text" class="form-control" id="exerciseInRoundNumberOfRepetitions" th:field="*{numberOfRepetitions}"/>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<!-- Ovde sam mislila na kilazu :) -->
+			<label for="exerciseInRoundDifficulty">Težina:</label>	
+			<input type="text" class="form-control" id="exerciseInRoundDifficulty" th:field="*{difficulty}"/>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button class="btn btn-success"  type="submit">Dodaj</button>
+		</div>
+	</div>
 
-	<input type="text" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName"/>
-	<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
-</p>
-<!-- Trigger the modal with a button -->            
-<button type="button" id="modal_button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+<input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
+<input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
+
+
+</form>
+
+<br/>
+
+
 
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg" style="min-width:1000px !important">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title">Vežbe</h4>
       </div>
       <div class="modal-body">
         <p>Some text in the modal.</p>
 <input type="text" id="myInputName" onkeyup="myFunctionName()" placeholder="Filtriranje po nazivu.."/>
 <input type="text" id="myInputDescription" onkeyup="myFunctionDescription()" placeholder="Filtriranje po opisu.."/>
-<table id = "myTableExercises" class = "table table-hover">
+<table style="width:900px" id = "myTableExercises" class = "table table-hover">
 	<thead>
 		<tr>
 			<th scope="col">Id</th>
@@ -212,19 +285,8 @@ Postojeci krugovi :
   </div>
 </div>
 
-<p>Napomena : <input type="text"  /></p>
 
-<p>Broj ponavljanja : <input type="text" th:field="*{numberOfRepetitions}"/></p>
-<p>Tezina : <input type="text" th:field="*{difficulty}"/></p>
 
-<button type="submit">Dodaj</button>
-
-<input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
-<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}" id="hiddenClientTrainingId"/>
-<input type="text" name="roundInTraining" th:value="${roundInTraining}" id="hiddenRoundInTraining"/>
-
-</form>
-<button type="button" id="hideTableRows">GGG</button>
 <br/>
 <br/>
 
@@ -256,5 +318,6 @@ Postojeci krugovi :
 	</tbody>
 </table>
 </form>
+
 </body>
 </html>

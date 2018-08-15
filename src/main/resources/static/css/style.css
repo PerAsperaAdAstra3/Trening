@@ -7,6 +7,16 @@ h2 {
     margin-left: 35px;
 }
 
+.home {
+
+	color:#000000;
+	margin-left:35px;
+	padding-bottom:10px;
+	font-weight:bold
+}
+
+
+
 #hidden_input {display : none};
 
 .hidden_column {display : none};

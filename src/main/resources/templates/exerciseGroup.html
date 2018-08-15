@@ -24,29 +24,34 @@
 	}
 </script>
 </head>
-<body>
+<body class="gradient">
 
-<div class="alert alert-primary" role="alert">
-<h1 align = "center">Vežbe u sistemu : </h1>
+<div class="alert div1" role="alert">
+	<a href="/" class="home">Početna</a>
+	<h1 align = "center">Grupe vežbi: </h1>
 </div>
 <br/>
-<h2>Dodavanje i izmena vežbe</h2>
+<h2>Dodavanje i izmena grupa vežbi</h2>
 
 <div class="panel">
-<form th:action="@{/addExerciseGroup}" th:object="${exerciseGroupDTO}" method="POST">
+<form style="padding-left:3em" th:action="@{/addExerciseGroup}" th:object="${exerciseGroupDTO}" method="POST">
 
-	<table>
-	    <tr><td></td><td></td><td><input type="hidden" th:field="*{id}" id="id" /></td> </tr>
-		<tr><td></td><td> Ime :</td><td><input type="text" th:field="*{name}" id="name" /></td> </tr>
-	</table>
-	<p>
-		<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novog</button>
-		<button type="submit" class="btn btn-warning" name="mode" value="edit">Izmeni</button>
-		<button type="reset" class="btn btn-light">Iscisti</button>
-	</p>
+	   <input type="hidden" th:field="*{id}" id="id" />
+	   	<div class="form-group row">
+			<div class="col-xs-2">
+				<label for="name">Naziv :</label>
+				<input class="form-control" type="text" th:field="*{name}" id="name" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
+				<button type="submit" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+				<button type="reset" class="btn btn-success">Isčisti</button>
+			</div>
+		</div>
 </form>
 </div>
-	<button type="button" id="search" class="btn btn-dark">Pretraga</button>
 <br/>
 
 <form th:action="@{/filterExerciseGroup}" th:object="${exerciseGroupDTOSearch}" method="POST">
@@ -69,8 +74,8 @@
 		<tr id="tr-entity-list" th:each = "exerciseGroup : ${exerciseGroups}">
 			<td class="exerciseGroupId" th:utext="${exerciseGroup.id}"></td>
 			<td class="exerciseGroupName" th:utext="${exerciseGroup.name}"></td>
-			<td><a th:href="@{/deleteExerciseGroup/{id}(id=${exerciseGroup.id})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
-			<td><a th:href="@{/filterExcerInGroup/{id}(id=${exerciseGroup.id})}"><button type="button" class="btn btn-danger">Check groups</button></a></td>
+			<td><a th:href="@{/deleteExerciseGroup/{id}(id=${exerciseGroup.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+			<td><a th:href="@{/filterExcerInGroup/{id}(id=${exerciseGroup.id})}"><button type="button" class="btn btn-danger">Vežbe iz grupe</button></a></td>
 		</tr>
 	</tbody>
 </table>

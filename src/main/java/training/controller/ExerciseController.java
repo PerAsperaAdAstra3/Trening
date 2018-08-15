@@ -44,7 +44,7 @@ public class ExerciseController {
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseGroupService.findAll()));
 		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
-		model.addAttribute("hiddenExerciseGroupId", "") ;
+		model.addAttribute("hiddenExerciseGroupId", "0") ;
 		return "exercise";
 	}
 	/*
@@ -98,7 +98,7 @@ public class ExerciseController {
 		
 		exerciseService.delete(Long.parseLong(id));
 
-		if(!hiddenExerciseGroupId.equals("")){
+		if(!hiddenExerciseGroupId.equals("0")){
 			List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
 			exerciseList.add(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)));
 			

@@ -15,10 +15,10 @@ public class Exercise {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name="Name", columnDefinition="VARCHAR(40)")
+	@Column(name="Name")
 	private String name;
 	
-	@Column(name="Description", columnDefinition="VARCHAR(100)")
+	@Column(name="Description")
 	private String description;
 
 	@ManyToOne

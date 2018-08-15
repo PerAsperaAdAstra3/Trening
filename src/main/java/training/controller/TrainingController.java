@@ -161,6 +161,18 @@ public class TrainingController {
 		model.addAttribute("hiddenRoundInTraining", "");
 		roundService.save(round);
 		trainingService.save(training);
+		
+		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
+		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(hiddenClientTrainingId));
+		for(ExerciseDTO exerciseDTO : exercisesForModal) {
+			System.out.println("Brojevi za : " + mapOfExercisesForClient.get(exerciseDTO.getId()));
+			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
+				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
+			} else {
+				exerciseDTO.setColorCode(60);
+			}
+		}
+		model.addAttribute("exercises", exercisesForModal);
 
 		// Hidden ID's
 		model.addAttribute("hiddenClientTrainingId", hiddenClientTrainingId);
@@ -171,7 +183,7 @@ public class TrainingController {
 		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
 		model.addAttribute("trainingDTOSearch", new TrainingDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
-		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
+		//model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
 
 		List<Training> trainingList = trainingService.findAll();
 		Long max = 0l;
@@ -251,7 +263,7 @@ public class TrainingController {
 		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
 		model.addAttribute("trainingDTOSearch", new TrainingDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
-		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
+		//model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
 
 		// model.addAttribute("exercisesInRound",
 		// roundFromExerInRound.getExerciseInRound()); //List<ExerciseInRound>
@@ -264,6 +276,18 @@ public class TrainingController {
 			max = Math.max(trainingIter.getNumberOfTrainings(), max);
 			System.out.println("IME : " + max);
 		}
+		
+		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
+		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(hiddenClientTrainingId));
+		for(ExerciseDTO exerciseDTO : exercisesForModal) {
+			System.out.println("Brojevi za : " + mapOfExercisesForClient.get(exerciseDTO.getId()));
+			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
+				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
+			} else {
+				exerciseDTO.setColorCode(60);
+			}
+		}
+		model.addAttribute("exercises", exercisesForModal);
 
 		System.out.println("Heighest NUMBER OF TRAININGS : " + max);
 		model.addAttribute("trainingNumberOfTraining", max + 1);

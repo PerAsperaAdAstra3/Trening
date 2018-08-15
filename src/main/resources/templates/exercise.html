@@ -22,8 +22,6 @@
 	    id = item.find(".exerciseId").html()
 		   exerciseGroupId = item.find(".exerciseGroupId").html()
 		test = item.find("#hiddenExerciseGroupId").html()
-		alert(name)
-		alert(test)
 	    $("#name").val(name);
 	    $("#description").val(description);
 	    $("#id").val(id);
@@ -34,34 +32,49 @@
 </head>
 <body class="gradient">
 <div class="alert div1" role="alert">
-<h1 align = "center">Vežbe u sistemu : </h1>
+	<a href="/" class="home">Početna</a>
+	<h1 align = "center">Vežbe u sistemu : </h1>
 </div>
 <br/>
 <h2>Dodavanje i izmena vežbe</h2>
 
 <div class="panel">
-<form th:action="@{/addExercise}" th:object="${exerciseDTO}" method="POST">
+<form style="padding-left:3em" th:action="@{/addExercise}" th:object="${exerciseDTO}" method="POST">
 
-	<table>
-	    <tr><td></td><td></td><td><input type="hidden" th:field="*{id}" id="id" /></td> </tr>
-		<tr><td></td><td> Ime :</td><td><input type="text" th:field="*{name}" id="name" /></td> </tr>
-		<tr><td></td><td>Opis :</td><td><input type="text" th:field="*{description}" id="description"/></td></tr>
-		<tr><td></td><td>Grupa vežbi :</td><td>
-		<select class="selectpicker" data-live-search="true" th:field="*{exerciseGroupId}" id="exerciseGroupId">
-                         <option th:each="exerciseGroup : ${exerciseGroups}"
-                            th:value="${exerciseGroup.id}"
-                            th:utext="${exerciseGroup.name}"/>
-                  </select></td></tr>
-	</table>
-	<p>
-		<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novog</button>
-		<button type="submit" class="btn btn-warning" name="mode" value="edit">Izmeni</button>
-		<button type="reset" class="btn btn-light">Iscisti</button>
-	</p>
+	   <input type="hidden" th:field="*{id}" id="id" />
+	    <div class="form-group row">
+			<div class="col-xs-2">
+				<label for="name">Naziv :</label>
+				<input class="form-control"  type="text" th:field="*{name}" id="name" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<label for="description">Opis :</label>
+				<textarea class="form-control"  type="text" th:field="*{description}" id="description"></textarea>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<label for="exerciseGroupId">Grupa vežbi :</label>
+				<select  class="selectpicker form-control" data-live-search="true" th:field="*{exerciseGroupId}" id="exerciseGroupId">
+		                         <option th:each="exerciseGroup : ${exerciseGroups}"
+		                            th:value="${exerciseGroup.id}"
+		                            th:utext="${exerciseGroup.name}"/>
+		       </select>
+		   </div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
+				<button type="submit" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+				<button type="reset" class="btn btn-success">Isčisti</button>
+			</div>
+		</div>
 	<input type="hidden" name="hiddenExerciseGroupId" th:value="${hiddenExerciseGroupId}"/>
 </form>
 </div>
-	<button type="button" id="search" class="btn btn-dark">Pretraga</button>
+	<!-- <button type="button" id="search" class="btn btn-dark">Pretraga</button> -->
 <br/>
 <form th:action="@{/filterExercise}" th:object="${exerciseDTOSearch}" method="POST">
 <table class = "table table-hover">
@@ -88,7 +101,7 @@
 			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
 			<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
 			<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}"></td>
-			<td><a th:href="@{/deleteExercise/{id}/{hiddenExerciseGroupId}(id=${exercise.id}, hiddenExerciseGroupId=${hiddenExerciseGroupId})}"><button type="button" class="btn btn-danger">Delete</button></a></td>
+			<td><a th:href="@{/deleteExercise/{id}/{hiddenExerciseGroupId}(id=${exercise.id}, hiddenExerciseGroupId=${hiddenExerciseGroupId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 		</tr>
 	</tbody>
 </table>
