@@ -20,9 +20,13 @@
 		name = item.find(".clientName").html()
 	    familyName = item.find(".clientFamilyName").html()
 	    id = item.find(".clientId").html()
+	    email = item.find(".clientEmail").html()
+	    phoneNumber = item.find(".clientPhoneNumber").html()
 	    $("#name").val(name);
 	    $("#familyName").val(familyName);
 	    $("#id").val(id);
+	    $("#phoneNumber").val(phoneNumber);
+	    $("#email").val(email);
 	}
 	</script>
 </head>
@@ -48,7 +52,21 @@
   	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="*{familyName}">Prezime:</label>
-			<input  type="text" th:field="*{familyName}" id="*{familyName}" class="form-control" />
+			<input  type="text" th:field="*{familyName}" id="familyName" class="form-control" />
+		</div>
+	</div>
+	
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="*{email}">Email:</label>
+			<input  type="text" th:field="*{email}" id="email" class="form-control" />
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label for="*{phoneNumber}">Broj telefona:</label>
+			<input  type="text" th:field="*{phoneNumber}" id="phoneNumber" class="form-control" />
 		</div>
 	</div>
 	
@@ -73,6 +91,8 @@
 			<th scope="col">Id</th>
 			<th scope="col">Ime</th>
 			<th scope="col">Prezime</th>
+			<th scope="col">Email</th>
+			<th scope="col">Broj telefona</th>
 			<th scope="col"></th>
 			<th scope="col"></th>
 		</tr>
@@ -80,6 +100,8 @@
 			<td><input /></td>	
 			<td><input th:field="*{name}"/></td>
 			<td><input th:field="*{familyName}"/></td>
+			<td><input th:field="*{email}"/></td>
+			<td><input th:field="*{phoneNumber}"/></td>
 			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
 			<td></td>
 		</tr>
@@ -89,6 +111,8 @@
 			<td scope="row" class="clientId" th:utext="${client.id}"></td>
 			<td class="clientName" th:utext="${client.name}"></td>
 			<td class="clientFamilyName" th:utext="${client.familyName}"></td>
+			<td class="clientEmail" th:utext="${client.email}"></td>
+			<td class="clientPhoneNumber" th:utext="${client.phoneNumber}"></td>
 			<td>
 				<a th:href="@{/deleteTraining/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td>
