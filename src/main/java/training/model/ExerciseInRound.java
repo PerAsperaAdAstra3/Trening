@@ -27,9 +27,6 @@ public class ExerciseInRound {
 	@Column(name="ExerciseName")
 	private String exerciseName;
 	
-//	@OneToMany(mappedBy = "roundExerciseInRound")
-//	private List<Round> rounds = new ArrayList<Round>();
-	
 	@ManyToOne
 	@JoinColumn(name="roundExerciseInRound")
 	private Round round;

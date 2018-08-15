@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
-import training.repository.ClientRepository;
 import training.repository.TrainingRepository;
 import training.service.TrainingService;
 
@@ -22,8 +20,6 @@ public class JpaTrainingService implements TrainingService {
 
 	@Autowired
 	private TrainingRepository trainingRepository;
-	
-	//@Autowire
 	
 	@Override
 	public Training findOne(Long id) {

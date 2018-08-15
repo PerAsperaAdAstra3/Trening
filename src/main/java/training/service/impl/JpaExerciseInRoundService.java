@@ -57,7 +57,7 @@ public class JpaExerciseInRoundService implements ExerciseInRoundService {
 		ExerciseInRound newExerciseInRound = exerciseInRoundRepository.getOne(id);
 		newExerciseInRound.setDifficulty(exerciseInRound.getDifficulty());
 		newExerciseInRound.setNumberOfRepetitions(exerciseInRound.getNumberOfRepetitions());
-		newExerciseInRound.setExerciseId(exerciseInRound.getExerciseId()); //setExercise(exerciseInRound.getExercise());
+		newExerciseInRound.setExerciseId(exerciseInRound.getExerciseId());
 		return newExerciseInRound;
 	}
 

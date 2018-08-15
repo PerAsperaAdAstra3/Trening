@@ -1,28 +1,10 @@
 package training;
 
-import java.util.Date;
-
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import training.model.Client;
-import training.model.Exercise;
-import training.model.ExerciseGroup;
-import training.model.ExerciseInRound;
-import training.model.Round;
-import training.model.Training;
-import training.service.ClientService;
-import training.service.ExerciseGroupService;
-import training.service.ExerciseInRoundService;
-import training.service.ExerciseService;
-import training.service.RoundService;
-import training.service.TrainingService;
 
 @Component
 public class TrainingTestData {
-
+/*
 	@Autowired
 	private ExerciseService exerciseService;
 	
@@ -45,7 +27,7 @@ public class TrainingTestData {
 	private void init() {
 
 		//Trainings
-		/*
+		
 		Training training1 = new Training();
 		Training training2 = new Training();
 		Training training3 = new Training();
@@ -101,17 +83,17 @@ public class TrainingTestData {
         ExerciseInRound exerciseInRound2 = new ExerciseInRound(3,"Second round");		
         ExerciseInRound exerciseInRound3 = new ExerciseInRound(4,"Third round");		
 
-        exerciseInRound1.setExerciseId(exercise1.getId());  // ovo ima u sebi Stomach
+        exerciseInRound1.setExerciseId(exercise1.getId());  
 		exerciseInRoundService.save(exerciseInRound1);
 		round1.setExerciseInRound(exerciseInRound1);
 		training1.addRound(round1);
 
-        exerciseInRound2.setExerciseId(exercise2.getId());  // ovo ima u sebi Stomach
+        exerciseInRound2.setExerciseId(exercise2.getId()); 
 		exerciseInRoundService.save(exerciseInRound2);
 		round2.setExerciseInRound(exerciseInRound2);
 		training2.addRound(round2);
 
-        exerciseInRound3.setExerciseId(exercise3.getId());  // ovo ima u sebi Stomach
+        exerciseInRound3.setExerciseId(exercise3.getId());  
 		exerciseInRoundService.save(exerciseInRound3);
 		round3.setExerciseInRound(exerciseInRound3);
 		training3.addRound(round3);
@@ -140,7 +122,7 @@ public class TrainingTestData {
 		exerciseService.save(exercise2);
 		
 		exerciseService.save(exercise3);
-		exerciseService.save(exercise4);*/
+		exerciseService.save(exercise4);
 		
-	}
+	}*/
 }

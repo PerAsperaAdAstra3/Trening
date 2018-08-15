@@ -44,7 +44,6 @@ public class RoundController {
 	@RequestMapping(method = RequestMethod.POST )
 	public ResponseEntity<?> addRound(@Valid @RequestBody Round round, Errors errors){
 		if(errors.hasErrors()) {
-			System.out.println(errors.hasErrors());
 			return new ResponseEntity<String>(errors.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
 		}
 		Round newRound = roundService.save(round);

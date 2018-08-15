@@ -44,7 +44,6 @@ public class ExerciseInRoundController {
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public ResponseEntity<?> add(@Valid @RequestBody ExerciseInRound exerciseInRound, Errors errors){
 		if(errors.hasErrors()) {
-			System.out.println(errors.getAllErrors());
 			return new ResponseEntity<String>(errors.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
 		}
 		ExerciseInRound newExerciseInRound = exerciseInRoundService.save(exerciseInRound);

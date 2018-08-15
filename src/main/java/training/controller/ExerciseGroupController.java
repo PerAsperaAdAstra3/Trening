@@ -55,9 +55,6 @@ public class ExerciseGroupController {
 	
 	@RequestMapping(value = {"/filterExcerInGroup/{id}"}, method = RequestMethod.GET)
 	public String filterExcerInGroup(Model model, @PathVariable String id){
-		System.out.println("Id koji je selektovan" + id);
-	
-		System.out.println("BROJ VEZBI :" +exerciseGroupService.findOne(Long.parseLong(id)).getExercises().size());
 		List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
 		exerciseList.add(exerciseGroupService.findOne(Long.parseLong(id)));
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
@@ -68,37 +65,6 @@ public class ExerciseGroupController {
 		return "exercise";
 	}
 	
-	/// #### PRIVREMENI TEST
-	/*
-	@RequestMapping(value = {"/filterExcerInGroup/{id}"}, method = RequestMethod.GET)
-	public String filterExcerInGroup(Model model, @PathVariable String id){
-		System.out.println("Id koji je selektovan" + id);
-		localId = id;
-		return "redirect:/redirectToExercise";
-	}
-	
-	@RequestMapping(value = {"/redirectToExercise"}, method = RequestMethod.GET)
-	public String filterExcerInGroup(Model model){
-		System.out.println("BROJ VEZBI :" +exerciseGroupService.findOne(Long.parseLong(localId)).getExercises().size());
-		List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
-		exerciseList.add(exerciseGroupService.findOne(Long.parseLong(localId)));
-		model.addAttribute("exerciseDTO", new ExerciseDTO());
-		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
-		model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
-		model.addAttribute("exercises",  exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(localId)).getExercises()));		
-		model.addAttribute("exerciseGroupId", localId) ;
-		return "exercise";
-	}
-	*/
-	/// #### PRIVREMENI TEST
-	
-	/*
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<ExerciseGroupDTO> findOne(@PathVariable Long id ){
-		ExerciseGroup exerciseGroup = exerciseGroupService.findOne(id);
-		return new ResponseEntity<>( exerciseGroupToExerciseGroupDTO.convert(exerciseGroup), HttpStatus.OK);
-	}
-	*/
 	@RequestMapping(value = {"/addExerciseGroup"} ,method = RequestMethod.POST)
 	public String addExerciseGroup(Model model, @ModelAttribute("exerciseGroupDTO") ExerciseGroupDTO exerciseGroupDTO, @RequestParam String mode){
 		

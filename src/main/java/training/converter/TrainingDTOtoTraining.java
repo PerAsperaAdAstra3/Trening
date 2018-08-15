@@ -22,7 +22,6 @@ public class TrainingDTOtoTraining implements Converter<TrainingDTO,Training>{
 		}
 
 		Training training = new Training();
-		//client.setId(source.getId());
 		training.setDate(source.getDate());
 		training.setNumberOfTrainings(source.getNumberOfTrainings());
 		if(source.getClientId() != null) {

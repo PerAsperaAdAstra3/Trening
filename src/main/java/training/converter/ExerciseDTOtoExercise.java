@@ -24,11 +24,7 @@ public class ExerciseDTOtoExercise implements Converter<ExerciseDTO,Exercise> {
 		exercise.setId(source.getId());
 		exercise.setName(source.getName());
 		exercise.setDescription(source.getDescription());
-		/*if(source.getExerciseGroupId() != null) {
-			exerciseGroupFindOneParam = source.getExerciseGroupId();
-		}*/
-		exercise.setExerciseGroup(exerciseGroupService.findOne(source.getExerciseGroupId())); //exerciseGroupFindOneParam));
-			
+		exercise.setExerciseGroup(exerciseGroupService.findOne(source.getExerciseGroupId()));
 		return exercise;
 	}
 	

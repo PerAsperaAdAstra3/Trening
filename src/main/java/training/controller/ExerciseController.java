@@ -47,31 +47,17 @@ public class ExerciseController {
 		model.addAttribute("hiddenExerciseGroupId", "0") ;
 		return "exercise";
 	}
-	/*
-	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<ExerciseDTO> getExercise(@PathVariable Long id) {
-		Exercise exercise = exerciseService.findOne(id);
-
-		return new ResponseEntity<>(exerciseToExerciseDTO.convert(exercise), HttpStatus.OK);
-	}
-*/
 	
 	@RequestMapping(value = {"/addExercise"}, method = RequestMethod.POST)
 	public String addExercise(Model model, @ModelAttribute("exerciseDTO") ExerciseDTO exerciseDTO, @RequestParam String mode, @RequestParam String hiddenExerciseGroupId) {
 
-		System.out.println("Exercise group parameter : "+hiddenExerciseGroupId);
 		if("add".equals(mode)) {
 			exerciseDTO.setId(null);
 			exerciseService.save(exerciseDTOtoExercise.convert(exerciseDTO));
 		} else {
-			System.out.println("Usli smo u EDIT");
 			exerciseService.edit(exerciseDTO.getId() , exerciseDTOtoExercise.convert(exerciseDTO));
 		}
-		
-		System.out.println("Ime : "+exerciseDTO.getName() );
-		System.out.println("Opis : "+exerciseDTO.getDescription() );
-		System.out.println("Exercise gorup ID : "+exerciseDTO.getExerciseGroupId());
-		
+				
 		if(!hiddenExerciseGroupId.equals("")){
 			List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
 			exerciseList.add(exerciseGroupService.findOne(exerciseDTO.getExerciseGroupId()));
@@ -81,11 +67,7 @@ public class ExerciseController {
 			model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseGroupService.findOne(exerciseDTO.getExerciseGroupId()).getExercises()));		
 			model.addAttribute("hiddenExerciseGroupId", exerciseDTO.getExerciseGroupId());
 			return "exercise";
-			
-	//		System.out.println("U add-u smo, usli smo u proveru da li smo dosli sa grupe");
-	//		return "filterExcerInGroup/{id}"; // "redirect:/filterExcerInGroup/?id="+hiddenExerciseGroupId; ///filterExcerInGroup/{id}
 		}
-		
 		return "redirect:/exerciseList";
 	}
 	
@@ -94,15 +76,11 @@ public class ExerciseController {
 	@RequestMapping(value = {"/deleteExercise/{id}/{hiddenExerciseGroupId}"}, method = RequestMethod.GET)
 	public String delete(Model model, @PathVariable String id, @PathVariable String hiddenExerciseGroupId){
 		
-		System.out.println("+++ USLI SMO U DELETE +++");
-		
 		exerciseService.delete(Long.parseLong(id));
 
 		if(!hiddenExerciseGroupId.equals("0")){
 			List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
 			exerciseList.add(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)));
-			
-			System.out.println("+++ USLI SMO U DELETE +++");
 			
 			model.addAttribute("exerciseDTO", new ExerciseDTO());
 			model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
@@ -111,9 +89,6 @@ public class ExerciseController {
 			model.addAttribute("exercises", list);		
 			model.addAttribute("hiddenExerciseGroupId", hiddenExerciseGroupId);
 			return "exercise";
-			
-	//		System.out.println("U add-u smo, usli smo u proveru da li smo dosli sa grupe");
-	//		return "filterExcerInGroup/{id}"; // "redirect:/filterExcerInGroup/?id="+hiddenExerciseGroupId; ///filterExcerInGroup/{id}
 		}
 		return "redirect:/exerciseList";
 	}
@@ -127,9 +102,7 @@ public class ExerciseController {
 			model.addAttribute("exerciseDTO", new ExerciseDTO());
 			model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
-	//		List<ExerciseDTO> exerciseListToFilter = exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)).getExercises());
 			List<ExerciseDTO> exerciseListToFilter = exerciseToExerciseDTO.convert(exerciseService.filter( exerciseDTOtoExercise.convert(exerciseDTOSearch)));
-		//	exerciseListToFilter ;
 			
 			List<ExerciseDTO> exerciseListToFilterRefined = new ArrayList<ExerciseDTO>();
 			for(ExerciseDTO exerciseDTO : exerciseListToFilter) {
@@ -143,8 +116,6 @@ public class ExerciseController {
 			model.addAttribute("hiddenExerciseGroupId", hiddenExerciseGroupId);
 			return "exercise";
 		}	
-	//		System.out.println("U add-u smo, usli smo u proveru da li smo dosli sa grupe");
-	//		return "filterExcerInGroup/{id}"; // "redirect:/filterExcerInGroup/?id="+hiddenExerciseGroupId; ///filterExcerInGroup/{id}
 		
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
