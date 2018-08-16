@@ -110,6 +110,13 @@
 	function sync1(item){
 	    roundId = item.find(".roundId").html()
 	    $("#hiddenRoundInTraining").val(roundId);
+	    
+	    document.getElementById("exerciseInRoundExerciseName").disabled = false;
+	    document.getElementById("modal_button").disabled = false;
+	    document.getElementById("exerciseInRoundNote").disabled = false;
+	    document.getElementById("exerciseInRoundNumberOfRepetitions").disabled = false;
+	    document.getElementById("exerciseInRoundDifficulty").disabled = false;
+	    document.getElementById("exerciseInRoundDodaj").disabled = false;
 	}
 	
 	function sync(item){
@@ -142,7 +149,7 @@
 		<div class="col-xs-2">
 			<label for="trainingDate">Datum:</label>
 			<!-- TODO FALI FIELD OVOG INPUTA -->
-			<input type="date" id="trainingDate" class="form-control"/>
+			<input type="date" id="trainingDate" class="form-control" th:value="${trainingCreationDate}"/>
 		</div>
   	</div>
   	<div class="form-group row">
@@ -185,7 +192,7 @@
 		<thead>
 			<tr>
 	 			<th>Id</th>
-				<th>Broj ponavljanja</th>
+				<th>Broj kruga</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -236,7 +243,7 @@
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button class="btn btn-success"  type="submit" disabled="disabled">Dodaj</button>
+			<button id="exerciseInRoundDodaj" class="btn btn-success"  type="submit" disabled="disabled">Dodaj</button>
 		</div>
 	</div>
 
@@ -244,6 +251,7 @@
 <input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
 <input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
 
+<input id="hiddenRoundInTraining" type="hidden" name="roundInTraining" th:value="${roundInTraining}"/>
 
 </form>
 
@@ -324,7 +332,8 @@
 		</tr>
 		<tr class="hidden_input" id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
 			<td class="exerciseId" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
-			<td class="exerciseName" th:utext="${exerciseInRound.difficulty}"></td>
+			<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
+			<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
 			<td></td>
 		</tr>
 	</tbody>

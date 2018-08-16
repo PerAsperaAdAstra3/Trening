@@ -1,6 +1,9 @@
 package training.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -77,16 +80,24 @@ public class TrainingController {
 	}
 
 	//Initialization of TrainingCreation page
+	
 	@RequestMapping(value = { "/trainingCreationHandler/{id}" }, method = RequestMethod.GET)
 	public String createTraining(Model model, @PathVariable String id) {
 
 		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(id));
 		
+	        Date date = new Date();
+	   
+	        DateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
+	        System.out.println("~~~~~~~~~~~~~~~~~~~~~~Today is " + formatter.format(date));
+		
+		System.out.println("DATUM ::::::" + new Date());
 		model.addAttribute("trainingDTO", new TrainingDTO());
 		model.addAttribute("trainingDTOSearch", new TrainingDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 		model.addAttribute("hiddenRoundInTraining", "");
+		model.addAttribute("trainingCreationDate", date);
 
 		List<Round> roundList = new ArrayList<Round>();
 
@@ -128,9 +139,18 @@ public class TrainingController {
 		System.out.println("Usli smo u SAVE");
 		TrainingDTO newTraining = new TrainingDTO();
 
+		List<Training> trainingList = trainingService.findAll();
+		Long max = 0l;
+		for (Training training : trainingList) {
+			max = Math.max(training.getNumberOfTrainings(), max);
+		}
+		model.addAttribute("trainingNumberOfTraining", max + 1);
+		
 		Training trainingDefaultId = trainingDTOtoTraining.convert(newTraining);
 
 		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(hiddenClientTrainingId));
+		
+		trainingDefaultId.setNumberOfTrainings((int) (max+1));
 		
 		trainingService.save(trainingDefaultId);
 		model.addAttribute("trainingDTO", new TrainingDTO());
@@ -142,13 +162,6 @@ public class TrainingController {
 		List<Round> roundList = new ArrayList<Round>();
 
 		List<ExerciseInRound> exercisesInRound = new ArrayList<ExerciseInRound>();
-
-		List<Training> trainingList = trainingService.findAll();
-		Long max = 0l;
-		for (Training training : trainingList) {
-			max = Math.max(training.getNumberOfTrainings(), max);
-		}
-		model.addAttribute("trainingNumberOfTraining", max + 1);
 
 		// Hidden ID's
 		model.addAttribute("hiddenClientTrainingId", hiddenClientTrainingId);
@@ -177,16 +190,15 @@ public class TrainingController {
 	@RequestMapping(value = { "/addRound" }, method = RequestMethod.POST)
 	public String addRound(Model model, @RequestParam String hiddenClientTrainingId,
 			@RequestParam String hiddenTrainingId) {
-
-		List<Round> rounds = roundService.findAll();
+		Training training = trainingService.findOne(Long.parseLong(hiddenTrainingId));
+		/*	List<Round> rounds = roundService.findAll();
 		int max1 = 0;
 		for (Round round : rounds) {
 			max1 = Math.max(round.getRoundSequenceNumber(), max1);
-		}
+		}*/
 
-		Round round = new Round(max1);
-		Training training = trainingService.findOne(Long.parseLong(hiddenTrainingId));
-
+		Round round = new Round(training.getRounds().size()+1);
+		
 		training.addRound(round);
 		model.addAttribute("hiddenRoundInTraining", "");
 		roundService.save(round);
@@ -228,6 +240,7 @@ public class TrainingController {
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds())); 
 		/// Testing something
 		List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
+		System.out.println("BROJ KRUGOVA U TRENINGU : " + training.getRounds().size());
 		for (Round roundIter : training.getRounds()) {
 			if (roundIter.getExerciseInRound() != null) {
 				listExerciseInRound.addAll(roundIter.getExerciseInRound());
