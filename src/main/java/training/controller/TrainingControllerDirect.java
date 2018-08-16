@@ -22,10 +22,12 @@ import training.converter.ExerciseToExerciseDTO;
 import training.converter.RoundToRoundDTO;
 import training.converter.TrainingDTOtoTraining;
 import training.converter.TrainingToTrainingDTO;
+import training.dto.ClientDTO;
 import training.dto.ExerciseDTO;
 import training.dto.ExerciseInRoundDTO;
 import training.dto.RoundDTO;
 import training.dto.TrainingDTO;
+import training.model.Client;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
@@ -36,7 +38,7 @@ import training.service.RoundService;
 import training.service.TrainingService;
 
 @Controller
-public class TrainingController {
+public class TrainingControllerDirect {
 
 	@Autowired
 	private ExerciseToExerciseDTO exerciseToExerciseDTO;
@@ -71,20 +73,20 @@ public class TrainingController {
 	@Autowired
 	private ExerciseInRoundService exerciseInRoundService;
 
-	@RequestMapping(value = { "/trainingList" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/trainingListDirect" }, method = RequestMethod.GET)
 	public String getTrainings(Model model) {
 		model.addAttribute("trainingDTOSearch", new TrainingDTO());
 		model.addAttribute("trainingDTO", new TrainingDTO());
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingService.findAll()));
 		return "training";
 	}
-
+	
 	//Initialization of TrainingCreation page
 	
-	@RequestMapping(value = { "/trainingCreationHandler/{id}" }, method = RequestMethod.GET)
-	public String createTraining(Model model, @PathVariable String id) {
+	@RequestMapping(value = { "/trainingCreationHandlerDirect" }, method = RequestMethod.GET)
+	public String createTraining(Model model) {
 
-		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(id));
+	//	Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(id));
 		
 	        Date date = new Date();
 	   
@@ -101,6 +103,8 @@ public class TrainingController {
 
 		List<Round> roundList = new ArrayList<Round>();
 
+		
+		
 		List<ExerciseInRound> exercisesInRound = new ArrayList<ExerciseInRound>();
 
 		List<Training> trainingList = trainingService.findAll();
@@ -109,36 +113,44 @@ public class TrainingController {
 			max = Math.max(training.getNumberOfTrainings(), max);
 		}
 		model.addAttribute("trainingNumberOfTraining", max + 1);
-
+		
+		List<Client> clientList = clientService.findAll();
+		model.addAttribute("clientList", clientList);
+		
 		// Hidden ID's
-		model.addAttribute("hiddenClientTrainingId", id);
+		model.addAttribute("hiddenClientTrainingId", "");
 		model.addAttribute("hiddenTrainingId", "NONE");
 
 		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
 		
-		for(ExerciseDTO exerciseDTO : exercisesForModal) {
+	/*	for(ExerciseDTO exerciseDTO : exercisesForModal) {
 			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
 				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
 			} else {
 				exerciseDTO.setColorCode(60);
 			}
-		}
+		}*/
 		
 		model.addAttribute("exercises", exercisesForModal);
 		model.addAttribute("exercisesInRound", exercisesInRound);
 
-		model.addAttribute("clientOfTheTraining", clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));
+		model.addAttribute("clientOfTheTraining", new ClientDTO());//clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));
 		model.addAttribute("roundsInTraining", roundList);
 
-		return "trainingCreation";
+		return "trainingCreationDirect";
 	}
 	
 	//Saving of TrainingCreation page
-	@RequestMapping(value = { "/saveTraining"}, method = RequestMethod.POST)
-	public String saveTraining(Model model,  @RequestParam String hiddenClientTrainingId) {
+	@RequestMapping(value = { "/saveTrainingDirect"}, method = RequestMethod.POST)
+	public String saveTraining(Model model, @ModelAttribute("clientOfTheTraining") ClientDTO clientOfTheTraining) {
 		System.out.println("Usli smo u SAVE");
+		System.out.println("+++++++++++++ ClientDOT ID : " + clientOfTheTraining.getId());
+		
 		TrainingDTO newTraining = new TrainingDTO();
-
+		
+		List<Client> clientList = clientService.findAll();
+		model.addAttribute("clientList", clientList);
+		
 		List<Training> trainingList = trainingService.findAll();
 		Long max = 0l;
 		for (Training training : trainingList) {
@@ -148,10 +160,10 @@ public class TrainingController {
 		
 		Training trainingDefaultId = trainingDTOtoTraining.convert(newTraining);
 
-		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(hiddenClientTrainingId));
+		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(clientOfTheTraining.getId());
 		
 		trainingDefaultId.setNumberOfTrainings((int) (max+1));
-		trainingDefaultId.setClient(clientService.findOne(Long.parseLong(hiddenClientTrainingId)));
+		trainingDefaultId.setClient(clientService.findOne(clientOfTheTraining.getId()));
 		trainingService.save(trainingDefaultId);
 		model.addAttribute("trainingDTO", new TrainingDTO());
 		model.addAttribute("trainingDTOSearch", new TrainingDTO());
@@ -164,7 +176,7 @@ public class TrainingController {
 		List<ExerciseInRound> exercisesInRound = new ArrayList<ExerciseInRound>();
 
 		// Hidden ID's
-		model.addAttribute("hiddenClientTrainingId", hiddenClientTrainingId);
+		model.addAttribute("hiddenClientTrainingId", clientOfTheTraining.getId());
 		model.addAttribute("hiddenTrainingId", trainingDefaultId.getId());
 
 		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
@@ -180,14 +192,14 @@ public class TrainingController {
 		model.addAttribute("exercises", exercisesForModal);
 		model.addAttribute("exercisesInRound", exercisesInRound);
 
-		model.addAttribute("clientOfTheTraining", clientToClientDTO.convert(clientService.findOne(Long.parseLong(hiddenClientTrainingId))));
+		model.addAttribute("clientOfTheTraining", clientToClientDTO.convert(clientService.findOne(clientOfTheTraining.getId())));
 		model.addAttribute("roundsInTraining", roundList);
 
-		return "trainingCreation";
+		return "trainingCreationDirect";
 	}
 
 	//Adding a round in to Training
-	@RequestMapping(value = { "/addRound" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "/addRoundDirect" }, method = RequestMethod.POST)
 	public String addRound(Model model, @RequestParam String hiddenClientTrainingId,
 			@RequestParam String hiddenTrainingId) {
 		Training training = trainingService.findOne(Long.parseLong(hiddenTrainingId));
@@ -197,6 +209,9 @@ public class TrainingController {
 			max1 = Math.max(round.getRoundSequenceNumber(), max1);
 		}*/
 
+		List<Client> clientList = clientService.findAll();
+		model.addAttribute("clientList", clientList);
+		
 		Round round = new Round(training.getRounds().size()+1);
 		
 		training.addRound(round);
@@ -249,14 +264,14 @@ public class TrainingController {
 		model.addAttribute("exercisesInRound", round.getExerciseInRound());
 																			
 
-		return "trainingCreation";
+		return "trainingCreationDirect";
 	}
 
 	// add ExerciseInRound
 	
 	// ##################   EXERCIS IN ROUND #####################
 	
-	@RequestMapping(value = { "/addExerciseInRound" }, method = RequestMethod.POST) 
+	@RequestMapping(value = { "/addExerciseInRoundDirect" }, method = RequestMethod.POST) 
 	
 	// ADD
 	
@@ -272,6 +287,9 @@ public class TrainingController {
 
 		exerciseInRoundService.save(exerciseInRound);
 
+		List<Client> clientList = clientService.findAll();
+		model.addAttribute("clientList", clientList);
+		
 		List<Round> rounds = roundService.findAll();
 		int max1 = 0;
 		for (Round round : rounds) {
@@ -323,18 +341,20 @@ public class TrainingController {
 		}
 		model.addAttribute("exercisesInRound", listExerciseInRound);
 
-		return "trainingCreation";
+		return "trainingCreationDirect";
 	}
 	
 	//DELETE
 	
-	@RequestMapping(value = {"/deleteExerciseInRound/{id}/{hiddenTrainingId}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/deleteExerciseInRoundDirect/{id}/{hiddenTrainingId}"}, method = RequestMethod.GET)
 	public String delete(Model model, @PathVariable String id, @PathVariable String hiddenTrainingId){
 		
 		System.out.println("###############");
 
 		System.out.println(hiddenTrainingId);
 	
+		List<Client> clientList = clientService.findAll();
+		model.addAttribute("clientList", clientList);
 		
 		exerciseInRoundService.delete(Long.parseLong(id));
 
@@ -389,11 +409,11 @@ public class TrainingController {
 		}
 		model.addAttribute("exercisesInRound", listExerciseInRound);
 
-		return "trainingCreation";
+		return "trainingCreationDirect";
 	}
 
 	//DELETE ROUND
-	@RequestMapping(value = {"/deleteRound/{id}/{hiddenTrainingId}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/deleteRoundDirect/{id}/{hiddenTrainingId}"}, method = RequestMethod.GET)
 	public String deleteRound(Model model, @PathVariable String id, @PathVariable String hiddenTrainingId){
 		
 		System.out.println("###############");
@@ -412,6 +432,9 @@ public class TrainingController {
 			max1 = Math.max(round.getRoundSequenceNumber(), max1);
 		}
 
+		List<Client> clientList = clientService.findAll();
+		model.addAttribute("clientList", clientList);
+		
 		Training training = trainingService.findOne(Long.parseLong(hiddenTrainingId));
 		// Hidden ID's
 		model.addAttribute("hiddenClientTrainingId", trainingService.findOne(Long.parseLong(hiddenTrainingId)).getClient().getId());
@@ -457,7 +480,7 @@ public class TrainingController {
 		}
 		model.addAttribute("exercisesInRound", listExerciseInRound);
 
-		return "trainingCreation";
+		return "trainingCreationDirect";
 	}
 	
 }
