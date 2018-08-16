@@ -17,6 +17,13 @@
 		selectRoundIdOnRowClick(this)
 	});
 	
+	function enableAddRound(item) {
+		var trainingID = document.getElementsByClassName("hiddenTrainingId");
+		if(trainingID[0].value != "NONE"){
+			document.getElementById("noviKrug").disabled = false;
+		}
+	}
+	
 	  /*<![CDATA[*/
     
 	function filterByName() {
@@ -115,7 +122,7 @@
 	}
 	</script>
 </head>
-<body class="gradient">
+<body class="gradient" onLoad="enableAddRound()">
 	<div class="alert div1" role="alert">
 	
 	<a href="/" class="home">Početna</a>
@@ -129,7 +136,7 @@
 
 
 
-<form style="padding-left:3em" th:action="@{/filterClients}" th:object="${clientOfTheTraining}" method="POST">
+<form style="padding-left:3em" th:action="@{/saveTraining}" th:object="${clientOfTheTraining}" method="POST">
 
 	<div class="form-group row">
 		<div class="col-xs-2">
@@ -141,26 +148,31 @@
   	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="trainingNumberOfTraining">Redni broj:</label>
-			<input type="text" id="trainingNumberOfTraining" class="form-control" name="trainingNumberOfTraining" th:value="${trainingNumberOfTraining}"/>
+			<input type="text" id="trainingNumberOfTraining" class="form-control" name="trainingNumberOfTraining" th:value="${trainingNumberOfTraining}" disabled="disabled"/>
 		</div>
   	</div>
   	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="trainingClient">Klijent:</label>
-			<input type="text" id="trainingClient" class="form-control" th:field="*{name}" />
+			<input type="text" id="trainingClient" class="form-control" th:field="*{name}" disabled="disabled"/>
 		</div>
 	</div>
 	
+	<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+	<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
+	<input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
+
+	<button type="submit">Save</button>
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
 <form  style="padding-left:3em" th:action="@{/addRound}" th:object="${clientOfTheTraining}" method="POST">
  	<div class="form-group row">
 		<div class="col-xs-2">
-			<button class="btn btn-success" type="submit">Novi krug</button>
+			<button id="noviKrug" class="btn btn-success" type="submit" disabled="disabled">Novi krug</button>
 		</div>
 	</div>
-<input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
 <input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
 </form>
 <br/>
@@ -193,42 +205,42 @@
 			<label for="exerciseInRoundExerciseName">Vežba:</label>
 			<div class="form-row">
 			 	<div class="col">
-					<input type="text" class="form-control" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName"/>
+					<input type="text" class="form-control" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName" disabled="disabled"/>
 				</div>
 				<div class="col">
-					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Izbor</button>
+					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled="disabled">Izbor</button>
 				</div>
 			</div>
-			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
+			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId" disabled="disabled"/>
 		</div>
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<!-- TODO NEMA FIELD -->
 			<label for="exerciseInRoundNote">Napomena:</label>
-			<input class="form-control" id="exerciseInRoundNote" type="text"  />
+			<input class="form-control" id="exerciseInRoundNote" type="text" disabled="disabled"/>
 		</div>
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="exerciseInRoundNumberOfRepetitions">Broj ponavljanja:</label>
-			<input type="text" class="form-control" id="exerciseInRoundNumberOfRepetitions" th:field="*{numberOfRepetitions}"/>
+			<input type="text" class="form-control" id="exerciseInRoundNumberOfRepetitions" th:field="*{numberOfRepetitions}" disabled="disabled"/>
 		</div>
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<!-- Ovde sam mislila na kilazu :) -->
 			<label for="exerciseInRoundDifficulty">Težina:</label>	
-			<input type="text" class="form-control" id="exerciseInRoundDifficulty" th:field="*{difficulty}"/>
+			<input type="text" class="form-control" id="exerciseInRoundDifficulty" th:field="*{difficulty}" disabled="disabled"/>
 		</div>
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button class="btn btn-success"  type="submit">Dodaj</button>
+			<button class="btn btn-success"  type="submit" disabled="disabled">Dodaj</button>
 		</div>
 	</div>
 
-<input type="hidden" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
 <input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
 <input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
 
@@ -237,7 +249,7 @@
 
 <br/>
 
-
+<button type="button" id="xxx">XXX</button>
 
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
