@@ -15,7 +15,9 @@ h2 {
 	font-weight:bold
 }
 
-
+.highlighted{
+	background-color:#1ea043
+}
 
 #hidden_input {display : none};
 

@@ -6,7 +6,7 @@ function highlightRow(row){
   		//njenim dodavanjem ili uklanjanjem oznacavamo da neki red
   		//dobija, odnosno gubi selekciju
   		//uklanjamo sa trenutno selektovanog
-  		$(".highlighted").removeClass("highlighted");
+		$(row).parent().find(".highlighted").removeClass("highlighted");
   		//dodajemo na novi selektovani
     	$(row).addClass("highlighted");
     	//pozivamo sinhronizaciju, prosledjujemo dati red
