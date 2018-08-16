@@ -21,8 +21,7 @@ public class Round {
 	@JoinColumn(name = "RoundSeqNumber")
 	private int roundSequenceNumber;
 	
-	@OneToMany
-	@JoinColumn(name = "exerInRound")
+	@OneToMany(mappedBy = "round")
 	private List<ExerciseInRound> roundExerciseInRound = new ArrayList<ExerciseInRound>();
 	
 	@ManyToOne

@@ -120,7 +120,7 @@
 	
 	function sync1(item){
 	    roundId = item.find(".roundId").html()
-	    $("#hiddenRoundInTraining").val(roundId);
+	    $("#exerciseInRoundForm #hiddenRoundInTraining").val(roundId);
 	    
 	    document.getElementById("exerciseInRoundExerciseName").disabled = false;
 	    document.getElementById("modal_button").disabled = false;
@@ -330,7 +330,7 @@
 <br/>
 
 
-<form th:action="@{/deleteExerciseInRound}" th:object="${exerciseDTOSearch}" method="POST">
+<form id="exerciseInRoundForm" th:action="@{/deleteExerciseInRound}" th:object="${exerciseDTOSearch}" method="POST">
 <div class="container-responsive">
 	<table class = "table table-responsive">
 		<thead>
@@ -358,6 +358,7 @@
 				<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
 				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
 				<td class="note" th:utext="${exerciseInRound.note}"></td>
+				<td class="note" th:utext="${exerciseInRound.roundId}"></td>
 				<td><a th:href="@{/deleteExerciseInRound/{id}/{hiddenTrainingId}(id=${exerciseInRound.ExecInRound_Id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			</tr>
 		</tbody>
