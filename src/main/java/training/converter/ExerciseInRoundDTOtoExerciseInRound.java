@@ -17,6 +17,7 @@ public class ExerciseInRoundDTOtoExerciseInRound implements Converter<ExerciseIn
 		exerciseInRound.setExerciseName(source.getExerciseInRoundExerciseName());
 		exerciseInRound.setExerciseId(source.getexerciseInRoundExerciseId());
 		exerciseInRound.setNumberOfRepetitions(source.getNumberOfRepetitions());
+		exerciseInRound.setNote(source.getNote());
 		return exerciseInRound;
 	}
 	

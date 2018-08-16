@@ -14,6 +14,16 @@ public class ExerciseInRoundDTO {
 
 	private Long roundId;
 	
+	private String note;
+	
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
 	public Long getexerciseInRoundExerciseId() {
 		return exerciseInRoundExerciseId;
 	}

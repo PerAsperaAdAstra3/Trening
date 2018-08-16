@@ -21,6 +21,9 @@ public class ExerciseInRound {
 	@Column(name="Difficulty")
 	private String difficulty;
 
+	@Column(name="Note")
+	private String note;
+	
 	@Column(name="ExerciseID")
 	private Long exerciseID;
 	
@@ -31,6 +34,14 @@ public class ExerciseInRound {
 	@JoinColumn(name="roundExerciseInRound")
 	private Round round;
 	
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
 	public String getExerciseName() {
 		return exerciseName;
 	}

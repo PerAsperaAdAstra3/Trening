@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.engine.transaction.jta.platform.internal.SynchronizationRegistryBasedSynchronizationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ import training.dto.ExerciseDTO;
 import training.dto.ExerciseInRoundDTO;
 import training.dto.RoundDTO;
 import training.dto.TrainingDTO;
+import training.model.ExerciseGroup;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
@@ -67,7 +69,7 @@ public class TrainingController {
 
 	@Autowired
 	private ExerciseInRoundDTOtoExerciseInRound exerciseInRoundDTOtoExerciseInRound;
-
+	
 	@Autowired
 	private ExerciseInRoundService exerciseInRoundService;
 
@@ -253,10 +255,14 @@ public class TrainingController {
 	}
 
 	// add ExerciseInRound
+	
+	// ##################   EXERCIS IN ROUND #####################
+	
 	@RequestMapping(value = { "/addExerciseInRound" }, method = RequestMethod.POST) 
-																					
-																					
-	public String addExerciseInRound(Model model,
+	
+	// ADD
+	
+	public String addExerciseInRound(Model model,	
 			@ModelAttribute("exerciseInRoundDTO") ExerciseInRoundDTO exerciseInRoundDTO,
 			@RequestParam String roundInTraining, @RequestParam String hiddenClientTrainingId,
 			@RequestParam String hiddenTrainingId) {
@@ -321,4 +327,94 @@ public class TrainingController {
 
 		return "trainingCreation";
 	}
+	
+	//DELETE
+	
+	@RequestMapping(value = {"/deleteExerciseInRound"}, method = RequestMethod.POST)
+	public String delete(Model model, @ModelAttribute("exercisesInRound") ExerciseInRound exercisesInRound, @RequestParam String hiddenTrainingInRoundToDeleteId, 
+			@RequestParam String hiddenTrainingId,@RequestParam String hiddenClientTrainingId, @RequestParam String roundInTraining){
+		
+		System.out.println("###############");
+		System.out.println(hiddenTrainingInRoundToDeleteId);
+		System.out.println(hiddenTrainingId);
+		System.out.println(hiddenClientTrainingId);
+		//System.out.println(exerciseInRound);
+		//System.out.println();
+		
+		exerciseInRoundService.delete(exercisesInRound.getExecInRound_Id());
+
+		/*	List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
+			exerciseList.add(exerciseInRoundService.findOne(Long.parseLong(hiddenExerciseGroupId)));
+			
+			model.addAttribute("exerciseDTO", new ExerciseDTO());
+			model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
+			List<ExerciseDTO> list = exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)).getExercises());
+			model.addAttribute("exercises", list);		
+			model.addAttribute("hiddenExerciseGroupId", hiddenExerciseGroupId);
+			return "exercise";
+		}*/
+		
+	//	Round roundFromExerInRound = roundService.findOne(Long.parseLong(roundInTraining));
+	//	ExerciseInRound exerciseInRound = exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
+
+		//roundFromExerInRound.setExerciseInRound(exerciseInRound);
+
+//		exerciseInRoundService.save(exerciseInRound);
+
+		List<Round> rounds = roundService.findAll();
+		int max1 = 0;
+		for (Round round : rounds) {
+			max1 = Math.max(round.getRoundSequenceNumber(), max1);
+		}
+
+		Training training = trainingService.findOne(Long.parseLong(hiddenTrainingId));
+		// Hidden ID's
+		model.addAttribute("hiddenClientTrainingId", hiddenClientTrainingId);
+		model.addAttribute("hiddenTrainingId", hiddenTrainingId);
+
+		model.addAttribute("roundDTO", new RoundDTO());
+
+		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
+		model.addAttribute("trainingDTOSearch", new TrainingDTO());
+		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
+		List<Training> trainingList = trainingService.findAll();
+		Long max = 0l;
+		for (Training trainingIter : trainingList) {
+			max = Math.max(trainingIter.getNumberOfTrainings(), max);
+		}
+		
+		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
+		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(hiddenClientTrainingId));
+		for(ExerciseDTO exerciseDTO : exercisesForModal) {
+			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
+				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
+			} else {
+				exerciseDTO.setColorCode(60);
+			}
+		}
+		model.addAttribute("exercises", exercisesForModal);
+
+		model.addAttribute("trainingNumberOfTraining", max + 1);
+
+		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
+
+		model.addAttribute("clientOfTheTraining",
+				clientToClientDTO.convert(clientService.findOne(Long.parseLong(hiddenClientTrainingId))));
+		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
+
+		model.addAttribute("hiddenRoundInTraining", "");
+
+		Training trainingTemp = trainingService.findOne(Long.parseLong(hiddenTrainingId));
+
+		List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
+		for (Round roundIter : trainingTemp.getRounds()) {
+			listExerciseInRound.addAll(roundIter.getExerciseInRound());
+		}
+		model.addAttribute("exercisesInRound", listExerciseInRound);
+
+		return "trainingCreation";
+	}
+
+	
 }
