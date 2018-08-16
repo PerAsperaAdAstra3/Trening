@@ -120,7 +120,7 @@
 	
 	function sync1(item){
 	    roundId = item.find(".roundId").html()
-	    $("#exerciseInRoundForm #hiddenRoundInTraining").val(roundId);
+	    $("#addExerciseInRoundForm #hiddenRoundInTraining").val(roundId);
 	    
 	    document.getElementById("exerciseInRoundExerciseName").disabled = false;
 	    document.getElementById("modal_button").disabled = false;
@@ -228,7 +228,7 @@
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
 
-<form style="padding-left:3em"  th:action="@{/addExerciseInRound}" th:object="${exerciseInRoundDTO}" method="POST">
+<form style="padding-left:3em" id="addExerciseInRoundForm" th:action="@{/addExerciseInRound}" th:object="${exerciseInRoundDTO}" method="POST">
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="exerciseInRoundExerciseName">Vežba:</label>
@@ -273,7 +273,7 @@
 <input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
 <input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
 
-<input id="hiddenRoundInTraining" type="hidden" name="roundInTraining" th:value="${roundInTraining}"/>
+<input id="hiddenRoundInTraining" type="hidden" th:field="*{roundId}" />
 
 </form>
 
@@ -330,7 +330,7 @@
 <br/>
 
 
-<form id="exerciseInRoundForm" th:action="@{/deleteExerciseInRound}" th:object="${exerciseDTOSearch}" method="POST">
+<form id="deleteExerciseInRoundForm" th:action="@{/deleteExerciseInRound}" th:object="${exerciseDTOSearch}" method="POST">
 <div class="container-responsive">
 	<table class = "table table-responsive">
 		<thead>
@@ -358,7 +358,7 @@
 				<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
 				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
 				<td class="note" th:utext="${exerciseInRound.note}"></td>
-				<td class="note" th:utext="${exerciseInRound.roundId}"></td>
+				<td class="note" th:utext="${exerciseInRound.round.id}"></td>
 				<td><a th:href="@{/deleteExerciseInRound/{id}/{hiddenTrainingId}(id=${exerciseInRound.ExecInRound_Id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			</tr>
 		</tbody>

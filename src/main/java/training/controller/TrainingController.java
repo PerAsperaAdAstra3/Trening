@@ -261,27 +261,19 @@ public class TrainingController {
 	// ADD
 	
 	public String addExerciseInRound(Model model,	
-			@ModelAttribute("exerciseInRoundDTO") ExerciseInRoundDTO exerciseInRoundDTO,
-			@RequestParam String roundInTraining, @RequestParam String hiddenClientTrainingId,
-			@RequestParam String hiddenTrainingId) {
+			@ModelAttribute("exerciseInRoundDTO") ExerciseInRoundDTO exerciseInRoundDTO) {
 
-		Round roundFromExerInRound = roundService.findOne(Long.parseLong(roundInTraining));
 		ExerciseInRound exerciseInRound = exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
-
-		roundFromExerInRound.setExerciseInRound(exerciseInRound);
-
 		exerciseInRoundService.save(exerciseInRound);
+		Training training = exerciseInRound.getRound().getTraining();
+		Long trainingId = training.getId();
+		Long clientId = training.getClient().getId();
 
 		List<Round> rounds = roundService.findAll();
 		int max1 = 0;
 		for (Round round : rounds) {
 			max1 = Math.max(round.getRoundSequenceNumber(), max1);
 		}
-
-		Training training = trainingService.findOne(Long.parseLong(hiddenTrainingId));
-		// Hidden ID's
-		model.addAttribute("hiddenClientTrainingId", hiddenClientTrainingId);
-		model.addAttribute("hiddenTrainingId", hiddenTrainingId);
 
 		model.addAttribute("roundDTO", new RoundDTO());
 
@@ -294,37 +286,29 @@ public class TrainingController {
 			max = Math.max(trainingIter.getNumberOfTrainings(), max);
 		}
 		
-		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
-		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(hiddenClientTrainingId));
-		for(ExerciseDTO exerciseDTO : exercisesForModal) {
-			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
-				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
-			} else {
-				exerciseDTO.setColorCode(60);
-			}
-		}
-		model.addAttribute("exercises", exercisesForModal);
+		
+		model.addAttribute("exercises", getExercisesForModel(clientId));
 
 		model.addAttribute("trainingNumberOfTraining", max + 1);
 
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 
 		model.addAttribute("clientOfTheTraining",
-				clientToClientDTO.convert(clientService.findOne(Long.parseLong(hiddenClientTrainingId))));
+				clientToClientDTO.convert(training.getClient()));
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 
 		model.addAttribute("hiddenRoundInTraining", "");
 
-		Training trainingTemp = trainingService.findOne(Long.parseLong(hiddenTrainingId));
 
 		List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
-		for (Round roundIter : trainingTemp.getRounds()) {
+		for (Round roundIter : training.getRounds()) {
 			listExerciseInRound.addAll(roundIter.getExerciseInRound());
 		}
 		model.addAttribute("exercisesInRound", listExerciseInRound);
 
 		return "trainingCreation";
 	}
+
 	
 	//DELETE
 	
@@ -459,5 +443,18 @@ public class TrainingController {
 
 		return "trainingCreation";
 	}
+	
+	private List<ExerciseDTO> getExercisesForModel(Long clientId){
+		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
+		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(clientId);
+		for(ExerciseDTO exerciseDTO : exercisesForModal) {
+			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
+				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
+			} else {
+				exerciseDTO.setColorCode(60);
+			}
+		}
+		return exercisesForModal;
+	}		
 	
 }
