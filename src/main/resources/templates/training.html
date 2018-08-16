@@ -28,6 +28,11 @@
 	<div class="alert div1" role="alert">
 		<h1 align="center">Treninzi u sistemu</h1>
 	</div>
+	<a th:href="@{/addTrainingToClient}"><button class="btn btn-success">Create training</button></a>
+	<a th:href="@{/trainingCreationHandlerDirect}"><button class="btn btn-success">Create training directly</button></a>
+	<br/>
+	<br/>
+	<br/>
 <form th:action="@{/filterTrainings}" th:object="${trainingDTOSearch}" method="POST">
 <table class="table table-hover">
 	<thead>
@@ -53,6 +58,5 @@
 	</tbody>
 </table>
 </form>
-<a th:href="@{/addTrainingToClient}"><button>Create training</button></a>
 </body>
 </html>

@@ -161,7 +161,7 @@
 
 
 
-<form style="padding-left:3em" th:action="@{/saveTraining}" th:object="${clientOfTheTraining}" method="POST">
+<form style="padding-left:3em" th:action="@{/saveTrainingDirect}" th:object="${clientOfTheTraining}" method="POST">
 
 	<div class="form-group row">
 		<div class="col-xs-2">
@@ -179,7 +179,11 @@
   	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="trainingClient">Klijent:</label>
-			<input type="text" id="trainingClient" class="form-control" th:field="*{name}" disabled="disabled"/>
+			<select  class="selectpicker form-control" data-live-search="true" th:field="*{id}" id="id">
+		                         <option th:each="client : ${clientList}"
+		                            th:value="${client.id}"
+		                            th:utext="${client.name}"/>
+		       </select>
 		</div>
 	</div>
 	
@@ -191,7 +195,7 @@
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
-<form  style="padding-left:3em" th:action="@{/addRound}" th:object="${clientOfTheTraining}" method="POST">
+<form  style="padding-left:3em" th:action="@{/addRoundDirect}" th:object="${clientOfTheTraining}" method="POST">
  	<div class="form-group row">
 		<div class="col-xs-2">
 			<button id="noviKrug" class="btn btn-success" type="submit" disabled="disabled">Novi krug</button>
@@ -217,7 +221,7 @@
 				
 				<td class="roundRoundSequenceNumber" th:utext="${round.roundSequenceNumber}" ></td>
 				<td class="roundId" th:utext="${round.id}" style="display:none;"></td> 
-				<td><a th:href="@{/deleteRound/{id}/{hiddenTrainingId}(id=${round.id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+				<td><a th:href="@{/deleteRoundDirect/{id}/{hiddenTrainingId}(id=${round.id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			</tr>
 		</tbody>
 </table>
@@ -225,7 +229,7 @@
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
 
-<form style="padding-left:3em"  th:action="@{/addExerciseInRound}" th:object="${exerciseInRoundDTO}" method="POST">
+<form style="padding-left:3em"  th:action="@{/addExerciseInRoundDirect}" th:object="${exerciseInRoundDTO}" method="POST">
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="exerciseInRoundExerciseName">Vežba:</label>
@@ -325,7 +329,7 @@
 <br/>
 
 
-<form th:action="@{/deleteExerciseInRound}" th:object="${exerciseDTOSearch}" method="POST">
+<form th:action="@{/deleteExerciseInRoundDirect}" th:object="${exerciseDTOSearch}" method="POST">
 <table class = "table table-hover">
 	<thead>
 		<tr>
@@ -352,7 +356,7 @@
 			<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
 			<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
 			<td class="note" th:utext="${exerciseInRound.note}"></td>
-			<td><a th:href="@{/deleteExerciseInRound/{id}/{hiddenTrainingId}(id=${exerciseInRound.ExecInRound_Id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+			<td><a th:href="@{/deleteExerciseInRoundDirect/{id}/{hiddenTrainingId}(id=${exerciseInRound.ExecInRound_Id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 		</tr>
 	</tbody>
 </table>
