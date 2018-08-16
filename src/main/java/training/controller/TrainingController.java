@@ -330,7 +330,7 @@ public class TrainingController {
 	
 	//DELETE
 	
-	@RequestMapping(value = {"/deleteExerciseInRound/{id}/{hiddenExerciseGroupId}"}, method = RequestMethod.GET)
+	@RequestMapping(value = {"/deleteExerciseInRound/{id}/{hiddenTrainingId}"}, method = RequestMethod.GET)
 	public String delete(Model model, @PathVariable String id, @PathVariable String hiddenTrainingId){
 		
 		System.out.println("###############");
