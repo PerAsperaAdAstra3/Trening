@@ -153,7 +153,7 @@ public class TrainingController {
 		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(hiddenClientTrainingId));
 		
 		trainingDefaultId.setNumberOfTrainings((int) (max+1));
-		
+		trainingDefaultId.setClient(clientService.findOne(Long.parseLong(hiddenClientTrainingId)));
 		trainingService.save(trainingDefaultId);
 		model.addAttribute("trainingDTO", new TrainingDTO());
 		model.addAttribute("trainingDTOSearch", new TrainingDTO());
@@ -330,18 +330,17 @@ public class TrainingController {
 	
 	//DELETE
 	
-	@RequestMapping(value = {"/deleteExerciseInRound"}, method = RequestMethod.POST)
-	public String delete(Model model, @ModelAttribute("exercisesInRound") ExerciseInRound exercisesInRound, @RequestParam String hiddenTrainingInRoundToDeleteId, 
-			@RequestParam String hiddenTrainingId,@RequestParam String hiddenClientTrainingId, @RequestParam String roundInTraining){
+	@RequestMapping(value = {"/deleteExerciseInRound/{id}/{hiddenExerciseGroupId}"}, method = RequestMethod.GET)
+	public String delete(Model model, @PathVariable String id, @PathVariable String hiddenTrainingId){
 		
 		System.out.println("###############");
-		System.out.println(hiddenTrainingInRoundToDeleteId);
+	//	System.out.println(hiddenTrainingInRoundToDeleteId);
 		System.out.println(hiddenTrainingId);
-		System.out.println(hiddenClientTrainingId);
+	//	System.out.println(hiddenClientTrainingId);
 		//System.out.println(exerciseInRound);
 		//System.out.println();
 		
-		exerciseInRoundService.delete(exercisesInRound.getExecInRound_Id());
+		exerciseInRoundService.delete(Long.parseLong(id));
 
 		/*	List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
 			exerciseList.add(exerciseInRoundService.findOne(Long.parseLong(hiddenExerciseGroupId)));
@@ -370,7 +369,7 @@ public class TrainingController {
 
 		Training training = trainingService.findOne(Long.parseLong(hiddenTrainingId));
 		// Hidden ID's
-		model.addAttribute("hiddenClientTrainingId", hiddenClientTrainingId);
+		model.addAttribute("hiddenClientTrainingId", trainingService.findOne(Long.parseLong(hiddenTrainingId)).getClient().getId());
 		model.addAttribute("hiddenTrainingId", hiddenTrainingId);
 
 		model.addAttribute("roundDTO", new RoundDTO());
@@ -385,7 +384,7 @@ public class TrainingController {
 		}
 		
 		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
-		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(Long.parseLong(hiddenClientTrainingId));
+		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(trainingService.findOne(Long.parseLong(hiddenTrainingId)).getClient().getId());
 		for(ExerciseDTO exerciseDTO : exercisesForModal) {
 			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
 				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
@@ -400,7 +399,7 @@ public class TrainingController {
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 
 		model.addAttribute("clientOfTheTraining",
-				clientToClientDTO.convert(clientService.findOne(Long.parseLong(hiddenClientTrainingId))));
+				clientToClientDTO.convert(trainingService.findOne(Long.parseLong(hiddenTrainingId)).getClient()));
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 
 		model.addAttribute("hiddenRoundInTraining", "");

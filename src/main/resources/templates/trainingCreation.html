@@ -20,7 +20,7 @@
 	
 	$(document).on("click", "#deleteExerciseInRound", function(event) {
 		alert("BLA")
-		exerciseID = document.getElementsByClassName("hiddenTrainingId");
+		exerciseID = item.find(".exerciseId").html()
 				alert("BLA1")
 		$("#hiddenTrainingInRoundToDeleteId").val(exerciseID);
 		alert("BLA2")
@@ -355,7 +355,7 @@
 			<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
 			<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
 			<td class="note" th:utext="${exerciseInRound.note}"></td>
-			<td><button id="deleteExerciseInRound" type="submit" class="btn btn-danger">Briši</button></td>
+			<td><a th:href="@{/deleteExerciseInRound/{id}/{hiddenTrainingId}(id=${exerciseInRound.ExecInRound_Id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 		</tr>
 	</tbody>
 </table>
