@@ -217,6 +217,7 @@
 				
 				<td class="roundRoundSequenceNumber" th:utext="${round.roundSequenceNumber}" ></td>
 				<td class="roundId" th:utext="${round.id}" style="display:none;"></td> 
+				<td><a th:href="@{/deleteRound/{id}/{hiddenTrainingId}(id=${round.id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			</tr>
 		</tbody>
 </table>
@@ -321,8 +322,6 @@
     </div>
   </div>
 </div>
-
-
 
 <br/>
 <br/>
