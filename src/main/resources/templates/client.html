@@ -114,7 +114,7 @@
 			<td class="clientEmail" th:utext="${client.email}"></td>
 			<td class="clientPhoneNumber" th:utext="${client.phoneNumber}"></td>
 			<td>
-				<a th:href="@{/deleteTraining/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+				<a th:href="@{/deleteClient/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td>
 				<a th:href="@{/trainingCreationHandler/{id}(id=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
 		</tr>
