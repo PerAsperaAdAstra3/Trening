@@ -28,8 +28,8 @@
 
 	
 	function enableAddRound(item) {
-		var trainingID = document.getElementsByClassName("hiddenTrainingId");
-		if(trainingID[0].value != "NONE"){
+		var trainingID = $(".hiddenTrainingId")[0]
+		if($(trainingID).val() == ""){
 			document.getElementById("noviKrug").disabled = false;
 		}
 	}
@@ -80,13 +80,13 @@
 		
 		Array.prototype.forEach.call(els, function(el) {
 			var nooo = $(el).find(".exerciseColorCode").html(); 
-			if(nooo == 1){
+			if(nooo == 4){
 			 	el.style.backgroundColor = "red"
 			}
-			if(nooo == 2){
+			if(nooo == 3){
 			 	el.style.backgroundColor = "orange"
 			}
-			if(nooo == 3){
+			if(nooo == 2){
 			 	el.style.backgroundColor = "yellow"
 			}
 			 console.log(el.tagName);
@@ -128,6 +128,14 @@
 	    document.getElementById("exerciseInRoundNumberOfRepetitions").disabled = false;
 	    document.getElementById("exerciseInRoundDifficulty").disabled = false;
 	    document.getElementById("exerciseInRoundDodaj").disabled = false;
+	    
+	    $("#exercisesInRoundTable .roundId").each(function(){
+	    	if ($(this).html() != roundId)
+	    		$(this).parent().hide()
+	    	else
+	    		$(this).parent().show()
+	    	
+	    });
 	}
 	
 	function sync(item){
@@ -161,44 +169,40 @@
 
 
 
-<form style="padding-left:3em" th:action="@{/saveTraining}" th:object="${clientOfTheTraining}" method="POST">
+<form style="padding-left:3em" th:action="@{/saveTraining}" th:object="${trainingDTO}" method="POST">
 
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="trainingDate">Datum:</label>
-			<!-- TODO FALI FIELD OVOG INPUTA -->
-			<input type="date" id="trainingDate" class="form-control" th:value="${trainingCreationDate}"/>
+			<input type="date" id="trainingDate" class="form-control" th:field="*{date}"/>
 		</div>
   	</div>
   	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="trainingNumberOfTraining">Redni broj:</label>
-			<input type="text" id="trainingNumberOfTraining" class="form-control" name="trainingNumberOfTraining" th:value="${trainingNumberOfTraining}" disabled="disabled"/>
+			<input type="text" id="trainingNumberOfTraining" class="form-control" th:field="*{numberOfTrainings}"/>
 		</div>
   	</div>
   	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="trainingClient">Klijent:</label>
-			<input type="text" id="trainingClient" class="form-control" th:field="*{name}" disabled="disabled"/>
+			<input type="text" id="trainingClient" class="form-control" th:field="*{client}" disabled="disabled"/>
 		</div>
 	</div>
 	
-	<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
-	<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
-	<input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
+	<input type="hidden" class="hiddenTrainingId" th:field="*{clientId}"/>
 
 	<button type="submit">Save</button>
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
-<form  style="padding-left:3em" th:action="@{/addRound}" th:object="${clientOfTheTraining}" method="POST">
+<form  style="padding-left:3em" th:action="@{/addRound}" method="POST">
  	<div class="form-group row">
 		<div class="col-xs-2">
 			<button id="noviKrug" class="btn btn-success" type="submit" disabled="disabled">Novi krug</button>
 		</div>
 	</div>
 <input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
-<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
 </form>
 <br/>
 
@@ -240,7 +244,7 @@
 					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled="disabled">Izbor</button>
 				</div>
 			</div>
-			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId" disabled="disabled"/>
+			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
 		</div>
 	</div>
 	<div class="form-group row">
@@ -268,10 +272,6 @@
 			<button id="exerciseInRoundDodaj" class="btn btn-success"  type="submit" disabled="disabled">Dodaj</button>
 		</div>
 	</div>
-
-<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
-<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
-<input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
 
 <input id="hiddenRoundInTraining" type="hidden" th:field="*{roundId}" />
 
@@ -332,7 +332,7 @@
 
 <form id="deleteExerciseInRoundForm" th:action="@{/deleteExerciseInRound}" th:object="${exerciseDTOSearch}" method="POST">
 <div class="container-responsive">
-	<table class = "table table-responsive">
+	<table id="exercisesInRoundTable" class = "table table-responsive">
 		<thead>
 			<tr>
 				<th scope="col">Id</th>
@@ -358,7 +358,7 @@
 				<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
 				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
 				<td class="note" th:utext="${exerciseInRound.note}"></td>
-				<td class="note" th:utext="${exerciseInRound.round.id}"></td>
+				<td class="roundId" th:utext="${exerciseInRound.round.id}"></td>
 				<td><a th:href="@{/deleteExerciseInRound/{id}/{hiddenTrainingId}(id=${exerciseInRound.ExecInRound_Id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			</tr>
 		</tbody>

@@ -68,7 +68,7 @@ public class JpaTrainingService implements TrainingService {
 
 	@Override
 	public Map<Long, Integer> exercisesLastTraining(Long clientId) {
-		List<Training> lastTrainings = trainingRepository.findTop4ByClientId(clientId);
+		List<Training> lastTrainings = trainingRepository.findTop4ByClientIdOrderByIdDesc(clientId);
 		Map<Long,Integer> mapExercise = new HashMap<>();
 		int i =1;
 		for(Training training : lastTrainings) {
