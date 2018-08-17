@@ -75,7 +75,6 @@ public class TrainingControllerDirect {
 
 	@RequestMapping(value = { "/trainingListDirect" }, method = RequestMethod.GET)
 	public String getTrainings(Model model) {
-		model.addAttribute("trainingDTOSearch", new TrainingDTO());
 		model.addAttribute("trainingDTO", new TrainingDTO());
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingService.findAll()));
 		return "training";
@@ -95,10 +94,7 @@ public class TrainingControllerDirect {
 		
 		System.out.println("DATUM ::::::" + new Date());
 		model.addAttribute("trainingDTO", new TrainingDTO());
-		model.addAttribute("trainingDTOSearch", new TrainingDTO());
-		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
-		model.addAttribute("hiddenRoundInTraining", "");
 		model.addAttribute("trainingCreationDate", date);
 
 		List<Round> roundList = new ArrayList<Round>();
@@ -134,7 +130,7 @@ public class TrainingControllerDirect {
 		model.addAttribute("exercises", exercisesForModal);
 		model.addAttribute("exercisesInRound", exercisesInRound);
 
-		model.addAttribute("clientOfTheTraining", new ClientDTO());//clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));
+		model.addAttribute("clientOfTheTraining", new ClientDTO());
 		model.addAttribute("roundsInTraining", roundList);
 
 		return "trainingCreationDirect";
@@ -166,10 +162,7 @@ public class TrainingControllerDirect {
 		trainingDefaultId.setClient(clientService.findOne(clientOfTheTraining.getId()));
 		trainingService.save(trainingDefaultId);
 		model.addAttribute("trainingDTO", new TrainingDTO());
-		model.addAttribute("trainingDTOSearch", new TrainingDTO());
-		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
-		model.addAttribute("hiddenRoundInTraining", "");
 
 		List<Round> roundList = new ArrayList<Round>();
 
@@ -215,7 +208,6 @@ public class TrainingControllerDirect {
 		Round round = new Round(training.getRounds().size()+1);
 		
 		training.addRound(round);
-		model.addAttribute("hiddenRoundInTraining", "");
 		roundService.save(round);
 		trainingService.save(training);
 		
@@ -234,11 +226,8 @@ public class TrainingControllerDirect {
 		model.addAttribute("hiddenClientTrainingId", hiddenClientTrainingId);
 		model.addAttribute("hiddenTrainingId", hiddenTrainingId);
 
-		model.addAttribute("roundDTO", new RoundDTO());
 		/// Testing something
 		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
-		model.addAttribute("trainingDTOSearch", new TrainingDTO());
-		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 
 		List<Training> trainingList = trainingService.findAll();
 		Long max = 0l;
@@ -301,11 +290,7 @@ public class TrainingControllerDirect {
 		model.addAttribute("hiddenClientTrainingId", hiddenClientTrainingId);
 		model.addAttribute("hiddenTrainingId", hiddenTrainingId);
 
-		model.addAttribute("roundDTO", new RoundDTO());
-
 		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
-		model.addAttribute("trainingDTOSearch", new TrainingDTO());
-		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		List<Training> trainingList = trainingService.findAll();
 		Long max = 0l;
 		for (Training trainingIter : trainingList) {
@@ -330,8 +315,6 @@ public class TrainingControllerDirect {
 		model.addAttribute("clientOfTheTraining",
 				clientToClientDTO.convert(clientService.findOne(Long.parseLong(hiddenClientTrainingId))));
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
-
-		model.addAttribute("hiddenRoundInTraining", "");
 
 		Training trainingTemp = trainingService.findOne(Long.parseLong(hiddenTrainingId));
 
@@ -369,11 +352,7 @@ public class TrainingControllerDirect {
 		model.addAttribute("hiddenClientTrainingId", trainingService.findOne(Long.parseLong(hiddenTrainingId)).getClient().getId());
 		model.addAttribute("hiddenTrainingId", hiddenTrainingId);
 
-		model.addAttribute("roundDTO", new RoundDTO());
-
 		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
-		model.addAttribute("trainingDTOSearch", new TrainingDTO());
-		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		List<Training> trainingList = trainingService.findAll();
 		Long max = 0l;
 		for (Training trainingIter : trainingList) {
@@ -390,16 +369,11 @@ public class TrainingControllerDirect {
 			}
 		}
 		model.addAttribute("exercises", exercisesForModal);
-
 		model.addAttribute("trainingNumberOfTraining", max + 1);
-
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
-
 		model.addAttribute("clientOfTheTraining",
 				clientToClientDTO.convert(trainingService.findOne(Long.parseLong(hiddenTrainingId)).getClient()));
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
-
-		model.addAttribute("hiddenRoundInTraining", "");
 
 		Training trainingTemp = trainingService.findOne(Long.parseLong(hiddenTrainingId));
 
@@ -440,11 +414,7 @@ public class TrainingControllerDirect {
 		model.addAttribute("hiddenClientTrainingId", trainingService.findOne(Long.parseLong(hiddenTrainingId)).getClient().getId());
 		model.addAttribute("hiddenTrainingId", hiddenTrainingId);
 
-		model.addAttribute("roundDTO", new RoundDTO());
-
 		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
-		model.addAttribute("trainingDTOSearch", new TrainingDTO());
-		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		List<Training> trainingList = trainingService.findAll();
 		Long max = 0l;
 		for (Training trainingIter : trainingList) {
@@ -469,8 +439,6 @@ public class TrainingControllerDirect {
 		model.addAttribute("clientOfTheTraining",
 				clientToClientDTO.convert(trainingService.findOne(Long.parseLong(hiddenTrainingId)).getClient()));
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
-
-		model.addAttribute("hiddenRoundInTraining", "");
 
 		Training trainingTemp = trainingService.findOne(Long.parseLong(hiddenTrainingId));
 

@@ -1,7 +1,5 @@
 package training.dto;
 
-import java.util.Date;
-
 public class TrainingDTO {
 
 	private Long id;
