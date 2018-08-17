@@ -1,7 +1,5 @@
 package training.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +31,9 @@ public class ClientController {
 	
 	@RequestMapping(value = { "/clientList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
-		List<Client> clients = clientService.findAll();
-		ClientDTO clientDTO = new ClientDTO();
-		ClientDTO clientDTOSearch = new ClientDTO();
-		model.addAttribute("clientDTOSearch", clientDTOSearch);
-		model.addAttribute("clientDTO", clientDTO);
-		model.addAttribute("clients", clientToClientDTO.convert(clients));
+		model.addAttribute("clientDTOSearch", new ClientDTO());
+		model.addAttribute("clientDTO", new ClientDTO());
+		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		return "client";
 	}
 	
@@ -47,7 +42,7 @@ public class ClientController {
 	public String createTraining() {
 		return "redirect:/clientList";
 	}
-	
+	//TODO - REMOVE EVENTUALLY - IT WAS DECIDED THAT FILTERING WILL BE DONE ON FRONT END.
 	@RequestMapping(value = { "/filterClients" }, method = RequestMethod.POST)
 	public String filterClients(Model model, @ModelAttribute("clientDTOSearch") ClientDTO clientDTOSearch) {
 		model.addAttribute("clients", clientService.filter(clientDTOtoClient.convert(clientDTOSearch)));
