@@ -272,7 +272,7 @@
 			<button id="exerciseInRoundDodaj" class="btn btn-success"  type="submit" disabled="disabled">Dodaj</button>
 		</div>
 	</div>
-
+<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
 <input id="hiddenRoundInTraining" type="hidden" th:field="*{roundId}" />
 
 </form>
@@ -330,7 +330,7 @@
 <br/>
 
 
-<form id="deleteExerciseInRoundForm" th:action="@{/deleteExerciseInRound}" th:object="${exerciseDTOSearch}" method="POST">
+<form id="deleteExerciseInRoundForm" th:action="@{/deleteExerciseInRound}" method="POST">
 <div class="container-responsive">
 	<table id="exercisesInRoundTable" class = "table table-responsive">
 		<thead>
@@ -344,14 +344,6 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr id="hidden_input">
-			<td>Fuck my life</td>
-	
-			<td>Fuck my life</td>
-	
-			<td>Fuck my life</td>
-	
-			</tr>
 			<tr class="hidden_input" id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
 				<td class="exerciseId" th:utext="${exerciseInRound.ExecInRound_Id}"></td>
 				<td class="numberOfRepetitions" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
@@ -364,11 +356,7 @@
 		</tbody>
 	</table>
 </div>
-	<input type="hidden" class="hiddenTrainingInRoundToDeleteId" name="hiddenTrainingInRoundToDeleteId"/>
 	<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
-	<input type="hidden" name="hiddenClientTrainingId" th:value="${hiddenClientTrainingId}"/>
-	<input type="hidden" name="roundsInTraining" th:value="${roundsInTraining}"/>
-	<input id="hiddenRoundInTraining" type="hidden" name="roundInTraining" th:value="${roundInTraining}"/>
 </form>
 
 </body>

@@ -33,7 +33,7 @@
 	<br/>
 	<br/>
 	<br/>
-<form th:action="@{/filterTrainings}" th:object="${trainingDTOSearch}" method="POST">
+<form th:action="@{/filterTrainings}" method="POST">
 <table class="table table-hover">
 	<thead>
 		<tr>
@@ -41,12 +41,6 @@
 			<th scope="col">Redni broj</th>
 			<th scope="col">Klijenti</th>
 			<th scope="col"></th>
-		</tr>
-		<tr id="hidden_input">
-			<td><input /></td>	
-			<td><input th:field="*{date}"/></td>
-			<td><input th:field="*{numberOfTrainings}"/></td>
-			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
 		</tr>
 	</thead>	
 	<tbody>
