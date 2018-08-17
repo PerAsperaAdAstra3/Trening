@@ -52,7 +52,6 @@ public class ExerciseGroupController {
 		return "redirect:/exerciseGroupList";
 	}
 
-	
 	@RequestMapping(value = {"/filterExcerInGroup/{id}"}, method = RequestMethod.GET)
 	public String filterExcerInGroup(Model model, @PathVariable String id){
 		List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
@@ -77,6 +76,7 @@ public class ExerciseGroupController {
 		return "redirect:/exerciseGroupList";
 	}
 	
+	//TODO - This will most likely be removed - It was decided that filtering will be done on the front end.
 	@RequestMapping(value = {"/filterExerciseGroup"}, method = RequestMethod.POST)
 	public String filterExercisesGroup(Model model, @ModelAttribute("exerciseGroupDTOSearch") ExerciseGroupDTO exerciseGroupDTOSearch) {
 		model.addAttribute("exerciseGroupDTO", new ExerciseDTO());
