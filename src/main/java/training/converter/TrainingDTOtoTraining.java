@@ -1,5 +1,10 @@
 package training.converter;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -22,11 +27,18 @@ public class TrainingDTOtoTraining implements Converter<TrainingDTO,Training>{
 		}
 
 		Training training = new Training();
-		training.setDate(source.getDate());
-		training.setNumberOfTrainings(source.getNumberOfTrainings());
-		if(source.getClientId() != null) {
-			training.setClient(clientService.findOne(Long.parseLong(source.getClientId())));
+	    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		Date date;
+		try {
+			date = formatter.parse(source.getDate());
+			training.setDate(date);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	
+		training.setNumberOfTrainings(source.getNumberOfTrainings());
+		training.setClient(clientService.findOne(Long.parseLong(source.getClientId())));
 		return training;
 	}
 

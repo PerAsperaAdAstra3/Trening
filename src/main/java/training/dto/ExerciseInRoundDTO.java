@@ -24,12 +24,22 @@ public class ExerciseInRoundDTO {
 		this.note = note;
 	}
 
-	public Long getexerciseInRoundExerciseId() {
+
+
+	public Long getExerciseInRoundExerciseId() {
 		return exerciseInRoundExerciseId;
 	}
 
-	public void setExerciseInRoundExerciseId(Long exerciseId) {
-		this.exerciseInRoundExerciseId = exerciseId;
+	public void setExerciseInRoundExerciseId(Long exerciseInRoundExerciseId) {
+		this.exerciseInRoundExerciseId = exerciseInRoundExerciseId;
+	}
+
+	public String getRoundName() {
+		return roundName;
+	}
+
+	public void setRoundName(String roundName) {
+		this.roundName = roundName;
 	}
 
 	public Long getRoundId() {

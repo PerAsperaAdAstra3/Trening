@@ -1,5 +1,7 @@
 package training.converter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,9 @@ public class TrainingToTrainingDTO implements Converter<Training,TrainingDTO> {
 		}
 		TrainingDTO trainingDTO = new TrainingDTO(); 
 		trainingDTO.setId(source.getId());
-		trainingDTO.setDate(source.getDate());
+	    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+	    String strDate = formatter.format(source.getDate());
+		trainingDTO.setDate(strDate);
 		trainingDTO.setNumberOfTrainings(source.getNumberOfTrainings());
 		if(source.getClient() != null) {
 			trainingDTO.setClient(source.getClient().getName());

@@ -6,7 +6,7 @@ public class TrainingDTO {
 
 	private Long id;
 	
-	private Date date;
+	private String date;
 	
 	private int numberOfTrainings;
 	
@@ -30,11 +30,11 @@ public class TrainingDTO {
 		this.id = id;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
@@ -56,7 +56,7 @@ public class TrainingDTO {
 
 	public TrainingDTO() {}
 	
-	public TrainingDTO(Long id, Date date, int numberOfTrainings) {
+	public TrainingDTO(Long id, String date, int numberOfTrainings) {
 		super();
 		this.date = date;
 		this.numberOfTrainings = numberOfTrainings;
