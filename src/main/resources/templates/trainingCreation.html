@@ -38,7 +38,7 @@
     
 	function filterByName() {
 	  var input, filter, table, tr, td, i;
-	  input = document.getElementById("myInputName");
+	  input = document.getElementById("inputFilterByName");
 	  filter = input.value.toUpperCase();
 	  table = document.getElementById("myTableExercises");
 	  tr = table.getElementsByTagName("tr");
@@ -56,12 +56,30 @@
 	  
 	function filterByDescription() {
 		  var input, filter, table, tr, td, i;
-		  input = document.getElementById("myInputDescription");
+		  input = document.getElementById("inputFilterByDescription");
 		  filter = input.value.toUpperCase();
 		  table = document.getElementById("myTableExercises");
 		  tr = table.getElementsByTagName("tr");
 		  for (i = 0; i < tr.length; i++) {
 		    td = tr[i].getElementsByTagName("td")[2];
+		    if (td) {
+		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }       
+		  }
+		}
+	
+	function filterByGroup() {
+		  var input, filter, table, tr, td, i;
+		  input = document.getElementById("inputFilterByGroup");
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("myTableExercises");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[3];
 		    if (td) {
 		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
 		        tr[i].style.display = "";
@@ -290,8 +308,9 @@
         <h4 class="modal-title">Vežbe</h4>
       </div>
       <div class="modal-body">
-<input type="text" id="myInputName" onkeyup="filterByName()" placeholder="Filtriranje po nazivu.."/>
-<input type="text" id="myInputDescription" onkeyup="filterByDescription()" placeholder="Filtriranje po opisu.."/>
+<input type="text" id="inputFilterByName" onkeyup="filterByName()" placeholder="Filtriranje po nazivu.."/>
+<input type="text" id="inputFilterByDescription" onkeyup="filterByDescription()" placeholder="Filtriranje po opisu.."/>
+<input type="text" id="inputFilterByGroup" onkeyup="filterByGroup()" placeholder="Filtriranje po grupi.."/>
 <div class="container-responsive">
 	<table  id = "myTableExercises" class = "table table-responsive">
 		<thead>
@@ -301,7 +320,7 @@
 				<th scope="col">Opis</th>
 				<th scope="col">Grupa vežbi</th>
 				<th scope="col"></th>
-				<th scope="col">Color Code</th>
+				<th scope="col"></th>
 			</tr>
 	
 		</thead>
@@ -311,8 +330,8 @@
 				<td class="exerciseName" th:utext="${exercise.name}"></td>
 				<td class="exerciseDescription" th:utext="${exercise.description}"></td>
 				<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
-				<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}"></td>
-				<td class="exerciseColorCode hidden_column" th:utext="${exercise.colorCode}"></td>
+				<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}" style="display:none;"></td>
+				<td class="exerciseColorCode hidden_column" th:utext="${exercise.colorCode}" style="display:none;"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -350,7 +369,7 @@
 				<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
 				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
 				<td class="note" th:utext="${exerciseInRound.note}"></td>
-				<td class="roundId" th:utext="${exerciseInRound.round.id}"></td>
+				<td class="roundId" th:utext="${exerciseInRound.round.id}" style="display:none;"></td>
 				<td><a th:href="@{/deleteExerciseInRound/{id}/{hiddenTrainingId}(id=${exerciseInRound.ExecInRound_Id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			</tr>
 		</tbody>
