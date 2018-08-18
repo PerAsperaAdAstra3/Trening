@@ -84,6 +84,98 @@ public class TrainingController {
 	@RequestMapping(value = { "/trainingCreationHandler/{id}" }, method = RequestMethod.GET)
 	public String createTraining(Model model, @PathVariable String id) {
 		
+		model.addAttribute("trainingDTO", createTraining(id));
+		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
+		
+		return "trainingCreation";
+	}
+	
+	@RequestMapping(value = { "/saveTraining"}, method = RequestMethod.POST)
+	public String saveTraining(Model model, @ModelAttribute("trainingDTO") TrainingDTO trainingDTO ) {
+
+		Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
+
+		return "redirect:/redirectToTrainingCreation/"+training.getId();
+	}
+
+	//Adding a round in to Training
+	@RequestMapping(value = { "/addRound"}, method = RequestMethod.POST)
+	public String addRound(Model model, @RequestParam String hiddenTrainingId) {
+	
+		addRound(hiddenTrainingId);
+
+		return "redirect:/redirectToTrainingCreation/"+hiddenTrainingId;
+	}
+
+	// ADD EXERCISE IN ROUND
+	
+	@RequestMapping(value = { "/addExerciseInRound" }, method = RequestMethod.POST) 
+	public String addExerciseInRound(Model model,
+			@ModelAttribute("exerciseInRoundDTO") ExerciseInRoundDTO exerciseInRoundDTO, @RequestParam String hiddenTrainingId) {
+
+		addExerciseInRound(exerciseInRoundDTO);
+		
+		return "redirect:/redirectToTrainingCreation/"+hiddenTrainingId;
+	}
+
+	
+	//DELETE EXERCISE IN ROUND
+	
+	@RequestMapping(value = {"/deleteExerciseInRound/{id}/{hiddenTrainingId}"}, method = RequestMethod.GET)
+	public String delete(Model model, @PathVariable String id, @PathVariable String hiddenTrainingId){
+
+		exerciseInRoundService.delete(Long.parseLong(id));
+
+		return "redirect:/redirectToTrainingCreation/"+hiddenTrainingId;
+	}
+
+	//DELETE ROUND
+	@RequestMapping(value = {"/deleteRound/{id}/{hiddenTrainingId}"}, method = RequestMethod.GET)
+	public String deleteRound(Model model, @PathVariable String id, @PathVariable String hiddenTrainingId){
+		
+		for(ExerciseInRound exerciseInRound : roundService.findOne(Long.parseLong(id)).getExerciseInRound()) {
+			exerciseInRoundService.delete(exerciseInRound.getExecInRound_Id());
+		}
+		roundService.delete(Long.parseLong(id));
+		
+		return "redirect:/redirectToTrainingCreation/"+hiddenTrainingId;
+
+	}
+	
+	private List<ExerciseDTO> getExercisesForModel(Long clientId){
+		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
+		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(clientId);
+		System.out.println(mapOfExercisesForClient);
+		for(ExerciseDTO exerciseDTO : exercisesForModal) {
+			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
+				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
+			} else {
+				exerciseDTO.setColorCode(60);
+			}
+		}
+		return exercisesForModal;
+	}		
+	
+	private void addRound(String hiddenTrainingId) {
+		Training training = trainingService.findOne(Long.parseLong(hiddenTrainingId));
+		Round round = new Round(training.getRounds().size() + 1);
+		training.addRound(round);
+		roundService.save(round);
+		trainingService.save(training);
+	}
+	
+	private void addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO) {
+
+		ExerciseInRound exerciseInRound = exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
+		exerciseInRoundService.save(exerciseInRound);
+		Training training = exerciseInRound.getRound().getTraining();
+		List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
+		for (Round roundIter : training.getRounds()) {
+			listExerciseInRound.addAll(roundIter.getExerciseInRound());
+		}
+	}
+	
+	private TrainingDTO createTraining(String id) {
 		Long clinetId = Long.parseLong(id);
 		Client client = clientService.findOne(clinetId);
 		
@@ -104,97 +196,9 @@ public class TrainingController {
 		trainingDTO.setClientId(id);
 		trainingDTO.setNumberOfTrainings((int) (max + 1));
 		trainingDTO.setDate(strDate);
-		model.addAttribute("trainingDTO", trainingDTO);
-		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
-		return "trainingCreation";
-		//return "redirect:/redirectToTrainingCreation/"+hiddenTrainingId;
-	}
-	
-	//Saving of TrainingCreation page
-	@RequestMapping(value = { "/saveTraining"}, method = RequestMethod.POST)
-	public String saveTraining(Model model, @ModelAttribute("trainingDTO") TrainingDTO trainingDTO ) {
-		Training training = trainingDTOtoTraining.convert(trainingDTO);
-		trainingService.save(training);
-		return "redirect:/redirectToTrainingCreation/"+training.getId();
-	}
-
-	//Adding a round in to Training
-	@RequestMapping(value = { "/addRound"}, method = RequestMethod.POST)
-	public String addRound(Model model, @RequestParam String hiddenTrainingId) {
-		Training training = trainingService.findOne(Long.parseLong(hiddenTrainingId));
-		Round round = new Round(training.getRounds().size() + 1);
-		training.addRound(round);
-		roundService.save(round);
-		trainingService.save(training);
-		/// Testing something
 		
-		return "redirect:/redirectToTrainingCreation/"+hiddenTrainingId;
+		return trainingDTO;
 	}
-
-	// add ExerciseInRound
-	
-	// ##################   EXERCIS IN ROUND #####################
-	
-	@RequestMapping(value = { "/addExerciseInRound" }, method = RequestMethod.POST) 
-	
-	// ADD
-	
-	public String addExerciseInRound(Model model,	
-			@ModelAttribute("exerciseInRoundDTO") ExerciseInRoundDTO exerciseInRoundDTO, @RequestParam String hiddenTrainingId) {
-
-		System.out.println(exerciseInRoundDTO.getExerciseInRoundExerciseId());
-		ExerciseInRound exerciseInRound = exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
-		exerciseInRoundService.save(exerciseInRound);
-		Training training = exerciseInRound.getRound().getTraining();
-		Long clientId = training.getClient().getId();		
-		List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
-		for (Round roundIter : training.getRounds()) {
-			listExerciseInRound.addAll(roundIter.getExerciseInRound());
-		}
-		
-		model.addAttribute("exercises", getExercisesForModel(clientId));
-
-		return "redirect:/redirectToTrainingCreation/"+hiddenTrainingId;
-	//	return "trainingCreation";
-	}
-
-	
-	//DELETE
-	
-	@RequestMapping(value = {"/deleteExerciseInRound/{id}/{hiddenTrainingId}"}, method = RequestMethod.GET)
-	public String delete(Model model, @PathVariable String id, @PathVariable String hiddenTrainingId){
-
-		exerciseInRoundService.delete(Long.parseLong(id));
-
-		return "redirect:/redirectToTrainingCreation/"+hiddenTrainingId;
-	}
-
-	//DELETE ROUND
-	@RequestMapping(value = {"/deleteRound/{id}/{hiddenTrainingId}"}, method = RequestMethod.GET)
-	public String deleteRound(Model model, @PathVariable String id, @PathVariable String hiddenTrainingId){
-		
-		for(ExerciseInRound exerciseInRound : roundService.findOne(Long.parseLong(id)).getExerciseInRound()) {
-			exerciseInRoundService.delete(exerciseInRound.getExecInRound_Id());
-		}
-		roundService.delete(Long.parseLong(id));
-		//return "trainingCreation";
-		return "redirect:/redirectToTrainingCreation/"+hiddenTrainingId;
-		//hiddenTrainingId
-	}
-	
-	private List<ExerciseDTO> getExercisesForModel(Long clientId){
-		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
-		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(clientId);
-		System.out.println(mapOfExercisesForClient);
-		for(ExerciseDTO exerciseDTO : exercisesForModal) {
-			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
-				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
-			} else {
-				exerciseDTO.setColorCode(60);
-			}
-		}
-		return exercisesForModal;
-	}		
 	
 	@RequestMapping(value = {"/redirectToTrainingCreation/{hiddenTrainingId}"}, method = RequestMethod.GET)
 	public String redirectToTrainingCreation(Model model, @PathVariable String hiddenTrainingId){
@@ -204,7 +208,6 @@ public class TrainingController {
 		for (Round roundIter : training.getRounds()) {
 			listExerciseInRound.addAll(roundIter.getExerciseInRound());
 		}
-		
 		model.addAttribute("hiddenTrainingId", hiddenTrainingId);
 		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
 		model.addAttribute("exercises", getExercisesForModel(trainingService.findOne(Long.parseLong(hiddenTrainingId)).getClient().getId()));
@@ -212,10 +215,6 @@ public class TrainingController {
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 		model.addAttribute("hiddenTrainingId", training.getId());
 		model.addAttribute("exercisesInRound", listExerciseInRound);
-		
-//		model.addAttribute("exercises", getExercisesForModel(clientId)); // Iz add exercisInRound
-		//model.addAttribute("trainingNumberOfTraining", training.getNumberOfTrainings());
-		
 		model.addAttribute("exercises", getExercisesForModel(training.getClient().getId()));
 		
 		return "trainingCreation";
