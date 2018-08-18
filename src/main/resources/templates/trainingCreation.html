@@ -187,7 +187,7 @@
 <form  style="padding-left:3em" th:action="@{/addRound}" method="POST">
  	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="noviKrug" class="btn btn-success" type="submit" disabled="disabled">Novi krug</button>
+			<button id="noviKrug" class="btn btn-success" type="submit" disabled="disabled">Nova kombinacija</button>
 		</div>
 	</div>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
@@ -195,14 +195,14 @@
 <br/>
 
 
-<h3 style="padding-left:1em">Postojeci krugovi</h3>
+<h3 style="padding-left:1em">Postojeće kombinacije</h3>
  
 
 <div class="container-responsive">
 	<table style="margin-top:2em" class="table table-responsive">
 			<thead>
 				<tr>
-					<th>Broj kruga</th>
+					<th>Broj Kombinacije</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -309,7 +309,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
       </div>
     </div>
   </div>
