@@ -1,5 +1,6 @@
 package training.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity(name = "ExerciseInRound")
 public class ExerciseInRound {
@@ -31,6 +34,7 @@ public class ExerciseInRound {
 	private String exerciseName;
 	
 	@ManyToOne
+	//@Cascade(CascadeType.REMOVE)
 	@JoinColumn(name="roundExerciseInRound")
 	private Round round;
 	

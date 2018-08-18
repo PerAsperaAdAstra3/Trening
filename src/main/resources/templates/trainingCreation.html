@@ -19,67 +19,38 @@
 	
 	
 	$(document).on("click", "#deleteExerciseInRound", function(event) {
-		alert("BLA")
 		exerciseID = item.find(".exerciseId").html()
-				alert("BLA1")
 		$("#hiddenTrainingInRoundToDeleteId").val(exerciseID);
-		alert("BLA2")
 	});
 
 	
 	function enableAddRound(item) {
-		var trainingID = $(".hiddenTrainingId")[0]
+		var trainingID = $(".id")[0]
 		if($(trainingID).val() == ""){
 			document.getElementById("noviKrug").disabled = false;
 		}
 	}
 	
-	  /*<![CDATA[*/
-    
-	function filterByName() {
-	  var input, filter, table, tr, td, i;
-	  input = document.getElementById("inputFilterByName");
-	  filter = input.value.toUpperCase();
-	  table = document.getElementById("myTableExercises");
-	  tr = table.getElementsByTagName("tr");
-	  for (i = 0; i < tr.length; i++) {
-	    td = tr[i].getElementsByTagName("td")[1];
-	    if (td) {
-	      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-	        tr[i].style.display = "";
-	      } else {
-	        tr[i].style.display = "none";
-	      }
-	    }       
-	  }
-	}
-	  
-	function filterByDescription() {
-		  var input, filter, table, tr, td, i;
-		  input = document.getElementById("inputFilterByDescription");
+	  /*<![CDATA[*/	
+	function filterModal(typeToFilter) {
+		  var input, filter, table, tr, td, i, j;
+		  
+		 	if (typeToFilter === 1) {
+			  input = document.getElementById("inputFilterByName");
+		        j = 1;
+		    } else if (typeToFilter === 2){
+		    	 input = document.getElementById("inputFilterByDescription");
+		    	j = 2;
+		    } else if (typeToFilter === 3){
+		  	  input = document.getElementById("inputFilterByGroup");
+		    	j = 3;
+		    }
+		  
 		  filter = input.value.toUpperCase();
 		  table = document.getElementById("myTableExercises");
 		  tr = table.getElementsByTagName("tr");
 		  for (i = 0; i < tr.length; i++) {
-		    td = tr[i].getElementsByTagName("td")[2];
-		    if (td) {
-		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-		        tr[i].style.display = "";
-		      } else {
-		        tr[i].style.display = "none";
-		      }
-		    }       
-		  }
-		}
-	
-	function filterByGroup() {
-		  var input, filter, table, tr, td, i;
-		  input = document.getElementById("inputFilterByGroup");
-		  filter = input.value.toUpperCase();
-		  table = document.getElementById("myTableExercises");
-		  tr = table.getElementsByTagName("tr");
-		  for (i = 0; i < tr.length; i++) {
-		    td = tr[i].getElementsByTagName("td")[3];
+		    td = tr[i].getElementsByTagName("td")[j];
 		    if (td) {
 		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
 		        tr[i].style.display = "";
@@ -152,7 +123,6 @@
 	    		$(this).parent().hide()
 	    	else
 	    		$(this).parent().show()
-	    	
 	    });
 	}
 	
@@ -208,7 +178,7 @@
 		</div>
 	</div>
 	
-	<input type="hidden" class="hiddenTrainingId" th:field="*{clientId}"/>
+	<input type="hidden" class="id" th:field="*{clientId}"/>
 
 	<button class="btn btn-success" type="submit">Snimi</button>
 </form>
@@ -220,7 +190,7 @@
 			<button id="noviKrug" class="btn btn-success" type="submit" disabled="disabled">Novi krug</button>
 		</div>
 	</div>
-<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+<input type="hidden" class="id" name="id" th:value="${id}"/>
 </form>
 <br/>
 
@@ -241,7 +211,7 @@
 					
 					<td class="roundRoundSequenceNumber" th:utext="${round.roundSequenceNumber}" ></td>
 					<td class="roundId" th:utext="${round.id}" style="display:none;"></td> 
-					<td><a th:href="@{/deleteRound/{id}/{hiddenTrainingId}(id=${round.id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+					<td><a th:href="@{/deleteRound/{roundId}/{id}(roundId=${round.id}, id=${id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 				</tr>
 			</tbody>
 	</table>
@@ -290,7 +260,7 @@
 			<button id="exerciseInRoundDodaj" class="btn btn-success"  type="submit" disabled="disabled">Dodaj</button>
 		</div>
 	</div>
-<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+<input type="hidden" class="id" name="id" th:value="${id}"/>
 <input id="hiddenRoundInTraining" type="hidden" th:field="*{roundId}" />
 
 </form>
@@ -308,9 +278,9 @@
         <h4 class="modal-title">Vežbe</h4>
       </div>
       <div class="modal-body">
-<input type="text" id="inputFilterByName" onkeyup="filterByName()" placeholder="Filtriranje po nazivu.."/>
-<input type="text" id="inputFilterByDescription" onkeyup="filterByDescription()" placeholder="Filtriranje po opisu.."/>
-<input type="text" id="inputFilterByGroup" onkeyup="filterByGroup()" placeholder="Filtriranje po grupi.."/>
+<input type="text" id="inputFilterByName" onkeyup="filterModal(1)" placeholder="Filtriranje po nazivu.."/>
+<input type="text" id="inputFilterByDescription" onkeyup="filterModal(2)" placeholder="Filtriranje po opisu.."/>
+<input type="text" id="inputFilterByGroup" onkeyup="filterModal(3)" placeholder="Filtriranje po grupi.."/>
 <div class="container-responsive">
 	<table  id = "myTableExercises" class = "table table-responsive">
 		<thead>
@@ -370,12 +340,12 @@
 				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
 				<td class="note" th:utext="${exerciseInRound.note}"></td>
 				<td class="roundId" th:utext="${exerciseInRound.round.id}" style="display:none;"></td>
-				<td><a th:href="@{/deleteExerciseInRound/{id}/{hiddenTrainingId}(id=${exerciseInRound.ExecInRound_Id}, hiddenTrainingId=${hiddenTrainingId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+				<td><a th:href="@{/deleteExerciseInRound/{exerciseInRoundId}/{id}(exerciseInRoundId=${exerciseInRound.ExecInRound_Id}, id=${id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			</tr>
 		</tbody>
 	</table>
 </div>
-	<input type="hidden" class="hiddenTrainingId" name="hiddenTrainingId" th:value="${hiddenTrainingId}"/>
+	<input type="hidden" class="id" name="id" th:value="${id}"/>
 </form>
 
 </body>
