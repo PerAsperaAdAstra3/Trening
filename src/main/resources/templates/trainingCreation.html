@@ -127,6 +127,15 @@
 	    });
 	}
 	
+	 $(window).ready(function(){
+	        $('body').click(function(){
+	        	 $("#exercisesInRoundTable").each(function(){
+	        		 alert("Show all")
+	     	    		$(this).parent().show()
+	     	    });
+	        });
+	    });
+	
 	function sync(item){
 	    id = item.find(".exerciseId").html()
 	    exerciseName = item.find(".exerciseName").html()
