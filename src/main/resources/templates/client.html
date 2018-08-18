@@ -116,7 +116,7 @@
 			<td>
 				<a th:href="@{/deleteClient/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td>
-				<a th:href="@{/trainingCreationHandler/{id}(id=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
+				<a th:href="@{/trainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
 		</tr>
 	</tbody>
 </table>
