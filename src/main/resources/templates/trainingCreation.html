@@ -98,6 +98,16 @@
 		});
 	});
 	
+	$(window).scroll(function() {
+		  sessionStorage.scrollTop = $(this).scrollTop();
+		});
+
+		$(document).ready(function() {
+		  if (sessionStorage.scrollTop != "undefined") {
+		    $(window).scrollTop(sessionStorage.scrollTop);
+		  }
+		});
+	
 	function selectRoundIdOnRowClick(row){
 		 //ne reagujemo na klik na header tabele, samo obicne redove
 		 //this sadrzi red na koji se kliknulo
@@ -264,7 +274,7 @@
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="exerciseInRoundDodaj" class="btn btn-success"  type="submit" disabled="disabled">Dodaj</button>
+			<button id="exerciseInRoundDodaj" class="btn btn-success" type="submit" disabled="disabled">Dodaj</button>
 		</div>
 	</div>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
