@@ -133,8 +133,8 @@ public class TrainingController {
 	//DELETE ROUND
 	@RequestMapping(value = {"/deleteRound/{roundId}/{id}"}, method = RequestMethod.GET)
 	public String deleteRound(Model model, @PathVariable String roundId, @PathVariable String id){
-		
-		roundService.delete(Long.parseLong(roundId));
+	
+		deleteRound(roundId);
 		
 		return "redirect:/getTraining/"+id;
 
@@ -195,6 +195,18 @@ public class TrainingController {
 		trainingDTO.setDate(strDate);
 		
 		return trainingDTO;
+	}
+	
+	private void deleteRound(String id) {
+		Training training = roundService.findOne(Long.parseLong(id)).getTraining();		
+		int sequenceNumber = roundService.findOne(Long.parseLong(id)).getRoundSequenceNumber();
+		roundService.delete(Long.parseLong(id));
+		for(Round round : training.getRounds()) {
+			if(round.getRoundSequenceNumber() > sequenceNumber) {
+			round.setRoundSequenceNumber(round.getRoundSequenceNumber()-1);
+			roundService.save(round);
+			}
+		}
 	}
 	
 	@RequestMapping(value = {"/getTraining/{id}"}, method = RequestMethod.GET)
