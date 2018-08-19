@@ -2,7 +2,9 @@ package training.dto;
 
 public class ExerciseInRoundDTO {
 
-	private int numberOfRepetitions;
+	private Long id;
+	
+	private String numberOfRepetitions;
 
 	private String difficulty;
 	
@@ -16,6 +18,14 @@ public class ExerciseInRoundDTO {
 	
 	private String note;
 	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getNote() {
 		return note;
 	}
@@ -23,8 +33,6 @@ public class ExerciseInRoundDTO {
 	public void setNote(String note) {
 		this.note = note;
 	}
-
-
 
 	public Long getExerciseInRoundExerciseId() {
 		return exerciseInRoundExerciseId;
@@ -50,11 +58,11 @@ public class ExerciseInRoundDTO {
 		this.roundId = roundId;
 	}
 
-	public int getNumberOfRepetitions() {
+	public String getNumberOfRepetitions() {
 		return numberOfRepetitions;
 	}
 
-	public void setNumberOfRepetitions(int numberOfRepetitions) {
+	public void setNumberOfRepetitions(String numberOfRepetitions) {
 		this.numberOfRepetitions = numberOfRepetitions;
 	}
 
@@ -84,7 +92,7 @@ public class ExerciseInRoundDTO {
 	
 	public ExerciseInRoundDTO() {}
 	
-	public ExerciseInRoundDTO(int numberOfRepetitions, String difficulty) {
+	public ExerciseInRoundDTO(String numberOfRepetitions, String difficulty) {
 		super();
 		this.numberOfRepetitions = numberOfRepetitions;
 		this.difficulty = difficulty;

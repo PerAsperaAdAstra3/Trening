@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,10 +31,10 @@ public class Training {
 	@JoinColumn(name = "trainingList")
 	private Client client;
 	
-	@OneToMany(mappedBy = "trainingTask")
+	@OneToMany(mappedBy = "trainingTask", cascade = CascadeType.ALL)
 	private List<Task> tasks = new ArrayList<Task>();
 	
-    @OneToMany(mappedBy = "trainingRound")
+    @OneToMany(mappedBy = "trainingRound", cascade = CascadeType.ALL)
 	private List<Round> rounds = new ArrayList<Round>();
 	
 	public Long getId() {

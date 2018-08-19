@@ -19,7 +19,7 @@ public class ExerciseInRound {
 	private Long ExecInRound_Id;
 	
 	@Column(name="NumberOfRepetitions")
-	private int numberOfRepetitions;
+	private String numberOfRepetitions;
 	
 	@Column(name="Difficulty")
 	private String difficulty;
@@ -78,11 +78,11 @@ public class ExerciseInRound {
 		ExecInRound_Id = execInRound_Id;
 	}
 
-	public int getNumberOfRepetitions() {
+	public String getNumberOfRepetitions() {
 		return numberOfRepetitions;
 	}
 
-	public void setNumberOfRepetitions(int numberOfRepetitions) {
+	public void setNumberOfRepetitions(String numberOfRepetitions) {
 		this.numberOfRepetitions = numberOfRepetitions;
 	}
 
@@ -96,7 +96,7 @@ public class ExerciseInRound {
 	
 	public ExerciseInRound() {}
 	
-	public ExerciseInRound(int numberOfRepetitions, String difficulty) {
+	public ExerciseInRound(String numberOfRepetitions, String difficulty) {
 		super();
 		this.numberOfRepetitions = numberOfRepetitions;
 		this.difficulty = difficulty;

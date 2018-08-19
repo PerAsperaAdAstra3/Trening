@@ -9,14 +9,37 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 <script>
+
+	$(document).ready(function(){
+		selectedRound = $("#selectedRoundId").val()
+		if (selectedRound == "")
+			return
+		$("#roundsTable tr").each(function() {
+			roundId = $(this).find(".roundId").text()
+			if (selectedRound == roundId){
+				selectRoundIdOnRowClick(this)
+				return
+			}
+		});
+	});
+	
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow(this)
+		$('#myModal').modal('hide')
 	});
 	
 	$(document).on("click", "#round-id-sync", function(event) {
 		selectRoundIdOnRowClick(this)
 	});
 	
+	$(document).on("click", "#testingDeselect", function(event) {
+			$("#round-id-sync").parent().find(".highlighted").removeClass("highlighted");
+			   	$("#round-id-sync").removeClass("highlighted");
+			    $("#exercisesInRoundTable .roundId").each(function(){
+			    		$(this).parent().show()
+			    });
+			    sortTable();
+	});
 	
 	$(document).on("click", "#deleteExerciseInRound", function(event) {
 		exerciseID = item.find(".exerciseId").html()
@@ -25,10 +48,14 @@
 
 	
 	function enableAddRound(item) {
-		var trainingID = $(".id")[0]
-		if($(trainingID).val() == ""){
+		var trainingID = $(".idTraining")[0]
+		if($(trainingID).val() != ""){
 			document.getElementById("noviKrug").disabled = false;
+			document.getElementById("editTraining").disabled = false;
+			document.getElementById("deleteTraining").disabled = false;
+			document.getElementById("saveTraining").disabled = true;
 		}
+
 	}
 	
 	  /*<![CDATA[*/	
@@ -60,8 +87,35 @@
 		    }       
 		  }
 		}
-	  /*]]>*/
+	
  
+function sortTable() {
+  var table, rows, rowsSort, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("exercisesInRoundTable");
+  switching = true;
+
+  rowsSort = table.rows;
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < rows.length; i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[5];
+      y = rows[i + 1].getElementsByTagName("TD")[5];
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+
+/*]]>*/
+	  
 	$(document).on("click", "#modal_button", function(event) {
 		var els = document.getElementsByClassName("modal-table-coloring");
 		
@@ -69,13 +123,13 @@
 		
 		Array.prototype.forEach.call(els, function(el) {
 			var nooo = $(el).find(".exerciseColorCode").html(); 
-			if(nooo == 4){
+			if(nooo == 1){
 			 	el.style.backgroundColor = "red"
 			}
-			if(nooo == 3){
+			if(nooo == 2){
 			 	el.style.backgroundColor = "orange"
 			}
-			if(nooo == 2){
+			if(nooo == 3){
 			 	el.style.backgroundColor = "yellow"
 			}
 			 console.log(el.tagName);
@@ -89,6 +143,16 @@
 	   		 console.log(el.tagName);
 		});
 	});
+	//Keeping position on page
+	$(window).scroll(function() {
+		  sessionStorage.scrollTop = $(this).scrollTop();
+		});
+
+		$(document).ready(function() {
+		  if (sessionStorage.scrollTop != "undefined") {
+		    $(window).scrollTop(sessionStorage.scrollTop);
+		  }
+		});
 	
 	function selectRoundIdOnRowClick(row){
 		 //ne reagujemo na klik na header tabele, samo obicne redove
@@ -105,7 +169,6 @@
 		   	sync1($(row));
 	   }
 	}
-
 	
 	function sync1(item){
 	    roundId = item.find(".roundId").html()
@@ -116,7 +179,8 @@
 	    document.getElementById("exerciseInRoundNote").disabled = false;
 	    document.getElementById("exerciseInRoundNumberOfRepetitions").disabled = false;
 	    document.getElementById("exerciseInRoundDifficulty").disabled = false;
-	    document.getElementById("exerciseInRoundDodaj").disabled = false;
+	    document.getElementById("exerciseInRoundAdd").disabled = false;
+	    document.getElementById("exerciseInRoundEdit").disabled = false;
 	    
 	    $("#exercisesInRoundTable .roundId").each(function(){
 	    	if ($(this).html() != roundId)
@@ -135,7 +199,7 @@
 	    
 	    $("#exerciseInRoundExerciseName").val(exerciseName);
 	    $("#exerciseInRoundExerciseId").val(id);
-	    $("#id").val(id);
+	    $("#idExerciseInRound").val(id);
 	    $("#exerciseInRoundNote").val(exerciseInRoundNote);
 	    $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
 	    $("#exerciseInRoundDifficulty").val(difficulty);
@@ -177,32 +241,34 @@
 			<input type="text" id="trainingClient" class="form-control" th:field="*{client}" disabled="disabled"/>
 		</div>
 	</div>
-	
+	<input type="hidden" class="idTraining" th:field="*{id}"/>
 	<input type="hidden" class="id" th:field="*{clientId}"/>
 
-	<button class="btn btn-success" type="submit">Snimi</button>
+	<button id="saveTraining" class="btn btn-success" type="submit" name="mode" value="add">Snimi</button>
+	<button id="editTraining" class="btn btn-success" type="submit" disabled="disabled" name="mode" value="edit">Izmeni</button>
+	<a th:href="@{/deleteTraining/{id}/(id=*{id})}"><button id="deleteTraining" type="button" class="btn btn-danger" disabled="disabled">Briši</button></a>
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
 <form  style="padding-left:3em" th:action="@{/addRound}" method="POST">
  	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="noviKrug" class="btn btn-success" type="submit" disabled="disabled">Novi krug</button>
+			<button id="noviKrug" class="btn btn-success" type="submit" disabled="disabled">Nova kombinacija</button>
 		</div>
 	</div>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
+<input type="hidden" id="selectedRoundId" name="selectedRoundId" th:value="${selectedRoundId}"/>
 </form>
 <br/>
 
-
-<h3 style="padding-left:1em">Postojeci krugovi</h3>
+<h3 style="padding-left:1em">Postojeće kombinacije</h3>
  
 
 <div class="container-responsive">
-	<table style="margin-top:2em" class="table table-responsive">
+	<table id="roundsTable" style="margin-top:2em" class="table table-responsive">
 			<thead>
 				<tr>
-					<th>Broj kruga</th>
+					<th>Broj Kombinacije</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -215,6 +281,7 @@
 				</tr>
 			</tbody>
 	</table>
+	<div style="padding-left:3em"><button style="margine-left:3em" class="btn btn-success" id="testingDeselect">Deselektuj</button></div>
 </div>
 
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
@@ -226,7 +293,7 @@
 			<label for="exerciseInRoundExerciseName">Vežba:</label>
 			<div class="form-row">
 			 	<div class="col">
-					<input type="text" class="form-control" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName" disabled="disabled"/>
+					<input type="text" class="form-control" size="70" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName" disabled="disabled"/>
 				</div>
 				<div class="col">
 					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled="disabled">Izbor</button>
@@ -257,9 +324,11 @@
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="exerciseInRoundDodaj" class="btn btn-success"  type="submit" disabled="disabled">Dodaj</button>
+			<button id="exerciseInRoundAdd" class="btn btn-success" type="submit" name="modeEIR" value="add" disabled="disabled">Dodaj</button>
+			<button id="exerciseInRoundEdit" class="btn btn-success" type="submit" name="modeEIR" value="edit" disabled="disabled">Izmeni</button>
 		</div>
 	</div>
+<input type="hidden" th:field="*{id}" id="idExerciseInRound"/>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
 <input id="hiddenRoundInTraining" type="hidden" th:field="*{roundId}" />
 
@@ -285,7 +354,6 @@
 	<table  id = "myTableExercises" class = "table table-responsive">
 		<thead>
 			<tr>
-				<th scope="col">Id</th>
 				<th scope="col">Naziv</th>
 				<th scope="col">Opis</th>
 				<th scope="col">Grupa vežbi</th>
@@ -296,7 +364,7 @@
 		</thead>
 		<tbody>
 			<tr class="modal-table-coloring" id="tr-entity-list" th:each = "exercise : ${exercises}">
-				<td class="exerciseId" th:utext="${exercise.id}"></td>
+				<td class="exerciseId" th:utext="${exercise.id}" style="display:none;"></td>
 				<td class="exerciseName" th:utext="${exercise.name}"></td>
 				<td class="exerciseDescription" th:utext="${exercise.description}"></td>
 				<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
@@ -309,7 +377,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
       </div>
     </div>
   </div>
@@ -324,20 +392,19 @@
 	<table id="exercisesInRoundTable" class = "table table-responsive">
 		<thead>
 			<tr>
-				<th scope="col">Id</th>
+				<th scope="col">Naziv vežbe</th>
 				<th scope="col">Broj ponavljanja</th>
 				<th scope="col">Težina</th>
-				<th scope="col">Naziv vežbe</th>
 				<th scope="col">Napomena</th>
 				<th scope="col"></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr class="hidden_input" id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
-				<td class="exerciseId" th:utext="${exerciseInRound.ExecInRound_Id}"></td>
+				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
+				<td class="exerciseId" th:utext="${exerciseInRound.ExecInRound_Id}" style="display:none;"></td>
 				<td class="numberOfRepetitions" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
 				<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
-				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
 				<td class="note" th:utext="${exerciseInRound.note}"></td>
 				<td class="roundId" th:utext="${exerciseInRound.round.id}" style="display:none;"></td>
 				<td><a th:href="@{/deleteExerciseInRound/{exerciseInRoundId}/{id}(exerciseInRoundId=${exerciseInRound.ExecInRound_Id}, id=${id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
