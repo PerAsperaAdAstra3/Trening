@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../scripts/functions.js"></script>
 <meta charset="UTF-8"/>
 <title>Treninzi</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -12,6 +15,16 @@
 	
 	$(document).on("click", "#search", function(event) {
 		$("#hidden_input").css('display','table-row');
+	});
+	
+	$(window).scroll(function() {
+		  sessionStorage.scrollTop = $(this).scrollTop();
+		});
+
+		$(document).ready(function() {
+		  if (sessionStorage.scrollTop != "undefined") {
+		    $(window).scrollTop(sessionStorage.scrollTop);
+		  }
 	});
 
 	function sync(item){
@@ -47,6 +60,8 @@
 			<td scope="row" class="clientId" th:utext="${training.date}"></td>
 			<td class="trainingNumberOfTra" th:utext="${training.numberOfTrainings}"></td>
 			<td class="trainingClientName" th:utext="${training.client}"></td>
+			<td class="trainingClientName" th:utext="${training.id}" style="display:none;"></td>
+			<td><a th:href="@{/deleteTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 		</tr>
 	</tbody>
 </table>

@@ -73,6 +73,12 @@ public class TrainingController {
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingService.findAll()));
 		return "training";
 	}
+	
+	@RequestMapping(value = { "/deleteTraining/{id}" }, method = RequestMethod.GET)
+	public String getTrainings(Model model, @PathVariable String id) {
+		trainingService.delete(Long.parseLong(id));
+		return "redirect:/trainingList";
+	}
 
 	//Initialization of TrainingCreation page
 	
