@@ -34,9 +34,11 @@
 
 	
 	function enableAddRound(item) {
-		var trainingID = $(".id")[0]
-		if($(trainingID).val() == ""){
+		var trainingID = $(".idTraining")[0]
+		if($(trainingID).val() != ""){
 			document.getElementById("noviKrug").disabled = false;
+			document.getElementById("editTraining").disabled = false;
+			document.getElementById("deleteTraining").disabled = false;
 			document.getElementById("saveTraining").disabled = true;
 		}
 	}
@@ -223,10 +225,12 @@ function sortTable() {
 			<input type="text" id="trainingClient" class="form-control" th:field="*{client}" disabled="disabled"/>
 		</div>
 	</div>
-	
+	<input type="hidden" class="idTraining" th:field="*{id}"/>
 	<input type="hidden" class="id" th:field="*{clientId}"/>
 
-	<button id="saveTraining" class="btn btn-success" type="submit">Snimi</button>
+	<button id="saveTraining" class="btn btn-success" type="submit" name="mode" value="add">Snimi</button>
+	<button id="editTraining" class="btn btn-success" type="submit" disabled="disabled" name="mode" value="edit">Izmeni</button>
+	<a th:href="@{/deleteTraining/{id}/(id=*{id})}"><button id="deleteTraining" type="button" class="btn btn-danger" disabled="disabled">Briši</button></a>
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 

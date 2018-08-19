@@ -92,11 +92,9 @@ public class TrainingController {
 	}
 	
 	@RequestMapping(value = { "/saveTraining"}, method = RequestMethod.POST)
-	public String saveTraining(Model model, @ModelAttribute("trainingDTO") TrainingDTO trainingDTO ) {
-
-		Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
-
-		return "redirect:/getTraining/"+training.getId();
+	public String saveTraining(Model model, @ModelAttribute("trainingDTO") TrainingDTO trainingDTO, @RequestParam String mode) {
+		Long id = saveOrEditTraining(trainingDTO , mode);
+		return "redirect:/getTraining/"+id;
 	}
 
 	//Adding a round in to Training
@@ -207,6 +205,19 @@ public class TrainingController {
 			roundService.save(round);
 			}
 		}
+	}
+	
+	private Long saveOrEditTraining(TrainingDTO trainingDTO, String mode) {
+		Training training ;
+		if("add".equals(mode)) {
+			trainingDTO.setId(null);
+			training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
+		} else {
+			training =	trainingService.edit(trainingDTO.getId(), trainingDTOtoTraining.convert(trainingDTO));
+		training.getId();
+		}
+
+		return training.getId();
 	}
 	
 	@RequestMapping(value = {"/getTraining/{id}"}, method = RequestMethod.GET)

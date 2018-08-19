@@ -63,6 +63,8 @@ public class JpaTrainingService implements TrainingService {
 		Training newTraining = trainingRepository.findOne(id);
 		newTraining.setDate(training.getDate());
 		newTraining.setNumberOfTrainings(training.getNumberOfTrainings());
+		newTraining.setClient(training.getClient());
+		trainingRepository.save(newTraining);
 		return newTraining;
 	}
 
