@@ -37,6 +37,7 @@
 		var trainingID = $(".id")[0]
 		if($(trainingID).val() == ""){
 			document.getElementById("noviKrug").disabled = false;
+			document.getElementById("saveTraining").disabled = true;
 		}
 	}
 	
@@ -225,7 +226,7 @@ function sortTable() {
 	
 	<input type="hidden" class="id" th:field="*{clientId}"/>
 
-	<button class="btn btn-success" type="submit">Snimi</button>
+	<button id="saveTraining" class="btn btn-success" type="submit">Snimi</button>
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
