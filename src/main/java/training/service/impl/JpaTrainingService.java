@@ -72,8 +72,13 @@ public class JpaTrainingService implements TrainingService {
 	public Map<Long, Integer> exercisesLastTraining(Long clientId) {
 		List<Training> lastTrainings = trainingRepository.findTop4ByClientIdOrderByIdDesc(clientId);
 		Map<Long,Integer> mapExercise = new HashMap<>();
-		int i =1;
+		int i = 1;
+		boolean first = true;
 		for(Training training : lastTrainings) {
+			if (first){
+				first = false;
+				continue;
+			}
 			for(Round round : training.getRounds())
 				for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
 					if(!mapExercise.containsKey(exerciseInRound.getExerciseId()))
@@ -81,6 +86,7 @@ public class JpaTrainingService implements TrainingService {
 				}
 			i++;
 		}
+
 		return mapExercise;
 	}
 }
