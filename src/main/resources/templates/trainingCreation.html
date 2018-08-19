@@ -24,6 +24,7 @@
 			    $("#exercisesInRoundTable .roundId").each(function(){
 			    		$(this).parent().show()
 			    });
+			    sortTable();
 	});
 	
 	$(document).on("click", "#deleteExerciseInRound", function(event) {
@@ -68,8 +69,35 @@
 		    }       
 		  }
 		}
-	  /*]]>*/
+	
  
+function sortTable() {
+  var table, rows, rowsSort, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("exercisesInRoundTable");
+  switching = true;
+
+  rowsSort = table.rows;
+  while (switching) {
+    switching = false;
+    rows = table.rows;
+    for (i = 1; i < rows.length; i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("TD")[5];
+      y = rows[i + 1].getElementsByTagName("TD")[5];
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+
+/*]]>*/
+	  
 	$(document).on("click", "#modal_button", function(event) {
 		var els = document.getElementsByClassName("modal-table-coloring");
 		
