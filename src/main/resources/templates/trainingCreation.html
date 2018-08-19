@@ -18,6 +18,13 @@
 		selectRoundIdOnRowClick(this)
 	});
 	
+	$(document).on("click", "#testingDeselect", function(event) {
+			$("#round-id-sync").parent().find(".highlighted").removeClass("highlighted");
+			   	$("#round-id-sync").removeClass("highlighted");
+			    $("#exercisesInRoundTable .roundId").each(function(){
+			    		$(this).parent().show()
+			    });
+	});
 	
 	$(document).on("click", "#deleteExerciseInRound", function(event) {
 		exerciseID = item.find(".exerciseId").html()
@@ -106,7 +113,6 @@
 		   	sync1($(row));
 	   }
 	}
-
 	
 	function sync1(item){
 	    roundId = item.find(".roundId").html()
@@ -126,15 +132,6 @@
 	    		$(this).parent().show()
 	    });
 	}
-	
-	 $(window).ready(function(){
-	        $('body').click(function(){
-	        	 $("#exercisesInRoundTable").each(function(){
-	        		 alert("Show all")
-	     	    		$(this).parent().show()
-	     	    });
-	        });
-	    });
 	
 	function sync(item){
 	    id = item.find(".exerciseId").html()
@@ -204,7 +201,6 @@
 </form>
 <br/>
 
-
 <h3 style="padding-left:1em">Postojeće kombinacije</h3>
  
 
@@ -225,6 +221,7 @@
 				</tr>
 			</tbody>
 	</table>
+	<div style="padding-left:3em"><button style="margine-left:3em" class="btn btn-success" id="testingDeselect">Deselektuj</button></div>
 </div>
 
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
