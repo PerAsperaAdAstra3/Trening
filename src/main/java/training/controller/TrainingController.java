@@ -94,7 +94,7 @@ public class TrainingController {
 	@RequestMapping(value = { "/saveTraining"}, method = RequestMethod.POST)
 	public String saveTraining(Model model, @ModelAttribute("trainingDTO") TrainingDTO trainingDTO, @RequestParam String mode) {
 		Long id = saveOrEditTraining(trainingDTO , mode);
-		return "redirect:/getTraining/"+id+"/"+"";
+		return "redirect:/getTraining/"+id+"/"+"-3";
 	}
 
 	//Adding a round in to Training
@@ -110,11 +110,12 @@ public class TrainingController {
 	
 	@RequestMapping(value = { "/addExerciseInRound" }, method = RequestMethod.POST) 
 	public String addExerciseInRound(Model model,
-			@ModelAttribute("exerciseInRoundDTO") ExerciseInRoundDTO exerciseInRoundDTO, @RequestParam String id) {
+			@ModelAttribute("exerciseInRoundDTO") ExerciseInRoundDTO exerciseInRoundDTO, @RequestParam String modeEIR) {
 
-		Long newAddedRoundId = addExerciseInRound(exerciseInRoundDTO);
+		Long newAddedRoundId = addExerciseInRound(exerciseInRoundDTO, modeEIR);
+		Long trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
 		
-		return "redirect:/getTraining/"+id+"/"+newAddedRoundId;
+		return "redirect:/getTraining/"+trainingId+"/"+newAddedRoundId;
 	}
 
 	
@@ -160,15 +161,18 @@ public class TrainingController {
 		return round.getId();
 	}
 	
-	private Long addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO) {
+	private Long addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
 
-		ExerciseInRound exerciseInRound = exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
-		exerciseInRoundService.save(exerciseInRound);
-		Training training = exerciseInRound.getRound().getTraining();
-		List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
-		for (Round roundIter : training.getRounds()) {
-			listExerciseInRound.addAll(roundIter.getExerciseInRound());
-		}
+		ExerciseInRound exerciseInRound;//= exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
+	//	exerciseInRoundService.save(exerciseInRound);
+
+	if("add".equals(mode)) {
+			exerciseInRoundDTO.setId(null);
+			exerciseInRound = exerciseInRoundService.save(exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
+		} else {
+			exerciseInRound = exerciseInRoundService.edit(exerciseInRoundDTO.getId(), exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
+		} 
+		
 		return exerciseInRound.getRound().getId();
 	}
 	

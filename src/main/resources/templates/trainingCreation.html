@@ -41,15 +41,7 @@
 			document.getElementById("deleteTraining").disabled = false;
 			document.getElementById("saveTraining").disabled = true;
 		}
-		
-		selectRoundIdOnRowClick
-		
-		 $("#exercisesInRoundTable .roundId").each(function(){
-		    	if ($(this).html() != roundId)
-		    		$(this).parent().hide()
-		    	else
-		    		$(this).parent().show()
-		    });
+
 	}
 	
 	  /*<![CDATA[*/	
@@ -173,7 +165,8 @@ function sortTable() {
 	    document.getElementById("exerciseInRoundNote").disabled = false;
 	    document.getElementById("exerciseInRoundNumberOfRepetitions").disabled = false;
 	    document.getElementById("exerciseInRoundDifficulty").disabled = false;
-	    document.getElementById("exerciseInRoundDodaj").disabled = false;
+	    document.getElementById("exerciseInRoundAdd").disabled = false;
+	    document.getElementById("exerciseInRoundEdit").disabled = false;
 	    
 	    $("#exercisesInRoundTable .roundId").each(function(){
 	    	if ($(this).html() != roundId)
@@ -193,6 +186,7 @@ function sortTable() {
 	    $("#exerciseInRoundExerciseName").val(exerciseName);
 	    $("#exerciseInRoundExerciseId").val(id);
 	    $("#id").val(id);
+	    $("#idExerciseInRound").val(id);
 	    $("#exerciseInRoundNote").val(exerciseInRoundNote);
 	    $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
 	    $("#exerciseInRoundDifficulty").val(difficulty);
@@ -317,9 +311,11 @@ function sortTable() {
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="exerciseInRoundDodaj" class="btn btn-success" type="submit" disabled="disabled">Dodaj</button>
+			<button id="exerciseInRoundAdd" class="btn btn-success" type="submit" name="modeEIR" value="add" disabled="disabled">Dodaj</button>
+			<button id="exerciseInRoundEdit" class="btn btn-success" type="submit" name="modeEIR" value="edit" disabled="disabled">Izmeni</button>
 		</div>
 	</div>
+<input type="hidden" th:field="*{id}" id="idExerciseInRound"/>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
 <input id="hiddenRoundInTraining" type="hidden" th:field="*{roundId}" />
 
