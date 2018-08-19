@@ -41,6 +41,15 @@
 			document.getElementById("deleteTraining").disabled = false;
 			document.getElementById("saveTraining").disabled = true;
 		}
+		
+		selectRoundIdOnRowClick
+		
+		 $("#exercisesInRoundTable .roundId").each(function(){
+		    	if ($(this).html() != roundId)
+		    		$(this).parent().hide()
+		    	else
+		    		$(this).parent().show()
+		    });
 	}
 	
 	  /*<![CDATA[*/	
@@ -241,6 +250,7 @@ function sortTable() {
 		</div>
 	</div>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
+<input type="hidden" id="newAddedRoundId" name="newAddedRoundId" th:value="${newAddedRoundId}"/>
 </form>
 <br/>
 

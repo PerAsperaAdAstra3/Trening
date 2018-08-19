@@ -94,16 +94,16 @@ public class TrainingController {
 	@RequestMapping(value = { "/saveTraining"}, method = RequestMethod.POST)
 	public String saveTraining(Model model, @ModelAttribute("trainingDTO") TrainingDTO trainingDTO, @RequestParam String mode) {
 		Long id = saveOrEditTraining(trainingDTO , mode);
-		return "redirect:/getTraining/"+id;
+		return "redirect:/getTraining/"+id+"/"+"";
 	}
 
 	//Adding a round in to Training
 	@RequestMapping(value = { "/addRound"}, method = RequestMethod.POST)
 	public String addRound(Model model, @RequestParam String id) {
 	
-		addRound(id);
+		Long newAddedRoundId = addRound(id);
 
-		return "redirect:/getTraining/"+id;
+		return "redirect:/getTraining/"+id+"/"+newAddedRoundId;
 	}
 
 	// ADD EXERCISE IN ROUND
@@ -112,9 +112,9 @@ public class TrainingController {
 	public String addExerciseInRound(Model model,
 			@ModelAttribute("exerciseInRoundDTO") ExerciseInRoundDTO exerciseInRoundDTO, @RequestParam String id) {
 
-		addExerciseInRound(exerciseInRoundDTO);
+		Long newAddedRoundId = addExerciseInRound(exerciseInRoundDTO);
 		
-		return "redirect:/getTraining/"+id;
+		return "redirect:/getTraining/"+id+"/"+newAddedRoundId;
 	}
 
 	
@@ -125,7 +125,7 @@ public class TrainingController {
 
 		exerciseInRoundService.delete(Long.parseLong(exerciseInRoundId));
 
-		return "redirect:/getTraining/"+id;
+		return "redirect:/getTraining/"+id+"/"+"";
 	}
 
 	//DELETE ROUND
@@ -134,7 +134,7 @@ public class TrainingController {
 	
 		deleteRound(roundId);
 		
-		return "redirect:/getTraining/"+id;
+		return "redirect:/getTraining/"+id+"/"+"";
 
 	}
 	
@@ -151,15 +151,16 @@ public class TrainingController {
 		return exercisesForModal;
 	}		
 	
-	private void addRound(String id) {
+	private Long addRound(String id) {
 		Training training = trainingService.findOne(Long.parseLong(id));
 		Round round = new Round(training.getRounds().size() + 1);
 		training.addRound(round);
 		roundService.save(round);
 		trainingService.save(training);
+		return round.getId();
 	}
 	
-	private void addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO) {
+	private Long addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO) {
 
 		ExerciseInRound exerciseInRound = exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
 		exerciseInRoundService.save(exerciseInRound);
@@ -168,6 +169,7 @@ public class TrainingController {
 		for (Round roundIter : training.getRounds()) {
 			listExerciseInRound.addAll(roundIter.getExerciseInRound());
 		}
+		return exerciseInRound.getRound().getId();
 	}
 	
 	private TrainingDTO createTraining(String clientId) {
@@ -220,8 +222,8 @@ public class TrainingController {
 		return training.getId();
 	}
 	
-	@RequestMapping(value = {"/getTraining/{id}"}, method = RequestMethod.GET)
-	public String getTraining(Model model, @PathVariable String id){
+	@RequestMapping(value = {"/getTraining/{id}/{newAddedRoundId}"}, method = RequestMethod.GET)
+	public String getTraining(Model model, @PathVariable String id, @PathVariable String newAddedRoundId){
 	
 		Training training = trainingService.findOne(Long.parseLong(id));
 		List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
@@ -235,6 +237,7 @@ public class TrainingController {
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 		model.addAttribute("exercisesInRound", listExerciseInRound);
 		model.addAttribute("exercises", getExercisesForModel(training.getClient().getId()));
+		model.addAttribute("newAddedRoundId", newAddedRoundId);
 		
 		return "trainingCreation";
 	}
