@@ -200,6 +200,7 @@ public class TrainingController {
 		}
 		TrainingDTO trainingDTO = new TrainingDTO();
 		trainingDTO.setClient(client.getName());
+		trainingDTO.setClientFamilyName(client.getFamilyName());
 		trainingDTO.setClientId(clientId);
 		trainingDTO.setNumberOfTrainings((int) (max + 1));
 		trainingDTO.setDate(strDate);
