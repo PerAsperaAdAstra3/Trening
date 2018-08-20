@@ -74,18 +74,24 @@
 </head>
 <body class="gradient">
 	<div class="alert div1" role="alert">
+		<a href="/" class="home">Početna</a>
 		<h1 align="center">Treninzi u sistemu</h1>
 	</div>
 	<a style="padding-left:3em" th:href="@{/addTrainingToClient}"><button class="btn btn-success">Kreiraj trening</button></a>
 	<br/>
 	<br/>
 	<br/>
-<form th:action="@{/filterTrainings}" method="POST">
+<form method="POST">
+<div style="padding-left:3em">
+	<p><b> Filtriranje: </b></p>
 		<input type="text" id="inputFilterDate" onkeyup="filterModal(0)" placeholder="Filtriranje po datumu.."/>
 		<input type="text" id="inputFilterNumberOfTrainings" onkeyup="filterModal(1)" placeholder="Filtriranje po broju treninga.."/>
 		<input type="text" id="inputFilterClientName" onkeyup="filterModal(2)" placeholder="Filtriranje po imenu.."/>
 		<input type="text" id="inputFilterFamilyName" onkeyup="filterModal(3)" placeholder="Filtriranje po prezimenu.."/>
-		
+	<br/>
+	<br/>
+	<br/>
+</div>
 <table id="training" class="table table-hover">
 	<thead>
 		<tr>

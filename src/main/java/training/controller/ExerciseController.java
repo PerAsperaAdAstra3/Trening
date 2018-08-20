@@ -36,7 +36,6 @@ public class ExerciseController {
 
 	@RequestMapping(value = {"/exerciseList/{hiddenExerciseGroupId}"}, method=RequestMethod.GET)
 	public String getExercises(Model model, @PathVariable String hiddenExerciseGroupId) {		
-		System.out.println("EXERCISE LIST");
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));

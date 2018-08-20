@@ -75,13 +75,4 @@ public class ExerciseGroupController {
 		}
 		return "redirect:/exerciseGroupList";
 	}
-	
-	//TODO - This will most likely be removed - It was decided that filtering will be done on the front end.
-	@RequestMapping(value = {"/filterExerciseGroup"}, method = RequestMethod.POST)
-	public String filterExercisesGroup(Model model, @ModelAttribute("exerciseGroupDTOSearch") ExerciseGroupDTO exerciseGroupDTOSearch) {
-		model.addAttribute("exerciseGroupDTO", new ExerciseDTO());
-		model.addAttribute("exerciseGroupDTOSearch", new ExerciseDTO());
-		model.addAttribute("exerciseGroups", exerciseGroupService.filter(exerciseGroupDTOtoExerciseGroup.convert(exerciseGroupDTOSearch)));
-		return "exerciseGroup";
-	}
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<script src="../scripts/jquery-3.2.1.min.js"></script>
-	<script src="../scripts/functions.js"></script>
+	<script src="../../scripts/jquery-3.2.1.min.js"></script>
+	<script src="../../scripts/functions.js"></script>
 	<meta charset="utf-8"/>
 	<title>Grupa vežbi</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -22,6 +22,28 @@
 	    $("#name").val(name);
 	    $("#id").val(id);
 	}
+	
+	/*<![CDATA[*/	
+	function filterModal() {
+		  var input, filter, table, tr, td, i;
+		  
+		  input = document.getElementById("inputFilterName");
+		 	
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("exerciseGroupTable");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[0];
+		    if (td) {
+		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }       
+		  }
+		}
+	/*]]>*/
 </script>
 </head>
 <body class="gradient">
@@ -54,26 +76,26 @@
 </div>
 <br/>
 
-<form th:action="@{/filterExerciseGroup}" th:object="${exerciseGroupDTOSearch}" method="POST">
-<table class = "table table-hover">
+<form method="POST">
+<div style="padding-left:3em">
+	<p><b> Filtriranje: </b></p>
+	<input type="text" id="inputFilterName" onkeyup="filterModal()" placeholder="Filtriranje po nazivu.."/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+<table id="exerciseGroupTable" class = "table table-hover">
 	<thead>
 		<tr>
-			<th scope="col">Id</th>
 			<th scope="col">Naziv</th>
 			<th scope="col"></th>
 			<th scope="col"></th>
 		</tr>
-		<tr id="hidden_input">
-			<td><input/></td>	
-			<td><input th:field="*{name}"/></td>
-			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
-			<td></td>
-		</tr>
 	</thead>
 	<tbody>
 		<tr id="tr-entity-list" th:each = "exerciseGroup : ${exerciseGroups}">
-			<td class="exerciseGroupId" th:utext="${exerciseGroup.id}"></td>
 			<td class="exerciseGroupName" th:utext="${exerciseGroup.name}"></td>
+			<td class="exerciseGroupId" th:utext="${exerciseGroup.id}" style="display:none;"></td>
 			<td><a th:href="@{/deleteExerciseGroup/{id}(id=${exerciseGroup.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td><a th:href="@{/filterExcerInGroup/{id}(id=${exerciseGroup.id})}"><button type="button" class="btn btn-danger">Vežbe iz grupe</button></a></td>
 		</tr>

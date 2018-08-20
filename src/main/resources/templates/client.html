@@ -28,6 +28,40 @@
 	    $("#phoneNumber").val(phoneNumber);
 	    $("#email").val(email);
 	}
+	
+/*<![CDATA[*/	
+	function filterModal(typeToFilter) {
+		  var input, filter, table, tr, td, i, j;
+		  
+		 	if (typeToFilter === 0) {
+			  input = document.getElementById("inputFilterName");
+		        j = 0;
+		    } else if (typeToFilter === 1){
+		    	 input = document.getElementById("inputFilterDescription");
+		    	j = 1;
+		    } else if (typeToFilter === 2){
+		  	  input = document.getElementById("inputFilterEmail");
+		    	j = 2;
+		    } else if (typeToFilter === 3){
+			  	  input = document.getElementById("inputFilterPhone");
+			    	j = 3;
+			    }
+		 	
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("clientTable");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[j];
+		    if (td) {
+		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }       
+		  }
+		}
+/*]]>*/
 	</script>
 </head>
 <body class="gradient">
@@ -83,12 +117,20 @@
 </div>
 <br/>
 <div class="panel">
-	<button type="button" id="search" class="btn btn-dark">Pretraga</button>
-<form th:action="@{/filterClients}" th:object="${clientDTOSearch}" method="POST">
-<table class="table table-hover">
+<form method="POST">
+<div style="padding-left:3em">
+	<p><b> Filtriranje: </b></p>
+		<input type="text" id="inputFilterName" onkeyup="filterModal(0)" placeholder="Filtriranje po nazivu.."/>
+		<input type="text" id="inputFilterDescription" onkeyup="filterModal(1)" placeholder="Filtriranje po opisu.."/>
+		<input type="text" id="inputFilterEmail" onkeyup="filterModal(2)" placeholder="Filtriranje po email adresi.."/>
+		<input type="text" id="inputFilterPhone" onkeyup="filterModal(3)" placeholder="Filtriranje po broju telefona.."/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+<table id="clientTable" class="table table-hover">
 	<thead>
 		<tr>
-			<th scope="col">Id</th>
 			<th scope="col">Ime</th>
 			<th scope="col">Prezime</th>
 			<th scope="col">Email</th>
@@ -96,23 +138,14 @@
 			<th scope="col"></th>
 			<th scope="col"></th>
 		</tr>
-		<tr id="hidden_input">
-			<td><input /></td>	
-			<td><input th:field="*{name}"/></td>
-			<td><input th:field="*{familyName}"/></td>
-			<td><input th:field="*{email}"/></td>
-			<td><input th:field="*{phoneNumber}"/></td>
-			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
-			<td></td>
-		</tr>
 	</thead>
 	<tbody>
 		<tr	id="tr-entity-list" th:each = "client : ${clients}">
-			<td scope="row" class="clientId" th:utext="${client.id}"></td>
 			<td class="clientName" th:utext="${client.name}"></td>
 			<td class="clientFamilyName" th:utext="${client.familyName}"></td>
 			<td class="clientEmail" th:utext="${client.email}"></td>
 			<td class="clientPhoneNumber" th:utext="${client.phoneNumber}"></td>
+			<td scope="row" class="clientId" th:utext="${client.id}" style="display:none;"></td>
 			<td>
 				<a th:href="@{/deleteClient/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td>
