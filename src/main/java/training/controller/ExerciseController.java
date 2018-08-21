@@ -1,5 +1,8 @@
 package training.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +18,7 @@ import training.converter.ExerciseToExerciseDTO;
 import training.dto.ExerciseDTO;
 import training.service.ExerciseGroupService;
 import training.service.ExerciseService;
+import training.util.PdfGenaratorUtil;
 
 @Controller
 public class ExerciseController {
@@ -67,4 +71,5 @@ public class ExerciseController {
 		exerciseService.delete(Long.parseLong(id));
 		return "redirect:/exerciseList/"+hiddenExerciseGroupId;
 	}
+	 
 }

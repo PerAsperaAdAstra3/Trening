@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ import training.service.ExerciseInRoundService;
 import training.service.ExerciseService;
 import training.service.RoundService;
 import training.service.TrainingService;
+import training.util.PdfGenaratorUtil;
 
 @Controller
 public class TrainingController {
@@ -67,6 +69,9 @@ public class TrainingController {
 	
 	@Autowired
 	private ExerciseInRoundService exerciseInRoundService;
+
+	@Autowired
+	private PdfGenaratorUtil pdfGenaratorUtil;
 
 	@RequestMapping(value = { "/trainingList" }, method = RequestMethod.GET)
 	public String getTrainings(Model model) {
@@ -253,5 +258,25 @@ public class TrainingController {
 		return "trainingCreation";
 	}
 	
-	
+	@RequestMapping(value = {"/printPDF/{id}"}, method = RequestMethod.GET)
+	public String pdf(Model model, @PathVariable String id) throws Exception{
+		 Map<String,String> data = new HashMap<String,String>();
+		 Training training = trainingService.findOne(Long.parseLong(id));
+		 String imePrezime = training.getClient().getName() + " " + training.getClient().getFamilyName();
+		 String date = training.getDate().toString();
+		 String[] parts = date.split(" ");
+		 
+		 List<Round> rounds = training.getRounds();
+		 String round = rounds.get(0).getRoundSequenceNumber()+""; //getExerciseInRound().toString();
+		 
+		 date = parts[0];
+		 String trainingNumber = ""+training.getNumberOfTrainings();
+		 data.put("name", imePrezime);
+		 data.put("trainingNumber", trainingNumber);
+		 data.put("date", date);
+		 data.put("round", round);
+		 
+		 pdfGenaratorUtil.createPdf("PDFTemplate",data); 
+		 return "redirect:/trainingList";
+	}
 }

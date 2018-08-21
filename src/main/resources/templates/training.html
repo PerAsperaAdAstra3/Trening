@@ -111,6 +111,7 @@
 			<td class="trainingId" th:utext="${training.id}" style="display:none;"></td>
 			<td><a th:href="@{/getTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-success">Izmeni</button></a></td>
 			<td><a th:href="@{/deleteTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+			<td><a th:href="@{/printPDF/{id}(id=${training.id})}"><button type="button" class="btn btn-danger">PDF</button></a></td>
 		</tr>
 	</tbody>
 </table>

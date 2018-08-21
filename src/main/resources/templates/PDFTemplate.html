@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<table style="width:100%">
+	<tr>
+		<td align="left"><p th:text="'Klijent : ' + ${name}" /></td>
+		<td align="center"><p th:text="${trainingNumber} + '.trening'" /></td>
+		<td align="right"><p th:text="'Datum : ' + ${date}" /></td>
+	</tr>
+</table>
+
+<p th:text="'Kombinacija : ' + ${round}+'.'" />
+
+</body>
+</html>

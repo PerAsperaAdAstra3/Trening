@@ -247,6 +247,8 @@ function sortTable() {
 	<button id="saveTraining" class="btn btn-success" type="submit" name="mode" value="add">Snimi</button>
 	<button id="editTraining" class="btn btn-success" type="submit" disabled="disabled" name="mode" value="edit">Izmeni</button>
 	<a th:href="@{/deleteTraining/{id}/(id=*{id})}"><button id="deleteTraining" type="button" class="btn btn-danger" disabled="disabled">Briši</button></a>
+	<a th:href="@{/printPDF/{id}/{fromWhereToPDF}(id=${exercise.id}, fromWhereToPDF=${fromWhereToPDF})}"><button type="button" class="btn btn-danger">PDF</button></a>
+	<input type="hidden" id="fromWhereToPDF" class="btn btn-success" type="submit" name="fromWhereToPDF" value="trainingCreation"/>
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
