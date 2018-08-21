@@ -260,7 +260,7 @@ public class TrainingController {
 	
 	@RequestMapping(value = {"/printPDF/{id}"}, method = RequestMethod.GET)
 	public String pdf(Model model, @PathVariable String id) throws Exception{
-		 Map<String,String> data = new HashMap<String,String>();
+		 Map<String,Object> data = new HashMap<String,Object>();
 		 Training training = trainingService.findOne(Long.parseLong(id));
 		 String imePrezime = training.getClient().getName() + " " + training.getClient().getFamilyName();
 		 String date = training.getDate().toString();
@@ -269,12 +269,23 @@ public class TrainingController {
 		 List<Round> rounds = training.getRounds();
 		 String round = rounds.get(0).getRoundSequenceNumber()+""; //getExerciseInRound().toString();
 		 
+		 List<ExerciseInRound> exercisesInRound = new ArrayList<ExerciseInRound>();
+		 
+		 for(Round roundIter : rounds) {
+			 exercisesInRound.addAll(roundIter.getExerciseInRound());
+		 }
+		 
+		 rounds.get(0).getExerciseInRound().get(0).getExecInRound_Id();
+		 rounds.get(0).getExerciseInRound().get(0).getExecInRound_Id();
+		 
 		 date = parts[0];
 		 String trainingNumber = ""+training.getNumberOfTrainings();
 		 data.put("name", imePrezime);
 		 data.put("trainingNumber", trainingNumber);
 		 data.put("date", date);
+		 data.put("rounds", rounds);
 		 data.put("round", round);
+		 data.put("exercisesInRound", exercisesInRound);
 		 
 		 pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 return "redirect:/trainingList";
