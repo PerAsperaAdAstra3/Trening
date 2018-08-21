@@ -271,12 +271,21 @@ public class TrainingController {
 		 
 		 List<ExerciseInRound> exercisesInRound = new ArrayList<ExerciseInRound>();
 		 
+		 Map<Long,List<ExerciseInRound>> exercisesInRoundMap = new HashMap<Long,List<ExerciseInRound>>();
+		 
 		 for(Round roundIter : rounds) {
 			 exercisesInRound.addAll(roundIter.getExerciseInRound());
 		 }
 		 
-		 rounds.get(0).getExerciseInRound().get(0).getExecInRound_Id();
-		 rounds.get(0).getExerciseInRound().get(0).getExecInRound_Id();
+		 for(Round roundIter : rounds) {
+			 exercisesInRoundMap.put(roundIter.getId(), roundIter.getExerciseInRound());
+		 }
+		 
+		 Map<String, String> mapsX = new HashMap<String, String>();
+		 
+		 mapsX.put("one", "CRAB");
+		 mapsX.put("two", "CAT");
+		 mapsX.put("tree", "SNAKE");
 		 
 		 date = parts[0];
 		 String trainingNumber = ""+training.getNumberOfTrainings();
@@ -286,6 +295,8 @@ public class TrainingController {
 		 data.put("rounds", rounds);
 		 data.put("round", round);
 		 data.put("exercisesInRound", exercisesInRound);
+		 data.put("exercisesInRoundMap", exercisesInRoundMap);
+		 data.put("mapsX", mapsX);
 		 
 		 pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 return "redirect:/trainingList";
