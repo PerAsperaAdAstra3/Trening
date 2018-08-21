@@ -15,23 +15,23 @@
 <p th:text="'Kombinacija : ' + ${round}+'.'" />
 
 
-<table>
+<table style="width:100%">
 	<thead>
 		<tr>
-			<th scope="col">Naziv vežbe : </th>
-			<th scope="col">Težina : </th>
-			<th scope="col">Napomena : </th>
-			<th scope="col">Difficulty : </th>
-			<th scope="col">Broj vežbe u krugu : </th>
+			<th scope="col">Naziv vežbe:</th>
+			<th scope="col">Težina:</th>
+			<th scope="col">Broj ponavljanja:</th>
+			<th scope="col">Napomena:</th>
+			<th scope="col">Redni broj Kombinacije u treningu:</th>
 		</tr>
 	</thead>
 	<tbody>
         <tr th:each = "exerciseInRound : ${exercisesInRound}">
-			<td th:utext="${exerciseInRound.exerciseName}"></td>
-			<td th:utext="${exerciseInRound.difficulty}"></td>
-			<td th:utext="${exerciseInRound.Note}"></td>
-			<td th:utext="${exerciseInRound.exerciseName}"></td>
-			<td th:utext="${exerciseInRound.round.roundSequenceNumber}"></td>
+			<td align="center" th:utext="${exerciseInRound.exerciseName}"></td>
+			<td align="center" th:utext="${exerciseInRound.difficulty}"></td>
+			<td align="center" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
+			<td align="center" th:utext="${exerciseInRound.Note}"></td>
+			<td align="center" th:utext="${exerciseInRound.round.roundSequenceNumber}"></td>
   		</tr>
 	</tbody>
 </table>
