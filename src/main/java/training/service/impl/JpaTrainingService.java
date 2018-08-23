@@ -1,5 +1,6 @@
 package training.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,13 +23,13 @@ public class JpaTrainingService implements TrainingService {
 
 	@Autowired
 	private TrainingRepository trainingRepository;
-	
+
 	@Autowired
 	private ExerciseGroupService exerciseGroupService;
-	
+
 	@Autowired
 	private ExerciseService exerciseService;
-	
+
 	@Override
 	public Training findOne(Long id) {
 		return trainingRepository.findOne(id);
@@ -77,41 +78,39 @@ public class JpaTrainingService implements TrainingService {
 	}
 
 	@Override
-	public Map<Long, Integer> exercisesLastTraining(Long clientId) {
-		List<Training> lastTrainings = trainingRepository.findTop4ByClientIdOrderByIdDesc(clientId);
-		Map<Long,Integer> mapExercise = new HashMap<>();
-		Map<Long,Map<Long,Integer>> mapExerciseGrup = new HashMap<>();
-		Map<Long,Integer> mapExerciseGroupFinal = new HashMap<>();
+	public Map<Long, Integer> exercisesLastTraining(Training training) {
 		
-		int i = 1;
-		boolean first = true;
-		for(Training training : lastTrainings) {
-			if (first){
-				first = false;
-				continue;
-			}
-			for(Round round : training.getRounds())
+		List<Training> lastTrainings = trainingRepository.findTop10ByClientIdAndIdLessThanOrderByIdDesc(training.getClient().getId(), training.getId());
+
+		Map<Long, Integer> mapExerciseIndexes = new HashMap<Long, Integer>();
+		Map<Long, Integer> currentGroupIndexes = new HashMap<Long, Integer>();
+		for(Training currentTraining : lastTrainings) {
+
+			List<Long> groupsInTraining = new ArrayList<Long>();
+
+			for(Round round : currentTraining.getRounds())
 				for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
 					Long exerciseGroupId = exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId();
-				
-					if(!mapExercise.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId()))
-					mapExerciseGrup.put(exerciseGroupId, mapExercise);
-					
-					if(!mapExercise.containsKey(exerciseInRound.getExerciseId()))
-					    mapExercise.put(exerciseInRound.getExerciseId(), i);//mapExercise.size()+1);
-					
-					if(!mapExerciseGroupFinal.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) {
-						mapExerciseGroupFinal.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), mapExercise.size()+1);
+
+					Integer index;
+					if (groupsInTraining.contains(exerciseGroupId)){
+						index = currentGroupIndexes.get(exerciseGroupId);
 					}
-				//	if(!mapExercise.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) 
-				//		mapExercise.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), i);
+					else{
+						groupsInTraining.add(exerciseGroupId);
+						if (!currentGroupIndexes.containsKey(exerciseGroupId)){
+							index = 1;
+						}
+						else{
+							index = currentGroupIndexes.get(exerciseGroupId) + 1;
+						}
+						currentGroupIndexes.put(exerciseGroupId, index);
+					}
+					if (!mapExerciseIndexes.containsKey(exerciseInRound.getExerciseId()))
+						mapExerciseIndexes.put(exerciseInRound.getExerciseId(), index.intValue());
 				}
-//			if(!mapExerciseGroupFinal.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) {
-	//			   mapExercise.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), mapExercise.size()+1);
-	//		}
-			i++;
 		}
 
-		return mapExerciseGroupFinal;
+		return mapExerciseIndexes;
 	}
 }
