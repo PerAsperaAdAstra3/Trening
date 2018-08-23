@@ -11,7 +11,7 @@ public class indexController {
 	@RequestMapping(value = { "/indexSelect" }, method = RequestMethod.GET)
 	public String selectPage(@RequestParam String mode) {
 		if ("exercise".equals(mode)) {
-			String hiddenExerciseGroupId = "0";
+			String hiddenExerciseGroupId = "-2";
 			return "redirect:/exerciseList/"+hiddenExerciseGroupId;
 		} else if ("exerciseGroup".equals(mode)) {
 			return "redirect:/exerciseGroupList";

@@ -130,7 +130,7 @@
 			<td class="exerciseName" th:utext="${exercise.name}"></td>
 			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
 			<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
-			<td class="exerciseId" th:utext="${exercise.id}"></td>
+			<td class="exerciseId" th:utext="${exercise.id}" style="display:none;"></td>
 			<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}" style="display:none;"></td>
 			<td><a th:href="@{/deleteExercise/{id}/{hiddenExerciseGroupId}(id=${exercise.id}, hiddenExerciseGroupId=${hiddenExerciseGroupId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 		</tr>

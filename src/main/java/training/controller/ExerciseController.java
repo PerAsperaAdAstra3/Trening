@@ -42,13 +42,15 @@ public class ExerciseController {
 	public String getExercises(Model model, @PathVariable String hiddenExerciseGroupId) {		
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
+		
+		if(hiddenExerciseGroupId.equals("-2")|| hiddenExerciseGroupId == null) {
+		model.addAttribute("hiddenExerciseGroupId", "-2");
 		model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
 		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
-		
-		if(hiddenExerciseGroupId.equals("")) {
-		model.addAttribute("hiddenExerciseGroupId", "0");
 		}else {
+			model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)).getExercises()));
 			model.addAttribute("hiddenExerciseGroupId", hiddenExerciseGroupId);
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId))));
 		}
 		
 		return "exercise";
