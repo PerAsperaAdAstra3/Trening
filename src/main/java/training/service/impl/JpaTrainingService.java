@@ -101,7 +101,7 @@ public class JpaTrainingService implements TrainingService {
 					    mapExercise.put(exerciseInRound.getExerciseId(), i);//mapExercise.size()+1);
 					
 					if(!mapExerciseGroupFinal.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) {
-						   mapExercise.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), mapExercise.size()+1);
+						mapExerciseGroupFinal.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), mapExercise.size()+1);
 					}
 				//	if(!mapExercise.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) 
 				//		mapExercise.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), i);
