@@ -25,6 +25,7 @@
 	
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow(this)
+		selectRoundIdOnRowClick(this)
 		$('#myModal').modal('hide')
 	});
 	

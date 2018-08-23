@@ -37,7 +37,7 @@ public class PdfGenaratorUtil {
 		  String fileName = UUID.randomUUID().toString();
 		  System.out.println(fileName);
 	        try {
-	        	File outputFile = new File(System.getProperty("user.home")+"\\treninzi\\"+map.get("name").toString()+" " +map.get("date").toString() + ".pdf");
+	        	File outputFile = new File(System.getProperty("user.home")+"\\treninzi\\"+map.get("name").toString()+" " +map.get("trainingNumber").toString() + ".pdf");
 
 	        	os = new FileOutputStream(outputFile);
 
