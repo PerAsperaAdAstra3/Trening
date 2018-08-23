@@ -23,9 +23,26 @@
 		});
 	});
 	
+	$(document).on("click", "#exercisesInRoundTable tr", function(event) {
+		  roundId = $(this).find(".roundId").html()
+		  $("#roundsTable tr").each(function(){
+		   id = $(this).find(".roundId").html()
+		   if (id == roundId){
+		    selectRoundIdOnRowClick(this)
+		    return false //break
+		   }
+		  });
+		 });
+	
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow(this)
 		selectRoundIdOnRowClick(this)
+		$('#myModal').modal('hide')
+	});
+
+	
+	$(document).on("click", "#tr-entity-list-modal", function(event) {
+		highlightRow(this)
 		$('#myModal').modal('hide')
 	});
 	
@@ -364,7 +381,7 @@ function sortTable() {
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="modal-table-coloring" id="tr-entity-list" th:each = "exercise : ${exercises}">
+			<tr class="modal-table-coloring" id="tr-entity-list-modal" th:each = "exercise : ${exercises}">
 				<td class="exerciseId" th:utext="${exercise.id}" style="display:none;"></td>
 				<td class="exerciseName" th:utext="${exercise.name}"></td>
 				<td class="exerciseDescription" th:utext="${exercise.description}"></td>
