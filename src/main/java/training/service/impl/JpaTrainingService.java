@@ -12,6 +12,8 @@ import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
 import training.repository.TrainingRepository;
+import training.service.ExerciseGroupService;
+import training.service.ExerciseService;
 import training.service.TrainingService;
 
 @Service
@@ -20,6 +22,12 @@ public class JpaTrainingService implements TrainingService {
 
 	@Autowired
 	private TrainingRepository trainingRepository;
+	
+	@Autowired
+	private ExerciseGroupService exerciseGroupService;
+	
+	@Autowired
+	private ExerciseService exerciseService;
 	
 	@Override
 	public Training findOne(Long id) {
@@ -81,8 +89,8 @@ public class JpaTrainingService implements TrainingService {
 			}
 			for(Round round : training.getRounds())
 				for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
-					if(!mapExercise.containsKey(exerciseInRound.getExerciseId()))
-						mapExercise.put(exerciseInRound.getExerciseId(), i);
+					if(!mapExercise.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) 
+						mapExercise.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), i);
 				}
 			i++;
 		}

@@ -162,7 +162,7 @@ public class TrainingController {
 		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(clientId);
 		for(ExerciseDTO exerciseDTO : exercisesForModal) {
 			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
-				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
+				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseService.findOne(exerciseDTO.getId()).getExerciseGroup().getId()));
 			} else {
 				exerciseDTO.setColorCode(60);
 			}
