@@ -16,6 +16,7 @@
 	$(document).on("click", "#tr-entity-list-modal", function(event) {
 		highlightRow1(this)
 		$('#myModal').modal('hide')
+		$("#hiddenButtonToCopyTraining").click()
 	});
 	
 	$(document).on("click", "#search", function(event) {
@@ -57,45 +58,24 @@
 	    $("#id").val(id);
 	}
 	
-	$(document).on("click", "#modal_button", function(event) {
-			alert("Modal button clicked")
-	});
-	
-	//Experimentalno 
-	
 	function highlightRow1(row){
-	 //ne reagujemo na klik na header tabele, samo obicne redove
-	 //this sadrzi red na koji se kliknulo
 	if(!$(row).hasClass("header")){
-  		//klasa highlighted postavlja pozadinu na plavu
-  		//njenim dodavanjem ili uklanjanjem oznacavamo da neki red
-  		//dobija, odnosno gubi selekciju
-  		//uklanjamo sa trenutno selektovanog
 		$(row).parent().find(".highlighted").removeClass("highlighted");
-  		//dodajemo na novi selektovani
     	$(row).addClass("highlighted");
-    	//pozivamo sinhronizaciju, prosledjujemo dati red
     	sync1($(row));
     }
 }
 	
 	function sync1(item){
 		name = item.find(".clientName").html()
-	    familyName = item.find(".clientFamilyName").html()
-	    
-			
-	    
+	    familyName = item.find(".clientFamilyName").html()	    
 		idClientToCopy = item.find(".clientSelectId").html()
 		
-		
 		$("#idOfClientToCopyTo").val(idClientToCopy);
-		
-		
 	    $("#name").val(name);
 	    $("#familyName").val(familyName);
-	    $("#id").val(id);
 	}
-	//Experimentalno KRAJ
+
 /*<![CDATA[*/	
 	function filterModal(typeToFilter) {
 		  var input, filter, table, tr, td, i, j;
@@ -143,9 +123,9 @@
 	<br/>
 	<!-- Modal -->
 <form th:action="@{/copyTraining}" method="GET">
-	<input id="idOfCopiedTraining" type="text" th:value="${idOfCopiedTraining}" name="idOfCopiedTraining"/>
-	<input id="idOfClientToCopyTo" type="text" th:value="${idOfClientToCopyTo}" name="idOfClientToCopyTo"/>
-	<button type="submit">Kopiraj traning</button>
+	<input id="idOfCopiedTraining" type="hidden" th:value="${idOfCopiedTraining}" name="idOfCopiedTraining"/>
+	<input id="idOfClientToCopyTo" type="hidden" th:value="${idOfClientToCopyTo}" name="idOfClientToCopyTo"/>
+	<button id="hiddenButtonToCopyTraining" type="submit" style="display:none;">Kopiraj traning</button>
 </form>
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg" >

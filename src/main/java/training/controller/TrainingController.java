@@ -299,8 +299,7 @@ public class TrainingController {
 		Training copiedTraining = trainingService.findOne(Long.parseLong(idOfCopiedTraining));
 		Training trainingNew = new Training(copiedTraining);
 		
-		trainingService.save(copiedTraining);
-
+		trainingService.save(trainingNew);
 		trainingNew.setClient(clientService.findOne(Long.parseLong(idOfClientToCopyTo)));
 
 		for(Round round : copiedTraining.getRounds()) {
@@ -322,8 +321,6 @@ public class TrainingController {
 
 				newRound.setExerciseInRound(newExerciseInRound);
 				exerciseInRoundService.save(newExerciseInRound);
-			
-//				exerciseInRound.setExerciseId( ); exerciseInRoundService
 			}
 					
 			trainingNew.addRound(newRound);
@@ -331,9 +328,6 @@ public class TrainingController {
 		}
 		
 		trainingService.save(trainingNew);
-		
-		System.out.println("Id of client to copy : "+idOfClientToCopyTo);
-		System.out.println("Id of copied training : "+idOfCopiedTraining);
 		return "redirect:/getTraining/"+trainingNew.getId();
 	}
 }
