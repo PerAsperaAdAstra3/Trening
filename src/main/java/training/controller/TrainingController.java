@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import training.converter.ClientToClientDTO;
 import training.converter.ExerciseInRoundDTOtoExerciseInRound;
 import training.converter.ExerciseToExerciseDTO;
 import training.converter.RoundToRoundDTO;
@@ -73,10 +74,16 @@ public class TrainingController {
 	@Autowired
 	private PdfGenaratorUtil pdfGenaratorUtil;
 
+	@Autowired
+	private ClientToClientDTO clientToClientDTO;
+	
 	@RequestMapping(value = { "/trainingList" }, method = RequestMethod.GET)
 	public String getTrainings(Model model) {
 		model.addAttribute("trainingDTO", new TrainingDTO());
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingService.findAll()));
+		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
+		model.addAttribute("idOfCopiedTraining","");
+		model.addAttribute("idOfClientToCopyTo","");
 		return "training";
 	}
 	
@@ -267,38 +274,66 @@ public class TrainingController {
 		 String[] parts = date.split(" ");
 		 
 		 List<Round> rounds = training.getRounds();
-		 String round = rounds.get(0).getRoundSequenceNumber()+""; //getExerciseInRound().toString();
-		 
-		 List<ExerciseInRound> exercisesInRound = new ArrayList<ExerciseInRound>();
 		 
 		 Map<Long,List<ExerciseInRound>> exercisesInRoundMap = new HashMap<Long,List<ExerciseInRound>>();
 		 
 		 for(Round roundIter : rounds) {
-			 exercisesInRound.addAll(roundIter.getExerciseInRound());
+			 exercisesInRoundMap.put(new Long(roundIter.getRoundSequenceNumber()) , roundIter.getExerciseInRound());
 		 }
-		 
-		 for(Round roundIter : rounds) {
-			 exercisesInRoundMap.put(roundIter.getId(), roundIter.getExerciseInRound());
-		 }
-		 
-		 Map<String, String> mapsX = new HashMap<String, String>();
-		 
-		 mapsX.put("one", "CRAB");
-		 mapsX.put("two", "CAT");
-		 mapsX.put("tree", "SNAKE");
 		 
 		 date = parts[0];
+		 // Page Title/header
 		 String trainingNumber = ""+training.getNumberOfTrainings();
 		 data.put("name", imePrezime);
 		 data.put("trainingNumber", trainingNumber);
 		 data.put("date", date);
-		 data.put("rounds", rounds);
-		 data.put("round", round);
-		 data.put("exercisesInRound", exercisesInRound);
 		 data.put("exercisesInRoundMap", exercisesInRoundMap);
-		 data.put("mapsX", mapsX);
-		 
+		 		 
 		 pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 return "redirect:/trainingList";
+	}
+
+	@RequestMapping(value = {"/copyTraining"}, method = RequestMethod.GET)
+	public String copyTraining(Model model, @RequestParam String idOfClientToCopyTo, @RequestParam String idOfCopiedTraining){
+		
+		Training copiedTraining = trainingService.findOne(Long.parseLong(idOfCopiedTraining));
+		Training trainingNew = new Training(copiedTraining);
+		
+		trainingService.save(copiedTraining);
+
+		trainingNew.setClient(clientService.findOne(Long.parseLong(idOfClientToCopyTo)));
+
+		for(Round round : copiedTraining.getRounds()) {
+			Round newRound = new Round(round.getRoundSequenceNumber());
+			roundService.save(newRound);
+			newRound.setRoundSequenceNumber(round.getRoundSequenceNumber());
+			
+			for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
+				ExerciseInRound newExerciseInRound = new ExerciseInRound();
+				exerciseInRoundService.save(newExerciseInRound);
+				newExerciseInRound.setDifficulty(exerciseInRound.getDifficulty());
+				newExerciseInRound.setExerciseName(exerciseInRound.getExerciseName());
+				newExerciseInRound.setNumberOfRepetitions(exerciseInRound.getNumberOfRepetitions());
+
+				newExerciseInRound.setExerciseName(exerciseInRound.getExerciseName());
+				newExerciseInRound.setExerciseId(exerciseInRound.getExerciseId());
+				
+				newExerciseInRound.setNote(exerciseInRound.getNote());
+
+				newRound.setExerciseInRound(newExerciseInRound);
+				exerciseInRoundService.save(newExerciseInRound);
+			
+//				exerciseInRound.setExerciseId( ); exerciseInRoundService
+			}
+					
+			trainingNew.addRound(newRound);
+			roundService.save(round);
+		}
+		
+		trainingService.save(trainingNew);
+		
+		System.out.println("Id of client to copy : "+idOfClientToCopyTo);
+		System.out.println("Id of copied training : "+idOfCopiedTraining);
+		return "redirect:/getTraining/"+trainingNew.getId();
 	}
 }

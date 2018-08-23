@@ -1,6 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<style>
+.tableX, .tdX, tr, th {
+	border-collapse: collapse;
+    border: 1px solid black;
+}
+</style>
 </head>
 <body>
 
@@ -11,72 +17,47 @@
 		<td align="right"><p th:text="'Datum : ' + ${date}" /></td>
 	</tr>
 </table>
+<br/>
+<br/>
+<br/>
 
-<table style="width:100%">
+<table class="tableX" style="width:100%">
 	<thead>
 		<tr>
-			<th scope="col">Naziv vežbe:</th>
-			<th scope="col">Težina:</th>
-			<th scope="col">Broj ponavljanja:</th>
-			<th scope="col">Napomena:</th>
-			<th scope="col">Redni broj Kombinacije u treningu:</th>
+			<th align="center">Broj kruga:</th>
+			<th align="center">Vežbe u krugu:</th>
 		</tr>
 	</thead>
 	<tbody>
-        <tr th:each = "exerciseInRound : ${exercisesInRound}">
-			<td align="center" th:utext="${exerciseInRound.exerciseName}"></td>
-			<td align="center" th:utext="${exerciseInRound.difficulty}"></td>
-			<td align="center" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
-			<td align="center" th:utext="${exerciseInRound.Note}"></td>
-			<td align="center" th:utext="${exerciseInRound.round.roundSequenceNumber}"></td>
-  		</tr>
-	</tbody>
-</table>
-
-<table style="width:100%">
 	<tr>
-		<th align="left">Broj kruga:</th>
-		<th align="center">Vežbe u krugu:</th>
+	<td></td>
+	<td>
+	<table style="width:100%">
+							<tr>
+								<td class="tdX" width="55%" align="center">Naziv Vežbe:</td>
+								<td class="tdX" width="10%" align="center">Težina</td>
+								<td class="tdX" width="10%" align="center">Br. ponav.:</td>
+								<td class="tdX" width="25%" align="center">Napomena:</td>
+							</tr>
+				</table>
+	</td>
 	</tr>
 	<tr th:each="round : ${exercisesInRoundMap}">
-		<td th:text="${round.key}">keyvalue</td>
-			<td>
-				<table  style="width:100%">
-						<thead>	
-							<tr>
-								<th align="center">Note:</th>
-								<th align="center">Exercise Name:</th>
-								<th align="center">Težina</th>
-								<th align="center">Broj ponavljanje:</th>
-								<th align="center">Napomena:</th>
-								<th align="center">Round sequence number</th>
-							</tr>
-						</thead>
+		<td align="center" class="tdX" th:text="${round.key}"></td>
+			<td class="tdX">
+				<table style="width:100%">
 					<tbody>
 						<tr th:each="exerciseInRound : ${round.value}">
-							<td align="center" th:utext="${exerciseInRound.Note}"></td>
-							<td align="center" th:utext="${exerciseInRound.exerciseName}"></td>
-							<td align="center" th:utext="${exerciseInRound.difficulty}"></td>
-							<td align="center" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
-							<td align="center" th:utext="${exerciseInRound.Note}"></td>
-							<td align="center" th:utext="${exerciseInRound.round.roundSequenceNumber}"></td>
+							<td width="55%" align="center" th:utext="${exerciseInRound.exerciseName}"></td>
+							<td width="10%" align="center" th:utext="${exerciseInRound.difficulty}"></td>
+							<td width="10%" align="center" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
+							<td width="25%" align="center" th:utext="${exerciseInRound.Note}"></td>
 						</tr>
 					</tbody>
 				</table>
 			</td>
 		</tr>
-		<tr>
-			<td></td>
-			<td></td>
-		</tr>
-				<tr>
-			<td></td>
-			<td></td>
-		</tr>
-				<tr>
-			<td></td>
-			<td></td>
-		</tr>
+	</tbody>
 </table>
 </body>
 </html>

@@ -13,9 +13,19 @@
 		highlightRow(this)
 	});
 	
+	$(document).on("click", "#tr-entity-list-modal", function(event) {
+		highlightRow1(this)
+		$('#myModal').modal('hide')
+	});
+	
 	$(document).on("click", "#search", function(event) {
 		$("#hidden_input").css('display','table-row');
 	});
+	
+	$(document).on("click", "#copyTrainingButton", function(event) {
+		treID = item.find(".idOfCopiedTraining").html()
+	});
+
 	
 	$(window).scroll(function() {
 		  sessionStorage.scrollTop = $(this).scrollTop();
@@ -26,16 +36,66 @@
 		    $(window).scrollTop(sessionStorage.scrollTop);
 		  }
 	});
-
+		
 	function sync(item){
 		name = item.find(".clientName").html()
 	    familyName = item.find(".clientFamilyName").html()
-	    id = item.find(".clientId").html()
+	    
+		idTrainingCopied = item.find(".trainingId").html()
+		
+	    
+		idClientToCopy = item.find(".clientSelectId").html()
+		
+		posleSinca = item.find("#idOfCopiedTraining").html()
+		
+		$("#idOfCopiedTraining").val(idTrainingCopied);
+		$("#idOfClientToCopyTo").val(idClientToCopy);
+		
+		
 	    $("#name").val(name);
 	    $("#familyName").val(familyName);
 	    $("#id").val(id);
 	}
 	
+	$(document).on("click", "#modal_button", function(event) {
+			alert("Modal button clicked")
+	});
+	
+	//Experimentalno 
+	
+	function highlightRow1(row){
+	 //ne reagujemo na klik na header tabele, samo obicne redove
+	 //this sadrzi red na koji se kliknulo
+	if(!$(row).hasClass("header")){
+  		//klasa highlighted postavlja pozadinu na plavu
+  		//njenim dodavanjem ili uklanjanjem oznacavamo da neki red
+  		//dobija, odnosno gubi selekciju
+  		//uklanjamo sa trenutno selektovanog
+		$(row).parent().find(".highlighted").removeClass("highlighted");
+  		//dodajemo na novi selektovani
+    	$(row).addClass("highlighted");
+    	//pozivamo sinhronizaciju, prosledjujemo dati red
+    	sync1($(row));
+    }
+}
+	
+	function sync1(item){
+		name = item.find(".clientName").html()
+	    familyName = item.find(".clientFamilyName").html()
+	    
+			
+	    
+		idClientToCopy = item.find(".clientSelectId").html()
+		
+		
+		$("#idOfClientToCopyTo").val(idClientToCopy);
+		
+		
+	    $("#name").val(name);
+	    $("#familyName").val(familyName);
+	    $("#id").val(id);
+	}
+	//Experimentalno KRAJ
 /*<![CDATA[*/	
 	function filterModal(typeToFilter) {
 		  var input, filter, table, tr, td, i, j;
@@ -81,6 +141,55 @@
 	<br/>
 	<br/>
 	<br/>
+	<!-- Modal -->
+<form th:action="@{/copyTraining}" method="GET">
+	<input id="idOfCopiedTraining" type="text" th:value="${idOfCopiedTraining}" name="idOfCopiedTraining"/>
+	<input id="idOfClientToCopyTo" type="text" th:value="${idOfClientToCopyTo}" name="idOfClientToCopyTo"/>
+	<button type="submit">Kopiraj traning</button>
+</form>
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" >
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Klijenti</h4>
+      </div>
+      <div class="modal-body">
+<input type="text" id="inputFilterByName" onkeyup="filterModalClient(0)" placeholder="Filtriranje po nazivu.."/>
+<input type="text" id="inputFilterByFamilyName" onkeyup="filterModalClient(1)" placeholder="Filtriranje po prezimenu.."/>
+<input type="text" id="inputFilterByEmail" onkeyup="filterModalClient(2)" placeholder="Filtriranje po email.."/>
+<input type="text" id="inputFilterByPhone" onkeyup="filterModalClient(3)" placeholder="Filtriranje po broju telefona.."/>
+<div class="container-responsive">
+	<table style="width:100%" id = "myTableExercises" class = "table table-responsive">
+		<thead>
+			<tr>
+				<th scope="col">Ime:</th>
+				<th scope="col">Prezime:</th>
+				<th scope="col">Email:</th>
+				<th scope="col">Broj telefona:</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="modal-table-coloring" id="tr-entity-list-modal" th:each = "client : ${clients}">
+				<td class="clientSelectName" th:utext="${client.name}"></td>
+				<td class="clientSelectFamilyName" th:utext="${client.familyName}"></td>
+				<td class="clientSelectEmail" th:utext="${client.email}"></td>
+				<td class="clientSelectPhoneNumber" th:utext="${client.phoneNumber}"></td>
+				<td class="clientSelectId" th:utext="${client.id}" style="display:none;"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+      </div>
+     
+    </div>
+  </div>
+</div>
+	
 <form method="POST">
 <div style="padding-left:3em">
 	<p><b> Filtriranje: </b></p>
@@ -112,6 +221,7 @@
 			<td><a th:href="@{/getTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-success">Izmeni</button></a></td>
 			<td><a th:href="@{/deleteTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td><a th:href="@{/printPDF/{id}(id=${training.id})}"><button type="button" class="btn btn-danger">PDF</button></a></td>
+			<td><button  id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Kopiraj</button></td>
 		</tr>
 	</tbody>
 </table>

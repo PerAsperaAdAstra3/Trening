@@ -94,5 +94,18 @@ public class Training {
 		this.date = date;
 		this.numberOfTrainings = numberOfTrainings;
 	}
-	
+
+	public Training(Training training) {
+			//Long id, Date date, int numberOfTrainings, Client client, List<Task> tasks, List<Round> rounds) {
+		this.date = training.getDate();
+		this.numberOfTrainings = training.getNumberOfTrainings();
+		this.client = training.getClient();
+		for(Round round : training.getRounds()) {
+			System.out.println("Round ID : "+round.getId());
+			this.rounds.add(round);
+		}
+		for(Task task : training.getTasks()) {
+			this.tasks.add(task);
+		}
+	}
 }
