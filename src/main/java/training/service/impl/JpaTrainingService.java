@@ -80,6 +80,9 @@ public class JpaTrainingService implements TrainingService {
 	public Map<Long, Integer> exercisesLastTraining(Long clientId) {
 		List<Training> lastTrainings = trainingRepository.findTop4ByClientIdOrderByIdDesc(clientId);
 		Map<Long,Integer> mapExercise = new HashMap<>();
+		Map<Long,Map<Long,Integer>> mapExerciseGrup = new HashMap<>();
+		Map<Long,Integer> mapExerciseGroupFinal = new HashMap<>();
+		
 		int i = 1;
 		boolean first = true;
 		for(Training training : lastTrainings) {
@@ -89,12 +92,26 @@ public class JpaTrainingService implements TrainingService {
 			}
 			for(Round round : training.getRounds())
 				for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
-					if(!mapExercise.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) 
-						mapExercise.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), i);
+					Long exerciseGroupId = exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId();
+				
+					if(!mapExercise.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId()))
+					mapExerciseGrup.put(exerciseGroupId, mapExercise);
+					
+					if(!mapExercise.containsKey(exerciseInRound.getExerciseId()))
+					    mapExercise.put(exerciseInRound.getExerciseId(), i);//mapExercise.size()+1);
+					
+					if(!mapExerciseGroupFinal.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) {
+						   mapExercise.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), mapExercise.size()+1);
+					}
+				//	if(!mapExercise.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) 
+				//		mapExercise.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), i);
 				}
+//			if(!mapExerciseGroupFinal.containsKey(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId())) {
+	//			   mapExercise.put(exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId(), mapExercise.size()+1);
+	//		}
 			i++;
 		}
 
-		return mapExercise;
+		return mapExerciseGroupFinal;
 	}
 }
