@@ -37,12 +37,14 @@
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow(this)
 		selectRoundIdOnRowClick(this)
+		//enableExerciseInRoundEdit()
 	});
 
 	
 	$(document).on("click", "#tr-entity-list-modal", function(event) {
 		highlightRow(this)
 		$('#myModal').modal('hide')
+		//disableExerciseInRoundEdit()
 	});
 	
 	$(document).on("click", "#round-id-sync", function(event) {
@@ -70,6 +72,7 @@
 			document.getElementById("noviKrug").disabled = false;
 			document.getElementById("editTraining").disabled = false;
 			document.getElementById("deleteTraining").disabled = false;
+			document.getElementById("PDFButton").disabled = false;
 			document.getElementById("saveTraining").disabled = true;
 		}
 
@@ -137,7 +140,6 @@ function sortTable() {
 		var els = document.getElementsByClassName("modal-table-coloring");
 		
 		var test = document.getElementsByClassName("exerciseColorCode");
-		
 		Array.prototype.forEach.call(els, function(el) {
 			var nooo = $(el).find(".exerciseColorCode").html(); 
 			if(nooo == 1){
@@ -197,7 +199,6 @@ function sortTable() {
 	    document.getElementById("exerciseInRoundNumberOfRepetitions").disabled = false;
 	    document.getElementById("exerciseInRoundDifficulty").disabled = false;
 	    document.getElementById("exerciseInRoundAdd").disabled = false;
-	    document.getElementById("exerciseInRoundEdit").disabled = false;
 	    
 	    $("#exercisesInRoundTable .roundId").each(function(){
 	    	if ($(this).html() != roundId)
@@ -207,13 +208,21 @@ function sortTable() {
 	    });
 	}
 	
+	function enableExerciseInRoundEdit(){
+	    document.getElementById("exerciseInRoundEdit").disabled = false;
+	}
+	
+	function disableExerciseInRoundEdit(){
+	    document.getElementById("exerciseInRoundEdit").disabled = true;
+	}
+	
 	function sync(item){
 	    id = item.find(".exerciseId").html()
 	    exerciseName = item.find(".exerciseName").html()
 	    difficulty = item.find(".difficulty").html()
 	    numberOfRepetitions = item.find(".numberOfRepetitions").html()
 	    exerciseInRoundNote = item.find(".note").html()
-	    
+	    	    
 	    $("#exerciseInRoundExerciseName").val(exerciseName);
 	    $("#exerciseInRoundExerciseId").val(id);
 	    $("#idExerciseInRound").val(id);
@@ -264,7 +273,7 @@ function sortTable() {
 	<button id="saveTraining" class="btn btn-success" type="submit" name="mode" value="add">Snimi</button>
 	<button id="editTraining" class="btn btn-success" type="submit" disabled="disabled" name="mode" value="edit">Izmeni</button>
 	<a th:href="@{/deleteTraining/{id}/(id=*{id})}"><button id="deleteTraining" type="button" class="btn btn-danger" disabled="disabled">Briši</button></a>
-	<a th:href="@{/printPDF/{id}/(id=*{id})}"><button type="button" class="btn btn-danger">PDF</button></a>
+	<a th:href="@{/printPDF/{id}/(id=*{id})}"><button id="PDFButton" type="button" class="btn btn-danger" disabled="disabled">PDF</button></a>
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
