@@ -15,12 +15,17 @@
 	$(document).on("click", "#search", function(event) {
 		$("#hidden_input").css('display','table-row');
 	});
-
+	
+	$(document).on("click", "#resetButton", function(event) {
+		document.getElementById("editButton").disabled = true;
+	});
+	
 	function sync(item){
 		name = item.find(".exerciseName").html()
 	    description = item.find(".exerciseDescription").html()
 	    id = item.find(".exerciseId").html()
 		   exerciseGroupId = item.find(".exerciseGroupId").html()
+		   document.getElementById("editButton").disabled = false;
 		test = item.find("#hiddenExerciseGroupId").html()
 	    $("#name").val(name);
 	    $("#description").val(description);
@@ -98,8 +103,8 @@
 		<div class="form-group row">
 			<div class="col-xs-2">
 				<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
-				<button type="submit" class="btn btn-success" name="mode" value="edit">Izmeni</button>
-				<button type="reset" class="btn btn-success">Isčisti</button>
+				<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+				<button id="resetButton" type="reset" class="btn btn-success">Isčisti</button>
 			</div>
 		</div>
 	<input type="hidden" name="hiddenExerciseGroupId" th:value="${hiddenExerciseGroupId}"/>

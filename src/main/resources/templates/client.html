@@ -15,6 +15,10 @@
 	$(document).on("click", "#search", function(event) {
 		$("#hidden_input").css('display','table-row');
 	});
+	
+	$(document).on("click", "#resetButton", function(event) {
+			document.getElementById("editButton").disabled = true;
+	});
 
 	function sync(item){
 		name = item.find(".clientName").html()
@@ -22,6 +26,9 @@
 	    id = item.find(".clientId").html()
 	    email = item.find(".clientEmail").html()
 	    phoneNumber = item.find(".clientPhoneNumber").html()
+	    
+	    document.getElementById("editButton").disabled = false;
+		
 	    $("#name").val(name);
 	    $("#familyName").val(familyName);
 	    $("#id").val(id);
@@ -107,8 +114,8 @@
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
-			<button type="submit" class="btn btn-success" name="mode" value="edit">Izmeni</button>
-			<button type="reset" class="btn btn-success">Iscisti</button>
+			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+			<button id="resetButton" type="reset" class="btn btn-success">Iscisti</button>
 		</div>
 
 	</div>
