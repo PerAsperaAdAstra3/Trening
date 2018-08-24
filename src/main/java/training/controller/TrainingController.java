@@ -298,6 +298,14 @@ public class TrainingController {
 		Training copiedTraining = trainingService.findOne(Long.parseLong(idOfCopiedTraining));
 		Training trainingNew = new Training(copiedTraining);
 		
+		List<Training> trainingList = trainingService.findAll();
+		Long max = 0l;
+		for (Training training : trainingList) {
+			if (training.getClient().getId() == Long.parseLong(idOfClientToCopyTo))
+				max = Math.max(training.getNumberOfTrainings(), max);
+		}
+		trainingNew.setNumberOfTrainings((int) (max + 1));
+		
 		trainingService.save(trainingNew);
 		trainingNew.setClient(clientService.findOne(Long.parseLong(idOfClientToCopyTo)));
 
