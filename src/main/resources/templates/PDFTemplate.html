@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<meta charset="utf-8"/>
 <style>
 .tableX, .tdX, tr, th {
 	border-collapse: collapse;
@@ -42,6 +43,22 @@
 				</table>
 	</td>
 	</tr>
+	<tr>
+		<td class="tdX" align="center">*</td>
+			<td class="tdX" align="center">
+				<table style="width:100%">
+					<tbody>
+						<tr>
+							<td align="center">Bicikli 5 min</td>
+							
+						</tr>
+						<tr>
+							<td align="center">Vežbe oblikovanja</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>	
+	</tr>
 	<tr th:each="round : ${exercisesInRoundMap}">
 		<td align="center" class="tdX" th:text="${round.key}"></td>
 			<td class="tdX">
@@ -59,7 +76,7 @@
 		</tr>
 		<tr>
 			<td class="tdX" align="center">*</td>
-			<td class="tdX" align="center">Isteznanje</td>		
+			<td class="tdX" align="center">Istezanje</td>		
 		</tr>
 	</tbody>
 </table>
