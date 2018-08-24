@@ -37,14 +37,14 @@
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow(this)
 		selectRoundIdOnRowClick(this)
-		//enableExerciseInRoundEdit()
+		enableExerciseInRoundEdit()
 	});
 
 	
 	$(document).on("click", "#tr-entity-list-modal", function(event) {
 		highlightRow(this)
 		$('#myModal').modal('hide')
-		//disableExerciseInRoundEdit()
+		disableExerciseInRoundEdit()
 	});
 	
 	$(document).on("click", "#round-id-sync", function(event) {
@@ -62,7 +62,7 @@
 	
 	$(document).on("click", "#deleteExerciseInRound", function(event) {
 		exerciseID = item.find(".exerciseId").html()
-		$("#hiddenTrainingInRoundToDeleteId").val(exerciseID);
+		$("#hiddenTrainingInRoundToDeleteId").val(exerciseInRoundId);
 	});
 
 	
@@ -218,6 +218,7 @@ function sortTable() {
 	
 	function sync(item){
 	    id = item.find(".exerciseId").html()
+	    exerInRoundId = item.find(".exerciseInRoundId").html() 
 	    exerciseName = item.find(".exerciseName").html()
 	    difficulty = item.find(".difficulty").html()
 	    numberOfRepetitions = item.find(".numberOfRepetitions").html()
@@ -225,7 +226,7 @@ function sortTable() {
 	    	    
 	    $("#exerciseInRoundExerciseName").val(exerciseName);
 	    $("#exerciseInRoundExerciseId").val(id);
-	    $("#idExerciseInRound").val(id);
+	    $("#idExerciseInRound").val(exerInRoundId);
 	    $("#exerciseInRoundNote").val(exerciseInRoundNote);
 	    $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
 	    $("#exerciseInRoundDifficulty").val(difficulty);
@@ -326,7 +327,7 @@ function sortTable() {
 					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled="disabled">Izbor</button>
 				</div>
 			</div>
-			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
+			<input type="text" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
 		</div>
 	</div>
 	<div class="form-group row">
@@ -355,8 +356,8 @@ function sortTable() {
 			<button id="exerciseInRoundEdit" class="btn btn-success" type="submit" name="modeEIR" value="edit" disabled="disabled">Izmeni</button>
 		</div>
 	</div>
-<input type="hidden" th:field="*{id}" id="idExerciseInRound"/>
-<input type="hidden" class="id" name="id" th:value="${id}"/>
+<input type="text" th:field="*{id}" id="idExerciseInRound"/>
+<input type="text" class="id" name="id" th:value="${id}"/>
 <input id="hiddenRoundInTraining" type="hidden" th:field="*{roundId}" />
 
 </form>
@@ -428,11 +429,12 @@ function sortTable() {
 		<tbody>
 			<tr class="hidden_input" id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
 				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
-				<td class="exerciseId" th:utext="${exerciseInRound.ExecInRound_Id}" style="display:none;"></td>
+				<td class="exerciseInRoundId" th:utext="${exerciseInRound.ExecInRound_Id}" style="display:none;"></td>
 				<td class="numberOfRepetitions" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
 				<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
 				<td class="note" th:utext="${exerciseInRound.note}"></td>
 				<td class="roundId" th:utext="${exerciseInRound.round.id}" style="display:none;"></td>
+				<td class="exerciseExecId" th:utext="${exerciseInRound.exerciseID}" style="display:none;"></td>
 				<td><a th:href="@{/deleteExerciseInRound/{exerciseInRoundId}/{id}(exerciseInRoundId=${exerciseInRound.ExecInRound_Id}, id=${id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			</tr>
 		</tbody>
