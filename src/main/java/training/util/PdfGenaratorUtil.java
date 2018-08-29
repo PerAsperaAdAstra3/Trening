@@ -14,8 +14,6 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-import com.lowagie.text.DocumentException;
-
 
 @Component
 public class PdfGenaratorUtil {

@@ -204,25 +204,21 @@ public class TrainingController {
 
 		//TODO napisati query da se vade samo treninzi tog klijenta
 		// uzeti od njih max rednog broja i to je to
-		List<Training> trainingList = trainingService.findAll();
-		Long max = 0l;
-		for (Training training : trainingList) {
-			if (training.getClient().getId() == clinetId)
-				max = Math.max(training.getNumberOfTrainings(), max);
-		}
+
 		TrainingDTO trainingDTO = new TrainingDTO();
 		trainingDTO.setClient(client.getName());
 		trainingDTO.setClientFamilyName(client.getFamilyName());
 		trainingDTO.setClientId(clientId);
-		trainingDTO.setNumberOfTrainings((int) (max + 1));
+		trainingDTO.setNumberOfTrainings((int) (getNumberOfTrainings(clinetId) + 1));
 		trainingDTO.setDate(strDate);
 		
 		return trainingDTO;
 	}
 	
 	private void deleteRound(String id) {
-		Training training = roundService.findOne(Long.parseLong(id)).getTraining();		
-		int sequenceNumber = roundService.findOne(Long.parseLong(id)).getRoundSequenceNumber();
+		Round roundTemp = roundService.findOne(Long.parseLong(id));
+		Training training = roundTemp.getTraining();		
+		int sequenceNumber = roundTemp.getRoundSequenceNumber();
 		roundService.delete(Long.parseLong(id));
 		for(Round round : training.getRounds()) {
 			if(round.getRoundSequenceNumber() > sequenceNumber) {
@@ -275,19 +271,29 @@ public class TrainingController {
 		 List<Round> rounds = training.getRounds();
 		 
 		 Map<Long,List<ExerciseInRound>> exercisesInRoundMap = new HashMap<Long,List<ExerciseInRound>>();
-		 
+		 		 
 		 for(Round roundIter : rounds) {
+			 for(ExerciseInRound exerciseInRound : roundIter.getExerciseInRound()) {
+				 exerciseInRound.setDifficulty(filterLocalCharacters(exerciseInRound.getDifficulty()));
+				 exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExerciseName()));
+				 exerciseInRound.setNote(filterLocalCharacters(exerciseInRound.getNote()));
+				 exerciseInRound.setNumberOfRepetitions(filterLocalCharacters(exerciseInRound.getNumberOfRepetitions()));
+			 }
+			 
 			 exercisesInRoundMap.put(new Long(roundIter.getRoundSequenceNumber()) , roundIter.getExerciseInRound());
 		 }
 		 
 		 date = parts[0];
 		 // Page Title/header
 		 String trainingNumber = ""+training.getNumberOfTrainings();
+
+		 imePrezime = filterLocalCharacters(imePrezime);
+		 
 		 data.put("name", imePrezime);
 		 data.put("trainingNumber", trainingNumber);
 		 data.put("date", date);
 		 data.put("exercisesInRoundMap", exercisesInRoundMap);
-		 		 
+		 		 		 
 		 pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 return "redirect:/trainingList";
 	}
@@ -298,13 +304,7 @@ public class TrainingController {
 		Training copiedTraining = trainingService.findOne(Long.parseLong(idOfCopiedTraining));
 		Training trainingNew = new Training(copiedTraining);
 		
-		List<Training> trainingList = trainingService.findAll();
-		Long max = 0l;
-		for (Training training : trainingList) {
-			if (training.getClient().getId() == Long.parseLong(idOfClientToCopyTo))
-				max = Math.max(training.getNumberOfTrainings(), max);
-		}
-		trainingNew.setNumberOfTrainings((int) (max + 1));
+		trainingNew.setNumberOfTrainings((int)(getNumberOfTrainings(Long.parseLong(idOfClientToCopyTo)) + 1));
 		
 		trainingService.save(trainingNew);
 		trainingNew.setClient(clientService.findOne(Long.parseLong(idOfClientToCopyTo)));
@@ -337,4 +337,28 @@ public class TrainingController {
 		trainingService.save(trainingNew);
 		return "redirect:/getTraining/"+trainingNew.getId();
 	}
+	
+	private String filterLocalCharacters(String imePrezime) {
+		
+		 imePrezime = imePrezime.replaceAll("ć", "c");
+		 imePrezime = imePrezime.replaceAll("đ", "dj");
+		 imePrezime = imePrezime.replaceAll("č", "c");
+
+		 imePrezime = imePrezime.replaceAll("Ć", "C");
+		 imePrezime = imePrezime.replaceAll("Đ", "Dj");
+		 imePrezime = imePrezime.replaceAll("Č", "C");
+		 
+		return imePrezime;
+	}
+	
+	private Long getNumberOfTrainings(Long clinetId) {
+		List<Training> trainingList = trainingService.findAll();
+		Long max = 0l;
+		for (Training training : trainingList) {
+			if (training.getClient().getId() == clinetId)
+				max = Math.max(training.getNumberOfTrainings(), max);
+		}
+		return max;
+	}
+	
 }

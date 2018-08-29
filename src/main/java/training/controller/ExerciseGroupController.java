@@ -55,11 +55,12 @@ public class ExerciseGroupController {
 	@RequestMapping(value = {"/filterExcerInGroup/{id}"}, method = RequestMethod.GET)
 	public String filterExcerInGroup(Model model, @PathVariable String id){
 		List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
-		exerciseList.add(exerciseGroupService.findOne(Long.parseLong(id)));
+		ExerciseGroup exerciseGroup = exerciseGroupService.findOne(Long.parseLong(id));
+		exerciseList.add(exerciseGroup);
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
-		model.addAttribute("exercises",  exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(id)).getExercises()));		
+		model.addAttribute("exercises",  exerciseToExerciseDTO.convert(exerciseGroup.getExercises()));		
 		model.addAttribute("hiddenExerciseGroupId", id) ;
 		return "exercise";
 	}

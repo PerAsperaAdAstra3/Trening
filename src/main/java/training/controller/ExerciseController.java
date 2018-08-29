@@ -1,8 +1,5 @@
 package training.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +13,9 @@ import training.converter.ExerciseDTOtoExercise;
 import training.converter.ExerciseGroupToExerciseGroupDTO;
 import training.converter.ExerciseToExerciseDTO;
 import training.dto.ExerciseDTO;
+import training.model.ExerciseGroup;
 import training.service.ExerciseGroupService;
 import training.service.ExerciseService;
-import training.util.PdfGenaratorUtil;
 
 @Controller
 public class ExerciseController {
@@ -43,14 +40,15 @@ public class ExerciseController {
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		
-		if(hiddenExerciseGroupId.equals("-2")|| hiddenExerciseGroupId == null) {
-		model.addAttribute("hiddenExerciseGroupId", "-2");
-		model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
-		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
-		}else {
-			model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId)).getExercises()));
+		if(hiddenExerciseGroupId.equals("-1")|| hiddenExerciseGroupId == null) {
+			model.addAttribute("hiddenExerciseGroupId", "-1");
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
+			model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
+		} else {
+			ExerciseGroup exerciseGroup = exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId));
+			model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseGroup.getExercises()));
 			model.addAttribute("hiddenExerciseGroupId", hiddenExerciseGroupId);
-			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId))));
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroup));
 		}
 		
 		return "exercise";

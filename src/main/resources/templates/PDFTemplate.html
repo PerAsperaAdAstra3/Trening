@@ -25,58 +25,53 @@
 <table class="tableX" style="width:100%">
 	<thead>
 		<tr>
-			<th align="center">Broj kombinacije:</th>
 			<th align="center"></th>
 		</tr>
 	</thead>
 	<tbody>
 	<tr>
-	<td></td>
 	<td>
 	<table style="width:100%">
 							<tr>
-								<td class="tdX" width="55%" align="center">Vežba:</td>
-								<td class="tdX" width="10%" align="center">Težina:</td>
-								<td class="tdX" width="10%" align="center">Br. ponav.:</td>
-								<td class="tdX" width="25%" align="center">Napomena:</td>
+								<td class="tdX" width="40%" align="left">Vežba:</td>
+								<td class="tdX" width="18%" align="left">Br. ponav.:</td>
+								<td class="tdX" width="18%" align="left">Težina:</td>
+								<td class="tdX" width="24%" align="left">Napomena:</td>
 							</tr>
 				</table>
 	</td>
 	</tr>
 	<tr>
-		<td class="tdX" align="center">*</td>
 			<td class="tdX" align="center">
 				<table style="width:100%">
 					<tbody>
 						<tr>
-							<td align="center">Bicikli 5 min</td>
+							<td align="left">Bicikli 5 min</td>
 							
 						</tr>
 						<tr>
-							<td align="center">Vežbe oblikovanja</td>
+							<td align="left">Vežbe oblikovanja</td>
 						</tr>
 					</tbody>
 				</table>
 			</td>	
 	</tr>
 	<tr th:each="round : ${exercisesInRoundMap}">
-		<td align="center" class="tdX" th:text="${round.key}"></td>
 			<td class="tdX">
 				<table style="width:100%">
 					<tbody>
 						<tr th:each="exerciseInRound : ${round.value}">
-							<td width="55%" align="center" th:utext="${exerciseInRound.exerciseName}"></td>
-							<td width="10%" align="center" th:utext="${exerciseInRound.difficulty}"></td>
-							<td width="10%" align="center" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
-							<td width="25%" align="center" th:utext="${exerciseInRound.Note}"></td>
+							<td width="40%" align="left" th:utext="${exerciseInRound.exerciseName}"></td>
+							<td width="18%" align="left" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
+							<td width="18%" align="left" th:utext="${exerciseInRound.difficulty}"></td>
+							<td width="24%" align="left" th:utext="${exerciseInRound.Note}"></td>
 						</tr>
 					</tbody>
 				</table>
 			</td>
 		</tr>
 		<tr>
-			<td class="tdX" align="center">*</td>
-			<td class="tdX" align="center">Istezanje</td>		
+			<td class="tdX" align="left">Istezanje</td>		
 		</tr>
 	</tbody>
 </table>
