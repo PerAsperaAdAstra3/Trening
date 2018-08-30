@@ -10,8 +10,18 @@ public class TrainingDTO {
 	
 	private String client;
 	
+	private String clientFamilyName;
+
 	private String clientId;
 
+	public String getClientFamilyName() {
+		return clientFamilyName;
+	}
+
+	public void setClientFamilyName(String clientFamilyName) {
+		this.clientFamilyName = clientFamilyName;
+	}
+	
 	public String getClientId() {
 		return clientId;
 	}

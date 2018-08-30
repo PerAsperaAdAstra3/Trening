@@ -55,11 +55,12 @@ public class ExerciseGroupController {
 	@RequestMapping(value = {"/filterExcerInGroup/{id}"}, method = RequestMethod.GET)
 	public String filterExcerInGroup(Model model, @PathVariable String id){
 		List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
-		exerciseList.add(exerciseGroupService.findOne(Long.parseLong(id)));
+		ExerciseGroup exerciseGroup = exerciseGroupService.findOne(Long.parseLong(id));
+		exerciseList.add(exerciseGroup);
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
 		model.addAttribute("exerciseGroups", exerciseGroupToExerciseDTO.convert(exerciseList));
-		model.addAttribute("exercises",  exerciseToExerciseDTO.convert(exerciseGroupService.findOne(Long.parseLong(id)).getExercises()));		
+		model.addAttribute("exercises",  exerciseToExerciseDTO.convert(exerciseGroup.getExercises()));		
 		model.addAttribute("hiddenExerciseGroupId", id) ;
 		return "exercise";
 	}
@@ -74,14 +75,5 @@ public class ExerciseGroupController {
 			exerciseGroupService.edit(exerciseGroupDTO.getId(), exerciseGroupDTOtoExerciseGroup.convert(exerciseGroupDTO));
 		}
 		return "redirect:/exerciseGroupList";
-	}
-	
-	//TODO - This will most likely be removed - It was decided that filtering will be done on the front end.
-	@RequestMapping(value = {"/filterExerciseGroup"}, method = RequestMethod.POST)
-	public String filterExercisesGroup(Model model, @ModelAttribute("exerciseGroupDTOSearch") ExerciseGroupDTO exerciseGroupDTOSearch) {
-		model.addAttribute("exerciseGroupDTO", new ExerciseDTO());
-		model.addAttribute("exerciseGroupDTOSearch", new ExerciseDTO());
-		model.addAttribute("exerciseGroups", exerciseGroupService.filter(exerciseGroupDTOtoExerciseGroup.convert(exerciseGroupDTOSearch)));
-		return "exerciseGroup";
 	}
 }

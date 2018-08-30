@@ -13,6 +13,7 @@ import training.converter.ExerciseDTOtoExercise;
 import training.converter.ExerciseGroupToExerciseGroupDTO;
 import training.converter.ExerciseToExerciseDTO;
 import training.dto.ExerciseDTO;
+import training.model.ExerciseGroup;
 import training.service.ExerciseGroupService;
 import training.service.ExerciseService;
 
@@ -36,16 +37,18 @@ public class ExerciseController {
 
 	@RequestMapping(value = {"/exerciseList/{hiddenExerciseGroupId}"}, method=RequestMethod.GET)
 	public String getExercises(Model model, @PathVariable String hiddenExerciseGroupId) {		
-		System.out.println("EXERCISE LIST");
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
-		model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
-		model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
 		
-		if(hiddenExerciseGroupId.equals("")) {
-		model.addAttribute("hiddenExerciseGroupId", "0");
-		}else {
+		if(hiddenExerciseGroupId.equals("-1")|| hiddenExerciseGroupId == null) {
+			model.addAttribute("hiddenExerciseGroupId", "-1");
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
+			model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseService.findAll()));
+		} else {
+			ExerciseGroup exerciseGroup = exerciseGroupService.findOne(Long.parseLong(hiddenExerciseGroupId));
+			model.addAttribute("exercises", exerciseToExerciseDTO.convert(exerciseGroup.getExercises()));
 			model.addAttribute("hiddenExerciseGroupId", hiddenExerciseGroupId);
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroup));
 		}
 		
 		return "exercise";
@@ -68,4 +71,5 @@ public class ExerciseController {
 		exerciseService.delete(Long.parseLong(id));
 		return "redirect:/exerciseList/"+hiddenExerciseGroupId;
 	}
+	 
 }

@@ -23,10 +23,37 @@
 		});
 	});
 	
+	$(document).on("click", "#exercisesInRoundTable tr", function(event) {
+		  roundId = $(this).find(".roundId").html()
+		  $("#roundsTable tr").each(function(){
+		   id = $(this).find(".roundId").html()
+		   if (id == roundId){
+		    selectRoundIdOnRowClick(this)
+		    return false //break
+		   }
+		  });
+		 });
+	
 	$(document).on("click", "#tr-entity-list", function(event) {
+		highlightRow1(this)
+		selectRoundIdOnRowClick(this)
+		enableExerciseInRoundEdit()
+	});
+
+	
+	$(document).on("click", "#tr-entity-list-modal", function(event) {
 		highlightRow(this)
 		$('#myModal').modal('hide')
+		disableExerciseInRoundEdit()
 	});
+	
+	function highlightRow1(row){
+		if(!$(row).hasClass("header")){
+			$(row).parent().find(".highlighted").removeClass("highlighted");
+	    	$(row).addClass("highlighted");
+	    	sync2($(row));
+	    }
+	}
 	
 	$(document).on("click", "#round-id-sync", function(event) {
 		selectRoundIdOnRowClick(this)
@@ -42,8 +69,8 @@
 	});
 	
 	$(document).on("click", "#deleteExerciseInRound", function(event) {
-		exerciseID = item.find(".exerciseId").html()
-		$("#hiddenTrainingInRoundToDeleteId").val(exerciseID);
+		exerciseInRoundId = item.find(".exerciseInRoundId").html()
+		$("#hiddenTrainingInRoundToDeleteId").val(exerciseInRoundId);
 	});
 
 	
@@ -53,6 +80,7 @@
 			document.getElementById("noviKrug").disabled = false;
 			document.getElementById("editTraining").disabled = false;
 			document.getElementById("deleteTraining").disabled = false;
+			document.getElementById("PDFButton").disabled = false;
 			document.getElementById("saveTraining").disabled = true;
 		}
 
@@ -120,7 +148,6 @@ function sortTable() {
 		var els = document.getElementsByClassName("modal-table-coloring");
 		
 		var test = document.getElementsByClassName("exerciseColorCode");
-		
 		Array.prototype.forEach.call(els, function(el) {
 			var nooo = $(el).find(".exerciseColorCode").html(); 
 			if(nooo == 1){
@@ -180,7 +207,6 @@ function sortTable() {
 	    document.getElementById("exerciseInRoundNumberOfRepetitions").disabled = false;
 	    document.getElementById("exerciseInRoundDifficulty").disabled = false;
 	    document.getElementById("exerciseInRoundAdd").disabled = false;
-	    document.getElementById("exerciseInRoundEdit").disabled = false;
 	    
 	    $("#exercisesInRoundTable .roundId").each(function(){
 	    	if ($(this).html() != roundId)
@@ -190,16 +216,46 @@ function sortTable() {
 	    });
 	}
 	
+	function enableExerciseInRoundEdit(){
+	    document.getElementById("exerciseInRoundEdit").disabled = false;
+	}
+	
+	function disableExerciseInRoundEdit(){
+	    document.getElementById("exerciseInRoundEdit").disabled = true;
+	}
+	
 	function sync(item){
 	    id = item.find(".exerciseId").html()
+	    exerInRoundId = item.find(".exerciseInRoundId").html() 
+		exerInRoundId = item.find(".exerciseExecId").html()
+
 	    exerciseName = item.find(".exerciseName").html()
 	    difficulty = item.find(".difficulty").html()
 	    numberOfRepetitions = item.find(".numberOfRepetitions").html()
 	    exerciseInRoundNote = item.find(".note").html()
-	    
+	    	    
 	    $("#exerciseInRoundExerciseName").val(exerciseName);
 	    $("#exerciseInRoundExerciseId").val(id);
 	    $("#idExerciseInRound").val(id);
+	    $("#exerciseInRoundNote").val(exerciseInRoundNote);
+	    $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
+	    $("#exerciseInRoundDifficulty").val(difficulty);
+	    
+	}
+	
+	function sync2(item){
+		//This is called when the table with the ExerciseInRound is clicked.
+	    exerInRoundId = item.find(".exerciseInRoundId").html()
+    	exerInRoundExerciseId = item.find(".exerciseExecId").html()
+	    
+	    exerciseName = item.find(".exerciseName").html()
+	    difficulty = item.find(".difficulty").html()
+	    numberOfRepetitions = item.find(".numberOfRepetitions").html()
+	    exerciseInRoundNote = item.find(".note").html()
+	    	    
+	    $("#exerciseInRoundExerciseName").val(exerciseName);
+	    $("#exerciseInRoundExerciseId").val(exerInRoundExerciseId);
+	    $("#idExerciseInRound").val(exerInRoundId);
 	    $("#exerciseInRoundNote").val(exerciseInRoundNote);
 	    $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
 	    $("#exerciseInRoundDifficulty").val(difficulty);
@@ -247,6 +303,7 @@ function sortTable() {
 	<button id="saveTraining" class="btn btn-success" type="submit" name="mode" value="add">Snimi</button>
 	<button id="editTraining" class="btn btn-success" type="submit" disabled="disabled" name="mode" value="edit">Izmeni</button>
 	<a th:href="@{/deleteTraining/{id}/(id=*{id})}"><button id="deleteTraining" type="button" class="btn btn-danger" disabled="disabled">Briši</button></a>
+	<a th:href="@{/printPDF/{id}/(id=*{id})}"><button id="PDFButton" type="button" class="btn btn-danger" disabled="disabled">PDF</button></a>
 </form>
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
@@ -346,7 +403,7 @@ function sortTable() {
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">Vežbe</h4>
       </div>
-      <div class="modal-body">
+<div class="modal-body">
 <input type="text" id="inputFilterByName" onkeyup="filterModal(1)" placeholder="Filtriranje po nazivu.."/>
 <input type="text" id="inputFilterByDescription" onkeyup="filterModal(2)" placeholder="Filtriranje po opisu.."/>
 <input type="text" id="inputFilterByGroup" onkeyup="filterModal(3)" placeholder="Filtriranje po grupi.."/>
@@ -360,10 +417,9 @@ function sortTable() {
 				<th scope="col"></th>
 				<th scope="col"></th>
 			</tr>
-	
 		</thead>
 		<tbody>
-			<tr class="modal-table-coloring" id="tr-entity-list" th:each = "exercise : ${exercises}">
+			<tr class="modal-table-coloring" id="tr-entity-list-modal" th:each = "exercise : ${exercises}">
 				<td class="exerciseId" th:utext="${exercise.id}" style="display:none;"></td>
 				<td class="exerciseName" th:utext="${exercise.name}"></td>
 				<td class="exerciseDescription" th:utext="${exercise.description}"></td>
@@ -402,11 +458,12 @@ function sortTable() {
 		<tbody>
 			<tr class="hidden_input" id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
 				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
-				<td class="exerciseId" th:utext="${exerciseInRound.ExecInRound_Id}" style="display:none;"></td>
+				<td class="exerciseInRoundId" th:utext="${exerciseInRound.ExecInRound_Id}" style="display:none;"></td>
 				<td class="numberOfRepetitions" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
 				<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
 				<td class="note" th:utext="${exerciseInRound.note}"></td>
 				<td class="roundId" th:utext="${exerciseInRound.round.id}" style="display:none;"></td>
+				<td class="exerciseExecId" th:utext="${exerciseInRound.exerciseId}" style="display:none;"></td>
 				<td><a th:href="@{/deleteExerciseInRound/{exerciseInRoundId}/{id}(exerciseInRoundId=${exerciseInRound.ExecInRound_Id}, id=${id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			</tr>
 		</tbody>

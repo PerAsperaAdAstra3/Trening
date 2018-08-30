@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<style>
+.tableX, .tdX, tr, th {
+	border-collapse: collapse;
+    border: 1px solid black;
+}
+</style>
+</head>
+<body>
+
+<table style="width:100%">
+	<tr>
+		<td align="left"><p th:text="'Klijent : ' + ${name}" /></td>
+		<td align="center"><p th:text="${trainingNumber} + '.trening'" /></td>
+		<td align="right"><p th:text="'Datum : ' + ${date}" /></td>
+	</tr>
+</table>
+<br/>
+<br/>
+<br/>
+
+<table class="tableX" style="width:100%">
+	<thead>
+		<tr>
+			<th align="center"></th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+	<td>
+	<table style="width:100%">
+							<tr>
+								<td class="tdX" width="40%" align="left">Vežba:</td>
+								<td class="tdX" width="18%" align="left">Br. ponav.:</td>
+								<td class="tdX" width="18%" align="left">Težina:</td>
+								<td class="tdX" width="24%" align="left">Napomena:</td>
+							</tr>
+				</table>
+	</td>
+	</tr>
+	<tr>
+			<td class="tdX" align="center">
+				<table style="width:100%">
+					<tbody>
+						<tr>
+							<td align="left">Bicikli 5 min</td>
+							
+						</tr>
+						<tr>
+							<td align="left">Vežbe oblikovanja</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>	
+	</tr>
+	<tr th:each="round : ${exercisesInRoundMap}">
+			<td class="tdX">
+				<table style="width:100%">
+					<tbody>
+						<tr th:each="exerciseInRound : ${round.value}">
+							<td width="40%" align="left" th:utext="${exerciseInRound.exerciseName}"></td>
+							<td width="18%" align="left" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
+							<td width="18%" align="left" th:utext="${exerciseInRound.difficulty}"></td>
+							<td width="24%" align="left" th:utext="${exerciseInRound.Note}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class="tdX" align="left">Istezanje</td>		
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

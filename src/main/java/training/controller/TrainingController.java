@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import training.converter.ClientToClientDTO;
 import training.converter.ExerciseInRoundDTOtoExerciseInRound;
 import training.converter.ExerciseToExerciseDTO;
 import training.converter.RoundToRoundDTO;
@@ -34,6 +36,7 @@ import training.service.ExerciseInRoundService;
 import training.service.ExerciseService;
 import training.service.RoundService;
 import training.service.TrainingService;
+import training.util.PdfGenaratorUtil;
 
 @Controller
 public class TrainingController {
@@ -68,10 +71,19 @@ public class TrainingController {
 	@Autowired
 	private ExerciseInRoundService exerciseInRoundService;
 
+	@Autowired
+	private PdfGenaratorUtil pdfGenaratorUtil;
+
+	@Autowired
+	private ClientToClientDTO clientToClientDTO;
+	
 	@RequestMapping(value = { "/trainingList" }, method = RequestMethod.GET)
 	public String getTrainings(Model model) {
 		model.addAttribute("trainingDTO", new TrainingDTO());
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingService.findAll()));
+		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
+		model.addAttribute("idOfCopiedTraining","");
+		model.addAttribute("idOfClientToCopyTo","");
 		return "training";
 	}
 	
@@ -145,9 +157,9 @@ public class TrainingController {
 
 	}
 	
-	private List<ExerciseDTO> getExercisesForModel(Long clientId){
+	private List<ExerciseDTO> getExercisesForModel(Training training){
 		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
-		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(clientId);
+		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(training);
 		for(ExerciseDTO exerciseDTO : exercisesForModal) {
 			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
 				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
@@ -192,24 +204,21 @@ public class TrainingController {
 
 		//TODO napisati query da se vade samo treninzi tog klijenta
 		// uzeti od njih max rednog broja i to je to
-		List<Training> trainingList = trainingService.findAll();
-		Long max = 0l;
-		for (Training training : trainingList) {
-			if (training.getClient().getId() == clinetId)
-				max = Math.max(training.getNumberOfTrainings(), max);
-		}
+
 		TrainingDTO trainingDTO = new TrainingDTO();
 		trainingDTO.setClient(client.getName());
+		trainingDTO.setClientFamilyName(client.getFamilyName());
 		trainingDTO.setClientId(clientId);
-		trainingDTO.setNumberOfTrainings((int) (max + 1));
+		trainingDTO.setNumberOfTrainings((int) (getNumberOfTrainings(clinetId) + 1));
 		trainingDTO.setDate(strDate);
 		
 		return trainingDTO;
 	}
 	
 	private void deleteRound(String id) {
-		Training training = roundService.findOne(Long.parseLong(id)).getTraining();		
-		int sequenceNumber = roundService.findOne(Long.parseLong(id)).getRoundSequenceNumber();
+		Round roundTemp = roundService.findOne(Long.parseLong(id));
+		Training training = roundTemp.getTraining();		
+		int sequenceNumber = roundTemp.getRoundSequenceNumber();
 		roundService.delete(Long.parseLong(id));
 		for(Round round : training.getRounds()) {
 			if(round.getRoundSequenceNumber() > sequenceNumber) {
@@ -243,14 +252,113 @@ public class TrainingController {
 		}
 		model.addAttribute("id", id);
 		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
-		model.addAttribute("exercises", getExercisesForModel(trainingService.findOne(Long.parseLong(id)).getClient().getId()));
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 		model.addAttribute("exercisesInRound", listExerciseInRound);
-		model.addAttribute("exercises", getExercisesForModel(training.getClient().getId()));
+		model.addAttribute("exercises", getExercisesForModel(training));
 		
 		return "trainingCreation";
 	}
 	
+	@RequestMapping(value = {"/printPDF/{id}"}, method = RequestMethod.GET)
+	public String pdf(Model model, @PathVariable String id) throws Exception{
+		 Map<String,Object> data = new HashMap<String,Object>();
+		 Training training = trainingService.findOne(Long.parseLong(id));
+		 String imePrezime = training.getClient().getName() + " " + training.getClient().getFamilyName();
+		 String date = training.getDate().toString();
+		 String[] parts = date.split(" ");
+		 
+		 List<Round> rounds = training.getRounds();
+		 
+		 Map<Long,List<ExerciseInRound>> exercisesInRoundMap = new HashMap<Long,List<ExerciseInRound>>();
+		 		 
+		 for(Round roundIter : rounds) {
+			 for(ExerciseInRound exerciseInRound : roundIter.getExerciseInRound()) {
+				 exerciseInRound.setDifficulty(filterLocalCharacters(exerciseInRound.getDifficulty()));
+				 exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExerciseName()));
+				 exerciseInRound.setNote(filterLocalCharacters(exerciseInRound.getNote()));
+				 exerciseInRound.setNumberOfRepetitions(filterLocalCharacters(exerciseInRound.getNumberOfRepetitions()));
+			 }
+			 
+			 exercisesInRoundMap.put(new Long(roundIter.getRoundSequenceNumber()) , roundIter.getExerciseInRound());
+		 }
+		 
+		 date = parts[0];
+		 // Page Title/header
+		 String trainingNumber = ""+training.getNumberOfTrainings();
+
+		 imePrezime = filterLocalCharacters(imePrezime);
+		 
+		 data.put("name", imePrezime);
+		 data.put("trainingNumber", trainingNumber);
+		 data.put("date", date);
+		 data.put("exercisesInRoundMap", exercisesInRoundMap);
+		 		 		 
+		 pdfGenaratorUtil.createPdf("PDFTemplate",data); 
+		 return "redirect:/trainingList";
+	}
+
+	@RequestMapping(value = {"/copyTraining"}, method = RequestMethod.GET)
+	public String copyTraining(Model model, @RequestParam String idOfClientToCopyTo, @RequestParam String idOfCopiedTraining){
+		
+		Training copiedTraining = trainingService.findOne(Long.parseLong(idOfCopiedTraining));
+		Training trainingNew = new Training(copiedTraining);
+		
+		trainingNew.setNumberOfTrainings((int)(getNumberOfTrainings(Long.parseLong(idOfClientToCopyTo)) + 1));
+		
+		trainingService.save(trainingNew);
+		trainingNew.setClient(clientService.findOne(Long.parseLong(idOfClientToCopyTo)));
+
+		for(Round round : copiedTraining.getRounds()) {
+			Round newRound = new Round(round.getRoundSequenceNumber());
+			roundService.save(newRound);
+			newRound.setRoundSequenceNumber(round.getRoundSequenceNumber());
+			
+			for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
+				ExerciseInRound newExerciseInRound = new ExerciseInRound();
+				exerciseInRoundService.save(newExerciseInRound);
+				newExerciseInRound.setDifficulty(exerciseInRound.getDifficulty());
+				newExerciseInRound.setExerciseName(exerciseInRound.getExerciseName());
+				newExerciseInRound.setNumberOfRepetitions(exerciseInRound.getNumberOfRepetitions());
+
+				newExerciseInRound.setExerciseName(exerciseInRound.getExerciseName());
+				newExerciseInRound.setExerciseId(exerciseInRound.getExerciseId());
+				
+				newExerciseInRound.setNote(exerciseInRound.getNote());
+
+				newRound.setExerciseInRound(newExerciseInRound);
+				exerciseInRoundService.save(newExerciseInRound);
+			}
+					
+			trainingNew.addRound(newRound);
+			roundService.save(round);
+		}
+		
+		trainingService.save(trainingNew);
+		return "redirect:/getTraining/"+trainingNew.getId();
+	}
+	
+	private String filterLocalCharacters(String imePrezime) {
+		
+		 imePrezime = imePrezime.replaceAll("ć", "c");
+		 imePrezime = imePrezime.replaceAll("đ", "dj");
+		 imePrezime = imePrezime.replaceAll("č", "c");
+
+		 imePrezime = imePrezime.replaceAll("Ć", "C");
+		 imePrezime = imePrezime.replaceAll("Đ", "Dj");
+		 imePrezime = imePrezime.replaceAll("Č", "C");
+		 
+		return imePrezime;
+	}
+	
+	private Long getNumberOfTrainings(Long clinetId) {
+		List<Training> trainingList = trainingService.findAll();
+		Long max = 0l;
+		for (Training training : trainingList) {
+			if (training.getClient().getId() == clinetId)
+				max = Math.max(training.getNumberOfTrainings(), max);
+		}
+		return max;
+	}
 	
 }

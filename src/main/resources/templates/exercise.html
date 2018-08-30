@@ -15,12 +15,17 @@
 	$(document).on("click", "#search", function(event) {
 		$("#hidden_input").css('display','table-row');
 	});
-
+	
+	$(document).on("click", "#resetButton", function(event) {
+		document.getElementById("editButton").disabled = true;
+	});
+	
 	function sync(item){
 		name = item.find(".exerciseName").html()
 	    description = item.find(".exerciseDescription").html()
 	    id = item.find(".exerciseId").html()
 		   exerciseGroupId = item.find(".exerciseGroupId").html()
+		   document.getElementById("editButton").disabled = false;
 		test = item.find("#hiddenExerciseGroupId").html()
 	    $("#name").val(name);
 	    $("#description").val(description);
@@ -28,6 +33,37 @@
 		$("#exerciseGroupId").val(exerciseGroupId).change();
 		exerGID = item.find("#exerciseGroupId").html()
 	}
+	
+	/*<![CDATA[*/	
+	function filterModal(typeToFilter) {
+		  var input, filter, table, tr, td, i, j;
+		  
+		 	if (typeToFilter === 0) {
+			  input = document.getElementById("inputFilterName");
+		        j = 0;
+		    } else if (typeToFilter === 1){
+		    	 input = document.getElementById("inputFilterDescription");
+		    	j = 1;
+		    } else if (typeToFilter === 2){
+		  	  input = document.getElementById("inputFilterExerciseGroup");
+		    	j = 2;
+		    }
+		 	
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("exerciseTable");
+		  tr = table.getElementsByTagName("tr");
+		  for (i = 0; i < tr.length; i++) {
+		    td = tr[i].getElementsByTagName("td")[j];
+		    if (td) {
+		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		        tr[i].style.display = "";
+		      } else {
+		        tr[i].style.display = "none";
+		      }
+		    }       
+		  }
+		}
+/*]]>*/
 </script>
 </head>
 <body class="gradient">
@@ -67,39 +103,39 @@
 		<div class="form-group row">
 			<div class="col-xs-2">
 				<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
-				<button type="submit" class="btn btn-success" name="mode" value="edit">Izmeni</button>
-				<button type="reset" class="btn btn-success">Isčisti</button>
+				<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+				<button id="resetButton" type="reset" class="btn btn-success">Isčisti</button>
 			</div>
 		</div>
 	<input type="hidden" name="hiddenExerciseGroupId" th:value="${hiddenExerciseGroupId}"/>
 </form>
 </div>
-	<!-- <button type="button" id="search" class="btn btn-dark">Pretraga</button> -->
 <br/>
-<form th:action="@{/filterExercise}" th:object="${exerciseDTOSearch}" method="POST">
-<table class = "table table-hover">
+<form method="POST">
+<div style="padding-left:3em">
+	<p><b> Filtriranje: </b></p>
+		<input type="text" id="inputFilterName" onkeyup="filterModal(0)" placeholder="Filtriranje po nazivu.."/>
+		<input type="text" id="inputFilterDescription" onkeyup="filterModal(1)" placeholder="Filtriranje po opisu.."/>
+		<input type="text" id="inputFilterExerciseGroup" onkeyup="filterModal(2)" placeholder="Filtriranje po grupi vežbi.."/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+<table id="exerciseTable" class = "table table-hover">
 	<thead>
 		<tr>
-			<th scope="col">Id</th>
 			<th scope="col">Naziv</th>
 			<th scope="col">Opis</th>
 			<th scope="col">Grupa vežbi</th>
 			<th scope="col"></th>
 		</tr>
-		<tr id="hidden_input">
-			<td><input/></td>	
-			<td><input th:field="*{name}"/></td>
-			<td><input th:field="*{description}"/></td>
-			<td><input th:field="*{exerciseGroup}"/></td>
-			<td><button type="submit" class="btn btn-secondary">Filtriraj</button></td>
-		</tr>
 	</thead>
 	<tbody>
 		<tr id="tr-entity-list" th:each = "exercise : ${exercises}">
-			<td class="exerciseId" th:utext="${exercise.id}"></td>
 			<td class="exerciseName" th:utext="${exercise.name}"></td>
 			<td class="exerciseDescription" th:utext="${exercise.description}"></td>
 			<td class="exerciseGroup" th:utext="${exercise.exerciseGroup}"></td>
+			<td class="exerciseId" th:utext="${exercise.id}" style="display:none;"></td>
 			<td class="exerciseGroupId hidden_column" th:utext="${exercise.exerciseGroupId}" style="display:none;"></td>
 			<td><a th:href="@{/deleteExercise/{id}/{hiddenExerciseGroupId}(id=${exercise.id}, hiddenExerciseGroupId=${hiddenExerciseGroupId})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 		</tr>

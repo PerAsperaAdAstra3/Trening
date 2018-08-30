@@ -94,5 +94,12 @@ public class Training {
 		this.date = date;
 		this.numberOfTrainings = numberOfTrainings;
 	}
-	
+
+	public Training(Training training) {
+		this.date = new Date();
+		this.client = training.getClient();
+	/*	for(Task task : training.getTasks()) {
+			this.tasks.add(task);
+		}*/
+	}
 }

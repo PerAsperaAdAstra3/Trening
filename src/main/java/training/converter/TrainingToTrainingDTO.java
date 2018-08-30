@@ -27,6 +27,7 @@ public class TrainingToTrainingDTO implements Converter<Training,TrainingDTO> {
 		trainingDTO.setNumberOfTrainings(source.getNumberOfTrainings());
 		if(source.getClient() != null) {
 			trainingDTO.setClient(source.getClient().getName());
+			trainingDTO.setClientFamilyName(source.getClient().getFamilyName());
 			trainingDTO.setClientId(source.getClient().getId().toString());
 		}
 	/*	ModelMapper modelMapper = new ModelMapper();
