@@ -35,8 +35,11 @@ public class PdfGenaratorUtil {
 		  String fileName = UUID.randomUUID().toString();
 		  System.out.println(fileName);
 	        try {
-	        	File outputFile = new File(System.getProperty("user.home")+"\\treninzi\\"+map.get("name").toString()+" " +map.get("trainingNumber").toString() + ".pdf");
 
+	        	String home = System.getProperty("user.home");
+	        	String fileNameString = map.get("name").toString()+" " +map.get("trainingNumber").toString() + ".pdf";
+	        	java.nio.file.Path path = java.nio.file.Paths.get(home, "treninzi", fileNameString);
+	        	File outputFile = new File(path.toString());
 	        	os = new FileOutputStream(outputFile);
 
 	            ITextRenderer renderer = new ITextRenderer();
