@@ -91,29 +91,28 @@
 		  var input, filter, table, tr, td, i, j;
 		  
 		 	if (typeToFilter === 1) {
-			  input = document.getElementById("inputFilterByName");
+			  input = $("#inputFilterByName").val();
 		        j = 1;
 		    } else if (typeToFilter === 2){
-		    	 input = document.getElementById("inputFilterByDescription");
+		    	 input = $("#inputFilterByDescription").val();
 		    	j = 2;
 		    } else if (typeToFilter === 3){
-		  	  input = document.getElementById("inputFilterByGroup");
+		  	  input = $("#inputFilterByGroup").val();
 		    	j = 3;
 		    }
 		  
-		  filter = input.value.toUpperCase();
-		  table = document.getElementById("myTableExercises");
+		  filter = input.toUpperCase();
 		  tr = table.getElementsByTagName("tr");
-		  for (i = 0; i < tr.length; i++) {
-		    td = tr[i].getElementsByTagName("td")[j];
+		  $("tr").each(function(){
+		    td = $(this).find("td")[j];
 		    if (td) {
 		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-		        tr[i].style.display = "";
+		       	$(this).show(); 
 		      } else {
-		        tr[i].style.display = "none";
+		        $(this).hide(); 
 		      }
 		    }       
-		  }
+		  });
 		}
 	
  
@@ -182,17 +181,12 @@ function sortTable() {
 		});
 	
 	function selectRoundIdOnRowClick(row){
-		 //ne reagujemo na klik na header tabele, samo obicne redove
-		 //this sadrzi red na koji se kliknulo
+
 		if(!$(row).hasClass("header")){
-	 		//klasa highlighted postavlja pozadinu na plavu
-	 		//njenim dodavanjem ili uklanjanjem oznacavamo da neki red
-	 		//dobija, odnosno gubi selekciju
-	 		//uklanjamo sa trenutno selektovanog
 			$(row).parent().find(".highlighted").removeClass("highlighted");
-	 		//dodajemo na novi selektovani
+
 		   	$(row).addClass("highlighted");
-		   	//pozivamo sinhronizaciju, prosledjujemo dati red
+
 		   	sync1($(row));
 	   }
 	}

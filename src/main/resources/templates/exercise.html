@@ -39,29 +39,28 @@
 		  var input, filter, table, tr, td, i, j;
 		  
 		 	if (typeToFilter === 0) {
-			  input = document.getElementById("inputFilterName");
+			  input = $("#inputFilterName").val()
 		        j = 0;
 		    } else if (typeToFilter === 1){
-		    	 input = document.getElementById("inputFilterDescription");
+		    	 input = $("#inputFilterDescription").val()
 		    	j = 1;
 		    } else if (typeToFilter === 2){
-		  	  input = document.getElementById("inputFilterExerciseGroup");
+		  	  input = $("#inputFilterExerciseGroup").val()
 		    	j = 2;
 		    }
 		 	
-		  filter = input.value.toUpperCase();
-		  table = document.getElementById("exerciseTable");
-		  tr = table.getElementsByTagName("tr");
-		  for (i = 0; i < tr.length; i++) {
-		    td = tr[i].getElementsByTagName("td")[j];
+		  filter = input.toUpperCase(); 
+
+		 $("tr").each(function(){
+		    td = $(this).find("td")[j];
 		    if (td) {
 		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-		        tr[i].style.display = "";
+		        $(this).show();
 		      } else {
-		        tr[i].style.display = "none";
+		        $(this).hide();
 		      }
 		    }       
-		  }
+		 });
 		}
 /*]]>*/
 </script>
