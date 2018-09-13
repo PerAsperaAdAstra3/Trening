@@ -117,25 +117,25 @@
 	
  
 function sortTable() {
-  var table, rows, rowsSort, switching, i, x, y, shouldSwitch;
-  table = document.getElementById("exercisesInRoundTable");
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = ("#exercisesInRoundTable");
   switching = true;
 
-  rowsSort = table.rows;
   while (switching) {
     switching = false;
     rows = table.rows;
-    for (i = 1; i < rows.length; i++) {
+    rows.each(function(){
+
       shouldSwitch = false;
-      x = rows[i].getElementsByTagName("TD")[5];
-      y = rows[i + 1].getElementsByTagName("TD")[5];
+      x = $(this).find("td")[5];
+      y = $(this).next().find("td")[5];
       if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
         shouldSwitch = true;
         break;
       }
-    }
+    });
     if (shouldSwitch) {
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      $(this).parentNode.insertBefore($(this).next(), $(this));
       switching = true;
     }
   }
@@ -195,12 +195,12 @@ function sortTable() {
 	    roundId = item.find(".roundId").html()
 	    $("#addExerciseInRoundForm #hiddenRoundInTraining").val(roundId);
 	    
-	    document.getElementById("exerciseInRoundExerciseName").disabled = false;
-	    document.getElementById("modal_button").disabled = false;
-	    document.getElementById("exerciseInRoundNote").disabled = false;
-	    document.getElementById("exerciseInRoundNumberOfRepetitions").disabled = false;
-	    document.getElementById("exerciseInRoundDifficulty").disabled = false;
-	    document.getElementById("exerciseInRoundAdd").disabled = false;
+	    $("#exerciseInRoundExerciseName").prop("disabled", false); 
+	    $("#modal_button").prop("disabled", false);
+	    $("#exerciseInRoundNote").prop("disabled", false);
+	    $("#exerciseInRoundNumberOfRepetitions").prop("disabled", false);
+	    $("#exerciseInRoundDifficulty").prop("disabled", false);
+	    $("#exerciseInRoundAdd").prop("disabled", false);
 	    
 	    $("#exercisesInRoundTable .roundId").each(function(){
 	    	if ($(this).html() != roundId)
