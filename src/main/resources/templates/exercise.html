@@ -3,7 +3,7 @@
 <head>
 <script src="../../scripts/jquery-3.2.1.min.js"></script>
 <script src="../../scripts/functions.js"></script>
-<script src="../../scripts/filterModal.js"></script>
+<script src="../../scripts/filterTable.js"></script>
 <meta charset="utf-8"/>
 	<title >Vežbe</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -85,9 +85,9 @@
 <form method="POST">
 <div style="padding-left:3em">
 	<p><b> Filtriranje: </b></p>
-		<input type="text" id="inputFilterName" onkeyup="filterModal(0,2)" placeholder="Filtriranje po nazivu.."/>
-		<input type="text" id="inputFilterDescription" onkeyup="filterModal(1,2)" placeholder="Filtriranje po opisu.."/>
-		<input type="text" id="inputFilterExerciseGroup" onkeyup="filterModal(2,2)" placeholder="Filtriranje po grupi vežbi.."/>
+		<input type="text" id="inputFilterName" onkeyup="filterTable(0,2)" placeholder="Filtriranje po nazivu.."/>
+		<input type="text" id="inputFilterDescription" onkeyup="filterTable(1,2)" placeholder="Filtriranje po opisu.."/>
+		<input type="text" id="inputFilterExerciseGroup" onkeyup="filterTable(2,2)" placeholder="Filtriranje po grupi vežbi.."/>
 	<br/>
 	<br/>
 	<br/>

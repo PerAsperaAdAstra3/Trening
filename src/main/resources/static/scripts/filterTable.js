@@ -1,4 +1,4 @@
-function filterModal(typeToFilter, pageOrigin){
+function filterTable(typeToFilter, pageOrigin){
 	var input, filter, table, tr, td, i, j;
 	//Client
 	if(pageOrigin === 1){

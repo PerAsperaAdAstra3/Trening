@@ -3,7 +3,7 @@
 <head>
 <script src="scripts/jquery-3.2.1.min.js"></script>
 <script src="scripts/functions.js"></script>
-<script src="scripts/filterModal.js"></script>
+<script src="scripts/filterTable.js"></script>
 <meta charset="utf-8"/>
 	<title>Klijenti</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -95,10 +95,10 @@
 <form method="POST">
 <div style="padding-left:3em">
 	<p><b> Filtriranje: </b></p>
-		<input type="text" id="inputFilterName" onkeyup="filterModal(0,1)" placeholder="Filtriranje po nazivu.."/>
-		<input type="text" id="inputFilterDescription" onkeyup="filterModal(1,1)" placeholder="Filtriranje po opisu.."/>
-		<input type="text" id="inputFilterEmail" onkeyup="filterModal(2,1)" placeholder="Filtriranje po email adresi.."/>
-		<input type="text" id="inputFilterPhone" onkeyup="filterModal(3,1)" placeholder="Filtriranje po broju telefona.."/>
+		<input type="text" id="inputFilterName" onkeyup="filterTable(0,1)" placeholder="Filtriranje po nazivu.."/>
+		<input type="text" id="inputFilterDescription" onkeyup="filterTable(1,1)" placeholder="Filtriranje po opisu.."/>
+		<input type="text" id="inputFilterEmail" onkeyup="filterTable(2,1)" placeholder="Filtriranje po email adresi.."/>
+		<input type="text" id="inputFilterPhone" onkeyup="filterTable(3,1)" placeholder="Filtriranje po broju telefona.."/>
 	<br/>
 	<br/>
 	<br/>

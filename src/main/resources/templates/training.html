@@ -4,7 +4,7 @@
 <script src="../../scripts/jquery-3.2.1.min.js"></script>
 <script src="../../scripts/bootstrap.min.js"></script>
 <script src="../../scripts/functions.js"></script>
-<script src="../../scripts/filterModal.js"></script>
+<script src="../../scripts/filterTable.js"></script>
 <meta charset="UTF-8"/>
 <title>Treninzi</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -140,10 +140,10 @@
 <form method="POST">
 <div style="padding-left:3em">
 	<p><b> Filtriranje: </b></p>
-		<input type="text" id="inputFilterDate" onkeyup="filterModal(0,4)" placeholder="Filtriranje po datumu.."/>
-		<input type="text" id="inputFilterNumberOfTrainings" onkeyup="filterModal(1,4)" placeholder="Filtriranje po broju treninga.."/>
-		<input type="text" id="inputFilterClientName" onkeyup="filterModal(2,4)" placeholder="Filtriranje po imenu.."/>
-		<input type="text" id="inputFilterFamilyName" onkeyup="filterModal(3,4)" placeholder="Filtriranje po prezimenu.."/>
+		<input type="text" id="inputFilterDate" onkeyup="filterTable(0,4)" placeholder="Filtriranje po datumu.."/>
+		<input type="text" id="inputFilterNumberOfTrainings" onkeyup="filterTable(1,4)" placeholder="Filtriranje po broju treninga.."/>
+		<input type="text" id="inputFilterClientName" onkeyup="filterTable(2,4)" placeholder="Filtriranje po imenu.."/>
+		<input type="text" id="inputFilterFamilyName" onkeyup="filterTable(3,4)" placeholder="Filtriranje po prezimenu.."/>
 	<br/>
 	<br/>
 	<br/>
