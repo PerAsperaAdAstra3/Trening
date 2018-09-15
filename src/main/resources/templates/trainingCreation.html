@@ -4,6 +4,7 @@
 <script src="../../scripts/jquery-3.2.1.min.js"></script>
 <script src="../../scripts/bootstrap.min.js"></script>
 <script src="../../scripts/functions.js"></script>
+<script src="../../scripts/filterTable.js"></script>
 <meta charset="utf-8"/>
 	<title>Dodavanje treninga</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -87,56 +88,27 @@
 	}
 	
 	  /*<![CDATA[*/	
-	function filterModal(typeToFilter) {
-		  var input, filter, table, tr, td, i, j;
-		  
-		 	if (typeToFilter === 1) {
-			  input = document.getElementById("inputFilterByName");
-		        j = 1;
-		    } else if (typeToFilter === 2){
-		    	 input = document.getElementById("inputFilterByDescription");
-		    	j = 2;
-		    } else if (typeToFilter === 3){
-		  	  input = document.getElementById("inputFilterByGroup");
-		    	j = 3;
-		    }
-		  
-		  filter = input.value.toUpperCase();
-		  table = document.getElementById("myTableExercises");
-		  tr = table.getElementsByTagName("tr");
-		  for (i = 0; i < tr.length; i++) {
-		    td = tr[i].getElementsByTagName("td")[j];
-		    if (td) {
-		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-		        tr[i].style.display = "";
-		      } else {
-		        tr[i].style.display = "none";
-		      }
-		    }       
-		  }
-		}
-	
  
 function sortTable() {
-  var table, rows, rowsSort, switching, i, x, y, shouldSwitch;
-  table = document.getElementById("exercisesInRoundTable");
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = ("#exercisesInRoundTable");
   switching = true;
 
-  rowsSort = table.rows;
   while (switching) {
     switching = false;
     rows = table.rows;
-    for (i = 1; i < rows.length; i++) {
+    rows.each(function(){
+
       shouldSwitch = false;
-      x = rows[i].getElementsByTagName("TD")[5];
-      y = rows[i + 1].getElementsByTagName("TD")[5];
+      x = $(this).find("td")[5];
+      y = $(this).next().find("td")[5];
       if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
         shouldSwitch = true;
         break;
       }
-    }
+    });
     if (shouldSwitch) {
-      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      $(this).parentNode.insertBefore($(this).next(), $(this));
       switching = true;
     }
   }
@@ -182,17 +154,12 @@ function sortTable() {
 		});
 	
 	function selectRoundIdOnRowClick(row){
-		 //ne reagujemo na klik na header tabele, samo obicne redove
-		 //this sadrzi red na koji se kliknulo
+
 		if(!$(row).hasClass("header")){
-	 		//klasa highlighted postavlja pozadinu na plavu
-	 		//njenim dodavanjem ili uklanjanjem oznacavamo da neki red
-	 		//dobija, odnosno gubi selekciju
-	 		//uklanjamo sa trenutno selektovanog
 			$(row).parent().find(".highlighted").removeClass("highlighted");
-	 		//dodajemo na novi selektovani
+
 		   	$(row).addClass("highlighted");
-		   	//pozivamo sinhronizaciju, prosledjujemo dati red
+
 		   	sync1($(row));
 	   }
 	}
@@ -201,12 +168,12 @@ function sortTable() {
 	    roundId = item.find(".roundId").html()
 	    $("#addExerciseInRoundForm #hiddenRoundInTraining").val(roundId);
 	    
-	    document.getElementById("exerciseInRoundExerciseName").disabled = false;
-	    document.getElementById("modal_button").disabled = false;
-	    document.getElementById("exerciseInRoundNote").disabled = false;
-	    document.getElementById("exerciseInRoundNumberOfRepetitions").disabled = false;
-	    document.getElementById("exerciseInRoundDifficulty").disabled = false;
-	    document.getElementById("exerciseInRoundAdd").disabled = false;
+	    $("#exerciseInRoundExerciseName").prop("disabled", false); 
+	    $("#modal_button").prop("disabled", false);
+	    $("#exerciseInRoundNote").prop("disabled", false);
+	    $("#exerciseInRoundNumberOfRepetitions").prop("disabled", false);
+	    $("#exerciseInRoundDifficulty").prop("disabled", false);
+	    $("#exerciseInRoundAdd").prop("disabled", false);
 	    
 	    $("#exercisesInRoundTable .roundId").each(function(){
 	    	if ($(this).html() != roundId)
@@ -404,9 +371,9 @@ function sortTable() {
         <h4 class="modal-title">Vežbe</h4>
       </div>
 <div class="modal-body">
-<input type="text" id="inputFilterByName" onkeyup="filterModal(1)" placeholder="Filtriranje po nazivu.."/>
-<input type="text" id="inputFilterByDescription" onkeyup="filterModal(2)" placeholder="Filtriranje po opisu.."/>
-<input type="text" id="inputFilterByGroup" onkeyup="filterModal(3)" placeholder="Filtriranje po grupi.."/>
+<input type="text" id="inputFilterByName" onkeyup="filterTable(1,5)" placeholder="Filtriranje po nazivu.."/>
+<input type="text" id="inputFilterByDescription" onkeyup="filterTable(2,5)" placeholder="Filtriranje po opisu.."/>
+<input type="text" id="inputFilterByGroup" onkeyup="filterTable(3,5)" placeholder="Filtriranje po grupi.."/>
 <div class="container-responsive">
 	<table  id = "myTableExercises" class = "table table-responsive">
 		<thead>
