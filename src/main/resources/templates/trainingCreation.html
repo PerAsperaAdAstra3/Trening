@@ -148,6 +148,9 @@ function sortTable() {
 		var els = document.getElementsByClassName("modal-table-coloring");
 		
 		var test = document.getElementsByClassName("exerciseColorCode");
+		
+		document.getElementById("exerciseInRoundExerciseName").disabled = false;
+		
 		Array.prototype.forEach.call(els, function(el) {
 			var nooo = $(el).find(".exerciseColorCode").html(); 
 			if(nooo == 1){
@@ -201,7 +204,6 @@ function sortTable() {
 	    roundId = item.find(".roundId").html()
 	    $("#addExerciseInRoundForm #hiddenRoundInTraining").val(roundId);
 	    
-	    document.getElementById("exerciseInRoundExerciseName").disabled = false;
 	    document.getElementById("modal_button").disabled = false;
 	    document.getElementById("exerciseInRoundNote").disabled = false;
 	    document.getElementById("exerciseInRoundNumberOfRepetitions").disabled = false;
@@ -252,7 +254,7 @@ function sortTable() {
 	    difficulty = item.find(".difficulty").html()
 	    numberOfRepetitions = item.find(".numberOfRepetitions").html()
 	    exerciseInRoundNote = item.find(".note").html()
-	    	    
+
 	    $("#exerciseInRoundExerciseName").val(exerciseName);
 	    $("#exerciseInRoundExerciseId").val(exerInRoundExerciseId);
 	    $("#idExerciseInRound").val(exerInRoundId);
