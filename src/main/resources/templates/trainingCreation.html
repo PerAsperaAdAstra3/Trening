@@ -78,11 +78,11 @@
 	function enableAddRound(item) {
 		var trainingID = $(".idTraining")[0]
 		if($(trainingID).val() != ""){
-			document.getElementById("noviKrug").disabled = false;
-			document.getElementById("editTraining").disabled = false;
-			document.getElementById("deleteTraining").disabled = false;
-			document.getElementById("PDFButton").disabled = false;
-			document.getElementById("saveTraining").disabled = true;
+			$("#noviKrug").prop("disabled", false) 
+			$("#editTraining").prop("disabled", false) 
+			$("#deleteTraining").prop("disabled", false) 
+			$("#PDFButton").prop("disabled", false)
+			$("#saveTraining").prop("disabled", true)
 		}
 
 	}
@@ -117,11 +117,12 @@ function sortTable() {
 /*]]>*/
 	  
 	$(document).on("click", "#modal_button", function(event) {
-		var els = document.getElementsByClassName("modal-table-coloring");
+		var els = $(".modal-table-coloring");
 		
-		var test = document.getElementsByClassName("exerciseColorCode");
+		var test = $(".exerciseColorCode");
 		
-		document.getElementById("exerciseInRoundExerciseName").disabled = false;
+		$("#exerciseInRoundExerciseName").prop("disabled", false);
+		$("#exerciseInRoundAdd").prop("disabled", false);
 		
 		Array.prototype.forEach.call(els, function(el) {
 			var nooo = $(el).find(".exerciseColorCode").html(); 
@@ -139,7 +140,7 @@ function sortTable() {
 	});
 	
 	$(document).on("click", "#hideTableRows", function(event) {
-		var els = document.getElementsByClassName("hidden_input");
+		var els = $(".hidden_input");
 		Array.prototype.forEach.call(els, function(el) {
 		     el.style.visibility = 'hidden'
 	   		 console.log(el.tagName);
@@ -170,12 +171,10 @@ function sortTable() {
 	function sync1(item){
 	    roundId = item.find(".roundId").html()
 	    $("#addExerciseInRoundForm #hiddenRoundInTraining").val(roundId);
-	    $("#exerciseInRoundExerciseName").prop("disabled", false); 
 	    $("#modal_button").prop("disabled", false);
 	    $("#exerciseInRoundNote").prop("disabled", false);
 	    $("#exerciseInRoundNumberOfRepetitions").prop("disabled", false);
 	    $("#exerciseInRoundDifficulty").prop("disabled", false);
-	    $("#exerciseInRoundAdd").prop("disabled", false);
 	    $("#exercisesInRoundTable .roundId").each(function(){
 	    	if ($(this).html() != roundId)
 	    		$(this).parent().hide()
@@ -185,11 +184,11 @@ function sortTable() {
 	}
 	
 	function enableExerciseInRoundEdit(){
-	    document.getElementById("exerciseInRoundEdit").disabled = false;
+	    $("#exerciseInRoundEdit").prop("disabled", false);
 	}
 	
 	function disableExerciseInRoundEdit(){
-	    document.getElementById("exerciseInRoundEdit").disabled = true;
+	    $("#exerciseInRoundEdit").prop("disabled", true)
 	}
 	
 	function sync(item){
