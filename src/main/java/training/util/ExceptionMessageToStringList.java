@@ -5,9 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-@Component
 public class ExceptionMessageToStringList {
-	public List<String> createErrorMessageListForPrinting(Exception e) {
+	public static List<String> createErrorMessageListForPrinting(Exception e) {
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
