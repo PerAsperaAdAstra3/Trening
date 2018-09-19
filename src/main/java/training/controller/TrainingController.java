@@ -37,6 +37,7 @@ import training.service.ExerciseService;
 import training.service.RoundService;
 import training.service.TrainingService;
 import training.util.PdfGenaratorUtil;
+import training.util.ExceptionMessageToStringList;
 
 @Controller
 public class TrainingController {
@@ -73,6 +74,9 @@ public class TrainingController {
 
 	@Autowired
 	private PdfGenaratorUtil pdfGenaratorUtil;
+	
+	@Autowired
+	private ExceptionMessageToStringList exceptionMessageToStringList;
 
 	@Autowired
 	private ClientToClientDTO clientToClientDTO;
@@ -90,12 +94,7 @@ public class TrainingController {
 			
 	} catch(Exception e) {
 		e.printStackTrace();
-		List<String> messageList = new ArrayList<>();
-		StackTraceElement[] trace = e.getStackTrace();
-		for(int i=0; i < trace.length; i++ ) {
-			messageList.add(trace[i].toString());
-		}
-		model.addAttribute("errorMessage", messageList);
+		model.addAttribute("errorMessage", exceptionMessageToStringList.createErrorMessageListForPrinting(e));
 		return "errorPage";
 	}
 		
