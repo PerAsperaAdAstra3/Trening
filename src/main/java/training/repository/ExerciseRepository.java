@@ -11,5 +11,5 @@ import training.model.Exercise;
 public interface ExerciseRepository extends JpaRepository<Exercise,Long> {
 
 	List<Exercise> findByNameIgnoreCaseContainingAndDescriptionIgnoreCaseContaining(String name, String description);
-
+	Exercise findByName(String name);
 }
