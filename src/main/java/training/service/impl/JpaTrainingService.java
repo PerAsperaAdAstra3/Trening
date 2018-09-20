@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
@@ -80,12 +81,19 @@ public class JpaTrainingService implements TrainingService {
 
 		Map<Long, Integer> mapExerciseIndexes = new HashMap<Long, Integer>();
 		Map<Long, Integer> currentGroupIndexes = new HashMap<Long, Integer>();
+		List<Long> allIdsInExerciseTable = new ArrayList<>();
+		
+		for(Exercise exerciseTemp : exerciseService.findAll()) {
+			allIdsInExerciseTable.add(exerciseTemp.getId());
+		}
+		
 		for(Training currentTraining : lastTrainings) {
 
 			List<Long> groupsInTraining = new ArrayList<Long>();
 
 			for(Round round : currentTraining.getRounds())
 				for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
+					if(allIdsInExerciseTable.contains(exerciseInRound.getExerciseId())) {
 					Long exerciseGroupId = exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId();
 
 					Integer index;
@@ -104,6 +112,7 @@ public class JpaTrainingService implements TrainingService {
 					}
 					if (!mapExerciseIndexes.containsKey(exerciseInRound.getExerciseId()))
 						mapExerciseIndexes.put(exerciseInRound.getExerciseId(), index.intValue());
+					}
 				}
 		}
 

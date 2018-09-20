@@ -36,6 +36,7 @@ import training.service.ExerciseInRoundService;
 import training.service.ExerciseService;
 import training.service.RoundService;
 import training.service.TrainingService;
+import training.util.ExceptionMessageToStringList;
 import training.util.PdfGenaratorUtil;
 
 @Controller
@@ -79,17 +80,41 @@ public class TrainingController {
 	
 	@RequestMapping(value = { "/trainingList" }, method = RequestMethod.GET)
 	public String getTrainings(Model model) {
+		
+	try {
+		
 		model.addAttribute("trainingDTO", new TrainingDTO());
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingService.findAll()));
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		model.addAttribute("idOfCopiedTraining","");
 		model.addAttribute("idOfClientToCopyTo","");
+			
+	} catch(Exception e) {
+		e.printStackTrace();
+		model.addAttribute("errorMessage", ExceptionMessageToStringList.createErrorMessageListForPrinting(e));
+		return "errorPage";
+	}
+		
 		return "training";
 	}
 	
 	@RequestMapping(value = { "/deleteTraining/{id}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable String id) {
+	try {
+		
 		trainingService.delete(Long.parseLong(id));
+		
+	} catch(Exception e) {
+		e.printStackTrace();
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for(int i=0; i < trace.length; i++ ) {
+			messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
+		
 		return "redirect:/trainingList";
 	}
 
@@ -97,15 +122,41 @@ public class TrainingController {
 	
 	@RequestMapping(value = { "/trainingCreationHandler/{clientId}" }, method = RequestMethod.GET)
 	public String createTraining(Model model, @PathVariable String clientId) {
+	
+	try {
+		
 		model.addAttribute("trainingDTO", createTraining(clientId));
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 		
+	} catch(Exception e) {
+		e.printStackTrace();
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for(int i=0; i < trace.length; i++ ) {
+			messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
 		return "trainingCreation";
 	}
 	
 	@RequestMapping(value = { "/saveTraining"}, method = RequestMethod.POST)
 	public String saveTraining(Model model, @ModelAttribute("trainingDTO") TrainingDTO trainingDTO, @RequestParam String mode) {
-		Long id = saveOrEditTraining(trainingDTO , mode);
+		Long id = -1l;
+	try {	
+		 id = saveOrEditTraining(trainingDTO , mode);
+	} catch(Exception e) {
+		e.printStackTrace();
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for(int i=0; i < trace.length; i++ ) {
+			messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
+		
 		return "redirect:/getTraining/"+id;
 	}
 
@@ -114,8 +165,22 @@ public class TrainingController {
 	public String addRound(Model model, @RequestParam String id,
 		RedirectAttributes redir) {
 	
+		try {
+		
 		Long newAddedRoundId = addRound(id);
 		redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+			List<String> messageList = new ArrayList<>();
+			StackTraceElement[] trace = e.getStackTrace();
+			for(int i=0; i < trace.length; i++ ) {
+				messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
+		
 		return "redirect:/getTraining/"+id;
 	}
 
@@ -125,11 +190,23 @@ public class TrainingController {
 	public String addExerciseInRound(Model model,
 			@ModelAttribute("exerciseInRoundDTO") ExerciseInRoundDTO exerciseInRoundDTO, @RequestParam String modeEIR,
 			RedirectAttributes redir) {
-
-		Long newAddedRoundId = addExerciseInRound(exerciseInRoundDTO, modeEIR);
-		Long trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
-		redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
-		
+		Long trainingId = -1l;
+		try {
+			
+			Long newAddedRoundId = addExerciseInRound(exerciseInRoundDTO, modeEIR);
+			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
+			redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			List<String> messageList = new ArrayList<>();
+			StackTraceElement[] trace = e.getStackTrace();
+			for(int i=0; i < trace.length; i++ ) {
+				messageList.add(trace[i].toString());
+			}
+			model.addAttribute("errorMessage", messageList);
+			return "errorPage";
+		}
 		return "redirect:/getTraining/"+trainingId;
 	}
 
@@ -139,18 +216,39 @@ public class TrainingController {
 	@RequestMapping(value = {"/deleteExerciseInRound/{exerciseInRoundId}/{id}"}, method = RequestMethod.GET)
 	public String delete(Model model, @PathVariable String exerciseInRoundId, @PathVariable String id,
 			RedirectAttributes redir){
-
+		try {
+			
 		ExerciseInRound exerciseInRound = exerciseInRoundService.delete(Long.parseLong(exerciseInRoundId));
 		redir.addFlashAttribute("selectedRoundId", exerciseInRound.getRound().getId());
 
+		} catch(Exception e) {
+				e.printStackTrace();
+				List<String> messageList = new ArrayList<>();
+				StackTraceElement[] trace = e.getStackTrace();
+				for(int i=0; i < trace.length; i++ ) {
+				messageList.add(trace[i].toString());
+			}
+			model.addAttribute("errorMessage", messageList);
+			return "errorPage";
+		}
 		return "redirect:/getTraining/"+id;
 	}
 
 	//DELETE ROUND
 	@RequestMapping(value = {"/deleteRound/{roundId}/{id}"}, method = RequestMethod.GET)
 	public String deleteRound(Model model, @PathVariable String roundId, @PathVariable String id){
-	
+	try {
 		deleteRound(roundId);
+	} catch(Exception e) {
+		e.printStackTrace();
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for(int i=0; i < trace.length; i++ ) {
+			messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
 		//TODO Select the previous round if it exists, the next one is this is the first round
 		// nothing if this is the only round
 		return "redirect:/getTraining/"+id;
@@ -244,24 +342,38 @@ public class TrainingController {
 	
 	@RequestMapping(value = {"/getTraining/{id}"}, method = RequestMethod.GET)
 	public String getTraining(Model model, @PathVariable String id){
-	
-		Training training = trainingService.findOne(Long.parseLong(id));
-		List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
-		for (Round roundIter : training.getRounds()) {
-			listExerciseInRound.addAll(roundIter.getExerciseInRound());
+		try {
+			Training training = trainingService.findOne(Long.parseLong(id));
+			
+			List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
+			for (Round roundIter : training.getRounds()) {
+				listExerciseInRound.addAll(roundIter.getExerciseInRound());
+			}
+			model.addAttribute("id", id);
+			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
+			model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
+			model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
+			model.addAttribute("exercisesInRound", listExerciseInRound);
+			model.addAttribute("exercises", getExercisesForModel(training));
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+			List<String> messageList = new ArrayList<>();
+			StackTraceElement[] trace = e.getStackTrace();
+			for(int i=0; i < trace.length; i++ ) {
+				messageList.add(trace[i].toString());
+			}
+			model.addAttribute("errorMessage", messageList);
+			return "errorPage";
 		}
-		model.addAttribute("id", id);
-		model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
-		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
-		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
-		model.addAttribute("exercisesInRound", listExerciseInRound);
-		model.addAttribute("exercises", getExercisesForModel(training));
 		
 		return "trainingCreation";
 	}
 	
 	@RequestMapping(value = {"/printPDF/{id}"}, method = RequestMethod.GET)
 	public String pdf(Model model, @PathVariable String id) throws Exception{
+		
+		try {
 		 Map<String,Object> data = new HashMap<String,Object>();
 		 Training training = trainingService.findOne(Long.parseLong(id));
 		 String imePrezime = training.getClient().getName() + " " + training.getClient().getFamilyName();
@@ -295,12 +407,26 @@ public class TrainingController {
 		 data.put("exercisesInRoundMap", exercisesInRoundMap);
 		 		 		 
 		 pdfGenaratorUtil.createPdf("PDFTemplate",data); 
+		 
+	} catch(Exception e) {
+		e.printStackTrace();
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for(int i=0; i < trace.length; i++ ) {
+			messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
+		 
 		 return "redirect:/trainingList";
 	}
 
 	@RequestMapping(value = {"/copyTraining"}, method = RequestMethod.GET)
 	public String copyTraining(Model model, @RequestParam String idOfClientToCopyTo, @RequestParam String idOfCopiedTraining){
-		
+		Long newTrainingId = -1l;
+		try {
+			
 		Training copiedTraining = trainingService.findOne(Long.parseLong(idOfCopiedTraining));
 		Training trainingNew = new Training(copiedTraining);
 		
@@ -335,7 +461,20 @@ public class TrainingController {
 		}
 		
 		trainingService.save(trainingNew);
-		return "redirect:/getTraining/"+trainingNew.getId();
+		newTrainingId = trainingNew.getId();
+		
+	} catch(Exception e) {
+		e.printStackTrace();
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for(int i=0; i < trace.length; i++ ) {
+			messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
+		
+		return "redirect:/getTraining/"+newTrainingId;
 	}
 	
 	private String filterLocalCharacters(String imePrezime) {
