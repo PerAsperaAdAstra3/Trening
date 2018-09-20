@@ -3,8 +3,6 @@ package training.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 public class ExceptionMessageToStringList {
 	public static List<String> createErrorMessageListForPrinting(Exception e) {
 		List<String> messageList = new ArrayList<>();

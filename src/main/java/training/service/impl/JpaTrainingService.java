@@ -93,10 +93,10 @@ public class JpaTrainingService implements TrainingService {
 
 			for(Round round : currentTraining.getRounds())
 				for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
+					Integer index;
 					if(allIdsInExerciseTable.contains(exerciseInRound.getExerciseId())) {
 					Long exerciseGroupId = exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId();
 
-					Integer index;
 					if (groupsInTraining.contains(exerciseGroupId)){
 						index = currentGroupIndexes.get(exerciseGroupId);
 					}
@@ -112,6 +112,37 @@ public class JpaTrainingService implements TrainingService {
 					}
 					if (!mapExerciseIndexes.containsKey(exerciseInRound.getExerciseId()))
 						mapExerciseIndexes.put(exerciseInRound.getExerciseId(), index.intValue());
+						} else { // Doing the check based on Exercise NAME instead of ID
+						exerciseInRound.getExerciseName();
+						List<Exercise> exerciseListForByNameSearch = exerciseService.findAll();
+						Exercise exerciseOfInterest = new Exercise();
+						
+						for(Exercise e : exerciseListForByNameSearch) {
+							if(e.getName().equals(exerciseInRound.getExerciseName())) {
+								exerciseOfInterest = e;
+							}
+						}
+						
+						if(allIdsInExerciseTable.contains(exerciseOfInterest.getId())) {
+							
+						Long exerciseGroupId = exerciseService.findOne(exerciseOfInterest.getId()).getExerciseGroup().getId();//exerciseInRound.getExerciseId()).getExerciseGroup().getId();
+						
+						if (groupsInTraining.contains(exerciseGroupId)){
+							index = currentGroupIndexes.get(exerciseGroupId);
+						}
+						else{
+							groupsInTraining.add(exerciseGroupId);
+							if (!currentGroupIndexes.containsKey(exerciseGroupId)){
+								index = 1;
+							}
+							else{
+								index = currentGroupIndexes.get(exerciseGroupId) + 1;
+							}
+							currentGroupIndexes.put(exerciseGroupId, index);
+						}
+						if (!mapExerciseIndexes.containsKey(exerciseOfInterest.getId()))
+							mapExerciseIndexes.put(exerciseOfInterest.getId(), index.intValue());
+						}	
 					}
 				}
 		}
