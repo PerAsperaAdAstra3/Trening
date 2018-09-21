@@ -13,6 +13,7 @@ import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
+import training.repository.ExerciseRepository;
 import training.repository.TrainingRepository;
 import training.service.ExerciseService;
 import training.service.TrainingService;
@@ -26,6 +27,9 @@ public class JpaTrainingService implements TrainingService {
 
 	@Autowired
 	private ExerciseService exerciseService;
+	
+	@Autowired
+	private ExerciseRepository exerciseRepository;
 
 	@Override
 	public Training findOne(Long id) {
@@ -87,31 +91,59 @@ public class JpaTrainingService implements TrainingService {
 			allIdsInExerciseTable.add(exerciseTemp.getId());
 		}
 		
-		for(Training currentTraining : lastTrainings) {
+		for (Training currentTraining : lastTrainings) {
 
 			List<Long> groupsInTraining = new ArrayList<Long>();
 
-			for(Round round : currentTraining.getRounds())
-				for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
-					if(allIdsInExerciseTable.contains(exerciseInRound.getExerciseId())) {
-					Long exerciseGroupId = exerciseService.findOne(exerciseInRound.getExerciseId()).getExerciseGroup().getId();
-
+			for (Round round : currentTraining.getRounds())
+				for (ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
 					Integer index;
-					if (groupsInTraining.contains(exerciseGroupId)){
-						index = currentGroupIndexes.get(exerciseGroupId);
-					}
-					else{
-						groupsInTraining.add(exerciseGroupId);
-						if (!currentGroupIndexes.containsKey(exerciseGroupId)){
-							index = 1;
+					if (allIdsInExerciseTable.contains(exerciseInRound.getExerciseId())) {
+						Long exerciseGroupId = exerciseService.findOne(exerciseInRound.getExerciseId())
+								.getExerciseGroup().getId();
+
+						if (groupsInTraining.contains(exerciseGroupId)) {
+							index = currentGroupIndexes.get(exerciseGroupId);
+						} else {
+							groupsInTraining.add(exerciseGroupId);
+							if (!currentGroupIndexes.containsKey(exerciseGroupId)) {
+								index = 1;
+							} else {
+								index = currentGroupIndexes.get(exerciseGroupId) + 1;
+							}
+							currentGroupIndexes.put(exerciseGroupId, index);
 						}
-						else{
-							index = currentGroupIndexes.get(exerciseGroupId) + 1;
+						if (!mapExerciseIndexes.containsKey(exerciseInRound.getExerciseId()))
+							mapExerciseIndexes.put(exerciseInRound.getExerciseId(), index.intValue());
+					} else { // Doing the check based on Exercise NAME instead of ID
+						exerciseInRound.getExerciseName();
+						
+						Exercise exerciseOfInterest = null;
+
+						
+						exerciseOfInterest = exerciseRepository.findByName(exerciseInRound.getExerciseName());
+
+						
+						if(exerciseOfInterest != null)
+						if (allIdsInExerciseTable.contains(exerciseOfInterest.getId())) {
+
+							Long exerciseGroupId = exerciseService.findOne(exerciseOfInterest.getId())
+									.getExerciseGroup().getId();
+
+							if (groupsInTraining.contains(exerciseGroupId)) {
+								index = currentGroupIndexes.get(exerciseGroupId);
+							} else {
+								groupsInTraining.add(exerciseGroupId);
+								if (!currentGroupIndexes.containsKey(exerciseGroupId)) {
+									index = 1;
+								} else {
+									index = currentGroupIndexes.get(exerciseGroupId) + 1;
+								}
+								currentGroupIndexes.put(exerciseGroupId, index);
+							}
+							if (!mapExerciseIndexes.containsKey(exerciseOfInterest.getId()))
+								mapExerciseIndexes.put(exerciseOfInterest.getId(), index.intValue());
 						}
-						currentGroupIndexes.put(exerciseGroupId, index);
-					}
-					if (!mapExerciseIndexes.containsKey(exerciseInRound.getExerciseId()))
-						mapExerciseIndexes.put(exerciseInRound.getExerciseId(), index.intValue());
 					}
 				}
 		}
