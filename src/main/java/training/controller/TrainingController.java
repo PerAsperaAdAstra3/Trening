@@ -210,6 +210,30 @@ public class TrainingController {
 		return "redirect:/getTraining/"+trainingId;
 	}
 
+	//Testing
+	@RequestMapping(value = { "/addExerciseInRoundX" }, method = RequestMethod.POST) 
+	public String addExerciseInRoundX(Model model,
+			@ModelAttribute("exerciseInRoundDTOX") ExerciseInRoundDTO exerciseInRoundDTOX,
+			RedirectAttributes redir) {
+		Long trainingId = -1l;
+		try {
+			
+			Long newAddedRoundId = addExerciseInRoundX(exerciseInRoundDTOX);
+			trainingId = roundService.findOne(exerciseInRoundDTOX.getRoundId()).getTraining().getId();
+			redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+			List<String> messageList = new ArrayList<>();
+			StackTraceElement[] trace = e.getStackTrace();
+			for(int i=0; i < trace.length; i++ ) {
+				messageList.add(trace[i].toString());
+			}
+			model.addAttribute("errorMessage", messageList);
+			return "errorPage";
+		}
+		return "redirect:/getTraining/"+trainingId;
+	}
 	
 	//DELETE EXERCISE IN ROUND
 	
@@ -288,6 +312,22 @@ public class TrainingController {
 		} else {
 			exerciseInRound = exerciseInRoundService.edit(exerciseInRoundDTO.getId(), exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
 		} 
+		
+		return exerciseInRound.getRound().getId();
+	}
+	
+	//Test
+	private Long addExerciseInRoundX(ExerciseInRoundDTO exerciseInRoundDTO) {
+
+		ExerciseInRound exerciseInRound;//= exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
+	//	exerciseInRoundService.save(exerciseInRound);
+
+//	if("add".equals(mode)) {
+			exerciseInRoundDTO.setId(null);
+			exerciseInRound = exerciseInRoundService.save(exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
+	/*	} else {
+			exerciseInRound = exerciseInRoundService.edit(exerciseInRoundDTO.getId(), exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
+		} */
 		
 		return exerciseInRound.getRound().getId();
 	}
