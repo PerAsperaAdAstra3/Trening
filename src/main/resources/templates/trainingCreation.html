@@ -7,8 +7,8 @@
 <script src="../../scripts/filterTable.js"></script>
 <meta charset="utf-8"/>
 	<title>Dodavanje treninga</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{../../css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{../../css/style.css}"/>
 <script>
 
 	$(document).ready(function(){
@@ -230,53 +230,27 @@ function sortTable() {
 	}
 	
 	$(document).on("click", "#exerciseInRoundAdd", function(event){
-		alert('Testiramo novi nacina submitovanja!')
 
 		var areFieldsFilledIn = true;
-		
 		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
-		
-		$("#testForSecurity").val(exerciseInRoundExerciseName);
-		
 		var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
-		
-		var exerciseInRoundNote = $('#exerciseInRoundNote').val()
-		
-		var exerciseInRoundNumberOfRepetitions = $('#exerciseInRoundNumberOfRepetitions').val()
-		
-		var exerciseInRoundDifficulty = $('#exerciseInRoundDifficulty').val()
+	
+		$("#errorExerciseName").css('display','none');
+		$("#errorExerciseId").css('display','none');
 		
 		if(exerciseInRoundExerciseName == ""){
-			alert('PRazan string Exercise Name !!!')
 			areFieldsFilledIn = false;
+			$("#errorExerciseName").css('display','table-row');
 		}
 		
 		if(exerciseInRoundExerciseId == ""){
-			alert('PRazan string Exercise ID !!!')
 			areFieldsFilledIn = false;
-		}
-		
-		if(exerciseInRoundNote == ""){
-			alert('PRazan string Napomena: !!!')
-			areFieldsFilledIn = false;
-		}
-		
-		if(exerciseInRoundNumberOfRepetitions == ""){
-			alert('PRazan string Broj ponavljanja:!!!')
-			areFieldsFilledIn = false;
-		}
-		
-		if(exerciseInRoundDifficulty == ""){
-			alert('PRazan string Težina:!!!')
-			areFieldsFilledIn = false;
+			$("#errorExerciseId").css('display','table-row');
 		}
 		
 		if(areFieldsFilledIn){
-			alert('Sve je true!!!')
-			$( "#addExerciseInRoundForm" ).submit();
-		} else {
-			alert('Nisje sve true!!!')
-		}
+			$( "#addExerciseInRoundForm" ).submit();			
+		} 
 	});
 	</script>
 </head>
@@ -372,6 +346,12 @@ function sortTable() {
 				<div class="col">
 					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled="disabled">Izbor</button>
 				</div>
+				<div class="col">
+					<label id="errorExerciseName" class="errorText" style="display:none;"><font color="red"><b>Exercise Name Error message!!</b></font></label>
+				</div>
+				<div class="col">
+					<label id="errorExerciseId" class="errorText" style="display:none;"><font color="red"><b>Id Vežbe nema vrednost!!</b></font></label>
+				</div>
 			</div>
 			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
 		</div>
@@ -404,7 +384,6 @@ function sortTable() {
 	</div>
 <input type="hidden" th:field="*{id}" id="idExerciseInRound"/>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
-<input type="text" id="testForSecurity" />
 <input id="hiddenRoundInTraining" type="hidden" th:field="*{roundId}" />
 
 </form>
@@ -489,6 +468,5 @@ function sortTable() {
 </div>
 	<input type="hidden" class="id" name="id" th:value="${id}"/>
 </form>
-
 </body>
 </html>
