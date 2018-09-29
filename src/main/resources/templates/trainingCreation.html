@@ -22,6 +22,33 @@
 				return
 			}
 		});
+		
+		
+		$('#addExerciseInRoundForm').submit(function(){
+		
+		var areFieldsFilledIn = true;
+		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
+		var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
+		
+		$("#errorExerciseName").css('display','none');
+		$("#errorExerciseId").css('display','none');
+		
+		if(exerciseInRoundExerciseName == ""){
+			areFieldsFilledIn = false;
+			$("#errorExerciseName").css('display','table-row');
+		}
+		
+		if(exerciseInRoundExerciseId == ""){
+			areFieldsFilledIn = false;
+			$("#errorExerciseId").css('display','table-row');
+		}
+
+		if(areFieldsFilledIn){	
+	     	 return true;
+			} else {
+				return false;
+			}
+		});
 	});
 	
 	$(document).on("click", "#exercisesInRoundTable tr", function(event) {
@@ -229,29 +256,6 @@ function sortTable() {
 	    
 	}
 	
-	$(document).on("click", "#exerciseInRoundAdd", function(event){
-
-		var areFieldsFilledIn = true;
-		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
-		var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
-	
-		$("#errorExerciseName").css('display','none');
-		$("#errorExerciseId").css('display','none');
-		
-		if(exerciseInRoundExerciseName == ""){
-			areFieldsFilledIn = false;
-			$("#errorExerciseName").css('display','table-row');
-		}
-		
-		if(exerciseInRoundExerciseId == ""){
-			areFieldsFilledIn = false;
-			$("#errorExerciseId").css('display','table-row');
-		}
-		
-		if(areFieldsFilledIn){
-			$( "#addExerciseInRoundForm" ).submit();			
-		} 
-	});
 	</script>
 </head>
 <body class="gradient" onLoad="enableAddRound()">
@@ -335,7 +339,7 @@ function sortTable() {
 <p>------------------------------------------------------------------------------------------------------------------------------</p>
 
 
-<form style="padding-left:3em" id="addExerciseInRoundForm" th:action="@{/addExerciseInRoundX}" th:object="${exerciseInRoundDTO}" method="POST">
+<form style="padding-left:3em" id="addExerciseInRoundForm" th:action="@{/addExerciseInRound}" th:object="${exerciseInRoundDTO}" method="POST">
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label for="exerciseInRoundExerciseName">Vežba:</label>
@@ -378,7 +382,7 @@ function sortTable() {
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="exerciseInRoundAdd" class="btn btn-success" type="button" name="modeEIR" value="add" disabled="disabled">Dodaj</button>
+			<button id="exerciseInRoundAdd" class="btn btn-success" type="submit" name="modeEIR" value="add" disabled="disabled">Dodaj</button>
 			<button id="exerciseInRoundEdit" class="btn btn-success" type="submit" name="modeEIR" value="edit" disabled="disabled">Izmeni</button>
 		</div>
 	</div>
