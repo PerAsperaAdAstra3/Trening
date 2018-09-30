@@ -13,15 +13,15 @@
 
 	$(document).ready(function(){
 		selectedRound = $("#selectedRoundId").val()
-		if (selectedRound == "")
-			return
-		$("#roundsTable tr").each(function() {
-			roundId = $(this).find(".roundId").text()
-			if (selectedRound == roundId){
-				selectRoundIdOnRowClick(this)
-				return
-			}
-		});
+		if (selectedRound != ''){
+			$("#roundsTable tr").each(function() {
+				roundId = $(this).find(".roundId").text()
+				if (selectedRound == roundId){
+					selectRoundIdOnRowClick(this)
+					return
+				}
+			});
+		}
 		
 		
 		$('#addExerciseInRoundForm').submit(function(){
