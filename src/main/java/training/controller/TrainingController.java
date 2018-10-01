@@ -209,7 +209,6 @@ public class TrainingController {
 		}
 		return "redirect:/getTraining/"+trainingId;
 	}
-
 	
 	//DELETE EXERCISE IN ROUND
 	

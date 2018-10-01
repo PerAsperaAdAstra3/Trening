@@ -7,19 +7,48 @@
 <script src="../../scripts/filterTable.js"></script>
 <meta charset="utf-8"/>
 	<title>Dodavanje treninga</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{../../css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{../../css/style.css}"/>
 <script>
 
 	$(document).ready(function(){
 		selectedRound = $("#selectedRoundId").val()
-		if (selectedRound == "")
-			return
-		$("#roundsTable tr").each(function() {
-			roundId = $(this).find(".roundId").text()
-			if (selectedRound == roundId){
-				selectRoundIdOnRowClick(this)
-				return
+		if (selectedRound != ''){
+			$("#roundsTable tr").each(function() {
+				roundId = $(this).find(".roundId").text()
+				if (selectedRound == roundId){
+					selectRoundIdOnRowClick(this)
+					return
+				}
+			});
+		}
+			
+		$("#errorExerciseName").hide();
+		$("#errorExerciseId").hide();
+		
+		$('#addExerciseInRoundForm').submit(function(){
+		
+		var areFieldsFilledIn = true;
+		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
+		var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
+	
+		$("#errorExerciseName").hide();
+		$("#errorExerciseId").hide();
+		
+		if(exerciseInRoundExerciseName == ""){
+			areFieldsFilledIn = false;
+			$("#errorExerciseName").show();
+		}
+		
+		if(exerciseInRoundExerciseId == ""){
+			areFieldsFilledIn = false;
+			$("#errorExerciseId").show();
+		}
+
+		if(areFieldsFilledIn){	
+	     	 return true;
+			} else {
+				return false;
 			}
 		});
 	});
@@ -228,6 +257,7 @@ function sortTable() {
 	    $("#exerciseInRoundDifficulty").val(difficulty);
 	    
 	}
+	
 	</script>
 </head>
 <body class="gradient" onLoad="enableAddRound()">
@@ -321,6 +351,12 @@ function sortTable() {
 				</div>
 				<div class="col">
 					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled="disabled">Izbor</button>
+				</div>
+				<div class="col">
+					<label id="errorExerciseName" class="errorText"><font color="red"><b>Exercise Name Error message!!</b></font></label>
+				</div>
+				<div class="col">
+					<label id="errorExerciseId" class="errorText"><font color="red"><b>Id Vežbe nema vrednost!!</b></font></label>
 				</div>
 			</div>
 			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
@@ -438,6 +474,5 @@ function sortTable() {
 </div>
 	<input type="hidden" class="id" name="id" th:value="${id}"/>
 </form>
-
 </body>
 </html>
