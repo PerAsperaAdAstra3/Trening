@@ -22,25 +22,27 @@
 				}
 			});
 		}
-		
+			
+		$("#errorExerciseName").hide();
+		$("#errorExerciseId").hide();
 		
 		$('#addExerciseInRoundForm').submit(function(){
 		
 		var areFieldsFilledIn = true;
 		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
 		var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
-		
-		$("#errorExerciseName").css('display','none');
-		$("#errorExerciseId").css('display','none');
+	
+		$("#errorExerciseName").hide();
+		$("#errorExerciseId").hide();
 		
 		if(exerciseInRoundExerciseName == ""){
 			areFieldsFilledIn = false;
-			$("#errorExerciseName").css('display','table-row');
+			$("#errorExerciseName").show();
 		}
 		
 		if(exerciseInRoundExerciseId == ""){
 			areFieldsFilledIn = false;
-			$("#errorExerciseId").css('display','table-row');
+			$("#errorExerciseId").show();
 		}
 
 		if(areFieldsFilledIn){	
@@ -351,10 +353,10 @@ function sortTable() {
 					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled="disabled">Izbor</button>
 				</div>
 				<div class="col">
-					<label id="errorExerciseName" class="errorText" style="display:none;"><font color="red"><b>Exercise Name Error message!!</b></font></label>
+					<label id="errorExerciseName" class="errorText"><font color="red"><b>Exercise Name Error message!!</b></font></label>
 				</div>
 				<div class="col">
-					<label id="errorExerciseId" class="errorText" style="display:none;"><font color="red"><b>Id Vežbe nema vrednost!!</b></font></label>
+					<label id="errorExerciseId" class="errorText"><font color="red"><b>Id Vežbe nema vrednost!!</b></font></label>
 				</div>
 			</div>
 			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
