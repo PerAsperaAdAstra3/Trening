@@ -22,4 +22,6 @@ public interface TrainingService {
 	Training edit(Long id, Training training);
 	
 	Map<Long,Integer> exercisesLastTraining(Training training);
+	
+//	List<Training> getLast3Trainings(Client client);//, Training training);
 }

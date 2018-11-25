@@ -5,10 +5,13 @@
 <script src="../../scripts/bootstrap.min.js"></script>
 <script src="../../scripts/functions.js"></script>
 <script src="../../scripts/filterTable.js"></script>
+<script src="../../scripts/ajaxFunctions.js"></script>
 <meta charset="utf-8"/>
 	<title>Dodavanje treninga</title>
 	<link rel="stylesheet" type="text/css" th:href="@{../../css/bootstrap.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{../../css/style.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{../../css/custom-dropdown.css}"/>
+
 <script>
 
 	$(document).ready(function(){
@@ -22,12 +25,17 @@
 				}
 			});
 		}
-			
+				
 		$("#errorExerciseName").hide();
 		$("#errorExerciseId").hide();
 		
+		$(".exerciseInRoundId").hide();
+		
 		$('#addExerciseInRoundForm').submit(function(){
 		
+		//	ajaxExerciseInRound();
+				
+			
 		var areFieldsFilledIn = true;
 		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
 		var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
@@ -51,6 +59,82 @@
 				return false;
 			}
 		});
+	});
+
+	//Handling of click on Dodaj button.
+	
+	$(document).on("click", "#exerciseInRoundAdd", function() {
+			var areFieldsFilledIn = true;
+			var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
+			var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
+		
+			$("#errorExerciseName").hide();
+			$("#errorExerciseId").hide();
+			
+			if(exerciseInRoundExerciseName == ""){
+			//	areFieldsFilledIn = false;
+			//	$("#errorExerciseName").show();
+			}
+			
+			if(exerciseInRoundExerciseId == ""){
+				areFieldsFilledIn = false;
+				$("#errorExerciseId").show();
+			}
+
+			if(areFieldsFilledIn){	
+				 ajaxExerciseInRound();
+				}
+		});
+	
+	//Handling of click on Izmeni button.
+	// editTraining
+	$(document).on("click", "#exerciseInRoundEdit", function() {
+		var areFieldsFilledIn = true;
+		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
+		var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
+	
+		$("#errorExerciseName").hide();
+		$("#errorExerciseId").hide();
+		
+		if(exerciseInRoundExerciseName == ""){
+		//	areFieldsFilledIn = false;
+		//	$("#errorExerciseName").show();
+		}
+		
+		if(exerciseInRoundExerciseId == ""){
+			areFieldsFilledIn = false;
+			$("#errorExerciseId").show();
+		}
+
+		if(areFieldsFilledIn){	
+			ajaxExerciseInRoundChange();
+			}
+	});
+	
+	
+	
+	//ajaxAddRound   ---- id = noviKrug
+	
+	$(document).on("click", "#noviKrug", function() {
+			ajaxAddRound();
+	});
+	
+	$(document).on("click", "#PDFButton", function() {
+		PDFprintAjax();
+	});
+	
+	
+	$(document).on("click", "#roundDeleteButton", function(event) {
+					var roundId = $(this).parent().parent().find("#roundIdDel").html();
+					ajaxDeleteRound(roundId)
+					$(this).parent().parent().remove();
+			});
+
+	$(document).on("click", "#deleteExerciseInRound", function(event) {
+		var roundId = $(this).parent().parent().find(".exerciseInRoundId").html();
+		ajaxDeleteExerciseInRound(roundId)
+		//ajaxDeleteRound(roundId)
+		$(this).parent().parent().remove();
 	});
 	
 	$(document).on("click", "#exercisesInRoundTable tr", function(event) {
@@ -143,7 +227,31 @@ function sortTable() {
   }
 }
 
+function filterFunction() {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("exerciseInRoundExerciseName");
+    filter = input.value.toUpperCase();
+    div = document.getElementById("myDropdown");
+    a = div.getElementsByTagName("td");
+    for (i = 0; i < a.length; i++) {
+        if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+        } else {
+            a[i].style.display = "none";
+        }
+    }
+}
+
+function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
 /*]]>*/
+	  
+	  	$(document).on("click", "#exerciseInRoundExerciseId", function(event) {
+	  		$("#exerciseInRoundExerciseName").prop("disabled", false);
+			$("#exerciseInRoundAdd").prop("disabled", false);
+	  	});
 	  
 	$(document).on("click", "#modal_button", function(event) {
 		var els = $(".modal-table-coloring");
@@ -166,6 +274,36 @@ function sortTable() {
 			}
 			 console.log(el.tagName);
 		});
+	});
+	
+	$(document).on("click" , ".filterExercises", function(event){
+	
+		var dinamicSelectExerciseId = $(this).find(".dinamicSelectExerciseId").html()
+		var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
+		
+	
+		
+		$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
+		$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
+		
+	
+		
+		document.getElementById("myDropdown").classList.toggle("show");
+		//exerciseInRoundExerciseName	id
+	});
+	
+	$(document).on("click" , "#exerciseInRoundExerciseName", function(event){
+		
+		var dinamicSelectExerciseId = $(this).find(".dinamicSelectExerciseId").html()
+		var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
+		
+		if($("#exerciseInRoundExerciseName").val() == ""){
+			alert('Prazno polje');
+			$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
+			$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
+		}
+			
+		document.getElementById("myDropdown").classList.toggle("show");
 	});
 	
 	$(document).on("click", "#hideTableRows", function(event) {
@@ -201,9 +339,12 @@ function sortTable() {
 	    roundId = item.find(".roundId").html()
 	    $("#addExerciseInRoundForm #hiddenRoundInTraining").val(roundId);
 	    $("#modal_button").prop("disabled", false);
+	    $("#exerciseInRoundExerciseId").prop("disabled", false);
 	    $("#exerciseInRoundNote").prop("disabled", false);
 	    $("#exerciseInRoundNumberOfRepetitions").prop("disabled", false);
-	    $("#exerciseInRoundDifficulty").prop("disabled", false);
+	    $("#exerciseInRoundDifficulty").prop("disabled", false);  
+	    $("#exerciseInRoundExerciseName").prop("disabled", false);
+	    $("#exerciseInRoundAdd").prop("disabled", false);
 	    $("#exercisesInRoundTable .roundId").each(function(){
 	    	if ($(this).html() != roundId)
 	    		$(this).parent().hide()
@@ -249,6 +390,8 @@ function sortTable() {
 	    numberOfRepetitions = item.find(".numberOfRepetitions").html()
 	    exerciseInRoundNote = item.find(".note").html()
 
+	    $("#exerciseInRoundExerciseName").prop("disabled", false);
+	    
 	    $("#exerciseInRoundExerciseName").val(exerciseName);
 	    $("#exerciseInRoundExerciseId").val(exerInRoundExerciseId);
 	    $("#idExerciseInRound").val(exerInRoundId);
@@ -258,6 +401,7 @@ function sortTable() {
 	    
 	}
 	
+
 	</script>
 </head>
 <body class="gradient" onLoad="enableAddRound()">
@@ -269,28 +413,31 @@ function sortTable() {
 	</div>
 <br/>
 
-
 <h2>Dodavanje i izmena treninga</h2>
 
 
 
+<div class="form-group row">
+
+		<div class="col-xs-2">
+		
 <form style="padding-left:3em" th:action="@{/saveTraining}" th:object="${trainingDTO}" method="POST">
 
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<label for="trainingDate">Datum:</label>
+			<label class="label-width" for="trainingDate">Datum:</label>
 			<input type="date" id="trainingDate" class="form-control" th:field="*{date}"/>
 		</div>
   	</div>
   	<div class="form-group row">
 		<div class="col-xs-2">
-			<label for="trainingNumberOfTraining">Redni broj:</label>
+			<label class="label-width" for="trainingNumberOfTraining">Redni broj:</label>
 			<input type="text" id="trainingNumberOfTraining" class="form-control" th:field="*{numberOfTrainings}"/>
 		</div>
   	</div>
   	<div class="form-group row">
 		<div class="col-xs-2">
-			<label for="trainingClient">Klijent:</label>
+			<label class="label-width" for="trainingClient">Klijent:</label>
 			<input type="text" id="trainingClient" class="form-control" th:field="*{client}" disabled="disabled"/>
 		</div>
 	</div>
@@ -300,14 +447,14 @@ function sortTable() {
 	<button id="saveTraining" class="btn btn-success" type="submit" name="mode" value="add">Snimi</button>
 	<button id="editTraining" class="btn btn-success" type="submit" disabled="disabled" name="mode" value="edit">Izmeni</button>
 	<a th:href="@{/deleteTraining/{id}/(id=*{id})}"><button id="deleteTraining" type="button" class="btn btn-danger" disabled="disabled">Briši</button></a>
-	<a th:href="@{/printPDF/{id}/(id=*{id})}"><button id="PDFButton" type="button" class="btn btn-danger" disabled="disabled">PDF</button></a>
+	<button id="PDFButton" type="button" class="btn btn-danger" disabled="disabled">PDF</button>
 </form>
-<p>------------------------------------------------------------------------------------------------------------------------------</p>
+<p>---------------------------------------------------------------</p>
 
 <form  style="padding-left:3em" th:action="@{/addRound}" method="POST">
  	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="noviKrug" class="btn btn-success" type="submit" disabled="disabled">Nova kombinacija</button>
+			<button id="noviKrug" class="btn btn-success" type="button" disabled="disabled">Nova kombinacija</button>
 		</div>
 	</div>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
@@ -329,29 +476,91 @@ function sortTable() {
 			<tbody>
 				<tr	id="round-id-sync" th:each = "round : ${roundsInTraining}">
 					
-					<td class="roundRoundSequenceNumber" th:utext="${round.roundSequenceNumber}" ></td>
-					<td class="roundId" th:utext="${round.id}" style="display:none;"></td> 
-					<td><a th:href="@{/deleteRound/{roundId}/{id}(roundId=${round.id}, id=${id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+					<td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber" th:utext="${round.roundSequenceNumber}" ></td>
+					<td id="roundIdDel" class="roundId" th:utext="${round.id}" style="display:none;"></td> 
+					<td><button id="roundDeleteButton" type="button" class="btn btn-danger">Briši</button></td>
 				</tr>
 			</tbody>
 	</table>
 	<div style="padding-left:3em"><button style="margine-left:3em" class="btn btn-success" id="testingDeselect">Deselektuj</button></div>
 </div>
 
-<p>------------------------------------------------------------------------------------------------------------------------------</p>
+	</div>
+
+	<div class="col-xs-2">
+<!--  trainingListTest  -->
+	<br/>
+		<br/>
+	<table class="table-height">
+		<thead>
+		</thead>
+		<tbody>
+			<tr th:each="training : ${trainingListTest}">
+				<td>
+ <!-- 					<table style="width:100%">
+						<tbody> -->
+					<tr>
+						<td align="center" th:utext="'Trening : ' + ${training.date}"></td>
+					</tr>
+					<tr>
+						<td>-------------------------------------</td>
+					</tr>
+					<tr th:each="round : ${training.rounds}">
+						<td>
+							<table>
+								<tbody>
+									<tr th:each="exerciseInRound : ${round.exerciseInRound}">
+										<td align="left" th:utext="${exerciseInRound.exerciseName}"></td>
+										<td align="left" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
+										<td align="left" th:utext="${exerciseInRound.difficulty}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				
+			<!-- 	</tbody>
+					</table> -->
+				</td>
+			</tr>
+
+		</tbody>
+	</table>
+</div>
+</div>
+
+<p>-----------------------------------------------------------------------------------------------</p>
 
 
 <form style="padding-left:3em" id="addExerciseInRoundForm" th:action="@{/addExerciseInRound}" th:object="${exerciseInRoundDTO}" method="POST">
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<label for="exerciseInRoundExerciseName">Vežba:</label>
-			<div class="form-row">
-			 	<div class="col">
-					<input type="text" class="form-control" size="70" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName" disabled="disabled"/>
-				</div>
-				<div class="col">
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width" for="exerciseInRoundExerciseName">Vežba:</label>
+			  <!--  </div> -->
+			 	
+			 		 
+  		 		 
+					  
+					  <div class="dropdown">
+  		 		 	
+ 						   <input type="text" class="form-control" id="exerciseInRoundExerciseName" disabled="disabled" onkeyup="filterFunction()"/>
+ 						     <div id="myDropdown" class="dropdown-content">
+						   <table>
+						   		<tr class="filterExercises" th:each = "exercise : ${exercises}">
+						   			<td class="dinamicSelectExerciseId" th:utext="${exercise.id}"></td>
+						   			<td class="dinamicSelectExerciseName" th:utext="${exercise.name}"></td>
+						   		</tr>
+						   </table>
+					  </div>
+					  </div>
+					  
+					<input type="hidden" class="form-control" size="70" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName" disabled="disabled"/>
+		<!--		</div>
+				<div class="col"> -->
 					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled="disabled">Izbor</button>
-				</div>
+				
 				<div class="col">
 					<label id="errorExerciseName" class="errorText"><font color="red"><b>Exercise Name Error message!!</b></font></label>
 				</div>
@@ -361,36 +570,68 @@ function sortTable() {
 			</div>
 			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
 		</div>
-	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<!-- TODO NEMA FIELD -->
-			<label for="exerciseInRoundNote">Napomena:</label>
+			<label class="label-width" for="exerciseInRoundNote">Napomena:</label>
 			<input class="form-control" id="exerciseInRoundNote" type="text" th:field="*{note}" disabled="disabled"/>
 		</div>
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<label for="exerciseInRoundNumberOfRepetitions">Broj ponavljanja:</label>
+			<label class="label-width" for="exerciseInRoundNumberOfRepetitions">Broj ponavljanja:</label>
 			<input type="text" class="form-control" id="exerciseInRoundNumberOfRepetitions" th:field="*{numberOfRepetitions}" disabled="disabled"/>
 		</div>
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<!-- Ovde sam mislila na kilazu :) -->
-			<label for="exerciseInRoundDifficulty">Težina:</label>	
+			<label class="label-width" for="exerciseInRoundDifficulty">Težina:</label>	
 			<input type="text" class="form-control" id="exerciseInRoundDifficulty" th:field="*{difficulty}" disabled="disabled"/>
 		</div>
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="exerciseInRoundAdd" class="btn btn-success" type="submit" name="modeEIR" value="add" disabled="disabled">Dodaj</button>
-			<button id="exerciseInRoundEdit" class="btn btn-success" type="submit" name="modeEIR" value="edit" disabled="disabled">Izmeni</button>
+			<button id="exerciseInRoundAdd" class="btn btn-success" type="button" name="modeEIR" value="add" disabled="disabled">Dodaj</button>
+			<button id="exerciseInRoundEdit" class="btn btn-success" type="button" name="modeEIR" value="edit" disabled="disabled">Izmeni</button>
 		</div>
 	</div>
+</div>
+<div class="col-xs-2">
+<!-- 		<form id="deleteExerciseInRoundForm" th:action="@{/deleteExerciseInRound}" method="POST">  -->
+<div class="container-responsive">
+	<table id="exercisesInRoundTable" class = "table table-responsive">
+		<thead>
+			<tr>
+				<th scope="col">Naziv vežbe</th>
+				<th scope="col">Broj ponavljanja</th>
+				<th scope="col">Težina</th>
+				<th scope="col">Napomena</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="hidden_input" id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
+				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
+				<td class="exerciseInRoundId" th:utext="${exerciseInRound.ExecInRound_Id}"></td>
+				<td class="numberOfRepetitions" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
+				<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
+				<td class="note" th:utext="${exerciseInRound.note}"></td>
+				<td class="roundId" th:utext="${exerciseInRound.round.id}" style="display:none;"></td>
+				<td class="exerciseExecId" th:utext="${exerciseInRound.exerciseId}" style="display:none;"></td>
+				<td><button id="deleteExerciseInRound" type="button" class="btn btn-danger">Briši</button></td>
+			</tr>
+		</tbody>
+	</table>
+  </div>
+	<input type="hidden" class="id" name="id" th:value="${id}"/>
+<!-- </form>  --> 
+</div>
+</div>
+
 <input type="hidden" th:field="*{id}" id="idExerciseInRound"/>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
-<input id="hiddenRoundInTraining" type="hidden" th:field="*{roundId}" />
+<input type="hidden" id="hiddenRoundInTraining" th:field="*{roundId}" />
 
 </form>
 
@@ -445,34 +686,5 @@ function sortTable() {
 <br/>
 <br/>
 
-
-<form id="deleteExerciseInRoundForm" th:action="@{/deleteExerciseInRound}" method="POST">
-<div class="container-responsive">
-	<table id="exercisesInRoundTable" class = "table table-responsive">
-		<thead>
-			<tr>
-				<th scope="col">Naziv vežbe</th>
-				<th scope="col">Broj ponavljanja</th>
-				<th scope="col">Težina</th>
-				<th scope="col">Napomena</th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="hidden_input" id="tr-entity-list" th:each = "exerciseInRound : ${exercisesInRound}">
-				<td class="exerciseName" th:utext="${exerciseInRound.exerciseName}"></td>
-				<td class="exerciseInRoundId" th:utext="${exerciseInRound.ExecInRound_Id}" style="display:none;"></td>
-				<td class="numberOfRepetitions" th:utext="${exerciseInRound.numberOfRepetitions}"></td>
-				<td class="difficulty" th:utext="${exerciseInRound.difficulty}"></td>
-				<td class="note" th:utext="${exerciseInRound.note}"></td>
-				<td class="roundId" th:utext="${exerciseInRound.round.id}" style="display:none;"></td>
-				<td class="exerciseExecId" th:utext="${exerciseInRound.exerciseId}" style="display:none;"></td>
-				<td><a th:href="@{/deleteExerciseInRound/{exerciseInRoundId}/{id}(exerciseInRoundId=${exerciseInRound.ExecInRound_Id}, id=${id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-	<input type="hidden" class="id" name="id" th:value="${id}"/>
-</form>
 </body>
 </html>

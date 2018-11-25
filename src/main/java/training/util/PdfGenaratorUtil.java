@@ -19,8 +19,9 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 public class PdfGenaratorUtil {
 	@Autowired
 	private TemplateEngine templateEngine;
-	public void createPdf(String templateName, Map map) throws Exception {
+	public int createPdf(String templateName, Map map) throws Exception {
 		Assert.notNull(templateName, "The templateName can not be null");
+		int isThereError = 0;
 		Context ctx = new Context();
 		if (map != null) {
 		     Iterator itMap = map.entrySet().iterator();
@@ -48,6 +49,9 @@ public class PdfGenaratorUtil {
 	            renderer.createPDF(os, false);
 	            renderer.finishPDF();
 	            System.out.println("PDF created successfully");
+	        }catch (IOException e) {
+	           System.out.println("ERROR OCCURED!!!");
+	           isThereError = 1;
 	        }
 	        finally {
 	            if (os != null) {
@@ -56,5 +60,6 @@ public class PdfGenaratorUtil {
 	                } catch (IOException e) { /*ignore*/ }
 	            }
 	        }
+	   return isThereError;
 	}
 }

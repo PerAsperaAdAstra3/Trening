@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import training.model.Client;
 import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.model.Round;
@@ -150,4 +151,11 @@ public class JpaTrainingService implements TrainingService {
 
 		return mapExerciseIndexes;
 	}
+/*
+	@Override
+	public List<Training> getLast3Trainings(Client  client, Training training) {
+		// TODO Auto-generated method stub
+		List<Training> last3Trainings = trainingRepository.findTop10ByClientIdAndIdLessThanOrderByIdDesc(training.getClient().getId(), training.getId());
+		return last3Trainings;
+	}*/
 }

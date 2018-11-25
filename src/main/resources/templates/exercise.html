@@ -51,20 +51,20 @@
 	   <input type="hidden" th:field="*{id}" id="id" />
 	    <div class="form-group row">
 			<div class="col-xs-2">
-				<label for="name">Naziv :</label>
+				<label class="label-width-1" for="name">Naziv :</label>
 				<input class="form-control" size="50" type="text" th:field="*{name}" id="name" />
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-2">
-				<label for="description">Opis :</label>
+				<label class="label-width-1" for="description">Opis :</label>
 				<textarea class="form-control" cols="55" th:field="*{description}" id="description"></textarea>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-2">
-				<label for="exerciseGroupId">Grupa vežbi :</label>
-				<select  class="selectpicker form-control" data-live-search="true" th:field="*{exerciseGroupId}" id="exerciseGroupId">
+				<label class="label-width-1" for="exerciseGroupId">Grupa vežbi :</label>
+				<select class="selectpicker form-control" data-live-search="true" th:field="*{exerciseGroupId}" id="exerciseGroupId">
 		                         <option th:each="exerciseGroup : ${exerciseGroups}"
 		                            th:value="${exerciseGroup.id}"
 		                            th:utext="${exerciseGroup.name}"/>

@@ -10,6 +10,7 @@ public class indexController {
 
 	@RequestMapping(value = { "/indexSelect" }, method = RequestMethod.GET)
 	public String selectPage(@RequestParam String mode) {
+		int isThereError = 0;
 		if ("exercise".equals(mode)) {
 			String hiddenExerciseGroupId = "-1";
 			return "redirect:/exerciseList/"+hiddenExerciseGroupId;
@@ -19,7 +20,7 @@ public class indexController {
 			return "redirect:/clientList";
 		}
 
-		return "redirect:/trainingList";
+		return "redirect:/trainingList/"+isThereError;
 
 	}
 }

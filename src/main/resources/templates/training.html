@@ -5,6 +5,7 @@
 <script src="../../scripts/bootstrap.min.js"></script>
 <script src="../../scripts/functions.js"></script>
 <script src="../../scripts/filterTable.js"></script>
+<script src="../../scripts/ajaxFunctions.js"></script>
 <meta charset="UTF-8"/>
 <title>Treninzi</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -23,7 +24,70 @@
 	$(document).on("click", "#search", function(event) {
 		$("#hidden_input").css('display','table-row');
 	});
-	
+	  /*<![CDATA[*/	
+		function sortTable() {
+			  var table, rows, switching, i, x, y, shouldSwitch;
+			  table = document.getElementById("training");
+			  switching = true;
+			  /* Make a loop that will continue until
+			  no switching has been done: */
+			  while (switching) {
+			    // Start by saying: no switching is done:
+			    switching = false;
+			    rows = table.rows;
+			    /* Loop through all table rows (except the
+			    first, which contains table headers): */
+			    for (i = 1; i < (rows.length - 1); i++) {
+			      // Start by saying there should be no switching:
+			      shouldSwitch = false;
+			      /* Get the two elements you want to compare,
+			      one from current row and one from the next: */
+			      x = rows[i].getElementsByTagName("TD")[0];
+			      y = rows[i + 1].getElementsByTagName("TD")[0];
+			      // Check if the two rows should switch place:
+			      if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+			        // If so, mark as a switch and break the loop:
+			        shouldSwitch = true;
+			        break;
+			      }
+			    }
+			    if (shouldSwitch) {
+			      /* If a switch has been marked, make the switch
+			      and mark that a switch has been done: */
+			      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+			      switching = true;
+			    }
+			  }
+			  switching = true;
+			  while (switching) {
+				    // Start by saying: no switching is done:
+				    switching = false;
+				    rows = table.rows;
+				    /* Loop through all table rows (except the
+				    first, which contains table headers): */
+				    for (i = 1; i < (rows.length - 1); i++) {
+				      // Start by saying there should be no switching:
+				      shouldSwitch = false;
+				      /* Get the two elements you want to compare,
+				      one from current row and one from the next: */
+				      x = rows[i].getElementsByTagName("TD")[1];
+				      y = rows[i + 1].getElementsByTagName("TD")[1];
+				      // Check if the two rows should switch place:
+				      if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+				        // If so, mark as a switch and break the loop:
+				        shouldSwitch = true;
+				        break;
+				      }
+				    }
+				    if (shouldSwitch) {
+				      /* If a switch has been marked, make the switch
+				      and mark that a switch has been done: */
+				      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+				      switching = true;
+				    }
+				  }
+			}
+		/*]]>*/
 	$(document).on("click", "#copyTrainingButton", function(event) {
 		treID = item.find(".idOfCopiedTraining").html()
 	});
@@ -33,10 +97,23 @@
 		  sessionStorage.scrollTop = $(this).scrollTop();
 		});
 
-		$(document).ready(function() {
+	$(document).ready(function() {
 		  if (sessionStorage.scrollTop != "undefined") {
 		    $(window).scrollTop(sessionStorage.scrollTop);
 		  }
+		  var errorVariable = $("#errorMessage").val();
+		  if(errorVariable == 0){
+			  $("#pdfErrorMessage").hide();
+		  } else {
+			  $("#pdfErrorMessage").show();
+		  }
+		  sortTable()
+		  
+	});
+	
+	$(document).on("click", "#PDFButton", function() {
+		var trainingId = $(this).parent().parent().find(".trainingId").html();
+		PDFprintAjaxListPage(trainingId);
 	});
 		
 	function sync(item){
@@ -56,7 +133,7 @@
 		
 	    $("#name").val(name);
 	    $("#familyName").val(familyName);
-	    $("#id").val(id);
+	    $("#id").val(posleSinca);
 	}
 	
 	function highlightRow1(row){
@@ -144,6 +221,8 @@
 		<input type="text" id="inputFilterNumberOfTrainings" onkeyup="filterTable(1,4)" placeholder="Filtriranje po broju treninga.."/>
 		<input type="text" id="inputFilterClientName" onkeyup="filterTable(2,4)" placeholder="Filtriranje po imenu.."/>
 		<input type="text" id="inputFilterFamilyName" onkeyup="filterTable(3,4)" placeholder="Filtriranje po prezimenu.."/>
+		<input id="errorMessage" type="hidden" th:value="${errorMessage}" name="errorMessage"/>
+        <label id="pdfErrorMessage" class="errorText"><font color="red"><b>PDF fajl koji ste pokušali odštampati je otvoren, štampanje nije uspelo!</b></font></label>
 	<br/>
 	<br/>
 	<br/>
@@ -167,7 +246,7 @@
 			<td class="trainingId" th:utext="${training.id}" style="display:none;"></td>
 			<td><a th:href="@{/getTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-success">Izmeni</button></a></td>
 			<td><a th:href="@{/deleteTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
-			<td><a th:href="@{/printPDF/{id}(id=${training.id})}"><button type="button" class="btn btn-danger">PDF</button></a></td>
+			<td><button id="PDFButton" type="button" class="btn btn-danger">PDF</button></td>
 			<td><button  id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Kopiraj</button></td>
 		</tr>
 	</tbody>
