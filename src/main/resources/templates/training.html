@@ -25,69 +25,42 @@
 		$("#hidden_input").css('display','table-row');
 	});
 	  /*<![CDATA[*/	
-		function sortTable() {
-			  var table, rows, switching, i, x, y, shouldSwitch;
-			  table = document.getElementById("training");
-			  switching = true;
-			  /* Make a loop that will continue until
-			  no switching has been done: */
-			  while (switching) {
-			    // Start by saying: no switching is done:
-			    switching = false;
-			    rows = table.rows;
-			    /* Loop through all table rows (except the
-			    first, which contains table headers): */
-			    for (i = 1; i < (rows.length - 1); i++) {
-			      // Start by saying there should be no switching:
-			      shouldSwitch = false;
-			      /* Get the two elements you want to compare,
-			      one from current row and one from the next: */
-			      x = rows[i].getElementsByTagName("TD")[0];
-			      y = rows[i + 1].getElementsByTagName("TD")[0];
-			      // Check if the two rows should switch place:
-			      if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-			        // If so, mark as a switch and break the loop:
-			        shouldSwitch = true;
-			        break;
-			      }
-			    }
-			    if (shouldSwitch) {
-			      /* If a switch has been marked, make the switch
-			      and mark that a switch has been done: */
-			      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-			      switching = true;
-			    }
-			  }
-			  switching = true;
-			  while (switching) {
-				    // Start by saying: no switching is done:
-				    switching = false;
-				    rows = table.rows;
-				    /* Loop through all table rows (except the
-				    first, which contains table headers): */
-				    for (i = 1; i < (rows.length - 1); i++) {
-				      // Start by saying there should be no switching:
-				      shouldSwitch = false;
-				      /* Get the two elements you want to compare,
-				      one from current row and one from the next: */
-				      x = rows[i].getElementsByTagName("TD")[1];
-				      y = rows[i + 1].getElementsByTagName("TD")[1];
-				      // Check if the two rows should switch place:
-				      if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-				        // If so, mark as a switch and break the loop:
-				        shouldSwitch = true;
-				        break;
-				      }
-				    }
-				    if (shouldSwitch) {
-				      /* If a switch has been marked, make the switch
-				      and mark that a switch has been done: */
-				      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-				      switching = true;
-				    }
-				  }
+
+		function sortByTwoColumns(row1, row2) {
+			var v1, v2, r;
+			v1 = $(row1).find("td:eq(0)").text();
+			v2 = $(row2).find("td:eq(0)").text();
+
+			if(new Date(v1) > new Date(v2))
+			{
+				r = - 1;
+			} else if(new Date(v1) < new Date(v2)) {
+				r = 1;
+			} else { 
+				r = 0;
 			}
+			
+			if(r === 0){
+				v1 = $(row1).find("td:eq(3)").text();
+				v2 = $(row2).find("td:eq(3)").text();
+				if (v1 < v2) {
+			        r = -1;
+			      } else if (v1 > v2) {
+			        r = 1;
+			      } else {
+			        r = 0;
+			      }
+			}
+			return r;
+		}
+		
+		function sortTable(){
+			var rows = $("#training tbody tr").detach().get();
+			rows.sort(sortByTwoColumns);
+			$("#training tbody").append(rows);
+		}
 		/*]]>*/
+		
 	$(document).on("click", "#copyTrainingButton", function(event) {
 		treID = item.find(".idOfCopiedTraining").html()
 	});
@@ -107,8 +80,7 @@
 		  } else {
 			  $("#pdfErrorMessage").show();
 		  }
-		  sortTable()
-		  
+		 sortTable();
 	});
 	
 	$(document).on("click", "#PDFButton", function() {

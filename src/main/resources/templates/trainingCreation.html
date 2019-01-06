@@ -298,12 +298,18 @@ function myFunction() {
 		var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
 		
 		if($("#exerciseInRoundExerciseName").val() == ""){
-			alert('Prazno polje');
 			$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
 			$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
 		}
 			
 		document.getElementById("myDropdown").classList.toggle("show");
+	});
+	//##############
+	//Testing click anywhere
+	//##############
+	$('.ui-widget-overlay').on('click', function() {
+		alert('Novi Test')
+     	$('#exerciseInRoundExerciseName').dialog("close");
 	});
 	
 	$(document).on("click", "#hideTableRows", function(event) {
@@ -549,7 +555,7 @@ function myFunction() {
  						     <div id="myDropdown" class="dropdown-content">
 						   <table>
 						   		<tr class="filterExercises" th:each = "exercise : ${exercises}">
-						   			<td class="dinamicSelectExerciseId" th:utext="${exercise.id}"></td>
+						   			<td class="dinamicSelectExerciseId" th:utext="${exercise.id}" style="display:none;"></td>
 						   			<td class="dinamicSelectExerciseName" th:utext="${exercise.name}"></td>
 						   		</tr>
 						   </table>
