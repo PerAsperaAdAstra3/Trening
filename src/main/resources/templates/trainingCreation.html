@@ -126,15 +126,12 @@
 	
 	$(document).on("click", "#roundDeleteButton", function(event) {
 					var roundId = $(this).parent().parent().find("#roundIdDel").html();
-					ajaxDeleteRound(roundId)
-					$(this).parent().parent().remove();
+					ajaxDeleteRound(roundId, $(this))
 			});
 
 	$(document).on("click", "#deleteExerciseInRound", function(event) {
 		var roundId = $(this).parent().parent().find(".exerciseInRoundId").html();
-		ajaxDeleteExerciseInRound(roundId)
-		//ajaxDeleteRound(roundId)
-		$(this).parent().parent().remove();
+		ajaxDeleteExerciseInRound(roundId, $(this))
 	});
 	
 	$(document).on("click", "#exercisesInRoundTable tr", function(event) {

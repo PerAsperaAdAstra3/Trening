@@ -87,13 +87,7 @@ public class RestTrainingController {
 			obj.put("exerciseExecId", newExerciseInRoundExecId);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			List<String> messageList = new ArrayList<>();
-			StackTraceElement[] trace = e.getStackTrace();
-			for (int i = 0; i < trace.length; i++) {
-				messageList.add(trace[i].toString());
-			}
-			return ResponseEntity.badRequest().body("Desila se greska!!"); // "errorPage";
+			exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
 
@@ -103,7 +97,6 @@ public class RestTrainingController {
 
 		ExerciseInRound exerciseInRound;
 
-		exerciseInRoundDTO.setId(null);
 		exerciseInRound = exerciseInRoundService.save(exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
 		newExerciseInRoundExecId = exerciseInRound.getExecInRound_Id();
 		return exerciseInRound.getRound().getId();
@@ -112,10 +105,6 @@ public class RestTrainingController {
 	private Long editExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
 
 		ExerciseInRound exerciseInRound;
-		
-		System.out.println("exerciseInRoundDTO : " + exerciseInRoundDTO.getId());
-		System.out.println("exerciseInRoundDTO convert : " + exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
-		
 		exerciseInRound = exerciseInRoundService.edit(exerciseInRoundDTO.getId(), exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
 		return exerciseInRound.getRound().getId();
 	}
@@ -125,15 +114,6 @@ public class RestTrainingController {
 
 	@PostMapping(value = { "/changeExerciseInRoundAjax" })
 	public ResponseEntity<?> changeExerciseInRound(@Valid @RequestBody ExerciseInRoundDTOAjax exerciseInRoundDTOAjax) {
-		System.out.println("Change Exercise In Round Ajax");
-		System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundExerciseName());
-		System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundExerciseId());
-		System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundNote());
-		System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundNumberOfRepetitions());
-		System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundDifficulty());
-		System.out.println(exerciseInRoundDTOAjax.getRoundId());
-		System.out.println(exerciseInRoundDTOAjax.getExerciseExecId());
-		System.out.println("Change Exercise In Round Ajax");
 		JSONObject obj = new JSONObject();
 		try {
 			obj.put("exerciseInRoundExerciseName", exerciseInRoundDTOAjax.getExerciseInRoundExerciseName());
@@ -162,31 +142,14 @@ public class RestTrainingController {
 			Long newAddedRoundId = editExerciseInRound(exerciseInRoundDTO, "edit");
 			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
 			obj.put("roundId", newAddedRoundId);
-			obj.put("exerciseExecId", exerciseInRoundDTOAjax.getExerciseExecId()); //trainingId); //newExerciseInRoundExecId); // exerciseExecId
+			obj.put("exerciseExecId", exerciseInRoundDTOAjax.getExerciseExecId());
 			// redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			List<String> messageList = new ArrayList<>();
-			StackTraceElement[] trace = e.getStackTrace();
-			for (int i = 0; i < trace.length; i++) {
-				messageList.add(trace[i].toString());
-			}
-			return ResponseEntity.badRequest().body("Desila se greska!!"); // "errorPage";
+			exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
 
-	}
-
-	private Long changeExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
-
-		ExerciseInRound exerciseInRound;
-
-		exerciseInRoundDTO.setId(null);
-		exerciseInRound = exerciseInRoundService.save(exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
-		newExerciseInRoundExecId = exerciseInRound.getExecInRound_Id();
-
-		return exerciseInRound.getRound().getId();
 	}
 
 	// Add Round video #######################################################
@@ -207,13 +170,7 @@ public class RestTrainingController {
 			obj.put("selectedRoundId", newAddedRoundId);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			List<String> messageList = new ArrayList<>();
-			StackTraceElement[] trace = e.getStackTrace();
-			for (int i = 0; i < trace.length; i++) {
-				messageList.add(trace[i].toString());
-			}
-			return ResponseEntity.badRequest().body("Desila se greska!!"); // "errorPage";
+			exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
 	}
@@ -229,22 +186,12 @@ public class RestTrainingController {
 
 	//DELETE ROUND
 	@PostMapping(value = {"/deleteRoundAjax"})
-	public ResponseEntity<?> deleteRoundAjax(@Valid @RequestBody RoundDTOAjax roundDTOAjax) { //Model model, @PathVariable String roundId, @PathVariable String id){
-		System.out.println("U Delete Round-u smo!!!");
+	public ResponseEntity<?> deleteRoundAjax(@Valid @RequestBody RoundDTOAjax roundDTOAjax) {
 		JSONObject obj = new JSONObject();
-		//obj.put("selectedRoundId", "asdada");
 	try {
-		deleteRound(roundDTOAjax.getId());//roundId);		
+		deleteRound(roundDTOAjax.getId());
 	} catch(Exception e) {
-		e.printStackTrace();
-		List<String> messageList = new ArrayList<>();
-		StackTraceElement[] trace = e.getStackTrace();
-				
-		for(int i=0; i < trace.length; i++ ) {
-			messageList.add(trace[i].toString());
-		}
-	//	model.addAttribute("errorMessage", messageList);
-		return ResponseEntity.badRequest().body("Desila se greska!!"); //return "errorPage";
+		exceptionHandling(e);
 	}
 		//TODO Select the previous round if it exists, the next one is this is the first round
 		// nothing if this is the only round*/
@@ -276,12 +223,13 @@ public class RestTrainingController {
 //		redir.addFlashAttribute("selectedRoundId", exerciseInRound.getRound().getId());
 
 		} catch(Exception e) {
-				e.printStackTrace();
+			exceptionHandling(e);
+/*			e.printStackTrace();
 				List<String> messageList = new ArrayList<>();
 				StackTraceElement[] trace = e.getStackTrace();
 				for(int i=0; i < trace.length; i++ ) {
 				messageList.add(trace[i].toString());
-			}
+			}*/
 	//		model.addAttribute("errorMessage", messageList);
 			//return "errorPage";
 		}
@@ -292,7 +240,6 @@ public class RestTrainingController {
 	public ResponseEntity<?> pdfFromCreatePage(@Valid @RequestBody TrainingDTO trainingDTO) throws Exception{
 		int isThereError = 0;
 		JSONObject obj = new JSONObject();
-		System.out.println("Training DTO get id : " + trainingDTO.getId());
 		try {
 		 Map<String,Object> data = new HashMap<String,Object>();
 		 Training training = trainingService.findOne(trainingDTO.getId());
@@ -329,18 +276,9 @@ public class RestTrainingController {
 		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 
 	} catch(Exception e) {
-		e.printStackTrace();
-		List<String> messageList = new ArrayList<>();
-		StackTraceElement[] trace = e.getStackTrace();
-		for(int i=0; i < trace.length; i++ ) {
-			messageList.add(trace[i].toString());
-		}
-		return ResponseEntity.badRequest().body("Desila se greska!!"); 
-	//	model.addAttribute("errorMessage", messageList);
-	//	return "errorPage";
+		exceptionHandling(e);
 	}
 		 
-	//	 return "redirect:/trainingList/"+isThereError;
 		return ResponseEntity.ok(obj.toString());
 	}
 
@@ -357,4 +295,13 @@ public class RestTrainingController {
 		return imePrezime;
 	}
 	
+	private ResponseEntity<String> exceptionHandling(Exception e) {
+		e.printStackTrace();
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for (int i = 0; i < trace.length; i++) {
+			messageList.add(trace[i].toString());
+		}
+		return ResponseEntity.badRequest().body("Desila se greska!!");
+	}
 }

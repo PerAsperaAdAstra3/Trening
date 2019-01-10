@@ -34,7 +34,6 @@ public class PdfGenaratorUtil {
 		String processedHtml = templateEngine.process(templateName, ctx);
 		  FileOutputStream os = null;
 		  String fileName = UUID.randomUUID().toString();
-		  System.out.println(fileName);
 	        try {
 
 	        	String home = System.getProperty("user.home");
@@ -48,9 +47,7 @@ public class PdfGenaratorUtil {
 	            renderer.layout();
 	            renderer.createPDF(os, false);
 	            renderer.finishPDF();
-	            System.out.println("PDF created successfully");
 	        }catch (IOException e) {
-	           System.out.println("ERROR OCCURED!!!");
 	           isThereError = 1;
 	        }
 	        finally {

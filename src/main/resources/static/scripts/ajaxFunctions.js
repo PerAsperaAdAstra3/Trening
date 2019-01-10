@@ -46,9 +46,6 @@ function ajaxExerciseInRoundChange(){
 	
 	var roundExerciseId = $("#exerciseInRoundExerciseId").val();
 	
-	//exerciseInRound["exerciseInRoundExerciseName"] = $("#exerciseInRoundExerciseId option[value='"+ roundExerciseId +"']").text()
-	var blaa = $("#exerciseInRoundExerciseName").val();
-	
 	exerciseInRound["exerciseInRoundExerciseName"] = $("#exerciseInRoundExerciseName").val();
 	exerciseInRound["exerciseInRoundExerciseId"] = $("#exerciseInRoundExerciseId").val();
 	exerciseInRound["idExerciseInRound"] = $("#idExerciseInRound").val();
@@ -144,7 +141,7 @@ $.ajax({
 
 }
 
-function ajaxDeleteRound(roundId){	
+function ajaxDeleteRound(roundId, thisObject){	
 	var round = {}
 	
 	round["id"] = roundId;
@@ -158,7 +155,7 @@ function ajaxDeleteRound(roundId){
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-
+			thisObject.parent().parent().remove();
 		},
 		error: function (e) {
 
@@ -168,7 +165,7 @@ function ajaxDeleteRound(roundId){
 
 // AJAX Delete Exercise In Round
 
-function ajaxDeleteExerciseInRound(roundId){
+function ajaxDeleteExerciseInRound(roundId, thisObject){
 	
 	var round = {}
 	round["id"] = roundId;
@@ -182,7 +179,7 @@ function ajaxDeleteExerciseInRound(roundId){
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-
+			thisObject.parent().parent().remove();
 		},
 		error: function (e) {
 

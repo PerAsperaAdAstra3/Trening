@@ -80,7 +80,6 @@ public class TrainingController {
 	
 	@RequestMapping(value = { "/trainingList/{isThereError}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable int isThereError) {
-		System.out.println("Error code : "+ isThereError);
 	try {
 		
 		model.addAttribute("trainingDTO", new TrainingDTO());
