@@ -396,7 +396,7 @@ public class TrainingController {
 		try {
 		 Map<String,Object> data = new HashMap<String,Object>();
 		 Training training = trainingService.findOne(Long.parseLong(id));
-		 String imePrezime = training.getClient().getName() + " " + training.getClient().getFamilyName();
+		 String nameSurname = training.getClient().getName() + " " + training.getClient().getFamilyName();
 		 String date = training.getDate().toString();
 		 String[] parts = date.split(" ");
 		 
@@ -417,11 +417,11 @@ public class TrainingController {
 		 
 		 date = parts[0];
 		 // Page Title/header
-		 String trainingNumber = ""+training.getNumberOfTrainings();
+		 String trainingNumber = "" + training.getNumberOfTrainings();
 
-		 imePrezime = filterLocalCharacters(imePrezime);
+		 nameSurname = filterLocalCharacters(nameSurname);
 		 
-		 data.put("name", imePrezime);
+		 data.put("name", nameSurname);
 		 data.put("trainingNumber", trainingNumber);
 		 data.put("date", date);
 		 data.put("exercisesInRoundMap", exercisesInRoundMap);
@@ -448,7 +448,7 @@ public class TrainingController {
 		try {
 		 Map<String,Object> data = new HashMap<String,Object>();
 		 Training training = trainingService.findOne(Long.parseLong(id));
-		 String imePrezime = training.getClient().getName() + " " + training.getClient().getFamilyName();
+		 String nameSurname = training.getClient().getName() + " " + training.getClient().getFamilyName();
 		 String date = training.getDate().toString();
 		 String[] parts = date.split(" ");
 		 
@@ -469,11 +469,11 @@ public class TrainingController {
 		 
 		 date = parts[0];
 		 // Page Title/header
-		 String trainingNumber = ""+training.getNumberOfTrainings();
+		 String trainingNumber = "" + training.getNumberOfTrainings();
 
-		 imePrezime = filterLocalCharacters(imePrezime);
+		 nameSurname = filterLocalCharacters(nameSurname);
 		 
-		 data.put("name", imePrezime);
+		 data.put("name", nameSurname);
 		 data.put("trainingNumber", trainingNumber);
 		 data.put("date", date);
 		 data.put("exercisesInRoundMap", exercisesInRoundMap);
@@ -549,17 +549,17 @@ public class TrainingController {
 		return "redirect:/getTraining/"+newTrainingId;
 	}
 	
-	private String filterLocalCharacters(String imePrezime) {
+	private String filterLocalCharacters(String nameSurname) {
 		
-		 imePrezime = imePrezime.replaceAll("ć", "c");
-		 imePrezime = imePrezime.replaceAll("đ", "dj");
-		 imePrezime = imePrezime.replaceAll("č", "c");
+		 nameSurname = nameSurname.replaceAll("ć", "c");
+		 nameSurname = nameSurname.replaceAll("đ", "dj");
+		 nameSurname = nameSurname.replaceAll("č", "c");
 
-		 imePrezime = imePrezime.replaceAll("Ć", "C");
-		 imePrezime = imePrezime.replaceAll("Đ", "Dj");
-		 imePrezime = imePrezime.replaceAll("Č", "C");
+		 nameSurname = nameSurname.replaceAll("Ć", "C");
+		 nameSurname = nameSurname.replaceAll("Đ", "Dj");
+		 nameSurname = nameSurname.replaceAll("Č", "C");
 		 
-		return imePrezime;
+		return nameSurname;
 	}
 	
 	private Long getNumberOfTrainings(Long clinetId) {

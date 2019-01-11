@@ -28,14 +28,10 @@
 				
 		$("#errorExerciseName").hide();
 		$("#errorExerciseId").hide();
-		
 		$(".exerciseInRoundId").hide();
 		
 		$('#addExerciseInRoundForm').submit(function(){
 		
-		//	ajaxExerciseInRound();
-				
-			
 		var areFieldsFilledIn = true;
 		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
 		var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
@@ -70,12 +66,7 @@
 		
 			$("#errorExerciseName").hide();
 			$("#errorExerciseId").hide();
-			
-			if(exerciseInRoundExerciseName == ""){
-			//	areFieldsFilledIn = false;
-			//	$("#errorExerciseName").show();
-			}
-			
+					
 			if(exerciseInRoundExerciseId == ""){
 				areFieldsFilledIn = false;
 				$("#errorExerciseId").show();
@@ -96,11 +87,6 @@
 		$("#errorExerciseName").hide();
 		$("#errorExerciseId").hide();
 		
-		if(exerciseInRoundExerciseName == ""){
-		//	areFieldsFilledIn = false;
-		//	$("#errorExerciseName").show();
-		}
-		
 		if(exerciseInRoundExerciseId == ""){
 			areFieldsFilledIn = false;
 			$("#errorExerciseId").show();
@@ -110,8 +96,6 @@
 			ajaxExerciseInRoundChange();
 			}
 	});
-	
-	
 	
 	//ajaxAddRound   ---- id = noviKrug
 	
@@ -278,15 +262,10 @@ function myFunction() {
 		var dinamicSelectExerciseId = $(this).find(".dinamicSelectExerciseId").html()
 		var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
 		
-	
-		
 		$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
 		$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
 		
-	
-		
 		document.getElementById("myDropdown").classList.toggle("show");
-		//exerciseInRoundExerciseName	id
 	});
 	
 	$(document).on("click" , "#exerciseInRoundExerciseName", function(event){
@@ -494,14 +473,14 @@ function myFunction() {
 <!--  trainingListTest  -->
 	<br/>
 		<br/>
-	<table class="table-height">
+	<table>
 		<thead>
 		</thead>
 		<tbody>
 			<tr th:each="training : ${trainingListTest}">
 				<td>
- <!-- 					<table style="width:100%">
-						<tbody> -->
+				<table>
+					<tbody>
 					<tr>
 						<td align="center" th:utext="'Trening : ' + ${training.date}"></td>
 					</tr>
@@ -521,12 +500,10 @@ function myFunction() {
 							</table>
 						</td>
 					</tr>
-				
-			<!-- 	</tbody>
-					</table> -->
+					</tbody>
+				</table>
 				</td>
 			</tr>
-
 		</tbody>
 	</table>
 </div>

@@ -2,10 +2,7 @@
 function ajaxExerciseInRound(){
 
 	var exerciseInRound = {}
-	
 	var roundExerciseId = $("#exerciseInRoundExerciseId").val();
-	
-//	exerciseInRound["exerciseInRoundExerciseName"] = $("#exerciseInRoundExerciseId option[value='"+ roundExerciseId +"']").text()
 	
 	exerciseInRound["exerciseInRoundExerciseName"] = $("#exerciseInRoundExerciseName").val();
 	exerciseInRound["exerciseInRoundExerciseId"] = $("#exerciseInRoundExerciseId").val();
@@ -158,7 +155,7 @@ function ajaxDeleteRound(roundId, thisObject){
 			thisObject.parent().parent().remove();
 		},
 		error: function (e) {
-
+			alert('Desila se greska prilikom brisanja kruga iz Ajax-a!')
 		}
 	})
 }
@@ -182,7 +179,7 @@ function ajaxDeleteExerciseInRound(roundId, thisObject){
 			thisObject.parent().parent().remove();
 		},
 		error: function (e) {
-
+			alert('Desila se greska prilikom brisanja vežbe u krugu!')
 		}
 	})
 }

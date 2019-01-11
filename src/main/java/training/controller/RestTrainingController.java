@@ -143,7 +143,6 @@ public class RestTrainingController {
 			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
 			obj.put("roundId", newAddedRoundId);
 			obj.put("exerciseExecId", exerciseInRoundDTOAjax.getExerciseExecId());
-			// redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
 
 		} catch (Exception e) {
 			exceptionHandling(e);
@@ -154,7 +153,6 @@ public class RestTrainingController {
 
 	// Add Round video #######################################################
 
-	// public ResponseEntity<?> add
 	// Adding a round in to Training
 	@PostMapping(value = { "/addRoundAjax" })
 	public ResponseEntity<?> addRound(@Valid @RequestBody RoundDTOAjax roundDTOAjax) {
@@ -162,13 +160,9 @@ public class RestTrainingController {
 		JSONObject obj = new JSONObject();
 
 		try {
-
 			Long newAddedRoundId = addRoundCalc(roundDTOAjax.getId());
-			// redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
-
 			obj.put("roundRoundSequenceNumber", roundService.findOne(newAddedRoundId).getRoundSequenceNumber());
 			obj.put("selectedRoundId", newAddedRoundId);
-
 		} catch (Exception e) {
 			exceptionHandling(e);
 		}
@@ -196,7 +190,6 @@ public class RestTrainingController {
 		//TODO Select the previous round if it exists, the next one is this is the first round
 		// nothing if this is the only round*/
 		return ResponseEntity.ok(obj.toString());
-	//	return "redirect:/getTraining/"+roundDTOAjax.getId();
 	}
 	
 	private void deleteRound(String id) {
@@ -218,20 +211,9 @@ public class RestTrainingController {
 	public ResponseEntity<?> delete(@Valid @RequestBody RoundDTOAjax roundDTOAjax){
 		JSONObject obj = new JSONObject();
 		try {
-			
-		ExerciseInRound exerciseInRound = exerciseInRoundService.delete(Long.parseLong(roundDTOAjax.getId()));
-//		redir.addFlashAttribute("selectedRoundId", exerciseInRound.getRound().getId());
-
+			ExerciseInRound exerciseInRound = exerciseInRoundService.delete(Long.parseLong(roundDTOAjax.getId()));
 		} catch(Exception e) {
 			exceptionHandling(e);
-/*			e.printStackTrace();
-				List<String> messageList = new ArrayList<>();
-				StackTraceElement[] trace = e.getStackTrace();
-				for(int i=0; i < trace.length; i++ ) {
-				messageList.add(trace[i].toString());
-			}*/
-	//		model.addAttribute("errorMessage", messageList);
-			//return "errorPage";
 		}
 		 return ResponseEntity.ok(obj.toString());
 	}
@@ -243,7 +225,7 @@ public class RestTrainingController {
 		try {
 		 Map<String,Object> data = new HashMap<String,Object>();
 		 Training training = trainingService.findOne(trainingDTO.getId());
-		 String imePrezime = training.getClient().getName() + " " + training.getClient().getFamilyName();
+		 String nameSurname = training.getClient().getName() + " " + training.getClient().getFamilyName();
 		 String date = training.getDate().toString();
 		 String[] parts = date.split(" ");
 		 
@@ -258,17 +240,16 @@ public class RestTrainingController {
 				 exerciseInRound.setNote(filterLocalCharacters(exerciseInRound.getNote()));
 				 exerciseInRound.setNumberOfRepetitions(filterLocalCharacters(exerciseInRound.getNumberOfRepetitions()));
 			 }
-			 
 			 exercisesInRoundMap.put(new Long(roundIter.getRoundSequenceNumber()) , roundIter.getExerciseInRound());
 		 }
 		 
 		 date = parts[0];
 		 // Page Title/header
-		 String trainingNumber = ""+training.getNumberOfTrainings();
+		 String trainingNumber = "" + training.getNumberOfTrainings();
 
-		 imePrezime = filterLocalCharacters(imePrezime);
+		 nameSurname = filterLocalCharacters(nameSurname);
 		 
-		 data.put("name", imePrezime);
+		 data.put("name", nameSurname);
 		 data.put("trainingNumber", trainingNumber);
 		 data.put("date", date);
 		 data.put("exercisesInRoundMap", exercisesInRoundMap);
@@ -282,25 +263,25 @@ public class RestTrainingController {
 		return ResponseEntity.ok(obj.toString());
 	}
 
-	private String filterLocalCharacters(String imePrezime) {
+	private String filterLocalCharacters(String nameSurname) {
 		
-		 imePrezime = imePrezime.replaceAll("ć", "c");
-		 imePrezime = imePrezime.replaceAll("đ", "dj");
-		 imePrezime = imePrezime.replaceAll("č", "c");
+		 nameSurname = nameSurname.replaceAll("ć", "c");
+		 nameSurname = nameSurname.replaceAll("đ", "dj");
+		 nameSurname = nameSurname.replaceAll("č", "c");
 
-		 imePrezime = imePrezime.replaceAll("Ć", "C");
-		 imePrezime = imePrezime.replaceAll("Đ", "Dj");
-		 imePrezime = imePrezime.replaceAll("Č", "C");
+		 nameSurname = nameSurname.replaceAll("Ć", "C");
+		 nameSurname = nameSurname.replaceAll("Đ", "Dj");
+		 nameSurname = nameSurname.replaceAll("Č", "C");
 		 
-		return imePrezime;
+		return nameSurname;
 	}
 	
 	private ResponseEntity<String> exceptionHandling(Exception e) {
 		e.printStackTrace();
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
-		for (int i = 0; i < trace.length; i++) {
-			messageList.add(trace[i].toString());
+		for(StackTraceElement traceTemp : trace) {
+			messageList.add(traceTemp.toString());
 		}
 		return ResponseEntity.badRequest().body("Desila se greska!!");
 	}
