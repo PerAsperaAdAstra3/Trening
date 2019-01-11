@@ -394,7 +394,7 @@ public class TrainingController {
 	public String pdf(Model model, @PathVariable String id) throws Exception{
 		int isThereError = 0;
 		try {
-		 Map<String,Object> data = new HashMap<String,Object>();
+		 Map<String, Object> data = new HashMap<String, Object>();
 		 Training training = trainingService.findOne(Long.parseLong(id));
 		 String nameSurname = training.getClient().getName() + " " + training.getClient().getFamilyName();
 		 String date = training.getDate().toString();
@@ -446,7 +446,7 @@ public class TrainingController {
 	public String pdfFromCreatePage(Model model, @PathVariable String id, @PathVariable String pageSource) throws Exception{
 		int isThereError = 0;
 		try {
-		 Map<String,Object> data = new HashMap<String,Object>();
+		 Map<String, Object> data = new HashMap<String, Object>();
 		 Training training = trainingService.findOne(Long.parseLong(id));
 		 String nameSurname = training.getClient().getName() + " " + training.getClient().getFamilyName();
 		 String date = training.getDate().toString();

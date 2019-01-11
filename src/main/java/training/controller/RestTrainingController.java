@@ -223,7 +223,7 @@ public class RestTrainingController {
 		int isThereError = 0;
 		JSONObject obj = new JSONObject();
 		try {
-		 Map<String,Object> data = new HashMap<String,Object>();
+		 Map<String, Object> data = new HashMap<String, Object>();
 		 Training training = trainingService.findOne(trainingDTO.getId());
 		 String nameSurname = training.getClient().getName() + " " + training.getClient().getFamilyName();
 		 String date = training.getDate().toString();
