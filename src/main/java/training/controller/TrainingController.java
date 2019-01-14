@@ -78,9 +78,8 @@ public class TrainingController {
 	@Autowired
 	private ClientToClientDTO clientToClientDTO;
 	
-	@RequestMapping(value = { "/trainingList" }, method = RequestMethod.GET)
-	public String getTrainings(Model model) {
-		
+	@RequestMapping(value = { "/trainingList/{isThereError}" }, method = RequestMethod.GET)
+	public String getTrainings(Model model, @PathVariable int isThereError) {
 	try {
 		
 		model.addAttribute("trainingDTO", new TrainingDTO());
@@ -88,6 +87,7 @@ public class TrainingController {
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		model.addAttribute("idOfCopiedTraining","");
 		model.addAttribute("idOfClientToCopyTo","");
+		model.addAttribute("errorMessage",isThereError);
 			
 	} catch(Exception e) {
 		e.printStackTrace();
@@ -100,6 +100,7 @@ public class TrainingController {
 	
 	@RequestMapping(value = { "/deleteTraining/{id}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable String id) {
+		int isThereError = 0;
 	try {
 		
 		trainingService.delete(Long.parseLong(id));
@@ -115,7 +116,7 @@ public class TrainingController {
 		return "errorPage";
 	}
 		
-		return "redirect:/trainingList";
+		return "redirect:/trainingList/"+isThereError;
 	}
 
 	//Initialization of TrainingCreation page
@@ -125,6 +126,7 @@ public class TrainingController {
 	
 	try {
 		
+		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId));
 		model.addAttribute("trainingDTO", createTraining(clientId));
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 		
@@ -139,6 +141,24 @@ public class TrainingController {
 		return "errorPage";
 	}
 		return "trainingCreation";
+	}
+	
+	private List<Training> tablesShowingOldTrainings(String clientId){
+		Client client = clientService.findOne(Long.parseLong(clientId));
+		List<Training> trainingList = client.getTrainingList();
+	
+		List<Training> trainingListTest = new ArrayList<Training>();
+		if(trainingList.size() > 0 && trainingList.size() < 2) {
+			trainingListTest.add(trainingList.get(trainingList.size() - 1));
+		}
+		if(trainingList.size() > 1 && trainingList.size() < 3) {
+			trainingListTest.add(trainingList.get(trainingList.size() - 2));
+			}
+		if(trainingList.size() > 2 && trainingList.size() < 4) {
+			trainingListTest.add(trainingList.get(trainingList.size() - 3));
+		}
+		
+		return trainingListTest;
 	}
 	
 	@RequestMapping(value = { "/saveTraining"}, method = RequestMethod.POST)
@@ -348,6 +368,7 @@ public class TrainingController {
 			for (Round roundIter : training.getRounds()) {
 				listExerciseInRound.addAll(roundIter.getExerciseInRound());
 			}
+			model.addAttribute("trainingListTest", tablesShowingOldTrainings(training.getClient().getId().toString()));
 			model.addAttribute("id", id);
 			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
 			model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
@@ -371,11 +392,11 @@ public class TrainingController {
 	
 	@RequestMapping(value = {"/printPDF/{id}"}, method = RequestMethod.GET)
 	public String pdf(Model model, @PathVariable String id) throws Exception{
-		
+		int isThereError = 0;
 		try {
-		 Map<String,Object> data = new HashMap<String,Object>();
+		 Map<String, Object> data = new HashMap<String, Object>();
 		 Training training = trainingService.findOne(Long.parseLong(id));
-		 String imePrezime = training.getClient().getName() + " " + training.getClient().getFamilyName();
+		 String nameSurname = training.getClient().getName() + " " + training.getClient().getFamilyName();
 		 String date = training.getDate().toString();
 		 String[] parts = date.split(" ");
 		 
@@ -396,16 +417,16 @@ public class TrainingController {
 		 
 		 date = parts[0];
 		 // Page Title/header
-		 String trainingNumber = ""+training.getNumberOfTrainings();
+		 String trainingNumber = "" + training.getNumberOfTrainings();
 
-		 imePrezime = filterLocalCharacters(imePrezime);
+		 nameSurname = filterLocalCharacters(nameSurname);
 		 
-		 data.put("name", imePrezime);
+		 data.put("name", nameSurname);
 		 data.put("trainingNumber", trainingNumber);
 		 data.put("date", date);
 		 data.put("exercisesInRoundMap", exercisesInRoundMap);
 		 		 		 
-		 pdfGenaratorUtil.createPdf("PDFTemplate",data); 
+		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 
 	} catch(Exception e) {
 		e.printStackTrace();
@@ -418,9 +439,61 @@ public class TrainingController {
 		return "errorPage";
 	}
 		 
-		 return "redirect:/trainingList";
+		 return "redirect:/trainingList/"+isThereError;
 	}
 
+	@RequestMapping(value = {"/printPDF/{id}/{pageSource}"}, method = RequestMethod.GET)
+	public String pdfFromCreatePage(Model model, @PathVariable String id, @PathVariable String pageSource) throws Exception{
+		int isThereError = 0;
+		try {
+		 Map<String, Object> data = new HashMap<String, Object>();
+		 Training training = trainingService.findOne(Long.parseLong(id));
+		 String nameSurname = training.getClient().getName() + " " + training.getClient().getFamilyName();
+		 String date = training.getDate().toString();
+		 String[] parts = date.split(" ");
+		 
+		 List<Round> rounds = training.getRounds();
+		 
+		 Map<Long,List<ExerciseInRound>> exercisesInRoundMap = new HashMap<Long,List<ExerciseInRound>>();
+		 		 
+		 for(Round roundIter : rounds) {
+			 for(ExerciseInRound exerciseInRound : roundIter.getExerciseInRound()) {
+				 exerciseInRound.setDifficulty(filterLocalCharacters(exerciseInRound.getDifficulty()));
+				 exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExerciseName()));
+				 exerciseInRound.setNote(filterLocalCharacters(exerciseInRound.getNote()));
+				 exerciseInRound.setNumberOfRepetitions(filterLocalCharacters(exerciseInRound.getNumberOfRepetitions()));
+			 }
+			 
+			 exercisesInRoundMap.put(new Long(roundIter.getRoundSequenceNumber()) , roundIter.getExerciseInRound());
+		 }
+		 
+		 date = parts[0];
+		 // Page Title/header
+		 String trainingNumber = "" + training.getNumberOfTrainings();
+
+		 nameSurname = filterLocalCharacters(nameSurname);
+		 
+		 data.put("name", nameSurname);
+		 data.put("trainingNumber", trainingNumber);
+		 data.put("date", date);
+		 data.put("exercisesInRoundMap", exercisesInRoundMap);
+		 		 		 
+		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
+		 
+	} catch(Exception e) {
+		e.printStackTrace();
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for(int i=0; i < trace.length; i++ ) {
+			messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
+		 
+		 return "redirect:/trainingList/"+isThereError;
+	}
+	
 	@RequestMapping(value = {"/copyTraining"}, method = RequestMethod.GET)
 	public String copyTraining(Model model, @RequestParam String idOfClientToCopyTo, @RequestParam String idOfCopiedTraining){
 		Long newTrainingId = -1l;
@@ -476,17 +549,17 @@ public class TrainingController {
 		return "redirect:/getTraining/"+newTrainingId;
 	}
 	
-	private String filterLocalCharacters(String imePrezime) {
+	private String filterLocalCharacters(String nameSurname) {
 		
-		 imePrezime = imePrezime.replaceAll("ć", "c");
-		 imePrezime = imePrezime.replaceAll("đ", "dj");
-		 imePrezime = imePrezime.replaceAll("č", "c");
+		 nameSurname = nameSurname.replaceAll("ć", "c");
+		 nameSurname = nameSurname.replaceAll("đ", "dj");
+		 nameSurname = nameSurname.replaceAll("č", "c");
 
-		 imePrezime = imePrezime.replaceAll("Ć", "C");
-		 imePrezime = imePrezime.replaceAll("Đ", "Dj");
-		 imePrezime = imePrezime.replaceAll("Č", "C");
+		 nameSurname = nameSurname.replaceAll("Ć", "C");
+		 nameSurname = nameSurname.replaceAll("Đ", "Dj");
+		 nameSurname = nameSurname.replaceAll("Č", "C");
 		 
-		return imePrezime;
+		return nameSurname;
 	}
 	
 	private Long getNumberOfTrainings(Long clinetId) {

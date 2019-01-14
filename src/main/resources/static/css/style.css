@@ -1,9 +1,9 @@
 h1 {
-    color:#003600;
+    color:#000000;
 }
  
 h2 {
-    color:#00AA00;
+    color:#000000;
     margin-left: 35px;
 }
 
@@ -41,13 +41,44 @@ table {
 
 .button1 {width: 220px;
 		  height: 220px;
-		  background: #DD6624;;
+		  color: #fff;
+	      background-color: #28a745;
+	      border-color: #28a745;
 		  }
 
-.div1 { background: #00AA00}
+.div1 { background: #dcdcdc}
 
-.gradient {background: linear-gradient(to top left, white 10%, orange 70%);}
+.gradient {background: linear-gradient(to top left, white 10%, #B8B8B8 70%);}
 
-.gradient1 {background: linear-gradient(to left, white 10%, orange 70%);}
+.gradient1 {background: linear-gradient(to left, white 10%, #B8B8B8 70%);}
+
+.tableX, .tdX {
+	border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.calc td:nth-child(1) {
+  width: 200px;
+}
+.calc td:nth-child(2) {
+  width: 200px;
+}
+.calc td:nth-child(3) {
+  width: 200px;
+}
+
+.label-width {
+	width: 150px;
+}
+
+.label-width-1 {
+	width: 100px;
+}
+
+.table-height {
+	       overflow-y:scroll;
+  		   height:500px;
+		   display:block;
+}
 
 #search { float: right };
