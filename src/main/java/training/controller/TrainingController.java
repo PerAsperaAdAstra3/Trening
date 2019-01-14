@@ -148,13 +148,12 @@ public class TrainingController {
 		List<Training> trainingList = client.getTrainingList();
 	
 		List<Training> trainingListTest = new ArrayList<Training>();
-		if(trainingList.size() > 0 && trainingList.size() < 2) {
+		
+		if(trainingList.size() <= 3) {
+			trainingListTest.addAll(trainingList);
+		} else {
 			trainingListTest.add(trainingList.get(trainingList.size() - 1));
-		}
-		if(trainingList.size() > 1 && trainingList.size() < 3) {
 			trainingListTest.add(trainingList.get(trainingList.size() - 2));
-			}
-		if(trainingList.size() > 2 && trainingList.size() < 4) {
 			trainingListTest.add(trainingList.get(trainingList.size() - 3));
 		}
 		
