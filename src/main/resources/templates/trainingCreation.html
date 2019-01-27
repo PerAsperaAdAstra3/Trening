@@ -132,6 +132,7 @@
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow1(this)
 		selectRoundIdOnRowClick(this)
+		filterFunction()
 		enableExerciseInRoundEdit()
 	});
 
@@ -139,6 +140,7 @@
 	$(document).on("click", "#tr-entity-list-modal", function(event) {
 		highlightRow(this)
 		$('#myModal').modal('hide')
+		filterFunction()
 		disableExerciseInRoundEdit()
 	});
 	
@@ -255,6 +257,7 @@ function myFunction() {
 			}
 			 console.log(el.tagName);
 		});
+		document.getElementById("myDropdown").classList.toggle("show");
 	});
 	
 	$(document).on("click" , ".filterExercises", function(event){
@@ -277,9 +280,22 @@ function myFunction() {
 			$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
 			$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
 		}
-			
-		document.getElementById("myDropdown").classList.toggle("show");
+
+		if($("#exerciseInRoundExerciseName").val() != ""){			
+			document.getElementById("myDropdown").classList.toggle("show");
+		}
 	});
+	
+	$(document).on("change keyup paste", "#exerciseInRoundExerciseName", function(event) {
+		if($("#myDropdown").is(":visible") == false){
+				document.getElementById("myDropdown").classList.toggle("show");
+			} else {
+				if($("#exerciseInRoundExerciseName").val() == ""){		
+						document.getElementById("myDropdown").classList.toggle("show");
+					}
+			}
+		});
+	
 	//##############
 	//Testing click anywhere
 	//##############
@@ -521,7 +537,7 @@ function myFunction() {
 					  
 					  <div class="dropdown">
   		 		 	
- 						   <input type="text" class="form-control" id="exerciseInRoundExerciseName" disabled="disabled" onkeyup="filterFunction()"/>
+ 						   <input type="text" class="form-control" id="exerciseInRoundExerciseName" autocomplete="off" disabled="disabled" onkeyup="filterFunction()"/>
  						     <div id="myDropdown" class="dropdown-content">
 						   <table>
 						   		<tr class="filterExercises" th:each = "exercise : ${exercises}">

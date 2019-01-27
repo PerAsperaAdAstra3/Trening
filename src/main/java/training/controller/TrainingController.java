@@ -152,7 +152,26 @@ public class TrainingController {
 			trainingListTest.addAll(trainingList);
 		} else {
 			for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
-				trainingListTest.add(trainingList.get(i));
+				trainingListTest.add(0, trainingList.get(i));
+			}
+		}
+		return trainingListTest;
+	}
+	
+	private List<Training> tablesShowingOldTrainings(String clientId, String trainingId){
+		Client client = clientService.findOne(Long.parseLong(clientId));
+		List<Training> trainingList = client.getTrainingList();
+		if(!trainingId.equals("") || trainingId != null) {
+			trainingList.remove(trainingList.size() - 1);
+		}
+		
+		List<Training> trainingListTest = new ArrayList<Training>();
+		
+		if(trainingList.size() <= 3) {
+			trainingListTest.addAll(trainingList);
+		} else {
+			for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
+				trainingListTest.add(0, trainingList.get(i));
 			}
 		}
 		return trainingListTest;
@@ -365,7 +384,7 @@ public class TrainingController {
 			for (Round roundIter : training.getRounds()) {
 				listExerciseInRound.addAll(roundIter.getExerciseInRound());
 			}
-			model.addAttribute("trainingListTest", tablesShowingOldTrainings(training.getClient().getId().toString()));
+			model.addAttribute("trainingListTest", tablesShowingOldTrainings(training.getClient().getId().toString(), training.getId().toString()));
 			model.addAttribute("id", id);
 			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
 			model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
