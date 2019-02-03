@@ -141,6 +141,9 @@
 		highlightRow(this)
 		$('#myModal').modal('hide')
 		filterFunction()
+		if($("#myDropdown").is(":visible") == true){
+			document.getElementById("myDropdown").classList.toggle("show");
+		}
 		disableExerciseInRoundEdit()
 	});
 	

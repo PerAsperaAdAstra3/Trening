@@ -147,9 +147,9 @@ public class TrainingController {
 		Client client = clientService.findOne(Long.parseLong(clientId));
 		List<Training> trainingList = client.getTrainingList();
 		List<Training> trainingListTest = new ArrayList<Training>();
-		
 		if(trainingList.size() <= 3) {
-			trainingListTest.addAll(trainingList);
+			for (int i = 0; i < trainingList.size(); i++)
+				trainingListTest.add(0, trainingList.get(i));
 		} else {
 			for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
 				trainingListTest.add(0, trainingList.get(i));
@@ -164,16 +164,16 @@ public class TrainingController {
 		if(!trainingId.equals("") || trainingId != null) {
 			trainingList.remove(trainingList.size() - 1);
 		}
-		
 		List<Training> trainingListTest = new ArrayList<Training>();
-		
-		if(trainingList.size() <= 3) {
-			trainingListTest.addAll(trainingList);
-		} else {
-			for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
-				trainingListTest.add(0, trainingList.get(i));
+		if (trainingList.size() >= 1)
+			if(trainingList.size() <= 3) {
+				for (int i = 0; i < trainingList.size(); i++)
+						trainingListTest.add(0, trainingList.get(i));
+			} else {
+				for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
+					trainingListTest.add(0, trainingList.get(i));
+				}
 			}
-		}
 		return trainingListTest;
 	}
 	
