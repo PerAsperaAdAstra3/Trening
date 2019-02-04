@@ -87,7 +87,7 @@ public class RestTrainingController {
 			obj.put("exerciseExecId", newExerciseInRoundExecId);
 
 		} catch (Exception e) {
-			exceptionHandling(e);
+			return exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
 
@@ -145,7 +145,7 @@ public class RestTrainingController {
 			obj.put("exerciseExecId", exerciseInRoundDTOAjax.getExerciseExecId());
 
 		} catch (Exception e) {
-			exceptionHandling(e);
+			return	exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
 
@@ -164,7 +164,7 @@ public class RestTrainingController {
 			obj.put("roundRoundSequenceNumber", roundService.findOne(newAddedRoundId).getRoundSequenceNumber());
 			obj.put("selectedRoundId", newAddedRoundId);
 		} catch (Exception e) {
-			exceptionHandling(e);
+			return exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
 	}
@@ -185,7 +185,7 @@ public class RestTrainingController {
 	try {
 		deleteRound(roundDTOAjax.getId());
 	} catch(Exception e) {
-		exceptionHandling(e);
+		return	exceptionHandling(e);
 	}
 		//TODO Select the previous round if it exists, the next one is this is the first round
 		// nothing if this is the only round*/
@@ -213,7 +213,7 @@ public class RestTrainingController {
 		try {
 			ExerciseInRound exerciseInRound = exerciseInRoundService.delete(Long.parseLong(roundDTOAjax.getId()));
 		} catch(Exception e) {
-			exceptionHandling(e);
+			return exceptionHandling(e);
 		}
 		 return ResponseEntity.ok(obj.toString());
 	}
@@ -256,8 +256,12 @@ public class RestTrainingController {
 		 		 		 
 		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 
+		 if(isThereError != 0) {
+			return ResponseEntity.badRequest().body("Desila se greska!!!");
+		 }
+		 
 	} catch(Exception e) {
-		exceptionHandling(e);
+		return exceptionHandling(e);
 	}
 		 
 		return ResponseEntity.ok(obj.toString());

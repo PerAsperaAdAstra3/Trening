@@ -198,10 +198,10 @@ function PDFprintAjax(){
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			alert('PDF je uspesno odstampan!')
+			alert('PDF je uspešno odštampan!')
 		},
 		error: function (e) {
-			alert('Desila se greska prilikom stampanja PDF-a!')
+			alert('Desila se greška prilikom štampanja PDF-a - dokument otvoren!')
 		}
 	})
 }
@@ -220,10 +220,10 @@ function PDFprintAjaxListPage(trainingId){
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			alert('PDF je uspesno odstampan!')
+			alert('PDF je uspešno odštampan!')
 		},
 		error: function (e) {
-			alert('Desila se greska prilikom stampanja PDF-a!')
+			alert('Desila se greška prilikom štampanja PDF-a - dokument otvoren!')
 		}
 	})
 }
