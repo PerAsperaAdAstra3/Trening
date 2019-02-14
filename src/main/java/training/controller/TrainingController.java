@@ -129,6 +129,7 @@ public class TrainingController {
 		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId));
 		model.addAttribute("trainingDTO", createTraining(clientId));
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
+		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		
 	} catch(Exception e) {
 		e.printStackTrace();

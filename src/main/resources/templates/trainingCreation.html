@@ -71,11 +71,18 @@
 				areFieldsFilledIn = false;
 				$("#errorExerciseId").show();
 			}
-
-			if(areFieldsFilledIn){	
+			//myModalAdd
+			$('#myModalAdd').modal('show');
+		/*	if(areFieldsFilledIn){	
 				 ajaxExerciseInRound();
-				}
+				}*/
 		});
+	
+	$(document).on("click", "#ZatvoriXX", function() {
+
+		$('#myModalAdd').modal('toggle'); // $('#myModal').modal('toggle');
+
+	});
 	
 	//Handling of click on Izmeni button.
 	// editTraining
@@ -589,6 +596,7 @@ function myFunction() {
 		<div class="col-xs-2">
 			<button id="exerciseInRoundAdd" class="btn btn-success" type="button" name="modeEIR" value="add" disabled="disabled">Dodaj</button>
 			<button id="exerciseInRoundEdit" class="btn btn-success" type="button" name="modeEIR" value="edit" disabled="disabled">Izmeni</button>
+			<button id="modal_button_Test" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Izbor</button>
 		</div>
 	</div>
 </div>
@@ -673,6 +681,72 @@ function myFunction() {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal - Add Exercise -->
+<div id="myModalAdd" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" >
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Vežba</h4>
+      </div>
+	<div class="modal-body">
+		<div class="container-responsive">
+		<table  id = "myTableExercises" class = "table table-responsive">
+			<thead>
+				<tr>
+					<th scope="col">Naziv</th>
+					<th scope="col">Opis</th>
+					<th scope="col">Grupa vežbi</th>
+					<th scope="col"></th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<form style="padding-left:3em" th:action="@{/addExercise}" method="POST">
+
+	   <input type="hidden" id="id" />
+	    <div class="form-group row">
+			<div class="col-xs-2">
+				<label class="label-width-1" for="name">Naziv :</label>
+				<input class="form-control" size="50" type="text"  id="name" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<label class="label-width-1" for="description">Opis :</label>
+				<textarea class="form-control" cols="55" id="description"></textarea>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<label class="label-width-1" for="exerciseGroupId">Grupa vežbi :</label>
+				<select class="selectpicker form-control" data-live-search="true"  id="exerciseGroupId">
+		                        
+		       </select>
+		   </div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
+				<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+				<button id="resetButton" type="reset" class="btn btn-success">Isčisti</button>
+			</div>
+		</div>
+	<input type="hidden" name="hiddenExerciseGroupId" th:value="${hiddenExerciseGroupId}"/>
+</form>
+		</div>
+	</div>
+      <div class="modal-footer">
+        <button type="button" id="ZatvoriXX" class="btn btn-default">Zatvori xxx</button>
       </div>
     </div>
   </div>
