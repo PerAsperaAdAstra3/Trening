@@ -71,17 +71,29 @@
 				areFieldsFilledIn = false;
 				$("#errorExerciseId").show();
 			}
+			var isNotSame = checkExerciseNameTest()
+			
+			if(isNotSame == true){
+				$('#exerciseInRoundExerciseId').val("");
+				exerciseInRoundExerciseId = "";
+			}
+			//name
+			$('#name').val(exerciseInRoundExerciseName);
 			//myModalAdd
-			$('#myModalAdd').modal('show');
-		/*	if(areFieldsFilledIn){	
-				 ajaxExerciseInRound();
-				}*/
+			if(exerciseInRoundExerciseId == ""){
+				$('#myModalAdd').modal('show');
+				$("#errorExerciseId").hide();
+			} else {
+				if(areFieldsFilledIn){	
+					 ajaxExerciseInRound();
+				}
+			}
 		});
-	
-	$(document).on("click", "#ZatvoriXX", function() {
 
-		$('#myModalAdd').modal('toggle'); // $('#myModal').modal('toggle');
-
+	$(document).on("click", "#addButton", function() {
+		$('#myModalAdd').modal('hide')
+		$("#errorExerciseId").hide();
+		ajaxExerciseInRoundAddExercise();
 	});
 	
 	//Handling of click on Izmeni button.
@@ -103,6 +115,8 @@
 			ajaxExerciseInRoundChange();
 			}
 	});
+	
+	
 	
 	//ajaxAddRound   ---- id = noviKrug
 	
@@ -239,8 +253,26 @@ function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
+function checkExerciseNameTest() {
+		var exerciseNames = $(".dinamicSelectExerciseName");
+		
+		var isItNotSame = true;
+
+		var exerciseNameValueVar = $("#exerciseInRoundExerciseName").val();
+
+	    for(var i = 0; i < exerciseNames.length; i++){
+	        if(exerciseNameValueVar == exerciseNames[i].textContent){
+	        	isItNotSame = false;
+	        }
+	    }
+	    
+	    return isItNotSame;
+}
+
 /*]]>*/
-	  
+
+
+
 	  	$(document).on("click", "#exerciseInRoundExerciseId", function(event) {
 	  		$("#exerciseInRoundExerciseName").prop("disabled", false);
 			$("#exerciseInRoundAdd").prop("disabled", false);
@@ -596,7 +628,6 @@ function myFunction() {
 		<div class="col-xs-2">
 			<button id="exerciseInRoundAdd" class="btn btn-success" type="button" name="modeEIR" value="add" disabled="disabled">Dodaj</button>
 			<button id="exerciseInRoundEdit" class="btn btn-success" type="button" name="modeEIR" value="edit" disabled="disabled">Izmeni</button>
-			<button id="modal_button_Test" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModalAdd">Izbor</button>
 		</div>
 	</div>
 </div>
@@ -698,46 +729,35 @@ function myFunction() {
       </div>
 	<div class="modal-body">
 		<div class="container-responsive">
-		<table  id = "myTableExercises" class = "table table-responsive">
-			<thead>
-				<tr>
-					<th scope="col">Naziv</th>
-					<th scope="col">Opis</th>
-					<th scope="col">Grupa vežbi</th>
-					<th scope="col"></th>
-					<th scope="col"></th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
-		<form style="padding-left:3em" th:action="@{/addExercise}" method="POST">
+		
+<form style="padding-left:3em" th:object="${exerciseDTO}" method="POST">
 
-	   <input type="hidden" id="id" />
+	   <input type="hidden" th:field="*{id}" id="id" />
 	    <div class="form-group row">
 			<div class="col-xs-2">
 				<label class="label-width-1" for="name">Naziv :</label>
-				<input class="form-control" size="50" type="text"  id="name" />
+				<input class="form-control" size="50" type="text" th:field="*{name}" id="name" />
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-2">
 				<label class="label-width-1" for="description">Opis :</label>
-				<textarea class="form-control" cols="55" id="description"></textarea>
+				<textarea class="form-control" cols="55" th:field="*{description}" id="description"></textarea>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-2">
 				<label class="label-width-1" for="exerciseGroupId">Grupa vežbi :</label>
-				<select class="selectpicker form-control" data-live-search="true"  id="exerciseGroupId">
-		                        
+				<select class="selectpicker form-control" data-live-search="true" th:field="*{exerciseGroupId}" id="exerciseGroupId">
+		                         <option th:each="exerciseGroup : ${exerciseGroups}"
+		                            th:value="${exerciseGroup.id}"
+		                            th:utext="${exerciseGroup.name}"/>
 		       </select>
 		   </div>
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-2">
-				<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
-				<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+				<button id="addButton" type="button" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
 				<button id="resetButton" type="reset" class="btn btn-success">Isčisti</button>
 			</div>
 		</div>
@@ -746,7 +766,6 @@ function myFunction() {
 		</div>
 	</div>
       <div class="modal-footer">
-        <button type="button" id="ZatvoriXX" class="btn btn-default">Zatvori xxx</button>
       </div>
     </div>
   </div>

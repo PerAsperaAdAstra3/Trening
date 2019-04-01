@@ -65,6 +65,16 @@ public class ExerciseController {
 		return "redirect:/exerciseList/"+hiddenExerciseGroupId;
 	}
 	
+	@RequestMapping(value = {"/addExerciseTest"}, method = RequestMethod.POST)
+	public String addExerciseTest(Model model, @ModelAttribute("exerciseDTO") ExerciseDTO exerciseDTO, @RequestParam String mode, @RequestParam String hiddenExerciseGroupId) {
+		if("add".equals(mode)) {
+			exerciseDTO.setId(null);
+			exerciseService.save(exerciseDTOtoExercise.convert(exerciseDTO));
+		} else {
+			exerciseService.edit(exerciseDTO.getId() , exerciseDTOtoExercise.convert(exerciseDTO));
+		}
+		return "trainingCreation";
+	}
 
 	@RequestMapping(value = {"/deleteExercise/{id}/{hiddenExerciseGroupId}"}, method = RequestMethod.GET)
 	public String delete(Model model, @PathVariable String id, @PathVariable String hiddenExerciseGroupId){
