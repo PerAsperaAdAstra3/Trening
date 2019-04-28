@@ -323,8 +323,7 @@ public class TrainingController {
 	
 	private Long addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
 
-		ExerciseInRound exerciseInRound;//= exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
-	//	exerciseInRoundService.save(exerciseInRound);
+		ExerciseInRound exerciseInRound;
 
 	if("add".equals(mode)) {
 			exerciseInRoundDTO.setId(null);

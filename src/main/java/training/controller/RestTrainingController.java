@@ -117,9 +117,6 @@ public class RestTrainingController {
 		} catch (Exception e) {
 
 		}
-		System.out.println("Name :" +exerciseInRoundDTOAjaxAddRound.getName());
-		System.out.println("Description : " + exerciseInRoundDTOAjaxAddRound.getDescription());
-		System.out.println("Exercise Group id : "+exerciseInRoundDTOAjaxAddRound.getExerciseGroupId());
 		
 		ExerciseDTO exerciseDTO = new ExerciseDTO();
 		exerciseDTO.setName(exerciseInRoundDTOAjaxAddRound.getName());
@@ -134,7 +131,6 @@ public class RestTrainingController {
 
 			exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseInRoundDTOAjaxAddRound.getExerciseInRoundExerciseName());
 			exerciseInRoundDTO.setExerciseInRoundExerciseId(exercise.getId());
-					//Long.parseLong(exerciseInRoundDTOAjaxAddRound.getExerciseInRoundExerciseId()));
 			obj.put("exerciseInRoundExerciseId", exercise.getId());
 			exerciseInRoundDTO.setNote(exerciseInRoundDTOAjaxAddRound.getExerciseInRoundNote());
 			exerciseInRoundDTO.setNumberOfRepetitions(exerciseInRoundDTOAjaxAddRound.getExerciseInRoundNumberOfRepetitions());

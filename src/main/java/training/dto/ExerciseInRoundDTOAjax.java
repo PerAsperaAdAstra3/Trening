@@ -14,7 +14,6 @@ public class ExerciseInRoundDTOAjax {
 	
 	private String exerciseInRoundDifficulty;
 	
-	//test
 	private String roundId;
 	
 	private String exerciseExecId;

@@ -15,13 +15,10 @@ public class ExerciseInRoundDTOAjaxAddRound {
 	
 	private String exerciseInRoundDifficulty;
 	
-	//test
 	private String roundId;
 	
 	private String exerciseExecId;
 
-	//test add Exercise
-	
 	private String name;
 	private String description;
 	private String exerciseGroupId;
