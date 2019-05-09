@@ -1,6 +1,7 @@
 package training.dto;
 
-public class ExerciseInRoundDTOAjax {
+public class ExerciseInRoundDTOAjaxAddRound {
+
 
 	private String exerciseInRoundExerciseName;
 	
@@ -17,6 +18,35 @@ public class ExerciseInRoundDTOAjax {
 	private String roundId;
 	
 	private String exerciseExecId;
+
+	private String name;
+	private String description;
+	private String exerciseGroupId;
+
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getExerciseGroupId() {
+		return exerciseGroupId;
+	}
+
+	public void setExerciseGroupId(String exerciseGroupId) {
+		this.exerciseGroupId = exerciseGroupId;
+	}
 
 	public String getRoundId() {
 		return roundId;
@@ -82,6 +112,6 @@ public class ExerciseInRoundDTOAjax {
 		this.exerciseInRoundDifficulty = exerciseInRoundDifficulty;
 	}
 	
-	public ExerciseInRoundDTOAjax () {}
+	public ExerciseInRoundDTOAjaxAddRound() {}
 	
 }

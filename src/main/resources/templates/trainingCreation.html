@@ -14,23 +14,22 @@
 
 <script>
 
-	$(document).ready(function(){
-		selectedRound = $("#selectedRoundId").val()
-		if (selectedRound != ''){
-			$("#roundsTable tr").each(function() {
-				roundId = $(this).find(".roundId").text()
-				if (selectedRound == roundId){
-					selectRoundIdOnRowClick(this)
-					return
-				}
-			});
-		}
+$(document).ready(function(){
+	selectedRound = $("#selectedRoundId").val()
+	if (selectedRound != ''){
+		$("#roundsTable tr").each(function() {
+			roundId = $(this).find(".roundId").text()
+			if (selectedRound == roundId){
+				selectRoundIdOnRowClick(this)
+				return
+			}
+		});
+	}
 				
-		$("#errorExerciseName").hide();
-		$("#errorExerciseId").hide();
-		$(".exerciseInRoundId").hide();
-		
-		$('#addExerciseInRoundForm').submit(function(){
+	$("#errorExerciseName").hide();
+	$("#errorExerciseId").hide();
+	$(".exerciseInRoundId").hide();	
+	$('#addExerciseInRoundForm').submit(function(){
 		
 		var areFieldsFilledIn = true;
 		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
@@ -53,138 +52,161 @@
 	     	 return true;
 			} else {
 				return false;
-			}
-		});
+		}
 	});
+});
 
 	//Handling of click on Dodaj button.
 	
-	$(document).on("click", "#exerciseInRoundAdd", function() {
-			var areFieldsFilledIn = true;
-			var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
-			var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
+$(document).on("click", "#exerciseInRoundAdd", function() {
+	var areFieldsFilledIn = true;
+	var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
+	var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
 		
-			$("#errorExerciseName").hide();
-			$("#errorExerciseId").hide();
+	$("#errorExerciseName").hide();
+	$("#errorExerciseId").hide();
 					
-			if(exerciseInRoundExerciseId == ""){
-				areFieldsFilledIn = false;
-				$("#errorExerciseId").show();
-			}
+	if(exerciseInRoundExerciseId == ""){
+		areFieldsFilledIn = false;
+		$("#errorExerciseId").show();
+	}
+	var isNotSame = checkExerciseNameTest()
+			
+	if(isNotSame){
+		$('#exerciseInRoundExerciseId').val("");
+		exerciseInRoundExerciseId = "";
+	}
 
-			if(areFieldsFilledIn){	
-				 ajaxExerciseInRound();
-				}
-		});
+	//name
+	$('#name').val(exerciseInRoundExerciseName);
+	//myModalAdd
+	if(exerciseInRoundExerciseId == ""){
+		$('#myModalAdd').modal('show');
+		$("#errorExerciseId").hide();
+	} else {
+		if(areFieldsFilledIn){	
+		 ajaxExerciseInRound();
+		}
+	}
+});
+
+$(document).on("click", "#addButton", function() {
+	$('#myModalAdd').modal('hide')
+	$("#errorExerciseId").hide();
+	ajaxExerciseInRoundAddExercise();
+});
 	
 	//Handling of click on Izmeni button.
 	// editTraining
-	$(document).on("click", "#exerciseInRoundEdit", function() {
-		var areFieldsFilledIn = true;
-		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
-		var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
+$(document).on("click", "#exerciseInRoundEdit", function() {
+	var areFieldsFilledIn = true;
+	var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
+	var exerciseInRoundExerciseId = $('#exerciseInRoundExerciseId').val()
 	
-		$("#errorExerciseName").hide();
-		$("#errorExerciseId").hide();
+	$("#errorExerciseName").hide();
+	$("#errorExerciseId").hide();
 		
-		if(exerciseInRoundExerciseId == ""){
-			areFieldsFilledIn = false;
-			$("#errorExerciseId").show();
-		}
+	if(exerciseInRoundExerciseId == ""){
+		areFieldsFilledIn = false;
+		$("#errorExerciseId").show();
+	}
 
-		if(areFieldsFilledIn){	
-			ajaxExerciseInRoundChange();
-			}
-	});
-	
-	//ajaxAddRound   ---- id = noviKrug
-	
-	$(document).on("click", "#noviKrug", function() {
-			ajaxAddRound();
-	});
-	
-	$(document).on("click", "#PDFButton", function() {
-		PDFprintAjax();
-	});
+	if(areFieldsFilledIn){	
+		ajaxExerciseInRoundChange();
+	}
+});
 	
 	
-	$(document).on("click", "#roundDeleteButton", function(event) {
-					var roundId = $(this).parent().parent().find("#roundIdDel").html();
-					ajaxDeleteRound(roundId, $(this))
-			});
+	
+//ajaxAddRound   ---- id = noviKrug
+	
+$(document).on("click", "#noviKrug", function() {
+	ajaxAddRound();
+});
+	
+$(document).on("click", "#PDFButton", function() {
+	PDFprintAjax();
+});
+	
+	
+$(document).on("click", "#roundDeleteButton", function(event) {
+	var roundId = $(this).parent().parent().find("#roundIdDel").html();
+	ajaxDeleteRound(roundId, $(this))
+});
 
-	$(document).on("click", "#deleteExerciseInRound", function(event) {
-		var roundId = $(this).parent().parent().find(".exerciseInRoundId").html();
-		ajaxDeleteExerciseInRound(roundId, $(this))
-	});
+$(document).on("click", "#deleteExerciseInRound", function(event) {
+	var roundId = $(this).parent().parent().find(".exerciseInRoundId").html();
+	ajaxDeleteExerciseInRound(roundId, $(this))
+});
 	
-	$(document).on("click", "#exercisesInRoundTable tr", function(event) {
-		  roundId = $(this).find(".roundId").html()
-		  $("#roundsTable tr").each(function(){
-		   id = $(this).find(".roundId").html()
-		   if (id == roundId){
-		    selectRoundIdOnRowClick(this)
-		    return false //break
-		   }
-		  });
-		 });
-	
-	$(document).on("click", "#tr-entity-list", function(event) {
-		highlightRow1(this)
-		selectRoundIdOnRowClick(this)
-		filterFunction()
-		enableExerciseInRoundEdit()
-	});
-
-	
-	$(document).on("click", "#tr-entity-list-modal", function(event) {
-		highlightRow(this)
-		$('#myModal').modal('hide')
-		filterFunction()
-		if($("#myDropdown").is(":visible") == true){
-			document.getElementById("myDropdown").classList.toggle("show");
-		}
-		disableExerciseInRoundEdit()
-	});
-	
-	function highlightRow1(row){
-		if(!$(row).hasClass("header")){
-			$(row).parent().find(".highlighted").removeClass("highlighted");
-	    	$(row).addClass("highlighted");
-	    	sync2($(row));
+$(document).on("click", "#exercisesInRoundTable tr", function(event) {
+	roundId = $(this).find(".roundId").html()
+	$("#roundsTable tr").each(function(){
+		id = $(this).find(".roundId").html()
+	   	if (id == roundId){
+	    	selectRoundIdOnRowClick(this)
+	    return false //break
 	    }
-	}
-	
-	$(document).on("click", "#round-id-sync", function(event) {
-		selectRoundIdOnRowClick(this)
 	});
+});
 	
-	$(document).on("click", "#testingDeselect", function(event) {
-			$("#round-id-sync").parent().find(".highlighted").removeClass("highlighted");
-			   	$("#round-id-sync").removeClass("highlighted");
-			    $("#exercisesInRoundTable .roundId").each(function(){
-			    		$(this).parent().show()
-			    });
-			    sortTable();
-	});
-	
-	$(document).on("click", "#deleteExerciseInRound", function(event) {
-		exerciseInRoundId = item.find(".exerciseInRoundId").html()
-		$("#hiddenTrainingInRoundToDeleteId").val(exerciseInRoundId);
-	});
+$(document).on("click", "#tr-entity-list", function(event) {
+	highlightRow1(this)
+	selectRoundIdOnRowClick(this)
+	filterFunction()
+	enableExerciseInRoundEdit()
+});
 
 	
-	function enableAddRound(item) {
-		var trainingID = $(".idTraining")[0]
-		if($(trainingID).val() != ""){
-			$("#noviKrug").prop("disabled", false) 
-			$("#editTraining").prop("disabled", false) 
-			$("#deleteTraining").prop("disabled", false) 
-			$("#PDFButton").prop("disabled", false)
-			$("#saveTraining").prop("disabled", true)
-		}
-
+$(document).on("click", "#tr-entity-list-modal", function(event) {
+	highlightRow(this)
+	$('#myModal').modal('hide')
+	filterFunction()
+	
+	if($("#myDropdown").is(":visible") == true){
+		document.getElementById("myDropdown").classList.toggle("show");
 	}
+	disableExerciseInRoundEdit()
+});
+	
+function highlightRow1(row){
+
+	if(!$(row).hasClass("header")){
+		$(row).parent().find(".highlighted").removeClass("highlighted");
+		$(row).addClass("highlighted");
+		sync2($(row));
+	}
+}
+	
+$(document).on("click", "#round-id-sync", function(event) {
+	selectRoundIdOnRowClick(this)
+});
+	
+$(document).on("click", "#testingDeselect", function(event) {
+	$("#round-id-sync").parent().find(".highlighted").removeClass("highlighted");
+	$("#round-id-sync").removeClass("highlighted");
+	$("#exercisesInRoundTable .roundId").each(function(){
+		$(this).parent().show()
+	});
+	sortTable();
+});
+	
+$(document).on("click", "#deleteExerciseInRound", function(event) {
+	exerciseInRoundId = item.find(".exerciseInRoundId").html()
+	$("#hiddenTrainingInRoundToDeleteId").val(exerciseInRoundId);
+});
+
+	
+function enableAddRound(item) {
+	var trainingID = $(".idTraining")[0]
+	if($(trainingID).val() != ""){
+		$("#noviKrug").prop("disabled", false) 
+		$("#editTraining").prop("disabled", false) 
+		$("#deleteTraining").prop("disabled", false) 
+		$("#PDFButton").prop("disabled", false)
+		$("#saveTraining").prop("disabled", true)
+	}
+}
 	
 	  /*<![CDATA[*/	
  
@@ -232,87 +254,101 @@ function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
 
+function checkExerciseNameTest() {
+
+	var exerciseNames = $(".dinamicSelectExerciseName");
+	var isItNotSame = true;	
+	var exerciseNameValueVar = $("#exerciseInRoundExerciseName").val();
+
+	for(var i = 0; i < exerciseNames.length; i++){
+		if(exerciseNameValueVar == exerciseNames[i].textContent){
+	        isItNotSame = false;
+	      }
+	   } 
+	return isItNotSame;
+}
+
 /*]]>*/
+
+$(document).on("click", "#exerciseInRoundExerciseId", function(event) {
+	$("#exerciseInRoundExerciseName").prop("disabled", false);
+	$("#exerciseInRoundAdd").prop("disabled", false);	 
+});
 	  
-	  	$(document).on("click", "#exerciseInRoundExerciseId", function(event) {
-	  		$("#exerciseInRoundExerciseName").prop("disabled", false);
-			$("#exerciseInRoundAdd").prop("disabled", false);
-	  	});
-	  
-	$(document).on("click", "#modal_button", function(event) {
-		var els = $(".modal-table-coloring");
+$(document).on("click", "#modal_button", function(event) {
 		
-		var test = $(".exerciseColorCode");
+	var els = $(".modal-table-coloring");
+	var test = $(".exerciseColorCode");
 		
-		$("#exerciseInRoundExerciseName").prop("disabled", false);
-		$("#exerciseInRoundAdd").prop("disabled", false);
-		
-		Array.prototype.forEach.call(els, function(el) {
-			var nooo = $(el).find(".exerciseColorCode").html(); 
+	$("#exerciseInRoundExerciseName").prop("disabled", false);
+	$("#exerciseInRoundAdd").prop("disabled", false);
+			
+	Array.prototype.forEach.call(els, function(el) {
+		var nooo = $(el).find(".exerciseColorCode").html(); 
 			if(nooo == 1){
-			 	el.style.backgroundColor = "red"
+				el.style.backgroundColor = "red"	
 			}
 			if(nooo == 2){
-			 	el.style.backgroundColor = "orange"
+				el.style.backgroundColor = "orange"
 			}
 			if(nooo == 3){
-			 	el.style.backgroundColor = "yellow"
+				el.style.backgroundColor = "yellow"
 			}
-			 console.log(el.tagName);
+			console.log(el.tagName);
 		});
-		document.getElementById("myDropdown").classList.toggle("show");
-	});
+	document.getElementById("myDropdown").classList.toggle("show");
+});
 	
-	$(document).on("click" , ".filterExercises", function(event){
+$(document).on("click" , ".filterExercises", function(event){
 	
-		var dinamicSelectExerciseId = $(this).find(".dinamicSelectExerciseId").html()
-		var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
+	var dinamicSelectExerciseId = $(this).find(".dinamicSelectExerciseId").html()
+	var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
 		
+	$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
+	$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
+		
+	document.getElementById("myDropdown").classList.toggle("show");
+});
+	
+$(document).on("click" , "#exerciseInRoundExerciseName", function(event){
+		
+	var dinamicSelectExerciseId = $(this).find(".dinamicSelectExerciseId").html()
+	var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
+		
+	if($("#exerciseInRoundExerciseName").val() == ""){
 		$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
 		$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
-		
-		document.getElementById("myDropdown").classList.toggle("show");
-	});
-	
-	$(document).on("click" , "#exerciseInRoundExerciseName", function(event){
-		
-		var dinamicSelectExerciseId = $(this).find(".dinamicSelectExerciseId").html()
-		var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
-		
-		if($("#exerciseInRoundExerciseName").val() == ""){
-			$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
-			$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
-		}
+	}
 
-		if($("#exerciseInRoundExerciseName").val() != ""){			
+	if($("#exerciseInRoundExerciseName").val() != ""){			
+		document.getElementById("myDropdown").classList.toggle("show");
+	}
+});
+	
+$(document).on("change keyup paste", "#exerciseInRoundExerciseName", function(event) {
+	if($("#myDropdown").is(":visible") == false){
+		document.getElementById("myDropdown").classList.toggle("show");
+	} else {
+		if($("#exerciseInRoundExerciseName").val() == ""){		
 			document.getElementById("myDropdown").classList.toggle("show");
 		}
-	});
-	
-	$(document).on("change keyup paste", "#exerciseInRoundExerciseName", function(event) {
-		if($("#myDropdown").is(":visible") == false){
-				document.getElementById("myDropdown").classList.toggle("show");
-			} else {
-				if($("#exerciseInRoundExerciseName").val() == ""){		
-						document.getElementById("myDropdown").classList.toggle("show");
-					}
-			}
-		});
+	}
+});
 	
 	//##############
 	//Testing click anywhere
 	//##############
-	$('.ui-widget-overlay').on('click', function() {
-     	$('#exerciseInRoundExerciseName').dialog("close");
-	});
+$('.ui-widget-overlay').on('click', function() {
+	$('#exerciseInRoundExerciseName').dialog("close");
+});
 	
-	$(document).on("click", "#hideTableRows", function(event) {
-		var els = $(".hidden_input");
-		Array.prototype.forEach.call(els, function(el) {
-		     el.style.visibility = 'hidden'
-	   		 console.log(el.tagName);
-		});
+$(document).on("click", "#hideTableRows", function(event) {
+	var els = $(".hidden_input");
+	Array.prototype.forEach.call(els, function(el) {
+		el.style.visibility = 'hidden'
+		console.log(el.tagName);
 	});
+});
 	//Keeping position on page
 	$(window).scroll(function() {
 		  sessionStorage.scrollTop = $(this).scrollTop();
@@ -324,82 +360,83 @@ function myFunction() {
 		  }
 		});
 	
-	function selectRoundIdOnRowClick(row){
+function selectRoundIdOnRowClick(row){
 
-		if(!$(row).hasClass("header")){
-			$(row).parent().find(".highlighted").removeClass("highlighted");
+	if(!$(row).hasClass("header")){
+		$(row).parent().find(".highlighted").removeClass("highlighted");
+		$(row).addClass("highlighted");
+		sync1($(row));
+	}
+}
+	
+function sync1(item){
+	
+	roundId = item.find(".roundId").html()
+	
+	$("#addExerciseInRoundForm #hiddenRoundInTraining").val(roundId);
+	$("#modal_button").prop("disabled", false);
+	$("#exerciseInRoundExerciseId").prop("disabled", false);
+	$("#exerciseInRoundNote").prop("disabled", false);
+	$("#exerciseInRoundNumberOfRepetitions").prop("disabled", false);
+	$("#exerciseInRoundDifficulty").prop("disabled", false);  
+	$("#exerciseInRoundExerciseName").prop("disabled", false);
+	$("#exerciseInRoundAdd").prop("disabled", false);
+	$("#exercisesInRoundTable .roundId").each(function(){
+	
+		if ($(this).html() != roundId)
+			$(this).parent().hide()
+			else
+				$(this).parent().show()
+	});
+}
+	
+function enableExerciseInRoundEdit(){
+    $("#exerciseInRoundEdit").prop("disabled", false);
+}
+	
+function disableExerciseInRoundEdit(){
+    $("#exerciseInRoundEdit").prop("disabled", true)
+}
+	
+function sync(item){
+    id = item.find(".exerciseId").html()
+    exerInRoundId = item.find(".exerciseInRoundId").html() 
+	exerInRoundId = item.find(".exerciseExecId").html()
 
-		   	$(row).addClass("highlighted");
-
-		   	sync1($(row));
-	   }
-	}
-	
-	function sync1(item){
-	    roundId = item.find(".roundId").html()
-	    $("#addExerciseInRoundForm #hiddenRoundInTraining").val(roundId);
-	    $("#modal_button").prop("disabled", false);
-	    $("#exerciseInRoundExerciseId").prop("disabled", false);
-	    $("#exerciseInRoundNote").prop("disabled", false);
-	    $("#exerciseInRoundNumberOfRepetitions").prop("disabled", false);
-	    $("#exerciseInRoundDifficulty").prop("disabled", false);  
-	    $("#exerciseInRoundExerciseName").prop("disabled", false);
-	    $("#exerciseInRoundAdd").prop("disabled", false);
-	    $("#exercisesInRoundTable .roundId").each(function(){
-	    	if ($(this).html() != roundId)
-	    		$(this).parent().hide()
-	    	else
-	    		$(this).parent().show()
-	    });
-	}
-	
-	function enableExerciseInRoundEdit(){
-	    $("#exerciseInRoundEdit").prop("disabled", false);
-	}
-	
-	function disableExerciseInRoundEdit(){
-	    $("#exerciseInRoundEdit").prop("disabled", true)
-	}
-	
-	function sync(item){
-	    id = item.find(".exerciseId").html()
-	    exerInRoundId = item.find(".exerciseInRoundId").html() 
-		exerInRoundId = item.find(".exerciseExecId").html()
-
-	    exerciseName = item.find(".exerciseName").html()
-	    difficulty = item.find(".difficulty").html()
-	    numberOfRepetitions = item.find(".numberOfRepetitions").html()
-	    exerciseInRoundNote = item.find(".note").html()
+    exerciseName = item.find(".exerciseName").html()
+    difficulty = item.find(".difficulty").html()
+    numberOfRepetitions = item.find(".numberOfRepetitions").html()
+    exerciseInRoundNote = item.find(".note").html()
 	    	    
-	    $("#exerciseInRoundExerciseName").val(exerciseName);
-	    $("#exerciseInRoundExerciseId").val(id);
-	    $("#idExerciseInRound").val(id);
-	    $("#exerciseInRoundNote").val(exerciseInRoundNote);
-	    $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
-	    $("#exerciseInRoundDifficulty").val(difficulty);
+    $("#exerciseInRoundExerciseName").val(exerciseName);
+    $("#exerciseInRoundExerciseId").val(id);
+    $("#idExerciseInRound").val(id);
+    $("#exerciseInRoundNote").val(exerciseInRoundNote);
+    $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
+    $("#exerciseInRoundDifficulty").val(difficulty);
 	    
-	}
+}
 	
-	function sync2(item){
+function sync2(item){
 		//This is called when the table with the ExerciseInRound is clicked.
-	    exerInRoundId = item.find(".exerciseInRoundId").html()
-    	exerInRoundExerciseId = item.find(".exerciseExecId").html()
+	exerInRoundId = item.find(".exerciseInRoundId").html()
+    exerInRoundExerciseId = item.find(".exerciseExecId").html()
 	    
-	    exerciseName = item.find(".exerciseName").html()
-	    difficulty = item.find(".difficulty").html()
-	    numberOfRepetitions = item.find(".numberOfRepetitions").html()
-	    exerciseInRoundNote = item.find(".note").html()
+    exerciseName = item.find(".exerciseName").html()
+    difficulty = item.find(".difficulty").html()
+    numberOfRepetitions = item.find(".numberOfRepetitions").html()
+    exerciseInRoundNote = item.find(".note").html()
 
-	    $("#exerciseInRoundExerciseName").prop("disabled", false);
+    $("#exerciseInRoundExerciseName").prop("disabled", false);
 	    
-	    $("#exerciseInRoundExerciseName").val(exerciseName);
-	    $("#exerciseInRoundExerciseId").val(exerInRoundExerciseId);
-	    $("#idExerciseInRound").val(exerInRoundId);
-	    $("#exerciseInRoundNote").val(exerciseInRoundNote);
-	    $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
-	    $("#exerciseInRoundDifficulty").val(difficulty);
+    $("#exerciseInRoundExerciseName").val(exerciseName);
+    $("#exerciseInRoundExerciseId").val(exerInRoundExerciseId);
+    $("#idExerciseInRound").val(exerInRoundId);
+    $("#exerciseInRoundNote").val(exerciseInRoundNote);
+    $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
+    $("#exerciseInRoundDifficulty").val(difficulty);
 	    
-	}
+}
 	
 
 	</script>
@@ -673,6 +710,60 @@ function myFunction() {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal - Add Exercise -->
+<div id="myModalAdd" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" >
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Vežba</h4>
+      </div>
+	<div class="modal-body">
+		<div class="container-responsive">
+		
+<form style="padding-left:3em" th:object="${exerciseDTO}" method="POST">
+
+	   <input type="hidden" th:field="*{id}" id="id" />
+	    <div class="form-group row">
+			<div class="col-xs-2">
+				<label class="label-width-1" for="name">Naziv :</label>
+				<input class="form-control" size="50" type="text" th:field="*{name}" id="name" />
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<label class="label-width-1" for="description">Opis :</label>
+				<textarea class="form-control" cols="55" th:field="*{description}" id="description"></textarea>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<label class="label-width-1" for="exerciseGroupId">Grupa vežbi :</label>
+				<select class="selectpicker form-control" data-live-search="true" th:field="*{exerciseGroupId}" id="exerciseGroupId">
+		                         <option th:each="exerciseGroup : ${exerciseGroups}"
+		                            th:value="${exerciseGroup.id}"
+		                            th:utext="${exerciseGroup.name}"/>
+		       </select>
+		   </div>
+		</div>
+		<div class="form-group row">
+			<div class="col-xs-2">
+				<button id="addButton" type="button" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
+				<button id="resetButton" type="reset" class="btn btn-success">Isčisti</button>
+			</div>
+		</div>
+	<input type="hidden" name="hiddenExerciseGroupId" th:value="${hiddenExerciseGroupId}"/>
+</form>
+		</div>
+	</div>
+      <div class="modal-footer">
       </div>
     </div>
   </div>

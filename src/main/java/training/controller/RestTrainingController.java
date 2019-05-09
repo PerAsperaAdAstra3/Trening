@@ -19,15 +19,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import training.converter.ExerciseDTOtoExercise;
 import training.converter.ExerciseInRoundDTOtoExerciseInRound;
+import training.dto.ExerciseDTO;
 import training.dto.ExerciseInRoundDTO;
 import training.dto.ExerciseInRoundDTOAjax;
+import training.dto.ExerciseInRoundDTOAjaxAddRound;
 import training.dto.RoundDTOAjax;
 import training.dto.TrainingDTO;
+import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
 import training.service.ExerciseInRoundService;
+import training.service.ExerciseService;
 import training.service.RoundService;
 import training.service.TrainingService;
 import training.util.PdfGenaratorUtil;
@@ -51,6 +56,12 @@ public class RestTrainingController {
 	
 	@Autowired
 	private PdfGenaratorUtil pdfGenaratorUtil;
+	
+	@Autowired
+	private ExerciseDTOtoExercise exerciseDTOtoExercise;
+	
+	@Autowired
+	private ExerciseService exerciseService;
 
 	// Add Exercise In Round #######################################################
 
@@ -93,6 +104,51 @@ public class RestTrainingController {
 
 	}
 
+	@PostMapping(value = { "/addExerciseInRoundAjaxAddRound" })
+		public ResponseEntity<?> addExerciseInRoundAddRound(@Valid @RequestBody ExerciseInRoundDTOAjaxAddRound exerciseInRoundDTOAjaxAddRound) {
+		JSONObject obj = new JSONObject();
+		try {
+			obj.put("exerciseInRoundExerciseName", exerciseInRoundDTOAjaxAddRound.getExerciseInRoundExerciseName());
+			obj.put("exerciseInRoundExerciseId", exerciseInRoundDTOAjaxAddRound.getExerciseInRoundExerciseId());
+			obj.put("exerciseInRoundNote", exerciseInRoundDTOAjaxAddRound.getExerciseInRoundNote());
+			obj.put("exerciseInRoundNumberOfRepetitions",
+					exerciseInRoundDTOAjaxAddRound.getExerciseInRoundNumberOfRepetitions());
+			obj.put("exerciseInRoundDifficulty", exerciseInRoundDTOAjaxAddRound.getExerciseInRoundDifficulty());
+		} catch (Exception e) {
+
+		}
+		
+		ExerciseDTO exerciseDTO = new ExerciseDTO();
+		exerciseDTO.setName(exerciseInRoundDTOAjaxAddRound.getName());
+		exerciseDTO.setDescription(exerciseInRoundDTOAjaxAddRound.getDescription());
+		exerciseDTO.setExerciseGroupId(Long.parseLong(exerciseInRoundDTOAjaxAddRound.getExerciseGroupId()));
+		exerciseDTO.setId(null);
+		Exercise exercise = exerciseService.save(exerciseDTOtoExercise.convert(exerciseDTO));
+		
+		Long trainingId = -1l;
+		try {
+			ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
+
+			exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseInRoundDTOAjaxAddRound.getExerciseInRoundExerciseName());
+			exerciseInRoundDTO.setExerciseInRoundExerciseId(exercise.getId());
+			obj.put("exerciseInRoundExerciseId", exercise.getId());
+			exerciseInRoundDTO.setNote(exerciseInRoundDTOAjaxAddRound.getExerciseInRoundNote());
+			exerciseInRoundDTO.setNumberOfRepetitions(exerciseInRoundDTOAjaxAddRound.getExerciseInRoundNumberOfRepetitions());
+			exerciseInRoundDTO.setDifficulty(exerciseInRoundDTOAjaxAddRound.getExerciseInRoundDifficulty());
+			exerciseInRoundDTO.setRoundId(Long.parseLong(exerciseInRoundDTOAjaxAddRound.getRoundId()));
+			
+			Long newAddedRoundId = addExerciseInRound(exerciseInRoundDTO, "add");
+			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
+			obj.put("roundId", newAddedRoundId);
+			obj.put("exerciseExecId", newExerciseInRoundExecId);
+
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+
+		return ResponseEntity.ok(obj.toString());
+	}
+	
 	private Long addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
 
 		ExerciseInRound exerciseInRound;

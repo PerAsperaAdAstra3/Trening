@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import training.converter.ClientToClientDTO;
+import training.converter.ExerciseGroupToExerciseGroupDTO;
 import training.converter.ExerciseInRoundDTOtoExerciseInRound;
 import training.converter.ExerciseToExerciseDTO;
 import training.converter.RoundToRoundDTO;
@@ -32,6 +33,7 @@ import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
 import training.service.ClientService;
+import training.service.ExerciseGroupService;
 import training.service.ExerciseInRoundService;
 import training.service.ExerciseService;
 import training.service.RoundService;
@@ -77,6 +79,12 @@ public class TrainingController {
 
 	@Autowired
 	private ClientToClientDTO clientToClientDTO;
+	
+	@Autowired
+	private ExerciseGroupService exerciseGroupService;
+	
+	@Autowired
+	private ExerciseGroupToExerciseGroupDTO exerciseGroupToExerciseGroupDTO;
 	
 	@RequestMapping(value = { "/trainingList/{isThereError}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable int isThereError) {
@@ -129,6 +137,7 @@ public class TrainingController {
 		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId));
 		model.addAttribute("trainingDTO", createTraining(clientId));
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
+		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		
 	} catch(Exception e) {
 		e.printStackTrace();
@@ -314,8 +323,7 @@ public class TrainingController {
 	
 	private Long addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
 
-		ExerciseInRound exerciseInRound;//= exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO);
-	//	exerciseInRoundService.save(exerciseInRound);
+		ExerciseInRound exerciseInRound;
 
 	if("add".equals(mode)) {
 			exerciseInRoundDTO.setId(null);
@@ -384,6 +392,10 @@ public class TrainingController {
 			for (Round roundIter : training.getRounds()) {
 				listExerciseInRound.addAll(roundIter.getExerciseInRound());
 			}
+			model.addAttribute("exerciseDTO", new ExerciseDTO());
+			model.addAttribute("hiddenExerciseGroupId", "-1");
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
+			
 			model.addAttribute("trainingListTest", tablesShowingOldTrainings(training.getClient().getId().toString(), training.getId().toString()));
 			model.addAttribute("id", id);
 			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
