@@ -18,10 +18,6 @@ public class indexController {
 			return "redirect:/exerciseGroupList";
 		} else if ("client".equals(mode)) {
 			return "redirect:/clientList";
-		} else if ("calendar".equals(mode)) {
-			return "redirect:/calendar";
-		} else if ("personalTrainer".equals(mode)) {
-			return "redirect:/personalTrainer";
 		}
 
 		return "redirect:/trainingList/"+isThereError;
