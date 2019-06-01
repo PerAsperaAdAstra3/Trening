@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +45,10 @@ public class PersonalTrainerController {
 		return "redirect:/personalTrainer";
 	}
 	
-	@RequestMapping(value = "/addPersonalTrainers", method = RequestMethod.POST)
-	public String deletePersonalTrainer(@PathVariable String id) {}
-//	/addPersonalTrainings
+	@RequestMapping(value = {"/deletePersonalTrainer/{id}"}, method = RequestMethod.GET)
+	public String deletePersonalTrainer(@PathVariable String id) {
+		System.out.println("Id personalnog trenera koji se brise : " + id);
+		personalTrainerService.delete(Long.parseLong(id));
+		return "redirect:/personalTrainer";
+	}
 }

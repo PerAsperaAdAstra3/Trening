@@ -14,6 +14,35 @@ $(document).on("click", "#addButton", function() {
 	$("#errorExerciseId").hide();
 	ajaxExerciseInRoundAddExercise();
 });
+
+$(document).on("click", "#tr-entity-list", function(event) {
+	highlightRow(this)
+});
+
+$(document).on("click", "#search", function(event) {
+	$("#hidden_input").css('display','table-row');
+});
+
+$(document).on("click", "#resetButton", function(event) {
+		document.getElementById("editButton").disabled = true;
+});
+
+function sync(item){
+	name = item.find(".personalTrainerName").html()
+    familyName = item.find(".personalTrainerFamilyName").html()
+    id = item.find(".personalTrainerId").html()
+    email = item.find(".personalTrainerEmail").html()
+    phoneNumber = item.find(".personalTrainerPhone").html()
+    
+    document.getElementById("editButton").disabled = false;
+	
+    $("#name").val(name);
+    $("#familyName").val(familyName);
+    $("#id").val(id);
+    $("#phoneNumber").val(phoneNumber);
+    $("#email").val(email);
+}
+
 </script>
 </head>
 <body class="gradient">
@@ -26,10 +55,11 @@ $(document).on("click", "#addButton", function() {
 
 <div class="panel">
 <form style="padding-left:3em" th:action="@{/addPersonalTrainers}" th:object="${personalTrainerDTO}" method="POST">
+	<input type="hidden" th:field="*{id}" id="id" />
 	<div class="form-group row">
 		<div class="col-xs-2">
 		<label class="label-width-1" for="*{name}">Ime:</label>
-		<input type="text" th:field="*{name}" id="givenName" class="form-control"/>
+		<input type="text" th:field="*{name}" id="name" class="form-control"/>
 		</div>
 	</div>
 	<div class="form-group row">
@@ -40,21 +70,21 @@ $(document).on("click", "#addButton", function() {
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-		<label class="label-width-1" for="*{phoneNumber}">Telefon:</label>
-		<input type="text" th:field="*{phoneNumber}" id="telephoneTrainer" class="form-control"/>
+		<label class="label-width-1" for="*{email}">Email:</label>
+		<input type="text" th:field="*{email}" id="email" class="form-control"/>
 		</div>
 	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
-		<label class="label-width-1" for="*{email}">Email:</label>
-		<input type="text" th:field="*{email}" id="emailTrainer" class="form-control"/>
+		<label class="label-width-1" for="*{phoneNumber}">Telefon:</label>
+		<input type="text" th:field="*{phoneNumber}" id="phoneNumber" class="form-control"/>
 		</div>
 	</div>
 	
 	<div class="from-group row">
 		<div class="col-xs-2">
 		<!--  TODO continue working on AJAX implementation -->
-			<button id="addButton" type="button" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
+			<button id="addButton" type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
 			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
 			<button id="resetButton" type="reset" class="btn btn-success">Iscisti</button>
 		</div>
@@ -79,21 +109,21 @@ $(document).on("click", "#addButton", function() {
 		<tr>
 			<th scope="col">Ime</th>
 			<th scope="col">Prezime</th>
-			<th scope="col">Telefon</th>
 			<th scope="col">Email</th>
+			<th scope="col">Telefon</th>
 			<th scope="col"></th>
 			<th scope="col"></th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr id="tr-entity-list" th:each = "personalTrainer : ${personalTrainers}">
-			<td class="personalTrainerId" th:utext="${personalTrainer.id}"></td>
 			<td class="personalTrainerName" th:utext="${personalTrainer.name}"></td>
 			<td class="personalTrainerFamilyName" th:utext="${personalTrainer.familyName}"></td>
 			<td class="personalTrainerEmail" th:utext="${personalTrainer.email}"></td>
 			<td class="personalTrainerPhone" th:utext="${personalTrainer.phoneNumber}"></td>
-			<td><a th:href="@{/deletePersonalTrainer/{id}(id=${personalTrainer.id)}}"><button type="button" class="btn btn-danger">Briši</button></a></td>
-			<td><a ></a></td>
+			<td scope="row" class="personalTrainerId" th:utext="${personalTrainer.id}" style="display:none;"></td>
+			<td><a th:href="@{/deletePersonalTrainer/{id}(id=${personalTrainer.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+			<td><a></a></td>
 		</tr>
 	</tbody>	
 </table>
