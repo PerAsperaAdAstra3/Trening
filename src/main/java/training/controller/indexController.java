@@ -22,6 +22,8 @@ public class indexController {
 			return "redirect:/calendar";
 		} else if ("personalTrainer".equals(mode)) {
 			return "redirect:/personalTrainer";
+		} else if ("testPage".equals(mode)) {
+			return "redirect:/test";
 		}
 
 		return "redirect:/trainingList/"+isThereError;
