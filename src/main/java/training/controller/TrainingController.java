@@ -134,10 +134,22 @@ public class TrainingController {
 	
 	try {
 		
+		TrainingDTO trainingDTO = createTraining(clientId);
+		Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
+		trainingDTO = trainingToTrainingDTO.convert(training);
+		
+		Round round = new Round(training.getRounds().size() + 1);
+		training.addRound(round);
+		roundService.save(round);
+		trainingService.save(training);
+		
+		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId));
-		model.addAttribute("trainingDTO", createTraining(clientId));
+		model.addAttribute("trainingDTO", trainingDTO);
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
+		model.addAttribute("selectedRoundId", training.getRounds().get(0).getId());
+		model.addAttribute("exercises", getExercisesForModel(training));
 		
 	} catch(Exception e) {
 		e.printStackTrace();

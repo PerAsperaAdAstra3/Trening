@@ -166,17 +166,25 @@ $.ajax({
 		timeout: 600000,
 		success: function (data){
 			console.log(data);	
-			var idTraining = $(".idTraining").val();
-
-		    $("#roundsTable tr:last").after('<tr id="round-id-sync"><td class="roundRoundSequenceNumber">'+ data.roundRoundSequenceNumber +'</td><td class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><a href="/deleteRound/'+data.selectedRoundId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
-			
+			var idTraining = $(".idTraining").val();			
+				$("#roundsTable tr").each(function() {
+					removeHighlights(this)
+				});
+		    $("#roundsTable tr:last").after('<tr id="round-id-sync" class="highlighted"><td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber">'+ data.roundRoundSequenceNumber +'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><a href="/deleteRound/'+data.selectedRoundId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+		    selectRoundIdOnRowClick($(".highlighted"));
 		},
 		error: function (e) {
 			var json = "<h4>Ajax Response</h4>";
 	            $('#feedback').html(json);
 		}
 	})
+}
 
+function removeHighlights(row){
+	if(!$(row).hasClass("header")){
+		$(row).parent().find(".highlighted").removeClass("highlighted");
+		sync1($(row));
+	}
 }
 
 function ajaxDeleteRound(roundId, thisObject){	
