@@ -25,12 +25,14 @@ import training.dto.ExerciseDTO;
 import training.dto.ExerciseInRoundDTO;
 import training.dto.ExerciseInRoundDTOAjax;
 import training.dto.ExerciseInRoundDTOAjaxAddRound;
+import training.dto.FilterLastExerciseInRoundDTOAjax;
 import training.dto.RoundDTOAjax;
 import training.dto.TrainingDTO;
 import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
+import training.repository.ExerciseInRoundRepository;
 import training.service.ExerciseInRoundService;
 import training.service.ExerciseService;
 import training.service.RoundService;
@@ -42,6 +44,9 @@ public class RestTrainingController {
 
 	private Long newExerciseInRoundExecId = -1l;
 
+	@Autowired
+	private ExerciseInRoundRepository exerciseInRoundRepository;
+	
 	@Autowired
 	private RoundService roundService;
 
@@ -148,6 +153,28 @@ public class RestTrainingController {
 
 		return ResponseEntity.ok(obj.toString());
 	}
+	
+	@PostMapping(value = { "/addExerciseInRoundFillFields" })
+	public ResponseEntity<?> addExerciseInRoundFillFields(@Valid @RequestBody FilterLastExerciseInRoundDTOAjax filterLastExerciseInRoundDTOAjax) {
+		
+		
+		String exerciseId = filterLastExerciseInRoundDTOAjax.getExerciseId();
+		String clientId = filterLastExerciseInRoundDTOAjax.getClientId();
+	
+		ExerciseInRound eir =  exerciseInRoundRepository.testQuery(clientId, exerciseId);
+		
+		JSONObject obj = new JSONObject();
+		try {
+		obj.put("exerciseInRoundExerciseName", eir.getExerciseName());
+		obj.put("exerciseInRoundDifficulty", eir.getDifficulty());
+		obj.put("exerciseInRoundNote", eir.getNote());
+		obj.put("exerciseInRoundNumberOfRepetitions", eir.getNumberOfRepetitions());
+		} catch (Exception e) {
+
+		}
+
+	return ResponseEntity.ok(obj.toString());
+}
 	
 	private Long addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
 

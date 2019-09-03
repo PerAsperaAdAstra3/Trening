@@ -40,6 +40,33 @@ $.ajax({
 	
 }
 
+function ajaxExerciseInRoundFill(dinamicSelectExerciseId){
+	
+	var exerciseInRound = {}
+	
+	exerciseInRound["clientId"] = $(".id").val();
+	exerciseInRound["exerciseId"] = dinamicSelectExerciseId;
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/addExerciseInRoundFillFields",
+		data: JSON.stringify(exerciseInRound),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+		    $("#exerciseInRoundNote").val(data.exerciseInRoundNote);
+		    $("#exerciseInRoundNumberOfRepetitions").val(data.exerciseInRoundNumberOfRepetitions);
+		    $("#exerciseInRoundDifficulty").val(data.exerciseInRoundDifficulty);
+		},
+		error: function (e) {
+			 var json = "<h4>Ajax Response</h4>";
+	            $('#feedback').html(json);
+		}
+	})
+}
+
 function ajaxExerciseInRound(){
 
 	var exerciseInRound = {}

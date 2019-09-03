@@ -59,6 +59,28 @@
 			rows.sort(sortByTwoColumns);
 			$("#training tbody").append(rows);
 		}
+		
+function filterTable(selectedName){
+	var input, filter, table, tr, td, i, j;
+	 input = selectedName;
+	 
+	 filter = input.toUpperCase();
+	
+	 $("tr").each(function(){
+	  		var idxx = $(this).prop('id')
+	  	
+	  		if(idxx == "tr-entity-list"){
+		    td = $(this).find("td")[2];
+		    if (td) {
+		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		        $(this).show();
+		      } else {
+		        $(this).hide();
+		      }
+		    }    
+		   }
+		 });
+}
 		/*]]>*/
 		
 	$(document).on("click", "#copyTrainingButton", function(event) {
@@ -87,6 +109,13 @@
 		var trainingId = $(this).parent().parent().find(".trainingId").html();
 		PDFprintAjaxListPage(trainingId);
 	});
+	
+	$(document).on("click", "#tr-entity-list-modalX", function(event) {
+			highlightRowFilterSelect(this);
+		 var clientSelectNameVar = $(this).find(".clientSelectNameFolder").html(); 
+		
+		 filterTable(clientSelectNameVar);
+	});
 		
 	function sync(item){
 		name = item.find(".clientName").html()
@@ -114,6 +143,13 @@
     	sync1($(row));
     }
 }
+
+	function highlightRowFilterSelect(row){
+	if(!$(row).hasClass("header")){
+		$(row).parent().find(".highlighted").removeClass("highlighted");
+    	$(row).addClass("highlighted");
+    }
+}
 	
 	function sync1(item){
 		name = item.find(".clientName").html()
@@ -126,6 +162,13 @@
 	}
 	
 </script>
+
+<style>
+ .floating-box {
+		  float: left;
+	}
+</style>
+
 </head>
 <body class="gradient">
 	<div class="alert div1" role="alert">
@@ -137,6 +180,28 @@
 	<br/>
 	<br/>
 	<!-- Modal -->
+	
+	
+	<div class="container-responsive">
+	     <table style="width:100%" id = "myTableExercisesX" class = "table table-responsive">
+		<thead>
+			<tr>
+				<th align="center" scope="col">Klijenti :</th>
+				<th scope="col"></th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr align="center" class="modal-table-coloringX floating-box trBox" id="tr-entity-list-modalX" th:each = "client : ${clients}">
+				<td class="clientSelectNameFamilinameFolder" th:utext="${client.name + ' ' + client.familyName}"></td>
+				<td class="clientSelectNameFolder" th:utext="${client.name}" style="display:none;"></td>
+				<td class="clientSelectId" th:utext="${client.id}" style="display:none;"></td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
+	
+	
 <form th:action="@{/copyTraining}" method="GET">
 	<input id="idOfCopiedTraining" type="hidden" th:value="${idOfCopiedTraining}" name="idOfCopiedTraining"/>
 	<input id="idOfClientToCopyTo" type="hidden" th:value="${idOfClientToCopyTo}" name="idOfClientToCopyTo"/>
@@ -152,6 +217,9 @@
         <h4 class="modal-title">Klijenti</h4>
       </div>
       <div class="modal-body">
+      
+ 
+      
 <input type="text" id="inputFilterByName" onkeyup="filterModalClient(0)" placeholder="Filtriranje po nazivu.."/>
 <input type="text" id="inputFilterByFamilyName" onkeyup="filterModalClient(1)" placeholder="Filtriranje po prezimenu.."/>
 <input type="text" id="inputFilterByEmail" onkeyup="filterModalClient(2)" placeholder="Filtriranje po email.."/>

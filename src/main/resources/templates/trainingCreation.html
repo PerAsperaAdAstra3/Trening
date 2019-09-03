@@ -88,6 +88,8 @@ $(document).on("click", "#exerciseInRoundAdd", function() {
 		 ajaxExerciseInRound();
 		}
 	}
+	
+	cleanExercise();
 });
 
 $(document).on("click", "#addButton", function() {
@@ -114,6 +116,8 @@ $(document).on("click", "#exerciseInRoundEdit", function() {
 	if(areFieldsFilledIn){	
 		ajaxExerciseInRoundChange();
 	}
+	
+	cleanExercise();
 });
 	
 	
@@ -200,7 +204,14 @@ $(document).on("click", "#deleteExerciseInRound", function(event) {
 function enableAddRound(item) {
 	var trainingID = $(".idTraining")[0]
 	if($(trainingID).val() != ""){
-		$("#noviKrug").prop("disabled", false) 
+		if($('#circularYN').val() != "yes"){
+			$("#noviKrug").prop("disabled", false) 
+			$("#brojKombinacije").show()
+			
+		} else {
+			$("#noviKrug").hide()
+		}
+		
 		$("#editTraining").prop("disabled", false) 
 		$("#deleteTraining").prop("disabled", false) 
 		$("#PDFButton").prop("disabled", false)
@@ -303,6 +314,8 @@ $(document).on("click" , ".filterExercises", function(event){
 	
 	var dinamicSelectExerciseId = $(this).find(".dinamicSelectExerciseId").html()
 	var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
+
+	ajaxExerciseInRoundFill(dinamicSelectExerciseId)
 		
 	$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
 	$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
@@ -398,6 +411,16 @@ function disableExerciseInRoundEdit(){
     $("#exerciseInRoundEdit").prop("disabled", true)
 }
 	
+	
+function cleanExercise(){
+		$("#exerciseInRoundExerciseName").val('');
+	    $("#exerciseInRoundExerciseId").val('');
+	    $("#idExerciseInRound").val('');
+	    $("#exerciseInRoundNote").val('');
+	    $("#exerciseInRoundNumberOfRepetitions").val('');
+	    $("#exerciseInRoundDifficulty").val('');
+}
+		
 function sync(item){
     id = item.find(".exerciseId").html()
     exerInRoundId = item.find(".exerciseInRoundId").html() 
@@ -491,7 +514,7 @@ function sync2(item){
 <form  style="padding-left:3em" th:action="@{/addRound}" method="POST">
  	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="noviKrug" class="btn btn-success" type="button" disabled="disabled">Nova kombinacija</button>
+			
 		</div>
 	</div>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
@@ -499,14 +522,16 @@ function sync2(item){
 </form>
 <br/>
 
-<h3 style="padding-left:1em">Postojeće kombinacije</h3>
- 
+<h3 style="padding-left:1em"><label th:text="${circularYesNo}"></label></h3>
+<!-- Postojeće kombinacije -->
+<input type="hidden" id="circularYN" name="circularYN" th:value="${circularYN}"/>
+<!-- <span th:text="${worldText}"></span> -->
 
 <div class="container-responsive">
 	<table id="roundsTable" style="margin-top:2em" class="table table-responsive">
 			<thead>
 				<tr>
-					<th>Broj Kombinacije</th>
+					<th width="200px"><label id="brojKombinacije" style="display:none;">Broj Kombinacije</label></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -519,7 +544,7 @@ function sync2(item){
 				</tr>
 			</tbody>
 	</table>
-	<div style="padding-left:3em"><button style="margine-left:3em" class="btn btn-success" id="testingDeselect">Deselektuj</button></div>
+	<div style="padding-left:3em"><button style="margine-left:3em" class="btn btn-success" id="testingDeselect">Prikaži sve</button>    <button id="noviKrug" class="btn btn-success" type="button" disabled="disabled">Nova kombinacija</button></div>
 </div>
 
 	</div>
@@ -537,7 +562,7 @@ function sync2(item){
 				<table>
 					<tbody>
 					<tr>
-						<td align="center" th:utext="'Trening : ' + ${training.date}"></td>
+						<td align="center" th:utext="'Trening : ' + ${#dates.format(training.date, 'dd-MM-yyyy')}"></td>
 					</tr>
 					<tr th:each="round : ${training.rounds}">
 						<td>

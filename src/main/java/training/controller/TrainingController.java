@@ -150,6 +150,44 @@ public class TrainingController {
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("selectedRoundId", training.getRounds().get(0).getId());
 		model.addAttribute("exercises", getExercisesForModel(training));
+		model.addAttribute("circularYesNo", "Postojeće kombinacije");
+		
+	} catch(Exception e) {
+		e.printStackTrace();
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for(int i=0; i < trace.length; i++ ) {
+			messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
+		return "trainingCreation";
+	}
+	
+	@RequestMapping(value = { "/circularTrainingCreationHandler/{clientId}" }, method = RequestMethod.GET)
+	public String createCircularTraining(Model model, @PathVariable String clientId) {
+	
+	try {
+		
+		TrainingDTO trainingDTO = createTraining(clientId);
+		Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
+		trainingDTO = trainingToTrainingDTO.convert(training);
+		
+		Round round = new Round(training.getRounds().size() + 1);
+		training.addRound(round);
+		roundService.save(round);
+		trainingService.save(training);
+		
+		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
+		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId));
+		model.addAttribute("trainingDTO", trainingDTO);
+		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
+		model.addAttribute("exerciseDTO", new ExerciseDTO());
+		model.addAttribute("selectedRoundId", training.getRounds().get(0).getId());
+		model.addAttribute("exercises", getExercisesForModel(training));
+		model.addAttribute("circularYesNo", "Kružni trening");
+		model.addAttribute("circularYN", "yes");
 		
 	} catch(Exception e) {
 		e.printStackTrace();

@@ -47,7 +47,6 @@ public class PersonalTrainerController {
 	
 	@RequestMapping(value = {"/deletePersonalTrainer/{id}"}, method = RequestMethod.GET)
 	public String deletePersonalTrainer(@PathVariable String id) {
-		System.out.println("Id personalnog trenera koji se brise : " + id);
 		personalTrainerService.delete(Long.parseLong(id));
 		return "redirect:/personalTrainer";
 	}
