@@ -112,6 +112,8 @@
 			<th scope="col">Broj telefona</th>
 			<th scope="col"></th>
 			<th scope="col"></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -125,6 +127,8 @@
 				<a th:href="@{/deleteClient/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td>
 				<a th:href="@{/trainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
+				<td>
+				<a th:href="@{/circularTrainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj kružni trening</button></a></td>
 		</tr>
 	</tbody>
 </table>

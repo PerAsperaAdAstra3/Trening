@@ -39,12 +39,33 @@ table {
 	    margin-left: 35px;
 }
 
+.trBox {
+	width: 20%;
+	max-width: 20%;
+}
+
+.th {
+	width: 10%;
+	max-width: 10%;
+}
+
+.table-calendar {
+  width: 70%;
+  max-width: 70%;
+  float: right;
+}
 .button1 {width: 220px;
 		  height: 220px;
 		  color: #fff;
 	      background-color: #28a745;
 	      border-color: #28a745;
 		  }
+.buttonFolders {width: 220px;
+		  		height: 90px;
+		  		color: #fff;
+	      		background-color: #28a745;
+	      		border-color: #28a745;
+		  		}
 
 .div1 { background: #dcdcdc}
 
