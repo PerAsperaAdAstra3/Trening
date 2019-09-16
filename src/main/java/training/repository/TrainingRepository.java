@@ -12,4 +12,6 @@ import training.model.Training;
 @Repository
 public interface TrainingRepository extends JpaRepository<Training, Long>{
 	List<Training> findTop10ByClientIdAndIdLessThanOrderByIdDesc(Long clientId, Long id);
+	
+	List<Training> findAllByClientIdOrderByIdDesc(Long clientId);
 }
