@@ -1,4 +1,3 @@
-
 function ajaxExerciseInRoundAddExercise(){
 	var exerciseInRound = {}
 	var roundExerciseId = $("#exerciseInRoundExerciseId").val();
