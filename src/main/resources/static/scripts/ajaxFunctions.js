@@ -1,3 +1,34 @@
+function ajaxAddMultipleExerciseInRound(attrList , attr, highlightedRoundID){
+	var multipleExerciseInRound = {}
+
+	multipleExerciseInRound["exerciseIDList"] = attrList;
+	multipleExerciseInRound["trainingId"] = attr;
+	multipleExerciseInRound["highlightedRoundId"] = highlightedRoundID;
+	multipleExerciseInRound["circularRoundYN"] = $('#circularYN').val();
+$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/addMultipleExerciseInRound",
+		data: JSON.stringify(multipleExerciseInRound),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			
+			//TODO Transform in to standard AJAX success handling - remove code related to this current solution.
+			
+			// location.reload();
+			// /getTraining/{attr}
+			 $('#callGetTraining')[0].click();
+		},
+		error: function (e) {
+			 var json = "<h4>Ajax Response</h4>";
+	            $('#feedback').html(json);
+		}
+	})
+
+}
+
 function ajaxExerciseInRoundAddExercise(){
 	var exerciseInRound = {}
 	var roundExerciseId = $("#exerciseInRoundExerciseId").val();

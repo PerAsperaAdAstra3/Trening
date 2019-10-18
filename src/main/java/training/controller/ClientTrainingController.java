@@ -53,6 +53,7 @@ public ResponseEntity<?> addExerciseInRound(@Valid @RequestBody ClientDTO client
 			
 			model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingRepository.findAllByClientIdOrderByIdDesc(Long.parseLong(id))));
 			model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
+			model.addAttribute("clientId", id);
 			model.addAttribute("idOfCopiedTraining","");
 			model.addAttribute("idOfClientToCopyTo","");
 			

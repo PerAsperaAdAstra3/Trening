@@ -56,15 +56,15 @@ function filterTable(typeToFilter, pageOrigin){
 
 	//TrainingCreation
 	if(pageOrigin === 5){
-		if (typeToFilter === 1) {
+		if (typeToFilter === 2) {
 			  input = $("#inputFilterByName").val();
-		        j = 1;
-		    } else if (typeToFilter === 2){
-		    	 input = $("#inputFilterByDescription").val();
-		    	j = 2;
+		        j = 2;
 		    } else if (typeToFilter === 3){
-		  	  input = $("#inputFilterByGroup").val();
+		    	 input = $("#inputFilterByDescription").val();
 		    	j = 3;
+		    } else if (typeToFilter === 4){
+		  	  input = $("#inputFilterByGroup").val();
+		    	j = 4;
 		    }
 	}
 	 	

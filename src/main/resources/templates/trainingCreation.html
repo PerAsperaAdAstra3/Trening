@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
 <script src="../../scripts/jquery-3.2.1.min.js"></script>
 <script src="../../scripts/bootstrap.min.js"></script>
 <script src="../../scripts/functions.js"></script>
@@ -29,6 +30,11 @@ $(document).ready(function(){
 	$("#errorExerciseName").hide();
 	$("#errorExerciseId").hide();
 	$(".exerciseInRoundId").hide();	
+	
+	$(".oldTrainings").eq("0").css('display','table-row');
+	$(".oldTrainings").eq("1").css('display','none');
+	$(".oldTrainings").eq("2").css('display','none');
+	
 	$('#addExerciseInRoundForm').submit(function(){
 		var areFieldsFilledIn = true;
 		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()
@@ -55,6 +61,29 @@ $(document).ready(function(){
 	});
 });
 
+
+$(document).on("click", "#button1", function(){
+
+	$(".oldTrainings").eq("0").css('display','table-row');
+	$(".oldTrainings").eq("1").css('display','none');
+	$(".oldTrainings").eq("2").css('display','none');
+	
+});
+
+$(document).on("click", "#button2", function(){
+	
+	$(".oldTrainings").eq("0").css('display','none');
+	$(".oldTrainings").eq("1").css('display','table-row');
+	$(".oldTrainings").eq("2").css('display','none');
+	
+});
+$(document).on("click", "#button3", function(){
+
+	$(".oldTrainings").eq("0").css('display','none');
+	$(".oldTrainings").eq("1").css('display','none');
+	$(".oldTrainings").eq("2").css('display','table-row');
+	
+});
 	//Handling of click on Dodaj button.
 	
 $(document).on("click", "#exerciseInRoundAdd", function() {
@@ -69,7 +98,7 @@ $(document).on("click", "#exerciseInRoundAdd", function() {
 		areFieldsFilledIn = false;
 		$("#errorExerciseId").show();
 	}
-	var isNotSame = checkExerciseNameTest()
+	var isNotSame =  checkExerciseNameTest()
 			
 	if(isNotSame){
 		$('#exerciseInRoundExerciseId').val("");
@@ -162,10 +191,48 @@ $(document).on("click", "#tr-entity-list", function(event) {
 
 	
 $(document).on("click", "#tr-entity-list-modal", function(event) {
-	highlightRow(this)
-	$('#myModal').modal('hide')
-	filterFunction()
+
+	if ($(this).find(".trainingChk").is(":checked")){
+		$(this).find(".trainingChk").prop('checked', false);		
+	} else {
+		$(this).find(".trainingChk").prop('checked', true);		
+	}
 	
+	$("#tr-entity-list-modal input").click(function(e) {
+        e.stopPropagation();
+   });
+});
+
+$(document).on("click", "#selectExercises", function(event) {
+	var doc = document.getElementById("test");
+	var chBoxes = document.getElementsByClassName("trainingChk");
+	var notes = null;
+	var listExerciseId = new Array();
+	var highlightedRound = $("#round-id-sync").parent().find(".highlighted");
+	var highlightedRoundID = $(highlightedRound).find("#roundIdDel").text();
+
+	$( ".trainingChk" ).each(function( index ) {
+		if ($(this).is(":checked"))
+		{
+			
+			id = $(this).parent().parent().find(".exerciseId").html()
+		    
+		exerciseName = $(this).find(".exerciseName").html()
+		listExerciseId.push(id);
+		  var xxx = $(this).parent().parent();
+			  sync($(this).parent().parent()); 
+		} else {
+		}
+
+		});
+	
+	listExerciseId.forEach(function(item) {
+	});	
+	var trainingIDXXX = $(".idTraining").val();
+
+	$('#myModal').modal('hide')
+	
+	ajaxAddMultipleExerciseInRound(listExerciseId, trainingIDXXX, highlightedRoundID)
 	if($("#myDropdown").is(":visible") == true){
 		document.getElementById("myDropdown").classList.toggle("show");
 	}
@@ -436,7 +503,6 @@ function sync(item){
     $("#exerciseInRoundNote").val(exerciseInRoundNote);
     $("#exerciseInRoundNumberOfRepetitions").val(numberOfRepetitions);
     $("#exerciseInRoundDifficulty").val(difficulty);
-	    
 }
 	
 function sync2(item){
@@ -481,7 +547,7 @@ function sync2(item){
 		<div class="col-xs-2">
 		
 <form style="padding-left:3em" th:action="@{/saveTraining}" th:object="${trainingDTO}" method="POST">
-
+	<a id="callGetTraining" style="visibility: hidden" th:href="@{/getTraining/{id}/(id=${trainingDTO.id})}">XXX</a>
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label class="label-width" for="trainingDate">Datum:</label>
@@ -517,6 +583,7 @@ function sync2(item){
 		</div>
 	</div>
 <input type="hidden" class="id" name="id" th:value="${id}"/>
+
 <input type="hidden" id="selectedRoundId" name="selectedRoundId" th:value="${selectedRoundId}"/>
 </form>
 <br/>
@@ -527,6 +594,7 @@ function sync2(item){
 <!-- <span th:text="${worldText}"></span> -->
 
 <div class="container-responsive">
+	
 	<table id="roundsTable" style="margin-top:2em" class="table table-responsive">
 			<thead>
 				<tr>
@@ -536,9 +604,8 @@ function sync2(item){
 			</thead>
 			<tbody>
 				<tr	id="round-id-sync" th:each = "round : ${roundsInTraining}">
-					
 					<td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber" th:utext="${round.roundSequenceNumber}" ></td>
-					<td id="roundIdDel" class="roundId" th:utext="${round.id}" style="display:none;"></td> 
+					<td id="roundIdDel" class="roundId roundIdSel" th:utext="${round.id}" style="display:none;"></td> 
 					<td><button id="roundDeleteButton" type="button" class="btn btn-danger">Briši</button></td>
 				</tr>
 			</tbody>
@@ -548,15 +615,20 @@ function sync2(item){
 
 	</div>
 
-	<div class="col-xs-2">
+	<div style="width:50%" class="col-xs-2">
 <!--  trainingListTest  -->
 	<br/>
 		<br/>
+		<div  align="center">
+		<button id="button1" class="btn btn-secondary">1</button>
+		<button id="button2" class="btn btn-secondary">2</button>
+		<button id="button3" class="btn btn-secondary">3</button>
+		</div>
 	<table>
 		<thead>
 		</thead>
 		<tbody>
-			<tr th:each="training : ${trainingListTest}">
+			<tr class="oldTrainings" th:each="training : ${trainingListTest}" style="display:none;">
 				<td>
 				<table>
 					<tbody>
@@ -615,7 +687,7 @@ function sync2(item){
 					<input type="hidden" class="form-control" size="70" th:field="*{exerciseInRoundExerciseName}" id="exerciseInRoundExerciseName" disabled="disabled"/>
 		<!--		</div>
 				<div class="col"> -->
-					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" disabled="disabled">Izbor</button>
+					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Izbor</button>
 				
 				<div class="col">
 					<label id="errorExerciseName" class="errorText"><font color="red"><b>Exercise Name Error message!!</b></font></label>
@@ -654,7 +726,6 @@ function sync2(item){
 	</div>
 </div>
 <div class="col-xs-2">
-<!-- 		<form id="deleteExerciseInRoundForm" th:action="@{/deleteExerciseInRound}" method="POST">  -->
 <div class="container-responsive">
 	<table id="exercisesInRoundTable" class = "table table-responsive">
 		<thead>
@@ -681,7 +752,6 @@ function sync2(item){
 	</table>
   </div>
 	<input type="hidden" class="id" name="id" th:value="${id}"/>
-<!-- </form>  --> 
 </div>
 </div>
 
@@ -704,13 +774,14 @@ function sync2(item){
         <h4 class="modal-title">Vežbe</h4>
       </div>
 <div class="modal-body">
-<input type="text" id="inputFilterByName" onkeyup="filterTable(1,5)" placeholder="Filtriranje po nazivu.."/>
-<input type="text" id="inputFilterByDescription" onkeyup="filterTable(2,5)" placeholder="Filtriranje po opisu.."/>
-<input type="text" id="inputFilterByGroup" onkeyup="filterTable(3,5)" placeholder="Filtriranje po grupi.."/>
+<input type="text" id="inputFilterByName" onkeyup="filterTable(2,5)" placeholder="Filtriranje po nazivu.."/>
+<input type="text" id="inputFilterByDescription" onkeyup="filterTable(3,5)" placeholder="Filtriranje po opisu.."/>
+<input type="text" id="inputFilterByGroup" onkeyup="filterTable(4,5)" placeholder="Filtriranje po grupi.."/>
 <div class="container-responsive">
 	<table  id = "myTableExercises" class = "table table-responsive">
 		<thead>
 			<tr>
+				<th scope="col"></th>
 				<th scope="col">Naziv</th>
 				<th scope="col">Opis</th>
 				<th scope="col">Grupa vežbi</th>
@@ -720,6 +791,7 @@ function sync2(item){
 		</thead>
 		<tbody>
 			<tr class="modal-table-coloring" id="tr-entity-list-modal" th:each = "exercise : ${exercises}">
+				<td class="checkBox"><input type="checkbox" class="trainingChk" name="trainingChk"/></td>
 				<td class="exerciseId" th:utext="${exercise.id}" style="display:none;"></td>
 				<td class="exerciseName" th:utext="${exercise.name}"></td>
 				<td class="exerciseDescription" th:utext="${exercise.description}"></td>
@@ -729,6 +801,7 @@ function sync2(item){
 			</tr>
 		</tbody>
 	</table>
+	      	<button id="selectExercises">Selektuj</button>
 </div>
 
       </div>
