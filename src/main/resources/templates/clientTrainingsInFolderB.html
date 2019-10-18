@@ -19,7 +19,7 @@ xmlns=http://www.w3.org/1999/xhtml"
 <script>
 $(document).ready(function(){
 	var selectedRound = $("#hiddenNameFamiliname").val()
-	$('#pageTitle').html("Klijent : " + selectedRound);
+	$('#pageTitle').html(selectedRound);
 });
 
 $(document).on("click", "#PDFButton", function() {
@@ -226,13 +226,21 @@ function filterTable(selectedName){
 //
 </script>
 <body>
+	<br/>
 	<a href="/" class="home">Početna</a>
     <h2 id="pageTitle" class="modal-title"></h2>
-    
+  
+  <br/>  
+    <input id="clientIdSel" type="hidden" th:value="${clientId}" name="clientIdSel"/>
+	<div class = "twoButtonsDiv"><a th:href="@{/trainingCreationHandler/{clientId}(clientId=${clientId})}"><button type="button" class="btn btn-success">Dodaj trening</button></a>
+	<a th:href="@{/circularTrainingCreationHandler/{clientId}(clientId=${clientId})}"><button type="button" class="btn btn-success">Dodaj kružni trening</button></a></div>
+  <br/>
+  <br/>
+  <br/>
 <form th:action="@{/copyTraining}" method="GET">
 <input id="idOfCopiedTraining" type="hidden" th:value="${idOfCopiedTraining}" name="idOfCopiedTraining"/>
 <input id="idOfClientToCopyTo" type="hidden" th:value="${idOfClientToCopyTo}" name="idOfClientToCopyTo"/>
-<button id="hiddenButtonToCopyTraining" type="submit" style="display:none;">Kopiraj traning</button>
+<button id="hiddenButtonToCopyTraining" type="submit" style="display:none;">Kopiraj trening</button>
 </form>
     
 <div id="myModal" class="modal fade" role="dialog">
@@ -275,7 +283,7 @@ function filterTable(selectedName){
   </div>
 </div>
     
-	<table id="training" class="table table-hover">
+	<table id="training" class="table">
 	<thead>
 		<tr>
 			<th scope="col"></th>
@@ -286,13 +294,13 @@ function filterTable(selectedName){
 	</thead>
 	<tbody>
 		<tr	id="tr-entity-list" th:each = "training : ${trainings}">
-			<td scope="row" class="image"><img src="/images/File_PDF2.png"/></td>
+			<td scope="row" class="image"></td>
 			<td scope="row" class="clientId" th:utext="${training.date}"></td>
 			<td class="trainingNumberOfTra" th:utext="${training.numberOfTrainings}"></td>
 			<td class="trainingId" th:utext="${training.id}" style="display:none;"></td>
 			<td><a th:href="@{/getTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-success">Izmeni</button></a></td>
 			<td><a th:href="@{/deleteTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
-			<td><button id="PDFButton" type="button" class="btn btn-danger">PDF</button></td>
+			<td><img id="PDFButton" src="/images/File_PDF3.png"/></td>
 			<td><button  id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Kopiraj</button></td>
 			<td><input type="hidden" id = "hiddenNameFamiliname" th:value="${training.client + ' ' + training.clientFamilyName}"/></td>
 		</tr>
