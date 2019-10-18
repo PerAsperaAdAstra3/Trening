@@ -62,7 +62,7 @@ public class ClientController {
 	}
 	
 	@RequestMapping(value = {"/deleteClient/{id}"}, method = RequestMethod.GET)
-	public String deleteClient(@PathVariable String id ) {
+	public String deleteClient(@PathVariable String id) {
 		clientService.delete(Long.parseLong(id));
 		return "redirect:/clientList";
 	}

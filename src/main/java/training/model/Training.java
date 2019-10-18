@@ -31,6 +31,10 @@ public class Training {
 	@JoinColumn(name = "trainingList")
 	private Client client;
 	
+	@ManyToOne
+	@JoinColumn(name = "trainingListAppointment")
+	private Appointment appointment;
+	
 	@OneToMany(mappedBy = "trainingTask", cascade = CascadeType.ALL)
 	private List<Task> tasks = new ArrayList<Task>();
 	

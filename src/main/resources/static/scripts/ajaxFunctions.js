@@ -1,3 +1,33 @@
+function ajaxAddMultipleExerciseInRound(attrList , attr, highlightedRoundID){
+	var multipleExerciseInRound = {}
+
+	multipleExerciseInRound["exerciseIDList"] = attrList;
+	multipleExerciseInRound["trainingId"] = attr;
+	multipleExerciseInRound["highlightedRoundId"] = highlightedRoundID;
+	multipleExerciseInRound["circularRoundYN"] = $('#circularYN').val();
+$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/addMultipleExerciseInRound",
+		data: JSON.stringify(multipleExerciseInRound),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			
+			//TODO Transform in to standard AJAX success handling - remove code related to this current solution.
+			
+			// location.reload();
+			// /getTraining/{attr}
+			 $('#callGetTraining')[0].click();
+		},
+		error: function (e) {
+			 var json = "<h4>Ajax Response</h4>";
+	            $('#feedback').html(json);
+		}
+	})
+
+}
 
 function ajaxExerciseInRoundAddExercise(){
 	var exerciseInRound = {}
@@ -38,6 +68,33 @@ $.ajax({
 	})
 
 	
+}
+
+function ajaxExerciseInRoundFill(dinamicSelectExerciseId){
+	
+	var exerciseInRound = {}
+	
+	exerciseInRound["clientId"] = $(".id").val();
+	exerciseInRound["exerciseId"] = dinamicSelectExerciseId;
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/addExerciseInRoundFillFields",
+		data: JSON.stringify(exerciseInRound),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+		    $("#exerciseInRoundNote").val(data.exerciseInRoundNote);
+		    $("#exerciseInRoundNumberOfRepetitions").val(data.exerciseInRoundNumberOfRepetitions);
+		    $("#exerciseInRoundDifficulty").val(data.exerciseInRoundDifficulty);
+		},
+		error: function (e) {
+			 var json = "<h4>Ajax Response</h4>";
+	            $('#feedback').html(json);
+		}
+	})
 }
 
 function ajaxExerciseInRound(){
@@ -166,17 +223,25 @@ $.ajax({
 		timeout: 600000,
 		success: function (data){
 			console.log(data);	
-			var idTraining = $(".idTraining").val();
-
-		    $("#roundsTable tr:last").after('<tr id="round-id-sync"><td class="roundRoundSequenceNumber">'+ data.roundRoundSequenceNumber +'</td><td class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><a href="/deleteRound/'+data.selectedRoundId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
-			
+			var idTraining = $(".idTraining").val();			
+				$("#roundsTable tr").each(function() {
+					removeHighlights(this)
+				});
+		    $("#roundsTable tr:last").after('<tr id="round-id-sync" class="highlighted"><td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber">'+ data.roundRoundSequenceNumber +'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><a href="/deleteRound/'+data.selectedRoundId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+		    selectRoundIdOnRowClick($(".highlighted"));
 		},
 		error: function (e) {
 			var json = "<h4>Ajax Response</h4>";
 	            $('#feedback').html(json);
 		}
 	})
+}
 
+function removeHighlights(row){
+	if(!$(row).hasClass("header")){
+		$(row).parent().find(".highlighted").removeClass("highlighted");
+		sync1($(row));
+	}
 }
 
 function ajaxDeleteRound(roundId, thisObject){	
