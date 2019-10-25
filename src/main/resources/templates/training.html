@@ -67,9 +67,9 @@ function filterTable(selectedName){
 	 filter = input.toUpperCase();
 	
 	 $("tr").each(function(){
-	  		var idxx = $(this).prop('id')
+	  		var idEntityList = $(this).prop('id')
 	  	
-	  		if(idxx == "tr-entity-list"){
+	  		if(idEntityList == "tr-entity-list"){
 		    td = $(this).find("td")[2];
 		    if (td) {
 		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {

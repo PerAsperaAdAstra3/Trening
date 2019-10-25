@@ -14,11 +14,7 @@ $.ajax({
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			
 			//TODO Transform in to standard AJAX success handling - remove code related to this current solution.
-			
-			// location.reload();
-			// /getTraining/{attr}
 			 $('#callGetTraining')[0].click();
 		},
 		error: function (e) {

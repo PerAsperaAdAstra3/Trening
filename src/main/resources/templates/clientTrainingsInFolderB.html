@@ -128,25 +128,23 @@ function sync(item){
 		}
 		
 function filterTable(selectedName){
-	var input, filter, table, tr, td, i, j;
+	 var input, filter, table, tr, td, i, j;
 	 input = selectedName;
-	 
 	 filter = input.toUpperCase();
 	
 	 $("tr").each(function(){
-	  		var idxx = $(this).prop('id')
-	  	
-	  		if(idxx == "tr-entity-list"){
-		    td = $(this).find("td")[2];
-		    if (td) {
-		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-		        $(this).show();
-		      } else {
-		        $(this).hide();
-		      }
-		    }    
-		   }
-		 });
+	  		var idEntityList = $(this).prop('id')
+	  		if(idEntityList == "tr-entity-list"){
+			    td = $(this).find("td")[2];
+			    if (td) {
+			      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			  	      $(this).show();
+			  	    } else {
+		      	 $(this).hide();
+		      	}	
+		     }    
+		  }
+	  });
 }
 		/*]]>*/
 		

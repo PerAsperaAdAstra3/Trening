@@ -500,49 +500,6 @@ public class TrainingController {
 		
 		return "trainingCreation";
 	}
-
-/*	 @RequestMapping(value = "/listBooks", method = RequestMethod.GET)
-	    public String listBooks(
-	      Model model, 
-	      @RequestParam("page") Optional<Integer> page, 
-	      @RequestParam("size") Optional<Integer> size) {
-	        int currentPage = page.orElse(1);
-	        int pageSize = size.orElse(5);
-	 
-	        Page<Training> trainingPage = findPaginated(PageRequest.of(currentPage - 1, pageSize));
-	 
-	        model.addAttribute("trainingPage", trainingPage);
-	 
-	        int totalPages = trainingPage.getTotalPages();
-	        if (totalPages > 0) {
-	            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-	                .boxed()
-	                .collect(Collectors.toList());
-	            model.addAttribute("pageNumbers", pageNumbers);
-	        }
-	 
-	        return "listBooks.html";
-	    }*/
-	
-	
-/*    public Page<Training> findPaginated(Pageable pageable, List<Training> oldTrainingList) {
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<Training> list;
- 
-        if(oldTrainingList.size() < startItem) {
-            list = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, oldTrainingList.size());
-            list = oldTrainingList.subList(startItem, toIndex);
-        }
- 
-        Page<Training> bookPage
-          = new PageImpl<Training>(list, PageRequest.of(currentPage, pageSize), oldTrainingList.size());
- 
-        return bookPage;
-    }*/
 	
 	@RequestMapping(value = {"/printPDF/{id}"}, method = RequestMethod.GET)
 	public String pdf(Model model, @PathVariable String id) throws Exception{

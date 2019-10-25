@@ -42,14 +42,13 @@ public class PdfGenaratorUtil {
 	        	String clientFolder = map.get("name").toString();
 	        	java.nio.file.Path pathTest = java.nio.file.Paths.get(home, "treninzi", clientFolder);
 	        	
-	        	if (Files.exists(pathTest)) {
-	        		
-	        	} else {
+	        	if (Files.notExists(pathTest)) {
 	        		File directory = new File(pathTest.toString());
 	        	    if (! directory.exists()){
 	        	        directory.mkdir();
 	        	    }
 	        	}
+	        	
 	        	String fileNameString = map.get("name").toString()+" " +map.get("trainingNumber").toString() + ".pdf";
 	        	java.nio.file.Path path = java.nio.file.Paths.get(pathTest.toString(), fileNameString);
 	        	File outputFile = new File(path.toString());

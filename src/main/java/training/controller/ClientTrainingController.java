@@ -37,16 +37,6 @@ public class ClientTrainingController {
 	@Autowired
 	private TrainingRepository trainingRepository;
 	
-@PostMapping(value = { "/clientTrainingList" })
-public ResponseEntity<?> addExerciseInRound(@Valid @RequestBody ClientDTO clientDTO) {
-		
-		List<Training> trainingClient = trainingRepository.findAllByClientIdOrderByIdDesc(clientDTO.getId());
-		for(Training training : trainingClient) {
-			System.out.println(training.getDate());
-		}
-		JSONObject obj = new JSONObject();	
-		return ResponseEntity.ok(obj.toString());
-}
 	
 	@RequestMapping(value = {"/clientTrainingSubmit/{id}"}, method = RequestMethod.GET)
 	public String selectPage(Model model, @PathVariable String id) {
