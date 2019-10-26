@@ -208,7 +208,7 @@ public class TrainingController {
 		model.addAttribute("selectedRoundId", training.getRounds().get(0).getId());
 		model.addAttribute("exercises", getExercisesForModel(training));
 		model.addAttribute("circularYesNo", "Kružni trening");
-		model.addAttribute("circularYN", "yes");
+		model.addAttribute("circularYN", true);
 		
 	} catch(Exception e) {
 		e.printStackTrace();
@@ -486,6 +486,44 @@ public class TrainingController {
 			model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 			model.addAttribute("exercisesInRound", listExerciseInRound);
 			model.addAttribute("exercises", getExercisesForModel(training));
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+			List<String> messageList = new ArrayList<>();
+			StackTraceElement[] trace = e.getStackTrace();
+			for(int i=0; i < trace.length; i++ ) {
+				messageList.add(trace[i].toString());
+			}
+			model.addAttribute("errorMessage", messageList);
+			return "errorPage";
+		}
+		
+		return "trainingCreation";
+	}
+	
+	// TODO move duplicate code to one method.
+	
+	@RequestMapping(value = {"/getTrainingCircular/{id}"}, method = RequestMethod.GET)
+	public String getTrainingCircular(Model model, @PathVariable String id){
+		try {
+			Training training = trainingService.findOne(Long.parseLong(id));
+			
+			List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
+			for (Round roundIter : training.getRounds()) {
+				listExerciseInRound.addAll(roundIter.getExerciseInRound());
+			}
+			model.addAttribute("exerciseDTO", new ExerciseDTO());
+			model.addAttribute("hiddenExerciseGroupId", "-1");
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
+			
+			model.addAttribute("trainingListTest", tablesShowingOldTrainings(training.getClient().getId().toString(), training.getId().toString()));
+			model.addAttribute("id", id);
+			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
+			model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
+			model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
+			model.addAttribute("exercisesInRound", listExerciseInRound);
+			model.addAttribute("exercises", getExercisesForModel(training));
+			model.addAttribute("circularYN", true);
 		
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -77,8 +77,7 @@ public class RestTrainingController {
 		JSONObject obj = new JSONObject();
 		Training training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
 		int sizeDifference =  multipleExercisetoRoundDTO.getExerciseIDList().size() - training.getRounds().size();
-
-		if(multipleExercisetoRoundDTO.getCircularRoundYN().equals("yes")) {
+		if(null != multipleExercisetoRoundDTO.getCircularRoundYN() && multipleExercisetoRoundDTO.getCircularRoundYN()) {
 			ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
 			training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
 		

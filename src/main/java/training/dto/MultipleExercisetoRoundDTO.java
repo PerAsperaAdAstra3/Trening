@@ -10,14 +10,13 @@ public class MultipleExercisetoRoundDTO {
 	
 	private Long highlightedRoundId;
 	
-	private String circularRoundYN;
+	private Boolean circularRoundYN;
 	
-	
-	public String getCircularRoundYN() {
+	public Boolean getCircularRoundYN() {
 		return circularRoundYN;
 	}
 
-	public void setCircularRoundYN(String circularRoundYN) {
+	public void setCircularRoundYN(Boolean circularRoundYN) {
 		this.circularRoundYN = circularRoundYN;
 	}
 

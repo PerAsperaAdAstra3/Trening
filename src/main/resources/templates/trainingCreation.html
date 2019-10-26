@@ -213,13 +213,10 @@ $(document).on("click", "#selectExercises", function(event) {
 
 	$( ".trainingChk" ).each(function( index ) {
 		if ($(this).is(":checked"))
-		{
-			
-			id = $(this).parent().parent().find(".exerciseId").html()
-		    
+		{			
+		id = $(this).parent().parent().find(".exerciseId").html()
 		exerciseName = $(this).find(".exerciseName").html()
 		listExerciseId.push(id);
-		  var xxx = $(this).parent().parent();
 			  sync($(this).parent().parent()); 
 		} else {
 		}
@@ -228,11 +225,11 @@ $(document).on("click", "#selectExercises", function(event) {
 	
 	listExerciseId.forEach(function(item) {
 	});	
-	var trainingIDXXX = $(".idTraining").val();
+	var trainingID = $(".idTraining").val();
 
 	$('#myModal').modal('hide')
 	
-	ajaxAddMultipleExerciseInRound(listExerciseId, trainingIDXXX, highlightedRoundID)
+	ajaxAddMultipleExerciseInRound(listExerciseId, trainingID, highlightedRoundID)
 	if($("#myDropdown").is(":visible") == true){
 		document.getElementById("myDropdown").classList.toggle("show");
 	}
@@ -270,7 +267,7 @@ $(document).on("click", "#deleteExerciseInRound", function(event) {
 function enableAddRound(item) {
 	var trainingID = $(".idTraining")[0]
 	if($(trainingID).val() != ""){
-		if($('#circularYN').val() != "yes"){
+		if(!$('#circularYN').val()){
 			$("#noviKrug").prop("disabled", false) 
 			$("#brojKombinacije").show()
 			
@@ -547,7 +544,8 @@ function sync2(item){
 		<div class="col-xs-2">
 		
 <form style="padding-left:3em" th:action="@{/saveTraining}" th:object="${trainingDTO}" method="POST">
-	<a id="callGetTraining" style="visibility: hidden" th:href="@{/getTraining/{id}/(id=${trainingDTO.id})}">XXX</a>
+	<a id="callGetTraining" style="visibility: hidden" th:href="@{/getTraining/{id}/(id=${trainingDTO.id})}">callGetTraining</a>
+	<a id="callGetTrainingCircular" style="visibility: hidden" th:href="@{/getTrainingCircular/{id}/(id=${trainingDTO.id})}">callGetTrainingCircular</a>
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label class="label-width" for="trainingDate">Datum:</label>

@@ -15,7 +15,14 @@ $.ajax({
 		timeout: 600000,
 		success: function (data){
 			//TODO Transform in to standard AJAX success handling - remove code related to this current solution.
-			 $('#callGetTraining')[0].click();
+			
+			var isItCircular = $('#circularYN').val()
+
+			if(isItCircular){
+				$('#callGetTrainingCircular')[0].click();
+			} else {
+				$('#callGetTraining')[0].click();
+			}
 		},
 		error: function (e) {
 			 var json = "<h4>Ajax Response</h4>";
@@ -156,14 +163,9 @@ $.ajax({
 		timeout: 600000,
 		success: function (data){
 			
-			console.log(data);	
-			var xxx = data.exerciseInRoundExerciseId
-			
 			var tableRow = $(".exerciseInRoundId").filter(function() {
 			    return $(this).text() == data.exerciseExecId;
 			}).closest("tr");
-			
-			console.log(tableRow);	
 			
 			var exerciseNameTest = tableRow.find(".exerciseName").html();
 			var exerciseInRoundIdTest = tableRow.find(".exerciseInRoundId").html();
@@ -173,11 +175,6 @@ $.ajax({
 			var roundIdTest = tableRow.find(".roundId").html();
 			var exerciseExecIdTest = tableRow.find(".exerciseExecId").html();
 			var exerciseNameTest = tableRow.find(".exerciseName").html();
-			
-			console.log(exerciseNameTest);
-			console.log(noteTest);
-			console.log(numberOfRepetitionsTest);
-			console.log(difficultyTest);
 			
 			if(exerciseNameTest != data.exerciseInRoundExerciseName){
 				tableRow.find(".exerciseName").html(data.exerciseInRoundExerciseName);
