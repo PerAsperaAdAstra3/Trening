@@ -156,7 +156,7 @@ public class RestTrainingController {
 		
 			ExerciseInRound eir =  exerciseInRoundRepository.testQuery(training.getClient().getId().toString(), multipleExercisetoRoundDTO.getExerciseIDList().get(0).toString());					
 			Long trainingId = -1l;
-			
+			//TODO Code occurs multiple times, move to separate method. Lot of similar code - add comments to make things clearer.
 			exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseService.findOne(multipleExercisetoRoundDTO.getExerciseIDList().get(0)).getName());
 			exerciseInRoundDTO.setExerciseInRoundExerciseId(multipleExercisetoRoundDTO.getExerciseIDList().get(0));
 			exerciseInRoundDTO.setRoundId(multipleExercisetoRoundDTO.getHighlightedRoundId());
@@ -311,7 +311,7 @@ public class RestTrainingController {
 		String clientId = filterLastExerciseInRoundDTOAjax.getClientId();
 		ExerciseInRound eir =  exerciseInRoundRepository.testQuery(clientId, exerciseId);
 		JSONObject obj = new JSONObject();
-		
+		//TODO add logging for error in future PR.
 		try {
 			obj.put("exerciseInRoundExerciseName", eir.getExerciseName());
 			obj.put("exerciseInRoundDifficulty", eir.getDifficulty());

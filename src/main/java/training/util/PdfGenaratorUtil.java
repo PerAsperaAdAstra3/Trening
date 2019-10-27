@@ -39,7 +39,7 @@ public class PdfGenaratorUtil {
 
 	        	String home = System.getProperty("user.home");
 	        	
-	        	String clientFolder = map.get("name").toString();
+	        	String clientFolder = map.get("name").toString(); //TODO Make this configurable in the future.
 	        	java.nio.file.Path pathTest = java.nio.file.Paths.get(home, "treninzi", clientFolder);
 	        	
 	        	if (Files.notExists(pathTest)) {

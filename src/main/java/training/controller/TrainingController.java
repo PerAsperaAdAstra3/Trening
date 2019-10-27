@@ -211,7 +211,7 @@ public class TrainingController {
 		model.addAttribute("circularYN", true);
 		
 	} catch(Exception e) {
-		e.printStackTrace();
+		e.printStackTrace();  //TODO add logging in future PR.
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
