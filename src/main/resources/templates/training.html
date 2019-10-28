@@ -72,7 +72,7 @@ function filterTable(selectedName){
 	  		if(idEntityList == "tr-entity-list"){
 		    td = $(this).find("td")[2];
 		    if (td) {
-		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) { //TODO replace innerHTML with JQuery equivalent
 		        $(this).show();
 		      } else {
 		        $(this).hide();

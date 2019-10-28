@@ -73,7 +73,7 @@ function filterTable(typeToFilter, pageOrigin){
 	 $("tr").each(function(){
 		    td = $(this).find("td")[j];
 		    if (td) {
-		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) { //TODO replace innerHTML with JQuery equivalent
 		        $(this).show();
 		      } else {
 		        $(this).hide();
