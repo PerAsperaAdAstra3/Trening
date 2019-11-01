@@ -223,21 +223,6 @@ public class TrainingController {
 		return "trainingCreation";
 	}
 	//TODO pretvoriti u "Query method"
-	private List<Training> tablesShowingOldTrainings(String clientId){
-		Client client = clientService.findOne(Long.parseLong(clientId));
-		List<Training> trainingList = client.getTrainingList();
-		List<Training> trainingListTest = new ArrayList<Training>();
-		if(trainingList.size() <= 3) {
-			for (int i = 0; i < trainingList.size(); i++)
-				trainingListTest.add(0, trainingList.get(i));
-		} else {
-			for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
-				trainingListTest.add(0, trainingList.get(i));
-			}
-		}
-		return trainingListTest;
-	}
-	
 	private List<Training> tablesShowingOldTrainings(String clientId, String trainingId){
 		Client client = clientService.findOne(Long.parseLong(clientId));
 		List<Training> trainingList = client.getTrainingList();
@@ -295,8 +280,8 @@ public class TrainingController {
 	
 		try {
 		
-		Long newAddedRoundId = addRound(id);
-		redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
+		Long newRoundId = addRound(id);
+		redir.addFlashAttribute("selectedRoundId", newRoundId);
 		
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -320,11 +305,9 @@ public class TrainingController {
 			RedirectAttributes redir) {
 		Long trainingId = -1l;
 		try {
-			
-			Long newAddedRoundId = addExerciseInRound(exerciseInRoundDTO, modeEIR);
+			Long newRoundId = addExerciseInRound(exerciseInRoundDTO, modeEIR);
 			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
-			redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
-			
+			redir.addFlashAttribute("selectedRoundId", newRoundId);
 		} catch(Exception e) {
 			e.printStackTrace();
 			List<String> messageList = new ArrayList<>();

@@ -63,29 +63,36 @@ $(document).ready(function(){
 
 
 $(document).on("click", "#button1", function(){
-
-	$(".oldTrainings").eq("0").css('display','table-row');
-	$(".oldTrainings").eq("1").css('display','none');
-	$(".oldTrainings").eq("2").css('display','none');
-	
+	determineButton("button1")
 });
 
 $(document).on("click", "#button2", function(){
-	
-	$(".oldTrainings").eq("0").css('display','none');
-	$(".oldTrainings").eq("1").css('display','table-row');
-	$(".oldTrainings").eq("2").css('display','none');
-	
+	determineButton("button2")
 });
-$(document).on("click", "#button3", function(){
 
+$(document).on("click", "#button3", function(){
+	determineButton("button3")
+});
+
+function determineButton(buttonNumber){
 	$(".oldTrainings").eq("0").css('display','none');
 	$(".oldTrainings").eq("1").css('display','none');
-	$(".oldTrainings").eq("2").css('display','table-row');
+	$(".oldTrainings").eq("2").css('display','none');
 	
-});
-	//Handling of click on Dodaj button.
-	
+	switch(buttonNumber) {
+		case "button1":
+			$(".oldTrainings").eq("0").css('display','table-row');
+			break;
+		case "button2":
+			$(".oldTrainings").eq("1").css('display','table-row');
+			break;
+		case "button3":
+			$(".oldTrainings").eq("2").css('display','table-row');
+			break;
+	}
+}
+
+//Handling of click on Dodaj button.	
 $(document).on("click", "#exerciseInRoundAdd", function() {
 	var areFieldsFilledIn = true;
 	var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()

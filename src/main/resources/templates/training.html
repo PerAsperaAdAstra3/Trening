@@ -11,149 +11,137 @@
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 <script>
-	$(document).on("click", "#tr-entity-list", function(event) {
-		highlightRow(this)
-	});
-	
-	$(document).on("click", "#tr-entity-list-modal", function(event) {
-		highlightRow1(this)
-		$('#myModal').modal('hide')
-		$("#hiddenButtonToCopyTraining").click()
-	});
-	
-	$(document).on("click", "#search", function(event) {
-		$("#hidden_input").css('display','table-row');
-	});
-	  /*<![CDATA[*/	
 
-		function sortByTwoColumns(row1, row2) {
-			var v1, v2, r;
-			v1 = $(row1).find("td:eq(0)").text();
-			v2 = $(row2).find("td:eq(0)").text();
+$(document).on("click", "#tr-entity-list", function(event) {
+	highlightRow(this)
+});
+	
+$(document).on("click", "#tr-entity-list-modal", function(event) {
+	highlightRow1(this)
+	$('#myModal').modal('hide')
+	$("#hiddenButtonToCopyTraining").click()
+});
+	
+$(document).on("click", "#search", function(event) {
+	$("#hidden_input").css('display','table-row');
+});
 
-			if(new Date(v1) > new Date(v2))
-			{
-				r = - 1;
-			} else if(new Date(v1) < new Date(v2)) {
-				r = 1;
-			} else { 
-				r = 0;
-			}
+/*<![CDATA[*/	
+
+function sortByTwoColumns(row1, row2) {
+	var v1, v2, r;
+	v1 = $(row1).find("td:eq(0)").text();
+	v2 = $(row2).find("td:eq(0)").text();
+
+	if(new Date(v1) > new Date(v2)){
+		r = - 1;
+	} else if(new Date(v1) < new Date(v2)) {
+		r = 1;
+	} else { 
+		r = 0;
+	}
 			
-			if(r === 0){
-				v1 = $(row1).find("td:eq(3)").text();
-				v2 = $(row2).find("td:eq(3)").text();
-				if (v1 < v2) {
-			        r = -1;
-			      } else if (v1 > v2) {
-			        r = 1;
-			      } else {
-			        r = 0;
-			      }
-			}
-			return r;
+	if(r === 0){
+		v1 = $(row1).find("td:eq(3)").text();
+		v2 = $(row2).find("td:eq(3)").text();
+		if (v1 < v2) {
+			r = -1;
+		} else if (v1 > v2) {
+			r = 1;
+		} else {
+			r = 0;
 		}
+	}
+	return r;
+}
 		
-		function sortTable(){
-			var rows = $("#training tbody tr").detach().get();
-			rows.sort(sortByTwoColumns);
-			$("#training tbody").append(rows);
-		}
+function sortTable(){
+	var rows = $("#training tbody tr").detach().get();
+	rows.sort(sortByTwoColumns);
+	$("#training tbody").append(rows);
+}
 		
 function filterTable(selectedName){
 	var input, filter, table, tr, td, i, j;
-	 input = selectedName;
-	 
-	 filter = input.toUpperCase();
-	
-	 $("tr").each(function(){
-	  		var idEntityList = $(this).prop('id')
-	  	
-	  		if(idEntityList == "tr-entity-list"){
-		    td = $(this).find("td")[2];
+	input = selectedName;
+	filter = input.toUpperCase();
+
+	$("tr").each(function(){
+	var idEntityList = $(this).prop('id')
+		if(idEntityList == "tr-entity-list"){
+			td = $(this).find("td")[2];
 		    if (td) {
-		      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) { //TODO replace innerHTML with JQuery equivalent
-		        $(this).show();
-		      } else {
-		        $(this).hide();
-		      }
-		    }    
-		   }
-		 });
+				if (td.innerHTML.toUpperCase().indexOf(filter) > -1) { //TODO replace innerHTML with JQuery equivalent
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			}
+		}
+	});
 }
 
 function sortTableFolders(){
-			var rows = $("#myTableExercisesX tbody tr").detach().get();
-			rows.sort(sortByColumn);
-			$("#myTableExercisesX tbody").append(rows);
-		}
-		
-		function sortByColumn(row1, row2) {
-			var v1, v2, r;
+	var rows = $("#myTableExercisesX tbody tr").detach().get();
+	rows.sort(sortByColumn);
+	$("#myTableExercisesX tbody").append(rows);
+}
 
-				v1 = $(row1).find("td:eq(0)").text();
-				v2 = $(row2).find("td:eq(0)").text();
-				if (v1 < v2) {
-			        r = -1;
-			      } else if (v1 > v2) {
-			        r = 1;
-			      } else {
-			        r = 0;
-			      }
-			return r;
-		}
-		/*]]>*/
-		
-	$(document).on("click", "#copyTrainingButton", function(event) {
-		treID = item.find(".idOfCopiedTraining").html()
-	});
+function sortByColumn(row1, row2) {
+		var v1, v2, r;
+		v1 = $(row1).find("td:eq(0)").text();
+		v2 = $(row2).find("td:eq(0)").text();
+		if (v1 < v2) {
+	        r = -1;
+	      } else if (v1 > v2) {
+	        r = 1;
+	      } else {
+	        r = 0;
+	      }
+	return r;
+}
+/*]]>*/
 
-	
-	$(window).scroll(function() {
-		  sessionStorage.scrollTop = $(this).scrollTop();
-		});
+$(document).on("click", "#copyTrainingButton", function(event) {
+	treID = item.find(".idOfCopiedTraining").html()
+});
 
-	$(document).ready(function() {
-		  if (sessionStorage.scrollTop != "undefined") {
-		    $(window).scrollTop(sessionStorage.scrollTop);
-		  }
-		  var errorVariable = $("#errorMessage").val();
-		  if(errorVariable == 0){
-			  $("#pdfErrorMessage").hide();
-		  } else {
-			  $("#pdfErrorMessage").show();
-		  }
-		
-		 sortTableFolders()
-	});
-	
-	$(document).on("click", "#PDFButton", function() {
-		var trainingId = $(this).parent().parent().find(".trainingId").html();
-		PDFprintAjaxListPage(trainingId);
-	});
-	
+$(window).scroll(function() {
+	sessionStorage.scrollTop = $(this).scrollTop();
+});
 
-		
-	function sync(item){
-		name = item.find(".clientName").html()
-	    familyName = item.find(".clientFamilyName").html()
-	    
-		idTrainingCopied = item.find(".trainingId").html()
-		
-	    
-		idClientToCopy = item.find(".clientSelectId").html()
-		
-		afterSync = item.find("#idOfCopiedTraining").html()
-		
-		$("#idOfCopiedTraining").val(idTrainingCopied);
-		$("#idOfClientToCopyTo").val(idClientToCopy);
-		
-	    $("#name").val(name);
-	    $("#familyName").val(familyName);
-	    $("#id").val(afterSync);
+$(document).ready(function() {
+	if (sessionStorage.scrollTop != "undefined") {
+		$(window).scrollTop(sessionStorage.scrollTop);
 	}
+	var errorVariable = $("#errorMessage").val();
+	if(errorVariable == 0){
+		$("#pdfErrorMessage").hide();
+	} else {
+		$("#pdfErrorMessage").show();
+	}
+		sortTableFolders()
+});
+
+$(document).on("click", "#PDFButton", function() {
+	var trainingId = $(this).parent().parent().find(".trainingId").html();
+	PDFprintAjaxListPage(trainingId);
+});
+
+function sync(item){
+	name = item.find(".clientName").html()
+    familyName = item.find(".clientFamilyName").html()
+	idTrainingCopied = item.find(".trainingId").html()
+	idClientToCopy = item.find(".clientSelectId").html()
+	afterSync = item.find("#idOfCopiedTraining").html()
+	$("#idOfCopiedTraining").val(idTrainingCopied);
+	$("#idOfClientToCopyTo").val(idClientToCopy);
+    $("#name").val(name);
+    $("#familyName").val(familyName);
+    $("#id").val(afterSync);
+}
 	
-	function highlightRow1(row){
+function highlightRow1(row){
 	if(!$(row).hasClass("header")){
 		$(row).parent().find(".highlighted").removeClass("highlighted");
     	$(row).addClass("highlighted");
@@ -161,32 +149,23 @@ function sortTableFolders(){
     }
 }
 
-	function highlightRowFilterSelect(row){
+function highlightRowFilterSelect(row){
 	if(!$(row).hasClass("header")){
 		$(row).parent().find(".highlighted").removeClass("highlighted");
     	$(row).addClass("highlighted");
     }
 }
 	
-	function sync1(item){
-		name = item.find(".clientName").html()
-	    familyName = item.find(".clientFamilyName").html()	    
-		idClientToCopy = item.find(".clientSelectId").html()
-		
-		$("#idOfClientToCopyTo").val(idClientToCopy);
-	    $("#name").val(name);
-	    $("#familyName").val(familyName);
-	}
+function sync1(item){
+	name = item.find(".clientName").html()
+    familyName = item.find(".clientFamilyName").html()	    
+	idClientToCopy = item.find(".clientSelectId").html()		
+	$("#idOfClientToCopyTo").val(idClientToCopy);
+    $("#name").val(name);
+    $("#familyName").val(familyName);
+}
 	
 </script>
-
-<style>
- .floating-box {
-		  float: left;
-	}
-a { color: #000000; }
-</style>
-
 </head>
 <body class="gradient">
 	<div class="alert div1" role="alert">
@@ -213,7 +192,7 @@ a { color: #000000; }
 		<tbody>
 			<tr align="center" class="modal-table-coloringX floating-box trBox" id="tr-entity-list-modalX" th:each = "client : ${clients}">
 				<td class="clientSelectNameFamilinameFolder">
-							<a th:href="@{/clientTrainingSubmit/{id}/(id=${client.id})}"><img src="/images/folder-170A.png"/><br/>
+							<a class="folderName" th:href="@{/clientTrainingSubmit/{id}/(id=${client.id})}"><img src="/images/folder-170A.png"/><br/>
 							<span align="bottom" th:utext="${client.name + ' ' + client.familyName}"/></a></td>	
 				<td class="clientSelectNameFolder" th:utext="${client.name}" style="display:none;"></td>
 				<td class="clientSelectId" th:utext="${client.id}" style="display:none;"></td>

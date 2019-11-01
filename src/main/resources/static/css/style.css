@@ -53,11 +53,6 @@ table {
 	max-width: 10%;
 }
 
-.table-calendar {
-  width: 70%;
-  max-width: 70%;
-  float: right;
-}
 .button1 {width: 220px;
 		  height: 220px;
 		  color: #fff;
@@ -72,6 +67,10 @@ table {
 		  		}
 
 .div1 { background: #dcdcdc}
+
+.floating-box { float: left;}
+
+.folderName { color: #000000;}
 
 .gradient {background: linear-gradient(to top left, white 10%, #B8B8B8 70%);}
 
