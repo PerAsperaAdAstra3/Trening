@@ -14,6 +14,7 @@ import training.model.Exercise;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
+import training.repository.ExerciseInRoundRepository;
 import training.repository.ExerciseRepository;
 import training.repository.TrainingRepository;
 import training.service.ExerciseService;
@@ -26,6 +27,9 @@ public class JpaTrainingService implements TrainingService {
 	@Autowired
 	private TrainingRepository trainingRepository;
 
+	@Autowired
+	private ExerciseInRoundRepository exerciseInRoundRepository;
+	
 	@Autowired
 	private ExerciseService exerciseService;
 	

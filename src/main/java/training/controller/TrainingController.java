@@ -2,13 +2,23 @@ package training.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,6 +42,7 @@ import training.model.Client;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
+import training.repository.TrainingRepository;
 import training.service.ClientService;
 import training.service.ExerciseGroupService;
 import training.service.ExerciseInRoundService;
@@ -86,6 +97,9 @@ public class TrainingController {
 	@Autowired
 	private ExerciseGroupToExerciseGroupDTO exerciseGroupToExerciseGroupDTO;
 	
+	@Autowired
+	private TrainingRepository trainingRepository;
+	
 	@RequestMapping(value = { "/trainingList/{isThereError}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable int isThereError) {
 	try {
@@ -110,8 +124,17 @@ public class TrainingController {
 	public String getTrainings(Model model, @PathVariable String id) {
 		int isThereError = 0;
 	try {
+
+		Training training = trainingRepository.findOne(Long.parseLong(id));
+
 		
 		trainingService.delete(Long.parseLong(id));
+
+		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingRepository.findAllByClientIdOrderByIdDesc(training.getClient().getId())));
+		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
+		model.addAttribute("clientId", training.getClient().getId());
+		model.addAttribute("idOfCopiedTraining","");
+		model.addAttribute("idOfClientToCopyTo","");
 		
 	} catch(Exception e) {
 		e.printStackTrace();
@@ -123,8 +146,7 @@ public class TrainingController {
 		model.addAttribute("errorMessage", messageList);
 		return "errorPage";
 	}
-		
-		return "redirect:/trainingList/"+isThereError;
+	    return "clientTrainingsInFolderB";
 	}
 
 	//Initialization of TrainingCreation page
@@ -133,11 +155,23 @@ public class TrainingController {
 	public String createTraining(Model model, @PathVariable String clientId) {
 	
 	try {
+		TrainingDTO trainingDTO = createTraining(clientId);
+		Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
+		trainingDTO = trainingToTrainingDTO.convert(training);
 		
-		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId));
-		model.addAttribute("trainingDTO", createTraining(clientId));
+		Round round = new Round(training.getRounds().size() + 1);
+		training.addRound(round);
+		roundService.save(round);
+		trainingService.save(training);
+		
+		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
+		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId, training.getId().toString()));
+		model.addAttribute("trainingDTO", trainingDTO);
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
+		model.addAttribute("selectedRoundId", training.getRounds().get(0).getId());
+		model.addAttribute("exercises", getExercisesForModel(training));
+		model.addAttribute("circularYesNo", "Postojeće kombinacije");
 		
 	} catch(Exception e) {
 		e.printStackTrace();
@@ -152,37 +186,71 @@ public class TrainingController {
 		return "trainingCreation";
 	}
 	
-	private List<Training> tablesShowingOldTrainings(String clientId){
-		Client client = clientService.findOne(Long.parseLong(clientId));
-		List<Training> trainingList = client.getTrainingList();
-		List<Training> trainingListTest = new ArrayList<Training>();
-		if(trainingList.size() <= 3) {
-			for (int i = 0; i < trainingList.size(); i++)
-				trainingListTest.add(0, trainingList.get(i));
-		} else {
-			for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
-				trainingListTest.add(0, trainingList.get(i));
-			}
-		}
-		return trainingListTest;
-	}
+	@RequestMapping(value = { "/circularTrainingCreationHandler/{clientId}" }, method = RequestMethod.GET)
+	public String createCircularTraining(Model model, @PathVariable String clientId) {
 	
+	try {
+		
+		TrainingDTO trainingDTO = createTraining(clientId);
+		Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
+		trainingDTO = trainingToTrainingDTO.convert(training);
+		
+		Round round = new Round(training.getRounds().size() + 1);
+		training.addRound(round);
+		roundService.save(round);
+		trainingService.save(training);
+		
+		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
+		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId, training.getId().toString()));
+		model.addAttribute("trainingDTO", trainingDTO);
+		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
+		model.addAttribute("exerciseDTO", new ExerciseDTO());
+		model.addAttribute("selectedRoundId", training.getRounds().get(0).getId());
+		model.addAttribute("exercises", getExercisesForModel(training));
+		model.addAttribute("circularYesNo", "Kružni trening");
+		model.addAttribute("circularYN", true);
+		
+	} catch(Exception e) {
+		e.printStackTrace();  //TODO add logging in future PR.
+		List<String> messageList = new ArrayList<>();
+		StackTraceElement[] trace = e.getStackTrace();
+		for(int i=0; i < trace.length; i++ ) {
+			messageList.add(trace[i].toString());
+		}
+		model.addAttribute("errorMessage", messageList);
+		return "errorPage";
+	}
+		return "trainingCreation";
+	}
+	//TODO pretvoriti u "Query method"
 	private List<Training> tablesShowingOldTrainings(String clientId, String trainingId){
 		Client client = clientService.findOne(Long.parseLong(clientId));
 		List<Training> trainingList = client.getTrainingList();
+		
+		Training training = trainingService.findOne(Long.parseLong(trainingId));
+		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
+		for(int ii = 0; ii < trainingList.size() ; ii++) {
+				if(trainingList.get(ii).getId() > training.getId()) {
+				trainingList.remove(ii);
+			}
+		}
+		
 		if(!trainingId.equals("") || trainingId != null) {
 			trainingList.remove(trainingList.size() - 1);
 		}
 		List<Training> trainingListTest = new ArrayList<Training>();
-		if (trainingList.size() >= 1)
+		
+		if (trainingList.size() >= 1) {
 			if(trainingList.size() <= 3) {
-				for (int i = 0; i < trainingList.size(); i++)
+				for (int i = 0; i < trainingList.size(); i++) {
 						trainingListTest.add(0, trainingList.get(i));
+				}
 			} else {
 				for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
 					trainingListTest.add(0, trainingList.get(i));
 				}
 			}
+		}
 		return trainingListTest;
 	}
 	
@@ -212,8 +280,8 @@ public class TrainingController {
 	
 		try {
 		
-		Long newAddedRoundId = addRound(id);
-		redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
+		Long newRoundId = addRound(id);
+		redir.addFlashAttribute("selectedRoundId", newRoundId);
 		
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -237,11 +305,9 @@ public class TrainingController {
 			RedirectAttributes redir) {
 		Long trainingId = -1l;
 		try {
-			
-			Long newAddedRoundId = addExerciseInRound(exerciseInRoundDTO, modeEIR);
+			Long newRoundId = addExerciseInRound(exerciseInRoundDTO, modeEIR);
 			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
-			redir.addFlashAttribute("selectedRoundId", newAddedRoundId);
-			
+			redir.addFlashAttribute("selectedRoundId", newRoundId);
 		} catch(Exception e) {
 			e.printStackTrace();
 			List<String> messageList = new ArrayList<>();
@@ -403,6 +469,44 @@ public class TrainingController {
 			model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 			model.addAttribute("exercisesInRound", listExerciseInRound);
 			model.addAttribute("exercises", getExercisesForModel(training));
+		
+		} catch(Exception e) {
+			e.printStackTrace();
+			List<String> messageList = new ArrayList<>();
+			StackTraceElement[] trace = e.getStackTrace();
+			for(int i=0; i < trace.length; i++ ) {
+				messageList.add(trace[i].toString());
+			}
+			model.addAttribute("errorMessage", messageList);
+			return "errorPage";
+		}
+		
+		return "trainingCreation";
+	}
+	
+	// TODO move duplicate code to one method.
+	
+	@RequestMapping(value = {"/getTrainingCircular/{id}"}, method = RequestMethod.GET)
+	public String getTrainingCircular(Model model, @PathVariable String id){
+		try {
+			Training training = trainingService.findOne(Long.parseLong(id));
+			
+			List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
+			for (Round roundIter : training.getRounds()) {
+				listExerciseInRound.addAll(roundIter.getExerciseInRound());
+			}
+			model.addAttribute("exerciseDTO", new ExerciseDTO());
+			model.addAttribute("hiddenExerciseGroupId", "-1");
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
+			
+			model.addAttribute("trainingListTest", tablesShowingOldTrainings(training.getClient().getId().toString(), training.getId().toString()));
+			model.addAttribute("id", id);
+			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
+			model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
+			model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
+			model.addAttribute("exercisesInRound", listExerciseInRound);
+			model.addAttribute("exercises", getExercisesForModel(training));
+			model.addAttribute("circularYN", true);
 		
 		} catch(Exception e) {
 			e.printStackTrace();

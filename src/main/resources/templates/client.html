@@ -103,13 +103,15 @@
 	<br/>
 	<br/>
 </div>
-<table id="clientTable" class="table table-hover">
+<table id="clientTable" class="table">
 	<thead>
 		<tr>
 			<th scope="col">Ime</th>
 			<th scope="col">Prezime</th>
 			<th scope="col">Email</th>
 			<th scope="col">Broj telefona</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
 			<th scope="col"></th>
 			<th scope="col"></th>
 		</tr>
@@ -125,6 +127,8 @@
 				<a th:href="@{/deleteClient/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td>
 				<a th:href="@{/trainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
+				<td>
+				<a th:href="@{/circularTrainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj kružni trening</button></a></td>
 		</tr>
 	</tbody>
 </table>

@@ -11,119 +11,159 @@
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 <script>
-	$(document).on("click", "#tr-entity-list", function(event) {
-		highlightRow(this)
-	});
-	
-	$(document).on("click", "#tr-entity-list-modal", function(event) {
-		highlightRow1(this)
-		$('#myModal').modal('hide')
-		$("#hiddenButtonToCopyTraining").click()
-	});
-	
-	$(document).on("click", "#search", function(event) {
-		$("#hidden_input").css('display','table-row');
-	});
-	  /*<![CDATA[*/	
 
-		function sortByTwoColumns(row1, row2) {
-			var v1, v2, r;
-			v1 = $(row1).find("td:eq(0)").text();
-			v2 = $(row2).find("td:eq(0)").text();
-
-			if(new Date(v1) > new Date(v2))
-			{
-				r = - 1;
-			} else if(new Date(v1) < new Date(v2)) {
-				r = 1;
-			} else { 
-				r = 0;
-			}
-			
-			if(r === 0){
-				v1 = $(row1).find("td:eq(3)").text();
-				v2 = $(row2).find("td:eq(3)").text();
-				if (v1 < v2) {
-			        r = -1;
-			      } else if (v1 > v2) {
-			        r = 1;
-			      } else {
-			        r = 0;
-			      }
-			}
-			return r;
-		}
-		
-		function sortTable(){
-			var rows = $("#training tbody tr").detach().get();
-			rows.sort(sortByTwoColumns);
-			$("#training tbody").append(rows);
-		}
-		/*]]>*/
-		
-	$(document).on("click", "#copyTrainingButton", function(event) {
-		treID = item.find(".idOfCopiedTraining").html()
-	});
-
+$(document).on("click", "#tr-entity-list", function(event) {
+	highlightRow(this)
+});
 	
-	$(window).scroll(function() {
-		  sessionStorage.scrollTop = $(this).scrollTop();
-		});
-
-	$(document).ready(function() {
-		  if (sessionStorage.scrollTop != "undefined") {
-		    $(window).scrollTop(sessionStorage.scrollTop);
-		  }
-		  var errorVariable = $("#errorMessage").val();
-		  if(errorVariable == 0){
-			  $("#pdfErrorMessage").hide();
-		  } else {
-			  $("#pdfErrorMessage").show();
-		  }
-		 sortTable();
-	});
+$(document).on("click", "#tr-entity-list-modal", function(event) {
+	highlightRow1(this)
+	$('#myModal').modal('hide')
+	$("#hiddenButtonToCopyTraining").click()
+});
 	
-	$(document).on("click", "#PDFButton", function() {
-		var trainingId = $(this).parent().parent().find(".trainingId").html();
-		PDFprintAjaxListPage(trainingId);
-	});
-		
-	function sync(item){
-		name = item.find(".clientName").html()
-	    familyName = item.find(".clientFamilyName").html()
-	    
-		idTrainingCopied = item.find(".trainingId").html()
-		
-	    
-		idClientToCopy = item.find(".clientSelectId").html()
-		
-		afterSync = item.find("#idOfCopiedTraining").html()
-		
-		$("#idOfCopiedTraining").val(idTrainingCopied);
-		$("#idOfClientToCopyTo").val(idClientToCopy);
-		
-	    $("#name").val(name);
-	    $("#familyName").val(familyName);
-	    $("#id").val(afterSync);
+$(document).on("click", "#search", function(event) {
+	$("#hidden_input").css('display','table-row');
+});
+
+/*<![CDATA[*/	
+
+function sortByTwoColumns(row1, row2) {
+	var v1, v2, r;
+	v1 = $(row1).find("td:eq(0)").text();
+	v2 = $(row2).find("td:eq(0)").text();
+
+	if(new Date(v1) > new Date(v2)){
+		r = - 1;
+	} else if(new Date(v1) < new Date(v2)) {
+		r = 1;
+	} else { 
+		r = 0;
 	}
+			
+	if(r === 0){
+		v1 = $(row1).find("td:eq(3)").text();
+		v2 = $(row2).find("td:eq(3)").text();
+		if (v1 < v2) {
+			r = -1;
+		} else if (v1 > v2) {
+			r = 1;
+		} else {
+			r = 0;
+		}
+	}
+	return r;
+}
+		
+function sortTable(){
+	var rows = $("#training tbody tr").detach().get();
+	rows.sort(sortByTwoColumns);
+	$("#training tbody").append(rows);
+}
+		
+function filterTable(selectedName){
+	var input, filter, table, tr, td, i, j;
+	input = selectedName;
+	filter = input.toUpperCase();
+
+	$("tr").each(function(){
+	var idEntityList = $(this).prop('id')
+		if(idEntityList == "tr-entity-list"){
+			td = $(this).find("td")[2];
+		    if (td) {
+				if (td.innerHTML.toUpperCase().indexOf(filter) > -1) { //TODO replace innerHTML with JQuery equivalent
+					$(this).show();
+				} else {
+					$(this).hide();
+				}
+			}
+		}
+	});
+}
+
+function sortTableFolders(){
+	var rows = $("#myTableExercisesX tbody tr").detach().get();
+	rows.sort(sortByColumn);
+	$("#myTableExercisesX tbody").append(rows);
+}
+
+function sortByColumn(row1, row2) {
+		var v1, v2, r;
+		v1 = $(row1).find("td:eq(0)").text();
+		v2 = $(row2).find("td:eq(0)").text();
+		if (v1 < v2) {
+	        r = -1;
+	      } else if (v1 > v2) {
+	        r = 1;
+	      } else {
+	        r = 0;
+	      }
+	return r;
+}
+/*]]>*/
+
+$(document).on("click", "#copyTrainingButton", function(event) {
+	treID = item.find(".idOfCopiedTraining").html()
+});
+
+$(window).scroll(function() {
+	sessionStorage.scrollTop = $(this).scrollTop();
+});
+
+$(document).ready(function() {
+	if (sessionStorage.scrollTop != "undefined") {
+		$(window).scrollTop(sessionStorage.scrollTop);
+	}
+	var errorVariable = $("#errorMessage").val();
+	if(errorVariable == 0){
+		$("#pdfErrorMessage").hide();
+	} else {
+		$("#pdfErrorMessage").show();
+	}
+		sortTableFolders()
+});
+
+$(document).on("click", "#PDFButton", function() {
+	var trainingId = $(this).parent().parent().find(".trainingId").html();
+	PDFprintAjaxListPage(trainingId);
+});
+
+function sync(item){
+	name = item.find(".clientName").html()
+    familyName = item.find(".clientFamilyName").html()
+	idTrainingCopied = item.find(".trainingId").html()
+	idClientToCopy = item.find(".clientSelectId").html()
+	afterSync = item.find("#idOfCopiedTraining").html()
+	$("#idOfCopiedTraining").val(idTrainingCopied);
+	$("#idOfClientToCopyTo").val(idClientToCopy);
+    $("#name").val(name);
+    $("#familyName").val(familyName);
+    $("#id").val(afterSync);
+}
 	
-	function highlightRow1(row){
+function highlightRow1(row){
 	if(!$(row).hasClass("header")){
 		$(row).parent().find(".highlighted").removeClass("highlighted");
     	$(row).addClass("highlighted");
     	sync1($(row));
     }
 }
+
+function highlightRowFilterSelect(row){
+	if(!$(row).hasClass("header")){
+		$(row).parent().find(".highlighted").removeClass("highlighted");
+    	$(row).addClass("highlighted");
+    }
+}
 	
-	function sync1(item){
-		name = item.find(".clientName").html()
-	    familyName = item.find(".clientFamilyName").html()	    
-		idClientToCopy = item.find(".clientSelectId").html()
-		
-		$("#idOfClientToCopyTo").val(idClientToCopy);
-	    $("#name").val(name);
-	    $("#familyName").val(familyName);
-	}
+function sync1(item){
+	name = item.find(".clientName").html()
+    familyName = item.find(".clientFamilyName").html()	    
+	idClientToCopy = item.find(".clientSelectId").html()		
+	$("#idOfClientToCopyTo").val(idClientToCopy);
+    $("#name").val(name);
+    $("#familyName").val(familyName);
+}
 	
 </script>
 </head>
@@ -132,11 +172,37 @@
 		<a href="/" class="home">Početna</a>
 		<h1 align="center">Treninzi u sistemu</h1>
 	</div>
-	<a style="padding-left:3em" th:href="@{/addTrainingToClient}"><button class="btn btn-success">Kreiraj trening</button></a>
+
 	<br/>
 	<br/>
 	<br/>
 	<!-- Modal -->
+	
+	
+	<div class="container-responsive">
+	<form id="clientTrainingFolder" th:action="@{/clientTrainingSubmit}" method="POST">
+	     <table style="width:100%" id = "myTableExercisesX" class = "table table-responsive">
+		<thead>
+			<tr>
+				<th align="center" scope="col">Klijenti :</th>
+				<th scope="col"></th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr align="center" class="modal-table-coloringX floating-box trBox" id="tr-entity-list-modalX" th:each = "client : ${clients}">
+				<td class="clientSelectNameFamilinameFolder">
+							<a class="folderName" th:href="@{/clientTrainingSubmit/{id}/(id=${client.id})}"><img src="/images/folder-170A.png"/><br/>
+							<span align="bottom" th:utext="${client.name + ' ' + client.familyName}"/></a></td>	
+				<td class="clientSelectNameFolder" th:utext="${client.name}" style="display:none;"></td>
+				<td class="clientSelectId" th:utext="${client.id}" style="display:none;"></td>
+			</tr>
+		</tbody>
+	</table>
+	</form>
+	</div>
+	
+	
 <form th:action="@{/copyTraining}" method="GET">
 	<input id="idOfCopiedTraining" type="hidden" th:value="${idOfCopiedTraining}" name="idOfCopiedTraining"/>
 	<input id="idOfClientToCopyTo" type="hidden" th:value="${idOfClientToCopyTo}" name="idOfClientToCopyTo"/>
@@ -152,6 +218,9 @@
         <h4 class="modal-title">Klijenti</h4>
       </div>
       <div class="modal-body">
+      
+ 
+      
 <input type="text" id="inputFilterByName" onkeyup="filterModalClient(0)" placeholder="Filtriranje po nazivu.."/>
 <input type="text" id="inputFilterByFamilyName" onkeyup="filterModalClient(1)" placeholder="Filtriranje po prezimenu.."/>
 <input type="text" id="inputFilterByEmail" onkeyup="filterModalClient(2)" placeholder="Filtriranje po email.."/>
@@ -185,43 +254,5 @@
   </div>
 </div>
 	
-<form method="POST">
-<div style="padding-left:3em">
-	<p><b> Filtriranje: </b></p>
-		<input type="text" id="inputFilterDate" onkeyup="filterTable(0,4)" placeholder="Filtriranje po datumu.."/>
-		<input type="text" id="inputFilterNumberOfTrainings" onkeyup="filterTable(1,4)" placeholder="Filtriranje po broju treninga.."/>
-		<input type="text" id="inputFilterClientName" onkeyup="filterTable(2,4)" placeholder="Filtriranje po imenu.."/>
-		<input type="text" id="inputFilterFamilyName" onkeyup="filterTable(3,4)" placeholder="Filtriranje po prezimenu.."/>
-		<input id="errorMessage" type="hidden" th:value="${errorMessage}" name="errorMessage"/>
-        <label id="pdfErrorMessage" class="errorText"><font color="red"><b>PDF fajl koji ste pokušali odštampati je otvoren, štampanje nije uspelo!</b></font></label>
-	<br/>
-	<br/>
-	<br/>
-</div>
-<table id="training" class="table table-hover">
-	<thead>
-		<tr>
-			<th scope="col">Datum</th>
-			<th scope="col">Redni broj</th>
-			<th scope="col">Ime klijenta</th>
-			<th scope="col">Prezime klijenta</th>
-			<th scope="col"></th>
-		</tr>
-	</thead>	
-	<tbody>
-		<tr	id="tr-entity-list" th:each = "training : ${trainings}">
-			<td scope="row" class="clientId" th:utext="${training.date}"></td>
-			<td class="trainingNumberOfTra" th:utext="${training.numberOfTrainings}"></td>
-			<td class="trainingClientName" th:utext="${training.client}"></td>
-			<td class="trainingClientName" th:utext="${training.clientFamilyName}"></td>
-			<td class="trainingId" th:utext="${training.id}" style="display:none;"></td>
-			<td><a th:href="@{/getTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-success">Izmeni</button></a></td>
-			<td><a th:href="@{/deleteTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
-			<td><button id="PDFButton" type="button" class="btn btn-danger">PDF</button></td>
-			<td><button  id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Kopiraj</button></td>
-		</tr>
-	</tbody>
-</table>
-</form>
 </body>
 </html>

@@ -3,6 +3,7 @@ package training.util;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
@@ -37,8 +38,19 @@ public class PdfGenaratorUtil {
 	        try {
 
 	        	String home = System.getProperty("user.home");
+	        	
+	        	String clientFolder = map.get("name").toString(); //TODO Make this configurable in the future.
+	        	java.nio.file.Path pathTest = java.nio.file.Paths.get(home, "treninzi", clientFolder);
+	        	
+	        	if (Files.notExists(pathTest)) {
+	        		File directory = new File(pathTest.toString());
+	        	    if (! directory.exists()){
+	        	        directory.mkdir();
+	        	    }
+	        	}
+	        	
 	        	String fileNameString = map.get("name").toString()+" " +map.get("trainingNumber").toString() + ".pdf";
-	        	java.nio.file.Path path = java.nio.file.Paths.get(home, "treninzi", fileNameString);
+	        	java.nio.file.Path path = java.nio.file.Paths.get(pathTest.toString(), fileNameString);
 	        	File outputFile = new File(path.toString());
 	        	os = new FileOutputStream(outputFile);
 

@@ -31,6 +31,10 @@ p {
 	margin-left: 35px
 }
  
+.twoButtonsDiv {
+	margin-left: 35px
+}
+ 
 table th, table td {
     padding: 5px;
 }
@@ -39,14 +43,34 @@ table {
 	    margin-left: 35px;
 }
 
+.trBox {
+	width: 20%;
+	max-width: 20%;
+}
+
+.th {
+	width: 10%;
+	max-width: 10%;
+}
+
 .button1 {width: 220px;
 		  height: 220px;
 		  color: #fff;
 	      background-color: #28a745;
 	      border-color: #28a745;
 		  }
+.buttonFolders {width: 220px;
+		  		height: 90px;
+		  		color: #fff;
+	      		background-color: #28a745;
+	      		border-color: #28a745;
+		  		}
 
 .div1 { background: #dcdcdc}
+
+.floating-box { float: left;}
+
+.folderName { color: #000000;}
 
 .gradient {background: linear-gradient(to top left, white 10%, #B8B8B8 70%);}
 
