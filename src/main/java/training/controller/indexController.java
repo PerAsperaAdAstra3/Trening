@@ -19,7 +19,6 @@ public class indexController {
 		} else if ("client".equals(mode)) {
 			return "redirect:/clientList";
 		}
-
 		return "redirect:/trainingList/"+isThereError;
 
 	}

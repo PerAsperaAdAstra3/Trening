@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -15,11 +17,16 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
+import training.controller.indexController;
+
 
 @Component
 public class PdfGenaratorUtil {
 	@Autowired
 	private TemplateEngine templateEngine;
+	
+    Logger logger = LoggerFactory.getLogger(PdfGenaratorUtil.class);
+	
 	public int createPdf(String templateName, Map map) throws Exception {
 		Assert.notNull(templateName, "The templateName can not be null");
 		int isThereError = 0;
@@ -60,13 +67,18 @@ public class PdfGenaratorUtil {
 	            renderer.createPDF(os, false);
 	            renderer.finishPDF();
 	        }catch (IOException e) {
+				logger.error(e.getMessage());
+				logger.error(LoggingUtil.LoggingMethod(e));
 	           isThereError = 1;
 	        }
 	        finally {
 	            if (os != null) {
 	                try {
 	                    os.close();
-	                } catch (IOException e) { /*ignore*/ }
+	                } catch (IOException e) {
+	        			logger.error(e.getMessage());
+	        			logger.error(LoggingUtil.LoggingMethod(e));	
+	                /*ignore*/ }
 	            }
 	        }
 	   return isThereError;

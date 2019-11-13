@@ -35,6 +35,11 @@ $(document).ready(function(){
 	$(".oldTrainings").eq("1").css('display','none');
 	$(".oldTrainings").eq("2").css('display','none');
 	
+//	$("#round-id-sync:first").addClass("highlighted");
+//	sync1($("#round-id-sync:first"));
+	selectRoundIdOnRowClick($("#round-id-sync:first"));
+
+	
 	$('#addExerciseInRoundForm').submit(function(){
 		var areFieldsFilledIn = true;
 		var exerciseInRoundExerciseName = $('#exerciseInRoundExerciseName').val()

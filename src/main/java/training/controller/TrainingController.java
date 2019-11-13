@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
@@ -50,6 +52,7 @@ import training.service.ExerciseService;
 import training.service.RoundService;
 import training.service.TrainingService;
 import training.util.ExceptionMessageToStringList;
+import training.util.LoggingUtil;
 import training.util.PdfGenaratorUtil;
 
 @Controller
@@ -100,6 +103,8 @@ public class TrainingController {
 	@Autowired
 	private TrainingRepository trainingRepository;
 	
+	Logger logger = LoggerFactory.getLogger(RestTrainingController.class);
+	
 	@RequestMapping(value = { "/trainingList/{isThereError}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable int isThereError) {
 	try {
@@ -112,6 +117,8 @@ public class TrainingController {
 		model.addAttribute("errorMessage",isThereError);
 			
 	} catch(Exception e) {
+		logger.error(e.getMessage());
+		logger.error(LoggingUtil.LoggingMethod(e));
 		e.printStackTrace();
 		model.addAttribute("errorMessage", ExceptionMessageToStringList.createErrorMessageListForPrinting(e));
 		return "errorPage";
@@ -137,6 +144,8 @@ public class TrainingController {
 		model.addAttribute("idOfClientToCopyTo","");
 		
 	} catch(Exception e) {
+		logger.error(e.getMessage());
+		logger.error(LoggingUtil.LoggingMethod(e));
 		e.printStackTrace();
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
@@ -174,6 +183,8 @@ public class TrainingController {
 		model.addAttribute("circularYesNo", "Postojeće kombinacije");
 		
 	} catch(Exception e) {
+		logger.error(e.getMessage());
+		logger.error(LoggingUtil.LoggingMethod(e));
 		e.printStackTrace();
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
@@ -211,7 +222,9 @@ public class TrainingController {
 		model.addAttribute("circularYN", true);
 		
 	} catch(Exception e) {
-		e.printStackTrace();  //TODO add logging in future PR.
+		logger.error(e.getMessage());
+		logger.error(LoggingUtil.LoggingMethod(e));
+		e.printStackTrace();
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
@@ -260,6 +273,8 @@ public class TrainingController {
 	try {	
 		 id = saveOrEditTraining(trainingDTO , mode);
 	} catch(Exception e) {
+		logger.error(e.getMessage());
+		logger.error(LoggingUtil.LoggingMethod(e));
 		e.printStackTrace();
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
@@ -279,11 +294,11 @@ public class TrainingController {
 		RedirectAttributes redir) {
 	
 		try {
-		
-		Long newRoundId = addRound(id);
-		redir.addFlashAttribute("selectedRoundId", newRoundId);
-		
+			Long newRoundId = addRound(id);
+			redir.addFlashAttribute("selectedRoundId", newRoundId);
 		} catch(Exception e) {
+			logger.error(e.getMessage());
+			logger.error(LoggingUtil.LoggingMethod(e));
 			e.printStackTrace();
 			List<String> messageList = new ArrayList<>();
 			StackTraceElement[] trace = e.getStackTrace();
@@ -309,6 +324,8 @@ public class TrainingController {
 			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
 			redir.addFlashAttribute("selectedRoundId", newRoundId);
 		} catch(Exception e) {
+			logger.error(e.getMessage());
+			logger.error(LoggingUtil.LoggingMethod(e));
 			e.printStackTrace();
 			List<String> messageList = new ArrayList<>();
 			StackTraceElement[] trace = e.getStackTrace();
@@ -327,15 +344,15 @@ public class TrainingController {
 	public String delete(Model model, @PathVariable String exerciseInRoundId, @PathVariable String id,
 			RedirectAttributes redir){
 		try {
-			
-		ExerciseInRound exerciseInRound = exerciseInRoundService.delete(Long.parseLong(exerciseInRoundId));
-		redir.addFlashAttribute("selectedRoundId", exerciseInRound.getRound().getId());
-
+			ExerciseInRound exerciseInRound = exerciseInRoundService.delete(Long.parseLong(exerciseInRoundId));
+			redir.addFlashAttribute("selectedRoundId", exerciseInRound.getRound().getId());
 		} catch(Exception e) {
-				e.printStackTrace();
-				List<String> messageList = new ArrayList<>();
-				StackTraceElement[] trace = e.getStackTrace();
-				for(int i=0; i < trace.length; i++ ) {
+			logger.error(e.getMessage());
+			logger.error(LoggingUtil.LoggingMethod(e));
+			e.printStackTrace();
+			List<String> messageList = new ArrayList<>();
+			StackTraceElement[] trace = e.getStackTrace();
+			for(int i=0; i < trace.length; i++ ) {
 				messageList.add(trace[i].toString());
 			}
 			model.addAttribute("errorMessage", messageList);
@@ -350,6 +367,8 @@ public class TrainingController {
 	try {
 		deleteRound(roundId);
 	} catch(Exception e) {
+		logger.error(e.getMessage());
+		logger.error(LoggingUtil.LoggingMethod(e));
 		e.printStackTrace();
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
@@ -471,6 +490,8 @@ public class TrainingController {
 			model.addAttribute("exercises", getExercisesForModel(training));
 		
 		} catch(Exception e) {
+			logger.error(e.getMessage());
+			logger.error(LoggingUtil.LoggingMethod(e));
 			e.printStackTrace();
 			List<String> messageList = new ArrayList<>();
 			StackTraceElement[] trace = e.getStackTrace();
@@ -509,6 +530,8 @@ public class TrainingController {
 			model.addAttribute("circularYN", true);
 		
 		} catch(Exception e) {
+			logger.error(e.getMessage());
+			logger.error(LoggingUtil.LoggingMethod(e));
 			e.printStackTrace();
 			List<String> messageList = new ArrayList<>();
 			StackTraceElement[] trace = e.getStackTrace();
@@ -561,6 +584,8 @@ public class TrainingController {
 		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 
 	} catch(Exception e) {
+		logger.error(e.getMessage());
+		logger.error(LoggingUtil.LoggingMethod(e));
 		e.printStackTrace();
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
@@ -613,6 +638,8 @@ public class TrainingController {
 		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 
 	} catch(Exception e) {
+		logger.error(e.getMessage());
+		logger.error(LoggingUtil.LoggingMethod(e));
 		e.printStackTrace();
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
@@ -668,6 +695,8 @@ public class TrainingController {
 		newTrainingId = trainingNew.getId();
 		
 	} catch(Exception e) {
+		logger.error(e.getMessage());
+		logger.error(LoggingUtil.LoggingMethod(e));
 		e.printStackTrace();
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
