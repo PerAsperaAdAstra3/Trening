@@ -146,24 +146,21 @@ public class RestTrainingController {
 				exerciseInRoundDTO.setDifficulty(eir.getDifficulty());
 			}
 		} catch(Exception e){
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		try {
 			if(null != eir.getNumberOfRepetitions()) {	
 				exerciseInRoundDTO.setNumberOfRepetitions(eir.getNumberOfRepetitions());
 			}
 		} catch(Exception e){
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		try {
 			if(null != eir.getNote()) {
 				exerciseInRoundDTO.setNote(eir.getNote()); 
 			}
 		} catch(Exception e){
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 	}
 	
@@ -178,8 +175,7 @@ public class RestTrainingController {
 					exerciseInRoundDTOAjax.getExerciseInRoundNumberOfRepetitions());
 			obj.put("exerciseInRoundDifficulty", exerciseInRoundDTOAjax.getExerciseInRoundDifficulty());
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		Long trainingId = -1l;
 		try {
@@ -196,8 +192,7 @@ public class RestTrainingController {
 			obj.put("exerciseExecId", newExerciseInRoundExecId);
 
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 			return exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
@@ -214,8 +209,7 @@ public class RestTrainingController {
 					exerciseInRoundDTOAjaxAddRound.getExerciseInRoundNumberOfRepetitions());
 			obj.put("exerciseInRoundDifficulty", exerciseInRoundDTOAjaxAddRound.getExerciseInRoundDifficulty());
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		ExerciseDTO exerciseDTO = new ExerciseDTO();
 		exerciseDTO.setName(exerciseInRoundDTOAjaxAddRound.getName());
@@ -238,8 +232,7 @@ public class RestTrainingController {
 			obj.put("roundId", newRoundId);
 			obj.put("exerciseExecId", newExerciseInRoundExecId);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 			return exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
@@ -258,8 +251,7 @@ public class RestTrainingController {
 			obj.put("exerciseInRoundNote", eir.getNote());
 			obj.put("exerciseInRoundNumberOfRepetitions", eir.getNumberOfRepetitions());
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		return ResponseEntity.ok(obj.toString());
 	}
@@ -291,8 +283,7 @@ public class RestTrainingController {
 					exerciseInRoundDTOAjax.getExerciseInRoundNumberOfRepetitions());
 			obj.put("exerciseInRoundDifficulty", exerciseInRoundDTOAjax.getExerciseInRoundDifficulty());
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		Long trainingId = -1l;
 		try {
@@ -309,8 +300,7 @@ public class RestTrainingController {
 			obj.put("roundId", newRoundId);
 			obj.put("exerciseExecId", exerciseInRoundDTOAjax.getExerciseExecId());
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 			return	exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
@@ -327,8 +317,7 @@ public class RestTrainingController {
 			obj.put("roundRoundSequenceNumber", roundService.findOne(newRoundId).getRoundSequenceNumber());
 			obj.put("selectedRoundId", newRoundId);
 		} catch (Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 			return exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
@@ -351,8 +340,7 @@ public class RestTrainingController {
 		try {
 			deleteRound(roundDTOAjax.getId());
 		} catch(Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 			return	exceptionHandling(e);
 		}
 		//TODO Select the previous round if it exists, the next one is this is the first round
@@ -381,8 +369,7 @@ public class RestTrainingController {
 		try {
 			ExerciseInRound exerciseInRound = exerciseInRoundService.delete(Long.parseLong(roundDTOAjax.getId()));
 		} catch(Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 			return exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());
@@ -434,8 +421,7 @@ public class RestTrainingController {
 				return ResponseEntity.badRequest().body("Desila se greska!!!");
 			}
 		} catch(Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
+			LoggingUtil.LoggingMethod(logger, e);
 			return exceptionHandling(e);
 		}
 		return ResponseEntity.ok(obj.toString());

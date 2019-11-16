@@ -117,9 +117,7 @@ public class TrainingController {
 		model.addAttribute("errorMessage",isThereError);
 			
 	} catch(Exception e) {
-		logger.error(e.getMessage());
-		logger.error(LoggingUtil.LoggingMethod(e));
-		e.printStackTrace();
+		LoggingUtil.LoggingMethod(logger, e);
 		model.addAttribute("errorMessage", ExceptionMessageToStringList.createErrorMessageListForPrinting(e));
 		return "errorPage";
 	}
@@ -144,9 +142,7 @@ public class TrainingController {
 		model.addAttribute("idOfClientToCopyTo","");
 		
 	} catch(Exception e) {
-		logger.error(e.getMessage());
-		logger.error(LoggingUtil.LoggingMethod(e));
-		e.printStackTrace();
+		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
@@ -183,9 +179,7 @@ public class TrainingController {
 		model.addAttribute("circularYesNo", "Postojeće kombinacije");
 		
 	} catch(Exception e) {
-		logger.error(e.getMessage());
-		logger.error(LoggingUtil.LoggingMethod(e));
-		e.printStackTrace();
+		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
@@ -222,9 +216,7 @@ public class TrainingController {
 		model.addAttribute("circularYN", true);
 		
 	} catch(Exception e) {
-		logger.error(e.getMessage());
-		logger.error(LoggingUtil.LoggingMethod(e));
-		e.printStackTrace();
+		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
@@ -273,9 +265,7 @@ public class TrainingController {
 	try {	
 		 id = saveOrEditTraining(trainingDTO , mode);
 	} catch(Exception e) {
-		logger.error(e.getMessage());
-		logger.error(LoggingUtil.LoggingMethod(e));
-		e.printStackTrace();
+		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
@@ -297,9 +287,7 @@ public class TrainingController {
 			Long newRoundId = addRound(id);
 			redir.addFlashAttribute("selectedRoundId", newRoundId);
 		} catch(Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
-			e.printStackTrace();
+			LoggingUtil.LoggingMethod(logger, e);
 			List<String> messageList = new ArrayList<>();
 			StackTraceElement[] trace = e.getStackTrace();
 			for(int i=0; i < trace.length; i++ ) {
@@ -324,9 +312,7 @@ public class TrainingController {
 			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
 			redir.addFlashAttribute("selectedRoundId", newRoundId);
 		} catch(Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
-			e.printStackTrace();
+			LoggingUtil.LoggingMethod(logger, e);
 			List<String> messageList = new ArrayList<>();
 			StackTraceElement[] trace = e.getStackTrace();
 			for(int i=0; i < trace.length; i++ ) {
@@ -347,9 +333,7 @@ public class TrainingController {
 			ExerciseInRound exerciseInRound = exerciseInRoundService.delete(Long.parseLong(exerciseInRoundId));
 			redir.addFlashAttribute("selectedRoundId", exerciseInRound.getRound().getId());
 		} catch(Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
-			e.printStackTrace();
+			LoggingUtil.LoggingMethod(logger, e);
 			List<String> messageList = new ArrayList<>();
 			StackTraceElement[] trace = e.getStackTrace();
 			for(int i=0; i < trace.length; i++ ) {
@@ -367,9 +351,7 @@ public class TrainingController {
 	try {
 		deleteRound(roundId);
 	} catch(Exception e) {
-		logger.error(e.getMessage());
-		logger.error(LoggingUtil.LoggingMethod(e));
-		e.printStackTrace();
+		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
@@ -490,9 +472,7 @@ public class TrainingController {
 			model.addAttribute("exercises", getExercisesForModel(training));
 		
 		} catch(Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
-			e.printStackTrace();
+			LoggingUtil.LoggingMethod(logger, e);
 			List<String> messageList = new ArrayList<>();
 			StackTraceElement[] trace = e.getStackTrace();
 			for(int i=0; i < trace.length; i++ ) {
@@ -530,9 +510,7 @@ public class TrainingController {
 			model.addAttribute("circularYN", true);
 		
 		} catch(Exception e) {
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
-			e.printStackTrace();
+			LoggingUtil.LoggingMethod(logger, e);
 			List<String> messageList = new ArrayList<>();
 			StackTraceElement[] trace = e.getStackTrace();
 			for(int i=0; i < trace.length; i++ ) {
@@ -584,9 +562,7 @@ public class TrainingController {
 		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 
 	} catch(Exception e) {
-		logger.error(e.getMessage());
-		logger.error(LoggingUtil.LoggingMethod(e));
-		e.printStackTrace();
+		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
@@ -638,9 +614,7 @@ public class TrainingController {
 		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 
 	} catch(Exception e) {
-		logger.error(e.getMessage());
-		logger.error(LoggingUtil.LoggingMethod(e));
-		e.printStackTrace();
+		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {
@@ -695,9 +669,7 @@ public class TrainingController {
 		newTrainingId = trainingNew.getId();
 		
 	} catch(Exception e) {
-		logger.error(e.getMessage());
-		logger.error(LoggingUtil.LoggingMethod(e));
-		e.printStackTrace();
+		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
 		StackTraceElement[] trace = e.getStackTrace();
 		for(int i=0; i < trace.length; i++ ) {

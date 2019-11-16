@@ -67,18 +67,16 @@ public class PdfGenaratorUtil {
 	            renderer.createPDF(os, false);
 	            renderer.finishPDF();
 	        }catch (IOException e) {
-				logger.error(e.getMessage());
-				logger.error(LoggingUtil.LoggingMethod(e));
-	           isThereError = 1;
+				LoggingUtil.LoggingMethod(logger, e);
+	            isThereError = 1;
 	        }
 	        finally {
 	            if (os != null) {
 	                try {
 	                    os.close();
 	                } catch (IOException e) {
-	        			logger.error(e.getMessage());
-	        			logger.error(LoggingUtil.LoggingMethod(e));	
-	                /*ignore*/ }
+	        			LoggingUtil.LoggingMethod(logger, e);
+	        		}
 	            }
 	        }
 	   return isThereError;

@@ -39,9 +39,7 @@ public class TrainingDTOtoTraining implements Converter<TrainingDTO,Training>{
 			training.setDate(date);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			logger.error(e.getMessage());
-			logger.error(LoggingUtil.LoggingMethod(e));
-			e.printStackTrace();
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 	
 		training.setNumberOfTrainings(source.getNumberOfTrainings());
