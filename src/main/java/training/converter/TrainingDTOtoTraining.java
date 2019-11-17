@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -12,12 +14,15 @@ import org.springframework.stereotype.Component;
 import training.dto.TrainingDTO;
 import training.model.Training;
 import training.service.ClientService;
+import training.util.LoggingUtil;
 
 @Component
 public class TrainingDTOtoTraining implements Converter<TrainingDTO,Training>{
 
 	@Autowired
 	private ClientService clientService;
+	
+	Logger logger = LoggerFactory.getLogger(TrainingDTOtoTraining.class);
 	
 	@Override
 	public Training convert(TrainingDTO source) {
@@ -34,7 +39,7 @@ public class TrainingDTOtoTraining implements Converter<TrainingDTO,Training>{
 			training.setDate(date);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 	
 		training.setNumberOfTrainings(source.getNumberOfTrainings());
