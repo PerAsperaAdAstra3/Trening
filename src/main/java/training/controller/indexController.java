@@ -18,7 +18,10 @@ public class indexController {
 			return "redirect:/exerciseGroupList";
 		} else if ("client".equals(mode)) {
 			return "redirect:/clientList";
+		} else if ("operator".equals(mode)) {
+			return "redirect:/operatorList";
 		}
+		
 		return "redirect:/trainingList/"+isThereError;
 
 	}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/functions.js"></script>
+<script src="scripts/filterTable.js"></script>
+<meta charset="utf-8"/>
+<title>Users</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<script>
+	$(document).on("click", "#tr-entity-list", function(event) {
+		highlightRow(this)
+	});
+	
+	$(document).on("click", "#search", function(event) {
+		$("#hidden_input").css('display','table-row');
+	});
+	
+	$(document).on("click", "#resetButton", function(event) {
+			document.getElementById("editButton").disabled = true;
+	});
+
+	function sync(item){
+		userName = item.find(".userName").html()
+	    password = item.find(".password").html()
+	    operatorId = item.find(".operatorId").html()
+	    
+	    document.getElementById("editButton").disabled = false;
+		
+	    $("#id").val(operatorId);
+	    $("#userName").val(userName);
+	    $("#password").val(password);
+	}
+	
+</script>
+</head>
+<body>
+	<div class="alert div1" role="alert">
+		<a href="/" class="home">Početna</a>
+		<h1 align="center">Operateri u sistemu</h1>
+	</div>
+	
+<h2>Dodavanje i izmena klijenta</h2>
+	
+<div class="panel">
+	<form style="padding-left:3em" th:action="@{/addOperator}" th:object="${operatorDTO}" method="POST">
+	<input type="hidden" th:field="*{id}" id="id" />
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="*{userName}">Koristničko ime:</label>
+			<input  type="text" th:field="*{userName}" id="userName" class="form-control" />
+		</div>
+	</div>
+	
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="*{password}">Lozinka:</label>
+			<input  type="text" th:field="*{password}" id="password" class="form-control" />
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
+			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+			<button id="resetButton" type="reset" class="btn btn-success">Iscisti</button>
+		</div>
+	</div>
+</form>
+</div>
+<br/>
+<div class="panel">
+<form method="POST">
+<div style="padding-left:3em">
+	<p><b> Filtriranje: </b></p>
+		<input type="text" id="inputFilterName" onkeyup="filterTable(0,1)" placeholder="Filtriranje po nazivu.."/>
+		<input type="text" id="inputFilterDescription" onkeyup="filterTable(1,1)" placeholder="Filtriranje po lozinci.."/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+<table id="clientTable" class="table">
+	<thead>
+		<tr>
+			<th scope="col">Korisničko ime : </th>
+			<th scope="col">Lozinka : </th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-list" th:each = "operator : ${operators}">
+			<td class="userName" th:utext="${operator.userName}"></td>
+			<td class="password" th:utext="${operator.password}"></td>
+			<td scope="row" class="operatorId" th:utext="${operator.id}" style="display:none;"></td>
+			<td>
+				<a th:href="@{/deleteOperator/{id}(id=${operator.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+<br/>
+</div>
+</body>
+</html>
