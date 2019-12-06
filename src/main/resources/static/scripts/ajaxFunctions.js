@@ -1,3 +1,29 @@
+function packageAddPackageElement(packageElementId){
+	
+	var packageUnit = {}
+	var roundExerciseId = $("#exerciseInRoundExerciseId").val();
+	packageUnit["id"] = $("#idPackage").val();
+	packageUnit["nameOfPackage"] = $("#nameOfPackage").val();
+	packageUnit["packageElementId"] = packageElementId;
+	
+$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/addPackagePackageElement",
+		data: JSON.stringify(packageUnit),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+		},
+		error: function (e) {
+			 var json = "<h4>Ajax Response</h4>";
+	            $('#feedback').html(json);
+		}
+	})
+	
+}
+
 function ajaxAddMultipleExerciseInRound(attrList , attr, highlightedRoundID){
 	var multipleExerciseInRound = {}
 

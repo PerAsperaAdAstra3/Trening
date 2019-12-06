@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import training.converter.ClientDTOtoClient;
 import training.converter.ClientToClientDTO;
 import training.dto.ClientDTO;
+import training.dto.ClientPackageDTO;
 import training.model.Client;
+import training.model.ClientPackage;
+import training.service.ClientPackageService;
 import training.service.ClientService;
 
 @Controller
@@ -22,6 +25,9 @@ public class ClientController {
 
 	@Autowired
 	ClientService clientService;
+	
+	@Autowired
+	ClientPackageService clientPackageService;
 	
 	@Autowired
     ClientToClientDTO clientToClientDTO;
@@ -36,7 +42,6 @@ public class ClientController {
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		return "client";
 	}
-	
 	
 	@RequestMapping(value = { "/addTrainingToClient" }, method = RequestMethod.GET)
 	public String createTraining() {
@@ -62,8 +67,20 @@ public class ClientController {
 	}
 	
 	@RequestMapping(value = {"/deleteClient/{id}"}, method = RequestMethod.GET)
-	public String deleteClient(@PathVariable String id ) {
+	public String deleteClient(@PathVariable String id) {
 		clientService.delete(Long.parseLong(id));
 		return "redirect:/clientList";
+	}
+	
+	@RequestMapping(value = {"/clientDetail/{id}"}, method = RequestMethod.GET)
+	public String clientDetail(Model model, @PathVariable String id) {
+		Client client = clientService.findOne(Long.parseLong(id));
+		ClientPackage clientPackage = clientPackageService.findOne(Long.parseLong(id));
+		System.out.println("U klijent Detail-usmo");
+		model.addAttribute("clientDTO", clientToClientDTO.convert(client));
+		model.addAttribute("clientPackage", new ClientPackageDTO());
+		model.addAttribute("clientPackages", client.getClientPackages());
+		//model.addAttribute("familyName", client.getFamilyName());
+		return "clientDetails";
 	}
 }

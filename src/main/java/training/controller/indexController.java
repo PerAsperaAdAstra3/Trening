@@ -20,6 +20,8 @@ public class indexController {
 			return "redirect:/clientList";
 		} else if ("operator".equals(mode)) {
 			return "redirect:/operatorList";
+		} else if ("package".equals(mode)) {
+			return "redirect:/packageList";
 		}
 		
 		return "redirect:/trainingList/"+isThereError;

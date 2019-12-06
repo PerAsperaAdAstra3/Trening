@@ -46,9 +46,9 @@
 		
 	</div>
 <br/>
+<div style="width:100%" class="form-group row">
+<div style="width:50%" class="panel col-xs-2">
 <h2>Dodavanje i izmena klijenta</h2>
-
-<div class="panel">
 <form style="padding-left:3em" th:action="@{/addClient}" th:object="${clientDTO}" method="POST">
 
 	<input type="hidden" th:field="*{id}" id="id" />
@@ -90,6 +90,12 @@
 	
 </form>
 </div>
+<div style="width:50%" class="col-xs-2">
+<h2>Paketi klijenta</h2>
+<p>Line 1 </p>
+<p>Line 2 </p>
+</div>
+</div>
 <br/>
 <div class="panel">
 <form method="POST">
@@ -114,6 +120,7 @@
 			<th scope="col"></th>
 			<th scope="col"></th>
 			<th scope="col"></th>
+			<th scope="col"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -124,10 +131,12 @@
 			<td class="clientPhoneNumber" th:utext="${client.phoneNumber}"></td>
 			<td scope="row" class="clientId" th:utext="${client.id}" style="display:none;"></td>
 			<td>
+				<a th:href="@{/clientDetail/{id}(id=${client.id})}"><button type="button" class="btn btn-secondary">Detalji</button></a></td>
+			<td>
 				<a th:href="@{/deleteClient/{id}(id=${client.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td>
 				<a th:href="@{/trainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
-				<td>
+			<td>
 				<a th:href="@{/circularTrainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj kružni trening</button></a></td>
 		</tr>
 	</tbody>

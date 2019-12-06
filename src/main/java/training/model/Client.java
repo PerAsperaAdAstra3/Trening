@@ -23,14 +23,17 @@ public class Client {
 	@Column(name = "FamilyName")
 	private String familyName;
 	
-	@OneToMany(mappedBy = "client")
-	private List<Training> trainingList = new ArrayList<Training>();
-	
 	@Column(name = "Email")
 	private String email;
 	
 	@Column(name = "PhoneNumber")
 	private String phoneNumber;
+
+	@OneToMany(mappedBy = "client")
+	private List<ClientPackage> clientPackages = new ArrayList<ClientPackage>();
+
+	@OneToMany(mappedBy = "client")
+	private List<Training> trainingList = new ArrayList<Training>();
 	
 	public String getEmail() {
 		return email;
@@ -81,6 +84,14 @@ public class Client {
 		this.name = name;
 	}
 
+	public List<ClientPackage> getClientPackages() {
+		return clientPackages;
+	}
+
+	public void addClientPackages(ClientPackage clientPackage) {
+		this.clientPackages.add(clientPackage);
+	}
+	
 	public Client() {}
 	
 	public Client(String name, String familyName) {

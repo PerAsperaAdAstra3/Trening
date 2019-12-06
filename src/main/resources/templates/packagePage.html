@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../scripts/functions.js"></script>
+<script src="../../scripts/filterTable.js"></script>
+<script src="../../scripts/ajaxFunctions.js"></script>
+<meta charset="utf-8"/>
+<title>Paketi : </title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<script>
+	$(document).on("click", "#tr-entity-list-package", function(event) {
+		highlightRowPackage(this)
+	});
+	
+	$(document).on("click", "#tr-entity-list", function(event) {
+		highlightRow(this)
+	});
+	
+	$(document).on("click", "#search", function(event) {
+		$("#hidden_input").css('display','table-row');
+	});
+	
+	$(document).on("click", "#resetButton", function(event) {
+			document.getElementById("editButton").disabled = true;
+	});
+	
+	$(document).on("click", "#resetButtonPackage", function(event) {
+		document.getElementById("editButtonPackage").disabled = true;
+	});
+		
+	$(document).on("click", ".addToPackage", function(event) {
+		document.getElementById("editButtonPackage").disabled = true;
+		var packageElementId = $(this).parent().parent().find(".packageElementId").html();
+		packageAddPackageElement(packageElementId);
+	});
+	
+	
+	function sync(item){
+		packageElementName = item.find(".packageElementName").html()
+	    packageElementDescription = item.find(".packageElementDescription").html()
+	    packageElementId = item.find(".packageElementId").html()
+	    packageElementPackageId = item.find(".packageElementPackageId").html()
+
+	    document.getElementById("editButton").disabled = false;
+		
+	    $("#name").val(packageElementName);
+	    $("#description").val(packageElementDescription);
+	    $("#id").val(packageElementId);
+	    $("#packageId").val(packageElementPackageId);
+	}
+
+	function syncPackage(item){
+		nameOfPackage = item.find(".nameOfPackage").html()
+	    packageId = item.find(".packageId").html()
+
+	    document.getElementById("editButtonPackage").disabled = false;
+		
+	    $("#nameOfPackage").val(nameOfPackage);
+	    $("#idPackage").val(packageId);
+	}
+	
+	</script>
+</head>
+<body>
+	<div class="alert div1" role="alert">
+		<a href="/" class="home">Početna</a>
+		<h1 align="center">Paketi u sistemu</h1>
+	</div>
+<h2 align="center">Dodavanje i izmena Paketa</h2>
+
+
+<div style="width:100%" class="form-group row">
+
+<div style="width:50%" class="col-xs-2">
+<h2>Paketi :</h2>
+<div style="width:100%" class="form-group row">
+
+<div style="width:50%" class="col-xs-2">
+<form style="padding-left:3em" th:action="@{/addPackage}" th:object="${packageDTO}" method="POST">
+
+	<input type="hidden" th:field="*{id}" id="idPackage" />
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="name">Ime paketa:</label>
+			<input  type="text" th:field="*{nameOfPackage}" id="nameOfPackage" class="form-control" />
+		</div>
+  	</div>
+  
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
+			<button id="editButtonPackage" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+			<button id="resetButtonPackage" type="reset" class="btn btn-success">Iscisti</button>
+		</div>
+	</div>
+</form>
+</div>
+<div style="width:50%" class="col-xs-2">
+<table>
+	<thead>
+		<tr>
+			<th scope="col">Ime</th>
+			<th scope="col">Opis</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-list" th:each = "package : ${packages}">
+			<td class="Name" th:utext="${package.nameOfPackage}"></td>
+			<td class="Name" th:utext="${package.nameOfPackage}"></td>
+			<td scope="row" class="packageId" th:utext="${package.id}" style="display:none;"></td>
+			<td>
+				<a th:href="@{/deletePackage/{id}(id=${package.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</div>
+<form method="POST">
+<div style="padding-left:3em">
+	<p><b> Filtriranje: </b></p>
+		<input type="text" id="inputFilterName" onkeyup="filterTable(0,1)" placeholder="Ime paketa.."/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+<table id="clientTable" class="table">
+	<thead>
+		<tr>
+			<th scope="col">Ime paketa</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-list-package" th:each = "package : ${packages}">
+			<td class="nameOfPackage" th:utext="${package.nameOfPackage}"></td>
+			<td scope="row" class="packageId" th:utext="${package.id}" style="display:none;"></td>
+			<td>
+				<a th:href="@{/deletePackage/{id}(id=${package.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+</div>
+<!-- ELEMENTI PAKETA -->
+<div style="width:50%" class="col-xs-2">
+	<h2>Elementi paketa :</h2>
+	<form style="padding-left:3em" th:action="@{/addPackageElement}" th:object="${packageElementDTO}" method="POST">
+
+	<input type="hidden" th:field="*{id}" id="id" />
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="name">Ime elementa:</label>
+			<input  type="text" th:field="*{name}" id="name" class="form-control" />
+		</div>
+  	</div>
+  
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="description">Opis:</label>
+			<input  type="text" th:field="*{description}" id="description" class="form-control" />
+		</div>
+  	</div>
+	<input type="hidden" th:field="*{packageId}" id="packageId" />
+	
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
+			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+			<button id="resetButton" type="reset" class="btn btn-success">Iscisti</button>
+		</div>
+	</div>
+</form>
+<form method="POST">
+<div style="padding-left:3em">
+	<p><b> Filtriranje: </b></p>
+		<input type="text" id="inputFilterName" onkeyup="filterTable(0,1)" placeholder="Filtriranje po nazivu.."/>
+		<input type="text" id="inputFilterDescription" onkeyup="filterTable(1,1)" placeholder="Filtriranje po opisu.."/>
+	<br/>
+	<br/>
+	<br/>
+</div>
+<table id="clientTable" class="table">
+	<thead>
+		<tr>
+			<th scope="col">Ime</th>
+			<th scope="col">Opis</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-list" th:each = "packageElement : ${packageElements}">
+			<td class="packageElementName" th:utext="${packageElement.name}"></td>
+			<td class="packageElementDescription" th:utext="${packageElement.description}"></td>
+			<td scope="row" class="packageElementId" th:utext="${packageElement.id}" style="display:none;"></td>
+			<td scope="row" class="packageElementPackageId" th:utext="${packageElement.packageId}" style="display:none;"></td>
+			<td>
+				<a th:href="@{/deletePackageElement/{id}(id=${packageElement.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+			<td>
+				<button type="button" class="btn btn-success addToPackage">Dodaj u paket</button></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+</div>
+</div>
+</body>
+</html>

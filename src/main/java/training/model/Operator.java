@@ -18,7 +18,7 @@ public class Operator{
 	
 	@Column(name = "password")
 	private String password;
-
+	
 /*	@Column(name = "actions")
 	private List<String> actionList;*/
 	

@@ -21,8 +21,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
-		http.authorizeRequests()
+		http
+        .csrf().disable()
+        .authorizeRequests()
+            .anyRequest().permitAll();
+	/*	http.authorizeRequests()
 		.antMatchers("/exerciseList/**").hasAnyRole("TRENER", "ADMIN")
 		.antMatchers("/clientList").hasAnyRole("TRENER", "ADMIN")
 		.antMatchers("/exerciseGroupList").hasAnyRole("TRENER", "ADMIN")
@@ -31,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.antMatchers("/getTraining/**").hasAnyRole("TRENER", "ADMIN")
 		.antMatchers("/trainingCreationHandler/**").hasAnyRole("TRENER", "ADMIN")
 		.antMatchers("/circularTrainingCreationHandler/**").hasAnyRole("TRENER", "ADMIN")
-		.and().httpBasic();
+		.and().httpBasic();*/
 	//	http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
 //		anyRequest().authenticated().and().httpBasic();
 	}
