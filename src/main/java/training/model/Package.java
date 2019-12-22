@@ -3,13 +3,13 @@ package training.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
 
 @Entity(name = "Package")
 public class Package {
@@ -21,10 +21,10 @@ public class Package {
 	@Column
 	private String nameOfPackage;
 	
-	@OneToMany(mappedBy = "packageUnitPE")
-	private List<PackageElement> packageElements = new ArrayList<PackageElement>();
+	@OneToMany(mappedBy = "package1", cascade = CascadeType.ALL)
+	private List<ElementsInPackages> elementsInPackages = new ArrayList<ElementsInPackages>();
 	
-	@OneToMany(mappedBy = "packageUnitCP")
+	@OneToMany(mappedBy = "packageUnitCP", cascade = CascadeType.ALL)
 	private List<ClientPackage> clientPackages = new ArrayList<ClientPackage>();
 
 	public Long getId() {
@@ -35,12 +35,13 @@ public class Package {
 		this.id = id;
 	}
 	
-	public List<PackageElement> getPackageElements() {
-		return packageElements;
+	public List<ElementsInPackages> getElementsInPackages() {
+		return elementsInPackages;
 	}
 
-	public void addPackageElements(PackageElement packageElement) {
-		this.packageElements.add(packageElement);
+	public void addElementsInPackages(ElementsInPackages elementsInPackages) {
+		elementsInPackages.setPackage(this);
+		this.elementsInPackages.add(elementsInPackages);
 	}
 
 	public List<ClientPackage> getClientPackages() {
@@ -48,6 +49,7 @@ public class Package {
 	}
 
 	public void addClientPackages(ClientPackage clientPackage) {
+		clientPackage.setPackageUnit(this);
 		this.clientPackages.add(clientPackage);
 	}
 
@@ -61,10 +63,9 @@ public class Package {
 
 	public Package() {}
 	
-	public Package(String nameOfPackage, List<PackageElement> packageElements) {
+	public Package(String nameOfPackage) {
 		super();
 		this.nameOfPackage = nameOfPackage;
-		this.packageElements = packageElements;
 	}
 	
 }

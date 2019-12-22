@@ -19,7 +19,7 @@ public class JpaPackageElementService implements PackageElementService {
 	PackageElementRepository packageElementRepository;
 	
 	@Override
-	public PackageElement findeOne(Long id) {
+	public PackageElement findOne(Long id) {
 		return packageElementRepository.findOne(id);
 	}
 
@@ -60,9 +60,9 @@ public class JpaPackageElementService implements PackageElementService {
 		PackageElement oldPackageElement = packageElementRepository.findOne(id);
 		oldPackageElement.setDescription(packageElement.getDescription());
 		oldPackageElement.setName(packageElement.getName());
-		for(ClientPackageElement clientPackageElement : packageElement.getClientPackageElements()) {
+		/*for(ClientPackageElement clientPackageElement : packageElement.getClientPackageElements()) {
 			oldPackageElement.addClientPackageElements(clientPackageElement);
-		}
+		}*/
 		packageElementRepository.save(oldPackageElement);
 		return null;
 	}

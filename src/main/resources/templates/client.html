@@ -90,11 +90,6 @@
 	
 </form>
 </div>
-<div style="width:50%" class="col-xs-2">
-<h2>Paketi klijenta</h2>
-<p>Line 1 </p>
-<p>Line 2 </p>
-</div>
 </div>
 <br/>
 <div class="panel">
@@ -138,6 +133,8 @@
 				<a th:href="@{/trainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
 			<td>
 				<a th:href="@{/circularTrainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj kružni trening</button></a></td>
+			<td>
+				<a th:href="@{/clientManagement/{id}(id=${client.id})}"><button type="button" class="btn btn-secondary">Paketi klijenta</button></a></td>
 		</tr>
 	</tbody>
 </table>

@@ -2,13 +2,14 @@ package training.service;
 
 import java.util.List;
 
+import training.model.Client;
 import training.model.ClientPackage;
 
 public interface ClientPackageService {
 
 	ClientPackage findOne(Long id);
 	
-	List<ClientPackage> filter(ClientPackage clientPackage);
+	List<ClientPackage> filter(Client client);
 	
 	List<ClientPackage> findAll();
 	

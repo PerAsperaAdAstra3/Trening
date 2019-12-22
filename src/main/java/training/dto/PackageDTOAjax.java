@@ -8,6 +8,18 @@ public class PackageDTOAjax {
 	
 	private Long packageElementId;
 	
+	private Long elementsInPackages;
+	
+	private Long numnerOfElements;
+	
+	public Long getNumnerOfElements() {
+		return numnerOfElements;
+	}
+
+	public void setNumnerOfElements(Long numnerOfElements) {
+		this.numnerOfElements = numnerOfElements;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -30,6 +42,14 @@ public class PackageDTOAjax {
 
 	public void setPackageElementId(Long packageElementId) {
 		this.packageElementId = packageElementId;
+	}
+
+	public Long getElementsInPackages() {
+		return elementsInPackages;
+	}
+
+	public void setElementsInPackages(Long elementsInPackages) {
+		this.elementsInPackages = elementsInPackages;
 	}
 
 	public PackageDTOAjax() {}

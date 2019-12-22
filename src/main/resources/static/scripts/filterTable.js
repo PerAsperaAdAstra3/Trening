@@ -67,7 +67,6 @@ function filterTable(typeToFilter, pageOrigin){
 		    	j = 4;
 		    }
 	}
-	 	
 	 filter = input.toUpperCase();
 	  
 	 $("tr").each(function(){

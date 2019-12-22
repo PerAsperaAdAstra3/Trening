@@ -7,6 +7,61 @@ h2 {
     margin-left: 35px;
 }
 
+.tbodyPackage {
+	display: block;
+    height: auto;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.thead {
+	width: auto;
+	color: #fff;
+  	background-color: #ababab;
+  	border-color: #ababab;
+}
+
+.trow {
+	width: auto;
+	color: #000;
+  	background-color: #ffffff;
+  	border-color: #ffffff;
+}
+
+.tablePackage {
+	border: 1px solid #ddd;
+	width: auto;
+	max-width: 100%;
+	margin-bottom: 1rem;
+	margin-right: 3rem;
+	border-radius: 0.25rem;
+	background-color: transparent
+}
+
+.tablePackageClientManagement {
+	border: 1px solid #ddd;
+	width: auto;
+	max-width: auto;
+	margin-bottom: 1rem;
+	margin-right: 3rem;
+	border-radius: 0.25rem;
+	background-color: transparent
+}
+
+.tablePackage td, .tablePackage th {
+	padding: .75rem;
+	vertical-align: top;
+}
+
+.tablePackage thead th {
+	vertical-align: bottom;
+}
+
+.tablePackage tbody+tbody {
+}
+
+
 .home {
 
 	color:#000000;
@@ -15,7 +70,7 @@ h2 {
 	font-weight:bold
 }
 
-.highlighted{
+.highlighted {
 	background-color:#1ea043
 }
 
@@ -30,7 +85,12 @@ table {
 p {
 	margin-left: 35px
 }
- 
+
+.divPackage {
+  border: 1px solid #ddd;
+  margin-left: 35px;
+}
+
 .twoButtonsDiv {
 	margin-left: 35px
 }

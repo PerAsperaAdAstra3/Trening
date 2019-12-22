@@ -2,7 +2,7 @@ package training.dto;
 
 public class PackageElementDTO {
 
-	private Long id;
+	private Long packageElementID;
 	
 	private String name;
 	
@@ -10,12 +10,12 @@ public class PackageElementDTO {
 	
 	private Long packageId;
 
-	public Long getId() {
-		return id;
+	public Long getPackageElementID() {
+		return packageElementID;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setPackageElementID(Long id) {
+		this.packageElementID = id;
 	}
 
 	public String getName() {

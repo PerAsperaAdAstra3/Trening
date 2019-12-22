@@ -9,8 +9,6 @@ public class PackageDTO {
 	
 	private String nameOfPackage;
 	
-	private List<PackageElementDTO> packageElementList = new ArrayList<PackageElementDTO>();
-	
 	public Long getId() {
 		return id;
 	}
@@ -25,14 +23,6 @@ public class PackageDTO {
 
 	public void setNameOfPackage(String nameOfPackage) {
 		this.nameOfPackage = nameOfPackage;
-	}
-
-	public List<PackageElementDTO> getPackageElementList() {
-		return packageElementList;
-	}
-
-	public void setPackageElementList(PackageElementDTO packageElementList) {
-		this.packageElementList.add(packageElementList);
 	}
 
 	public PackageDTO() {}

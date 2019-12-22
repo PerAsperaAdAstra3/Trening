@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import training.repository.PackageRepository;
 import training.service.PackageService;
 import training.model.ClientPackage;
+import training.model.ElementsInPackages;
 import training.model.Package;
 import training.model.PackageElement;
 
@@ -65,8 +66,8 @@ public class JpaPackageService implements PackageService {
 		for(ClientPackage clientPackage : packageUnit.getClientPackages()) {
 			oldPackage.addClientPackages(clientPackage);
 		}
-		for(PackageElement packageElement : packageUnit.getPackageElements()) {
-			oldPackage.addPackageElements(packageElement);
+		for(ElementsInPackages elementsInPackages : packageUnit.getElementsInPackages()) {
+			oldPackage.addElementsInPackages(elementsInPackages);
 		}
 		packageRepository.save(oldPackage);
 		return oldPackage;

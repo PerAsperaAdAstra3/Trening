@@ -6,7 +6,7 @@ import training.model.PackageElement;
 
 public interface PackageElementService {
 
-	PackageElement findeOne(Long id);
+	PackageElement findOne(Long id);
 	
 	List<PackageElement> findAll();
 	

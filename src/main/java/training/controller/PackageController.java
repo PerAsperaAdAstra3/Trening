@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import training.model.ElementsInPackages;
+import training.converter.ElementsInPackagesToElementsInPackagesDTO;
 import training.converter.PackageDTOtoPackage;
 import training.converter.PackageElementDTOtoPackageElement;
 import training.converter.PackageElementToPackageElementDTO;
 import training.converter.PackageToPackageDTO;
 import training.dto.PackageDTO;
 import training.dto.PackageElementDTO;
+import training.service.ElementsInPackagesService;
 import training.service.PackageElementService;
 import training.service.PackageService;
 
@@ -42,19 +45,23 @@ public class PackageController {
 	@Autowired
 	PackageDTOtoPackage packageDTOtoPackage;
 	
+	@Autowired
+	ElementsInPackagesService elementsInPackagesService;
+	
+	@Autowired
+	ElementsInPackagesToElementsInPackagesDTO elementsInPackagesToElementsInPackagesDTO;
+	
 	@RequestMapping(value = { "/packageList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
 		List<PackageDTO> packageList = packageToPackageDTO.convert(packageService.findAll());
 		
-		List<ArrayList<PackageElementDTO>> listOfpackageElementLists = new ArrayList<ArrayList<PackageElementDTO>>();
+		List<ElementsInPackages> elementsInPackages = new ArrayList<ElementsInPackages>();
 		
-		for(PackageDTO packageDTOiter : packageList) {
-			for(PackageElementDTO packageElementDTO : packageDTOiter.get) {
-				
+	/*	for(Package packageIter : packageService.findAll()) {
+			for(PackageElementDTO packageElementDTO : packageElementToPackageElementDTO.convert(packageIter.getElementsInPackages())) {
+				listOfAllpackageElements.add(packageElementDTO);
 			}
-		}
-		
-		List<PackageElementDTO> packageElementList = new ArrayList<PackageElementDTO>();
+		}*/
 //		List<ArrayList<PackageElementDTO>> listOfpackageElementLists = new ArrayList<ArrayList<PackageElementDTO>>();
 		
 		model.addAttribute("packageDTOSearch", new PackageDTO());
@@ -63,7 +70,7 @@ public class PackageController {
 		model.addAttribute("packageElementDTO", new PackageElementDTO());
 		model.addAttribute("packages", packageToPackageDTO.convert(packageService.findAll()));
 		model.addAttribute("packageElements", packageElementToPackageElementDTO.convert(packageElementService.findAll()));
-		model.addAttribute("ListOfpackageElementLists", packageElementToPackageElementDTO.convert(packageElementService.findAll()));
+		model.addAttribute("elementsInPackages", elementsInPackagesToElementsInPackagesDTO.convert(elementsInPackagesService.findAll()));
 		return "packagePage";
 	}
 	
@@ -71,10 +78,10 @@ public class PackageController {
 	public String addPackageElement(Model model, @ModelAttribute("packageElementDTO") PackageElementDTO packageElementDTO, @RequestParam String mode){
 
 		if("add".equals(mode)) {
-			packageElementDTO.setId(null);
+			packageElementDTO.setPackageElementID(null);
 			packageElementService.save(packageElementDTOtoPackageElement.convert(packageElementDTO));
 		} else {
-			packageElementService.edit(packageElementDTO.getId(), packageElementDTOtoPackageElement.convert(packageElementDTO));
+			packageElementService.edit(packageElementDTO.getPackageElementID(), packageElementDTOtoPackageElement.convert(packageElementDTO));
 		}
 		return "redirect:/packageList";
 	}

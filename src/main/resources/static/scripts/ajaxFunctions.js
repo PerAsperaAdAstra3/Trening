@@ -1,3 +1,102 @@
+//Add package to client
+
+function ajaxAddPackageToClient(packageId){
+	
+	alert('Usli smo u - ajaxAddPackageToClient')
+	var clientPackageDTO = {}
+	clientPackageDTO["clientId"] = $("#clientId").val();
+	clientPackageDTO["packageId"] = packageId;
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/addPackageToClient",
+		data: JSON.stringify(clientPackageDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			//thisObject.parent().parent().remove();
+			alert('SUCCESS')
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom brisanja vežbe u krugu!')
+		}
+	})
+}
+
+// NEW Delete elements in packages
+function ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, thisObject){
+	
+	var elementsInPackagesDTOAjax = {}
+	elementsInPackagesDTOAjax["id"] = elementsInPackagesId;
+	elementsInPackagesDTOAjax["number"] = newNumber;
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/deleteElementsInPackages",
+		data: JSON.stringify(elementsInPackagesDTOAjax),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			if(data.zeroLeft == "yes"){
+			  thisObject.parent().parent().remove();
+			}
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom brisanja vežbe u krugu!')
+		}
+	})
+}
+
+function packageAddPackageElementNumber(packageElementId){
+	
+	var packageUnit = {}
+	var roundExerciseId = $("#exerciseInRoundExerciseId").val();
+	var numberOfElements = $(".numberOfElements").val();
+	
+	packageUnit["id"] = $("#idPackage").val();
+	packageUnit["nameOfPackage"] = $("#nameOfPackage").val();
+	packageUnit["packageElementId"] = packageElementId;
+	packageUnit["numnerOfElements"] = numberOfElements;
+	
+$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/addPackagePackageElement",
+		data: JSON.stringify(packageUnit),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			console.log(data);	
+			var idTraining = $(".idTraining").val();
+			xcv = $(".packElId").html();
+			$("#tr-entity-list .elemInPackagesId").each(function(){
+			if($(this).html() == data.packElpackageId){
+					$(this).parent().hide();
+				}
+			});
+			if(data.modOfOperation == "add"){
+				$("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list" class="trow"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +'</td><td><input type="number" class="packElNumber" name="quantity" min="1" max="99" value="' + data.elementsInPackagesNumber + '"/></td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
+			} else {
+				$("#tr-entity-list .elemInPackagesId").each(function(){
+					if($(this).html() == data.elemInPackagesId){
+							$(this).parent().find(".packElNumber").val(data.elementsInPackagesNumber);
+						}
+					});
+			}
+		},
+		error: function (e) {
+			 var json = "<h4>Ajax Response</h4>";
+	            $('#feedback').html(json);
+		}
+	})
+	
+}
+
 function packageAddPackageElement(packageElementId){
 	
 	var packageUnit = {}
@@ -15,6 +114,8 @@ $.ajax({
 		cache: false,
 		timeout: 600000,
 		success: function (data){
+
+		    $("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +'</td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
 		},
 		error: function (e) {
 			 var json = "<h4>Ajax Response</h4>";

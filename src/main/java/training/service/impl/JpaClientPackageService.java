@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import training.model.Client;
 import training.model.ClientPackage;
 import training.repository.ClientPackageRepository;
 import training.service.ClientPackageService;
@@ -23,9 +24,8 @@ public class JpaClientPackageService implements ClientPackageService {
 	}
 
 	@Override
-	public List<ClientPackage> filter(ClientPackage clientPackage) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ClientPackage> filter(Client client) {
+		return clientPackageRepository.findByClient(client);
 	}
 
 	@Override

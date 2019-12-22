@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../scripts/functions.js"></script>
+<script src="../../scripts/filterTable.js"></script>
+<script src="../../scripts/filterClientPackageTable.js"></script>
+<script src="../../scripts/ajaxFunctions.js"></script>
+<meta charset="utf-8"/>
+<title>Client management</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/stylePackage.css}"/>
+<script>
+
+
+$(document).on("click", ".addPackageToClient", function(event) {
+	alert('fuuuuuuuuuck')
+    packageId = $(this).parent().parent().find(".packageId").html();
+	alert(packageId)
+    ajaxAddPackageToClient(packageId)
+});
+</script>
+</head>
+<body>
+<div class="alert div1" role="alert">
+	<a href="/" class="home">Početna</a>
+	<h1 align="center">Paketi u sistemu</h1>
+</div>
+<div style="width:100%" class="form-group row">
+<div style="width:40%" class="col-xs-2 divPackage roundedEdges">
+<h2>Klijent : </h2>
+<input type="hidden" id="clientId" th:value="${clientId}"/>
+
+<form method="POST">
+
+</form>
+</div>
+
+<div style="width:40%" class="col-xs-2 divPackage roundedEdges">
+<h2>Elementi trenutnog paketa : </h2>
+<form method="POST">
+	<br/>
+	<div>
+		<p><b> Filtriranje: </b>
+			<input type="text" id="inputFilterName" onkeyup="filterTable(0,1)" placeholder="Filtriranje po nazivu.."/>
+			<input type="text" id="inputFilterDescription" onkeyup="filterTable(1,1)" placeholder="Filtriranje po opisu.."/>
+		</p>
+		<br/>
+	</div>
+	<table id="clientTable" class="tbodyPackage tablePackage">
+		<thead class="thead">
+			<tr>
+			<th  style="width:15%;" scope="col">Ime</th>
+			<th  style="width:15%;" scope="col">Prezime</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-list" th:each = "clientPackageForClient : ${clientPackagesForClient}">
+			<td scope="row" class="clientPackageForClientId" th:utext="${clientPackageForClient.id}" style="display:none;"></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+</div>
+</div>
+
+<div style="width:100%" class="form-group row">
+<div style="width:40%" class="col-xs-2 divPackage roundedEdges">
+<h2>Paketi u sistemu : </h2>
+<form method="POST">
+	<br/>
+	<div>
+		<p><b> Filtriranje: </b>
+			<input type="text" id="inputFilterPackageName" onkeyup="filterTablePackages(0,8)" placeholder="Filtriranje po nazivu.."/>
+		</p>
+		<br/>
+	</div>
+	<table id="clientTable" class="tbodyPackage tablePackage">
+		<thead class="thead">
+			<tr>
+			<th  style="width:25%;" scope="col">Ime</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-listAllPackages" class="trP" th:each = "package : ${allPackages}">
+			<td  style="width:25%;" class="packageName" th:utext="${package.nameOfPackage}"></td>
+			<td scope="row" class="packageId" th:utext="${package.id}" style="display:none;"></td>
+			<td>
+				<button type="button" class="btn btn-success addPackageToClient">Dodaj</button></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+</div>
+
+<div style="width:40%" class="col-xs-2 divPackage roundedEdges">
+<h2>Stari paketi klijenta : </h2>
+<form method="POST">
+	<br/>
+	<div>
+		<p><b> Filtriranje: </b>
+			<input type="text" id="inputFilterPackageName" onkeyup="filterTable(0,1)" placeholder="Filtriranje po nazivu.."/>
+		</p>
+		<br/>
+	</div>
+	<table id="clientTable" class="tbodyPackage tablePackage">
+		<thead class="thead">
+			<tr>
+			<th  style="width:15%;" scope="col">Name of package</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-listAllPackages" th:each = "package : ${allPackages}">
+			<td  style="width:15%;" class="packageName" th:utext="${package.nameOfPackage}"></td>
+			<td scope="row" class="packageId" th:utext="${package.id}" style="display:none;"></td>
+		</tr>
+	</tbody>
+</table>
+</form>
+</div>
+</div>
+<div>
+</div>
+</body>
+</html>

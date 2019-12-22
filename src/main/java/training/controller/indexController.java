@@ -22,6 +22,8 @@ public class indexController {
 			return "redirect:/operatorList";
 		} else if ("package".equals(mode)) {
 			return "redirect:/packageList";
+		} else if ("clientManagement".equals(mode)) {
+			return "redirect:/clientManagement";
 		}
 		
 		return "redirect:/trainingList/"+isThereError;

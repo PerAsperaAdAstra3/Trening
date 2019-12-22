@@ -2,13 +2,12 @@ package training.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 
@@ -17,7 +16,7 @@ public class PackageElement {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long packageElementID;
 	
 	@Column(name="name")
 	private String name;
@@ -25,19 +24,18 @@ public class PackageElement {
 	@Column(name="description")
 	private String description;
 	
-	@OneToMany(mappedBy = "packageElement")
+	@OneToMany(mappedBy = "packageElement", cascade = CascadeType.ALL)
 	private List<ClientPackageElement> clientPackageElementsPE; 
+
+	@OneToMany(mappedBy = "packageElementEIP", cascade = CascadeType.ALL)
+	private List<ElementsInPackages> elementsInPackagesPE;
 	
-	@ManyToOne
-	@JoinColumn(name="packageUnitPE")
-	private Package packageUnitPE;
-	
-	public Long getId() {
-		return id;
+	public Long getPackageElementID() {
+		return packageElementID;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setPackageElementID(Long id) {
+		this.packageElementID = id;
 	}
 
 	public String getName() {
@@ -61,7 +59,17 @@ public class PackageElement {
 	}
 
 	public void addClientPackageElements(ClientPackageElement clientPackageElement) {
+		clientPackageElement.setPackageElement(this);
 		this.clientPackageElementsPE.add(clientPackageElement);
+	}
+	
+	public List<ElementsInPackages> getElementsInPackagesPE() {
+		return elementsInPackagesPE;
+	}
+
+	public void setElementsInPackagesPE(ElementsInPackages elementsInPackagesPE) {
+		elementsInPackagesPE.setPackageElementEIP(this);
+		this.elementsInPackagesPE.add(elementsInPackagesPE);
 	}
 
 	public PackageElement() {}
