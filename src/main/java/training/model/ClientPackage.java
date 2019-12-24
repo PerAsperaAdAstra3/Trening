@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,12 +25,23 @@ public class ClientPackage {
 	@JoinColumn(name = "packageUnitCP")
 	private Package packageUnitCP;
 	
+	@Column(name = "clientPackageStatus")
+	private boolean clientPackageStatus;
+	
 	@ManyToOne
 	@JoinColumn(name = "client")
 	private Client client;
 	
 	@OneToMany(mappedBy = "clientPackage" , cascade = CascadeType.ALL)
 	private List<ClientPackageElement> clientPackageElementsCP = new ArrayList<ClientPackageElement>();
+
+	public boolean isClientPackageStatus() {
+		return clientPackageStatus;
+	}
+
+	public void setClientPackageStatus(boolean clientPackageStatus) {
+		this.clientPackageStatus = clientPackageStatus;
+	}
 
 	public Long getId() {
 		return id;
@@ -60,6 +72,7 @@ public class ClientPackage {
 	}
 
 	public void addClientPackageElements(ClientPackageElement clientPackageElement) {
+		clientPackageElement.setClientPackage(this);
 		this.clientPackageElementsCP.add(clientPackageElement);
 	}
 

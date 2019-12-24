@@ -16,9 +16,7 @@
 
 
 $(document).on("click", ".addPackageToClient", function(event) {
-	alert('fuuuuuuuuuck')
     packageId = $(this).parent().parent().find(".packageId").html();
-	alert(packageId)
     ajaxAddPackageToClient(packageId)
 });
 </script>
@@ -30,8 +28,8 @@ $(document).on("click", ".addPackageToClient", function(event) {
 </div>
 <div style="width:100%" class="form-group row">
 <div style="width:40%" class="col-xs-2 divPackage roundedEdges">
-<h2>Klijent : </h2>
-<input type="hidden" id="clientId" th:value="${clientId}"/>
+<h3>Klijent : <span th:utext="${client.name + ' ' + client.familyName}"></span></h3>
+<input type="hidden" id="clientId" th:value="${client.id}"/>
 
 <form method="POST">
 
@@ -80,7 +78,7 @@ $(document).on("click", ".addPackageToClient", function(event) {
 	<table id="clientTable" class="tbodyPackage tablePackage">
 		<thead class="thead">
 			<tr>
-			<th  style="width:25%;" scope="col">Ime</th>
+			<th  style="width:25%;" scope="col">Naziv</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -108,13 +106,15 @@ $(document).on("click", ".addPackageToClient", function(event) {
 	<table id="clientTable" class="tbodyPackage tablePackage">
 		<thead class="thead">
 			<tr>
-			<th  style="width:15%;" scope="col">Name of package</th>
+			<th  style="width:15%;" scope="col">Naziv</th>
+			<th  style="width:15%;" scope="col">Aktivan</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr	id="tr-entity-listAllPackages" th:each = "package : ${allPackages}">
-			<td  style="width:15%;" class="packageName" th:utext="${package.nameOfPackage}"></td>
-			<td scope="row" class="packageId" th:utext="${package.id}" style="display:none;"></td>
+		<tr	id="tr-entity-listAllPackages" th:each = "clientPackage : ${clientPackages}">
+			<td style="width:15%;" class="packageName" th:utext="${clientPackage.nameOfPackage}"></td>
+			<td style="width:15%;" class="packageStatus" th:utext="${clientPackage.clientPackageStatus}"></td>
+			<td scope="row" class="packageId" th:utext="${clientPackage.id}" style="display:none;"></td>
 		</tr>
 	</tbody>
 </table>

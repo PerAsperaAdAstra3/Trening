@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-
 @Entity(name="ClientPackageElement")
 public class ClientPackageElement {
 
@@ -17,16 +16,35 @@ public class ClientPackageElement {
 	private Long id;
 	
 	@Column(name="counter")
-	private Integer counter;
+	private Integer count;
 	
 	@ManyToOne
 	@JoinColumn(name="clientPackage")
 	private ClientPackage clientPackage;
-
-	@ManyToOne
-	@JoinColumn(name="packageElement")
-	private PackageElement packageElement;
 	
+	@Column(name="clientPackageElementStatus")
+	private boolean clientPackageElementStatus;
+	
+	@ManyToOne
+	@JoinColumn(name="elementsInPackages")
+	private ElementsInPackages elementsInPackages;
+	
+	public boolean isClientPackageElementStatus() {
+		return clientPackageElementStatus;
+	}
+
+	public void setClientPackageElementStatus(boolean clientPackageElementStatus) {
+		this.clientPackageElementStatus = clientPackageElementStatus;
+	}
+
+	public ElementsInPackages getElementsInPackages() {
+		return elementsInPackages;
+	}
+
+	public void setElementsInPackages(ElementsInPackages elementsInPackages) {
+		this.elementsInPackages = elementsInPackages;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -35,20 +53,12 @@ public class ClientPackageElement {
 		this.id = id;
 	}
 
-	public PackageElement getPackageElement() {
-		return packageElement;
-	}
-
-	public void setPackageElement(PackageElement packageElement) {
-		this.packageElement = packageElement;
-	}
-
 	public Integer getCounter() {
-		return counter;
+		return count;
 	}
 
 	public void setCounter(Integer counter) {
-		this.counter = counter;
+		this.count = counter;
 	}
 
 	public ClientPackage getClientPackage() {
@@ -61,9 +71,8 @@ public class ClientPackageElement {
 
 	public ClientPackageElement() {}
 	
-	public ClientPackageElement(PackageElement packageElement, Integer counter) {
+	public ClientPackageElement(Integer counter) {
 		super();
-		this.packageElement = packageElement;
-		this.counter = counter;
+		this.count = counter;
 	}	
 }

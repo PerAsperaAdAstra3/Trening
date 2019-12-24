@@ -2,7 +2,6 @@
 
 function ajaxAddPackageToClient(packageId){
 	
-	alert('Usli smo u - ajaxAddPackageToClient')
 	var clientPackageDTO = {}
 	clientPackageDTO["clientId"] = $("#clientId").val();
 	clientPackageDTO["packageId"] = packageId;
@@ -17,7 +16,6 @@ function ajaxAddPackageToClient(packageId){
 		timeout: 600000,
 		success: function (data){
 			//thisObject.parent().parent().remove();
-			alert('SUCCESS')
 		},
 		error: function (e) {
 			alert('Desila se greska prilikom brisanja vežbe u krugu!')

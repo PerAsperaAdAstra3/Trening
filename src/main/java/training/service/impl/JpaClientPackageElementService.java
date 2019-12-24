@@ -59,7 +59,7 @@ public class JpaClientPackageElementService implements ClientPackageElementServi
 	public ClientPackageElement edit(Long id, ClientPackageElement clientPackageElement) {
 		ClientPackageElement oldClientPackageElement = clientPackageElementRepository.findOne(id);
 		oldClientPackageElement.setCounter(clientPackageElement.getCounter());
-		oldClientPackageElement.setPackageElement(clientPackageElement.getPackageElement());
+		//oldClientPackageElement.setPackageElement(clientPackageElement.getPackageElement());
 		oldClientPackageElement.setClientPackage(clientPackageElement.getClientPackage());
 		clientPackageElementRepository.save(oldClientPackageElement);
 		return null;

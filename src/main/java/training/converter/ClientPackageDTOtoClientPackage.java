@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import training.dto.ClientPackageDTO;
 import training.model.ClientPackage;
 import training.model.ClientPackageElement;
+import training.model.ElementsInPackages;
 import training.model.Package;
 import training.model.PackageElement;
 import training.service.ClientService;
@@ -32,9 +33,12 @@ public class ClientPackageDTOtoClientPackage implements Converter<ClientPackageD
 		clientPackage.setId(source.getId());
 		clientPackage.setClient(clientService.findOne(source.getClientId()));
 		clientPackage.setPackageUnit(packageUnit);
-		for(PackageElement packageElement : packageUnit.getElementsInPackages()) {
+		clientPackage.setClientPackageStatus(source.isClientPackageStatus());
+	/*	for(ElementsInPackages elementsInPackages : packageUnit.getElementsInPackages()) {
+			ClientPackageElement clientPackageElements = new ClientPackageElement();
+			clientPac
 			clientPackage.addClientPackageElements(clientPackageElement);
-		}
+		}*/
 		return clientPackage;
 	}
 

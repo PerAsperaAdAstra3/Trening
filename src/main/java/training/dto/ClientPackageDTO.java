@@ -12,7 +12,27 @@ public class ClientPackageDTO {
 	
 	private Long clientId;
 	
+	private String nameOfPackage;
+	
+	private boolean clientPackageStatus;
+	
+	public boolean isClientPackageStatus() {
+		return clientPackageStatus;
+	}
+
+	public void setClientPackageStatus(boolean clientPackageStatus) {
+		this.clientPackageStatus = clientPackageStatus;
+	}
+
 	private List<ClientPackageElement> clientPackageElements;
+
+	public String getNameOfPackage() {
+		return nameOfPackage;
+	}
+
+	public void setNameOfPackage(String nameOfPackage) {
+		this.nameOfPackage = nameOfPackage;
+	}
 
 	public Long getId() {
 		return id;

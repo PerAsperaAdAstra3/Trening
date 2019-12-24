@@ -73,10 +73,13 @@ ClientPackageToClientPackageDTO clientPackageToClientPackageDTO;
 		List<ClientPackage> clientPackageForClient = clientPackageService.filter(clientService.findOne(Long.parseLong(id)));
 		
 		model.addAttribute("clientId", id);
+		model.addAttribute("client", clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));
 		model.addAttribute("clientDTOSearch", new ClientDTO());
 		model.addAttribute("clientDTO", new ClientDTO());
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		model.addAttribute("allPackages", packageToPackageDTO.convert(packageList));
+		
+		model.addAttribute("clientPackages", clientPackageToClientPackageDTO.convert(clientPackageService.filter(clientService.findOne(Long.parseLong(id)))));
 		
 		model.addAttribute("clientPackagesForClient", clientPackageForClient);
 		
