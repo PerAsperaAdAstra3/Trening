@@ -1,14 +1,21 @@
 package training.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class PackageDTO {
 
 	private Long id;
 	
 	private String nameOfPackage;
+
+	private Long price;
 	
+	public Long getPrice() {
+		return price;
+	}
+
+	public void setPrice(Long price) {
+		this.price = price;
+	}
+
 	public Long getId() {
 		return id;
 	}

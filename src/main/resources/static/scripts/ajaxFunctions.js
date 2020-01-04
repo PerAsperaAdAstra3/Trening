@@ -1,3 +1,135 @@
+// Change status
+
+function changeClientPackageStatus(row){
+	
+	var clientPackageDTO = {}
+//	alert($(row).find(".clientPackageId").html())
+	clientPackageDTO["id"] = $(row).find(".clientPackageId").html();
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/changeClientPackageStatus",
+		data: JSON.stringify(clientPackageDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			
+			var state = $(row).find(".packageStatus").html();
+			var payed = $(row).find(".payedTable").prop("checked");
+			if(state == 'Aktivan'){	
+				if(payed == true){
+					$(row).css('background-color', '#56ed42');
+				}
+				if(payed == false){
+					$(row).css('background-color', '#e5ed42');
+				}
+			} else {
+				if(payed == true){
+					$(row).css('background-color', '#939492');
+				}
+				if(payed == false){
+					$(row).css('background-color', 'red');
+				}
+			}
+
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom menjanja statusa klijentovog paketa!')
+		}
+	})
+}
+
+// Delete clients package
+
+function deleteClientPackage(row){
+	
+	var clientPackageDTO = {}
+	clientPackageDTO["id"] = $(row).find(".clientPackageId").html();
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/deleteClientPackage",
+		data: JSON.stringify(clientPackageDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			$(row).hide()
+			
+			$("#tr-entity-list .clientPackageElementId").each(function(){
+				if($(row).find(".clientPackageId").html() == $(this).parent().find(".clientPackageElementClientPackageId").html()){
+					$(this).parent().hide();
+				}
+			});
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom brisanja  klijentovog paketa!')
+		}
+	})
+}
+
+//Use up a package from client.
+
+function useClientPackageElement(row){
+	
+	var clientPackageElementDTO = {}
+	clientPackageElementDTO["id"] = $(row).find(".clientPackageElementId").html();
+
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/useUpAPackageElement",
+		data: JSON.stringify(clientPackageElementDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			$("#tr-entity-list .clientPackageElementId").each(function(){
+				if($(this).html() == data.clientPackageElementId){
+						$(this).parent().find(".clientPackageElementActiveLeft").html(data.activeLeft);
+						$(this).parent().find(".clientPackageElementState").html(data.clientPackageElementState);
+						if($(this).parent().find(".clientPackageElementActiveLeft").html() == 0){
+							$(this).parent().find(".useUpAPackageElement").attr("disabled", false);	;
+						}
+					}
+				});
+			
+			$(".tr-entity-listAllClientPackages .clientPackageId").each(function(){
+				if($(this).html() == data.clientPackageId){
+						$(this).parent().find(".packageStatus").html(data.clientPackageStatus);
+						
+						
+						var state = data.clientPackageStatus;
+						var payed = data.clientPackagePayed;
+
+						if(state == 'Aktivan'){	
+							if(payed == true){
+								$(this).parent().css('background-color', '#56ed42');
+							}
+							if(payed == false){
+								$(this).parent().css('background-color', '#e5ed42');
+							}
+						} else {
+							if(payed == true){
+								$(this).parent().css('background-color', '#939492');
+							}
+							if(payed == false){
+								$(this).parent().css('background-color', 'red');
+							}
+						}
+					}
+				});
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom brisanja vežbe u krugu!')
+		}
+	})
+}
+
 //Add package to client
 
 function ajaxAddPackageToClient(packageId){
@@ -5,6 +137,8 @@ function ajaxAddPackageToClient(packageId){
 	var clientPackageDTO = {}
 	clientPackageDTO["clientId"] = $("#clientId").val();
 	clientPackageDTO["packageId"] = packageId;
+	clientPackageDTO["payed"] = $(".payed").prop("checked");
+	xxx = $(".payed").prop("checked");
 	
 	$.ajax({
 		type: "POST",
@@ -15,7 +149,7 @@ function ajaxAddPackageToClient(packageId){
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			//thisObject.parent().parent().remove();
+			//alert(data.clientPackage.nameOfPackage)
 		},
 		error: function (e) {
 			alert('Desila se greska prilikom brisanja vežbe u krugu!')
@@ -57,6 +191,7 @@ function packageAddPackageElementNumber(packageElementId){
 	
 	packageUnit["id"] = $("#idPackage").val();
 	packageUnit["nameOfPackage"] = $("#nameOfPackage").val();
+	packageUnit["price"] = $("#price").val();
 	packageUnit["packageElementId"] = packageElementId;
 	packageUnit["numnerOfElements"] = numberOfElements;
 	
@@ -71,12 +206,6 @@ $.ajax({
 		success: function (data){
 			console.log(data);	
 			var idTraining = $(".idTraining").val();
-			xcv = $(".packElId").html();
-			$("#tr-entity-list .elemInPackagesId").each(function(){
-			if($(this).html() == data.packElpackageId){
-					$(this).parent().hide();
-				}
-			});
 			if(data.modOfOperation == "add"){
 				$("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list" class="trow"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +'</td><td><input type="number" class="packElNumber" name="quantity" min="1" max="99" value="' + data.elementsInPackagesNumber + '"/></td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
 			} else {

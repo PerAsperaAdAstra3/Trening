@@ -14,13 +14,23 @@ public class ClientPackageDTO {
 	
 	private String nameOfPackage;
 	
-	private boolean clientPackageStatus;
+	private String payed;
 	
-	public boolean isClientPackageStatus() {
+	private String clientPackageStatus;
+	
+	public String getPayed() {
+		return payed;
+	}
+
+	public void setPayed(String payed) {
+		this.payed = payed;
+	}
+
+	public String getClientPackageStatus() {
 		return clientPackageStatus;
 	}
 
-	public void setClientPackageStatus(boolean clientPackageStatus) {
+	public void setClientPackageStatus(String clientPackageStatus) {
 		this.clientPackageStatus = clientPackageStatus;
 	}
 

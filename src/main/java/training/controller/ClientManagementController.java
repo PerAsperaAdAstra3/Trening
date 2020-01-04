@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import training.converter.ClientDTOtoClient;
 import training.converter.ClientPackageDTOtoClientPackage;
+import training.converter.ClientPackageElementToClientPackageElementDTO;
 import training.converter.ClientPackageToClientPackageDTO;
 import training.converter.ClientToClientDTO;
+import training.converter.ElementsInPackagesToElementsInPackagesDTO;
 import training.converter.PackageDTOtoPackage;
 import training.converter.PackageToPackageDTO;
 import training.dto.ClientDTO;
@@ -23,6 +25,7 @@ import training.model.Package;
 import training.service.ClientPackageElementService;
 import training.service.ClientPackageService;
 import training.service.ClientService;
+import training.service.ElementsInPackagesService;
 import training.service.PackageService;
 
 @Controller
@@ -58,8 +61,14 @@ ClientPackageDTOtoClientPackage clientPackageDTOtoClientPackage;
 @Autowired
 ClientPackageToClientPackageDTO clientPackageToClientPackageDTO;
 
-//@Autowired
-//ClientPackageElementToClientPackageElementDTO clientPackageElementToClientPackageElementDTO;
+@Autowired
+ClientPackageElementToClientPackageElementDTO clientPackageElementToClientPackageElementDTO;
+
+@Autowired
+ElementsInPackagesToElementsInPackagesDTO elementsInPackagesToElementsInPackagesDTO;
+
+@Autowired
+ElementsInPackagesService elementsInPackagesService;
 
 	@RequestMapping(value = { "/clientManagement/{id}" }, method = RequestMethod.GET)
 	public String clientManagement(Model model, @PathVariable String id) {
@@ -69,7 +78,6 @@ ClientPackageToClientPackageDTO clientPackageToClientPackageDTO;
 		List<Client> client = clientService.findAll();
 		List<ClientPackage> clientPackage = clientPackageService.findAll();
 		List<ClientPackageElement> clientPackageElement = clientPackageElementService.findAll();
-		
 		List<ClientPackage> clientPackageForClient = clientPackageService.filter(clientService.findOne(Long.parseLong(id)));
 		
 		model.addAttribute("clientId", id);
@@ -78,10 +86,10 @@ ClientPackageToClientPackageDTO clientPackageToClientPackageDTO;
 		model.addAttribute("clientDTO", new ClientDTO());
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		model.addAttribute("allPackages", packageToPackageDTO.convert(packageList));
-		
 		model.addAttribute("clientPackages", clientPackageToClientPackageDTO.convert(clientPackageService.filter(clientService.findOne(Long.parseLong(id)))));
-		
 		model.addAttribute("clientPackagesForClient", clientPackageForClient);
+		model.addAttribute("clientPackageElements", clientPackageElementToClientPackageElementDTO.convert(clientPackageElementService.findAll()));
+		model.addAttribute("elementsInPackages", elementsInPackagesToElementsInPackagesDTO.convert(elementsInPackagesService.findAll()));
 		
 		return "clientManagement";
 	}

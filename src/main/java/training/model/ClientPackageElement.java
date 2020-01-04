@@ -17,6 +17,9 @@ public class ClientPackageElement {
 	
 	@Column(name="counter")
 	private Integer count;
+
+	@Column(name="activeLeft")
+	private Integer activeLeft;
 	
 	@ManyToOne
 	@JoinColumn(name="clientPackage")
@@ -29,6 +32,14 @@ public class ClientPackageElement {
 	@JoinColumn(name="elementsInPackages")
 	private ElementsInPackages elementsInPackages;
 	
+	public Integer getActiveLeft() {
+		return activeLeft;
+	}
+
+	public void setActiveLeft(Integer activeLeft) {
+		this.activeLeft = activeLeft;
+	}
+
 	public boolean isClientPackageElementStatus() {
 		return clientPackageElementStatus;
 	}

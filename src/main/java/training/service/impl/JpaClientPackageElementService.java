@@ -19,8 +19,7 @@ public class JpaClientPackageElementService implements ClientPackageElementServi
 	
 	@Override
 	public ClientPackageElement findOne(Long id) {
-		clientPackageElementRepository.findOne(id);
-		return null;
+		return clientPackageElementRepository.findOne(id);
 	}
 
 	@Override
@@ -59,7 +58,6 @@ public class JpaClientPackageElementService implements ClientPackageElementServi
 	public ClientPackageElement edit(Long id, ClientPackageElement clientPackageElement) {
 		ClientPackageElement oldClientPackageElement = clientPackageElementRepository.findOne(id);
 		oldClientPackageElement.setCounter(clientPackageElement.getCounter());
-		//oldClientPackageElement.setPackageElement(clientPackageElement.getPackageElement());
 		oldClientPackageElement.setClientPackage(clientPackageElement.getClientPackage());
 		clientPackageElementRepository.save(oldClientPackageElement);
 		return null;

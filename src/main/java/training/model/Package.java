@@ -20,12 +20,23 @@ public class Package {
 	
 	@Column
 	private String nameOfPackage;
+
+	@Column
+	private Long price;
 	
 	@OneToMany(mappedBy = "package1", cascade = CascadeType.ALL)
 	private List<ElementsInPackages> elementsInPackages = new ArrayList<ElementsInPackages>();
 	
 	@OneToMany(mappedBy = "packageUnitCP", cascade = CascadeType.ALL)
 	private List<ClientPackage> clientPackages = new ArrayList<ClientPackage>();
+
+	public Long getPrice() {
+		return price;
+	}
+
+	public void setPrice(Long price) {
+		this.price = price;
+	}
 
 	public Long getId() {
 		return id;

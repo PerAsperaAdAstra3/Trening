@@ -23,9 +23,6 @@ public class PackageElement {
 	
 	@Column(name="description")
 	private String description;
-	
-/*	@OneToMany(mappedBy = "packageElement", cascade = CascadeType.ALL)
-	private List<ClientPackageElement> clientPackageElementsPE; */
 
 	@OneToMany(mappedBy = "packageElementEIP", cascade = CascadeType.ALL)
 	private List<ElementsInPackages> elementsInPackagesPE;
@@ -53,15 +50,6 @@ public class PackageElement {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-/*	public List<ClientPackageElement> getClientPackageElements() {
-		return clientPackageElementsPE;
-	}
-
-	public void addClientPackageElements(ClientPackageElement clientPackageElement) {
-		clientPackageElement.setPackageElement(this);
-		this.clientPackageElementsPE.add(clientPackageElement);
-	} */
 	
 	public List<ElementsInPackages> getElementsInPackagesPE() {
 		return elementsInPackagesPE;

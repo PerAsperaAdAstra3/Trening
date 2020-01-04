@@ -14,6 +14,14 @@ function highlightRowPackage(row){
     }
 }
 
+function highlightRowClientPackage(row){
+	if(!$(row).hasClass("header")){
+		$(row).parent().find(".highlighted").removeClass("highlighted");
+    	$(row).addClass("highlighted");
+    	//syncClientPackageELement($(row));
+    }
+}
+
 function goFirst(){
 	item = $("table tr:nth-child(2)");
 	$(".highlighted").removeClass("highlighted");

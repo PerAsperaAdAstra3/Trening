@@ -6,10 +6,7 @@ import org.springframework.stereotype.Component;
 
 import training.dto.ClientPackageDTO;
 import training.model.ClientPackage;
-import training.model.ClientPackageElement;
-import training.model.ElementsInPackages;
 import training.model.Package;
-import training.model.PackageElement;
 import training.service.ClientService;
 import training.service.PackageService;
 
@@ -33,12 +30,18 @@ public class ClientPackageDTOtoClientPackage implements Converter<ClientPackageD
 		clientPackage.setId(source.getId());
 		clientPackage.setClient(clientService.findOne(source.getClientId()));
 		clientPackage.setPackageUnit(packageUnit);
-		clientPackage.setClientPackageStatus(source.isClientPackageStatus());
-	/*	for(ElementsInPackages elementsInPackages : packageUnit.getElementsInPackages()) {
-			ClientPackageElement clientPackageElements = new ClientPackageElement();
-			clientPac
-			clientPackage.addClientPackageElements(clientPackageElement);
-		}*/
+		
+		if(source.getPayed().equals("true")) {
+			clientPackage.setPayed(true);
+		} else {
+			clientPackage.setPayed(false);
+		}
+		
+		if(source.getClientPackageStatus().equals("Aktivan")) {
+			clientPackage.setClientPackageStatus(true);
+		} else {
+			clientPackage.setClientPackageStatus(false);
+		}
 		return clientPackage;
 	}
 

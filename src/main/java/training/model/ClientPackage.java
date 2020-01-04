@@ -28,12 +28,23 @@ public class ClientPackage {
 	@Column(name = "clientPackageStatus")
 	private boolean clientPackageStatus;
 	
+	@Column(name = "clientPackagePayed")
+	private boolean payed = false;
+	
 	@ManyToOne
 	@JoinColumn(name = "client")
 	private Client client;
 	
 	@OneToMany(mappedBy = "clientPackage" , cascade = CascadeType.ALL)
 	private List<ClientPackageElement> clientPackageElementsCP = new ArrayList<ClientPackageElement>();
+
+	public boolean isPayed() {
+		return payed;
+	}
+
+	public void setPayed(boolean payed) {
+		this.payed = payed;
+	}
 
 	public boolean isClientPackageStatus() {
 		return clientPackageStatus;

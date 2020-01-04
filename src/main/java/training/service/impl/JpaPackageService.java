@@ -62,6 +62,7 @@ public class JpaPackageService implements PackageService {
 		Package oldPackage = packageRepository.findOne(id);
 		
 		oldPackage.setNameOfPackage(packageUnit.getNameOfPackage());
+		oldPackage.setPrice((packageUnit.getPrice()));
 		
 		for(ClientPackage clientPackage : packageUnit.getClientPackages()) {
 			oldPackage.addClientPackages(clientPackage);
