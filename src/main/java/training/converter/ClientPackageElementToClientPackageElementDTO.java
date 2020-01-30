@@ -30,12 +30,6 @@ public class ClientPackageElementToClientPackageElementDTO implements Converter<
 		clientPackageElementDTO.setName(source.getElementsInPackages().getPackageElementEIP().getName());
 		clientPackageElementDTO.setCount(source.getCounter());
 		clientPackageElementDTO.setActiveLeft(source.getActiveLeft());
-
-		System.out.println(clientPackageElementDTO.getDescription());
-		System.out.println(clientPackageElementDTO.getName());
-		System.out.println(clientPackageElementDTO.getCount());
-		System.out.println(clientPackageElementDTO.getClientPackageElementStatus());
-		System.out.println(clientPackageElementDTO.getId());
 		return clientPackageElementDTO;
 	}
 

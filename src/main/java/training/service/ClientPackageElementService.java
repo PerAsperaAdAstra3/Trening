@@ -2,11 +2,15 @@ package training.service;
 
 import java.util.List;
 
+import training.model.Client;
+import training.model.ClientPackage;
 import training.model.ClientPackageElement;
 
 public interface ClientPackageElementService {
 
 	ClientPackageElement findOne(Long id);
+	
+	List<ClientPackageElement> filter(ClientPackage clientPackage);
 	
 	List<ClientPackageElement> findAll();
 	

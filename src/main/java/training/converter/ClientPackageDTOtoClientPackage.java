@@ -30,6 +30,7 @@ public class ClientPackageDTOtoClientPackage implements Converter<ClientPackageD
 		clientPackage.setId(source.getId());
 		clientPackage.setClient(clientService.findOne(source.getClientId()));
 		clientPackage.setPackageUnit(packageUnit);
+		clientPackage.setClientPackagePrice(source.getPriceOfClientPackage());
 		
 		if(source.getPayed().equals("true")) {
 			clientPackage.setPayed(true);

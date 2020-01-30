@@ -20,20 +20,52 @@ function changeClientPackageStatus(row){
 			var payed = $(row).find(".payedTable").prop("checked");
 			if(state == 'Aktivan'){	
 				if(payed == true){
-					$(row).css('background-color', '#56ed42');
+					$(row).css('background-color', '#c0f8b9');
 				}
 				if(payed == false){
-					$(row).css('background-color', '#e5ed42');
+					$(row).css('background-color', '#eff48a');
 				}
 			} else {
 				if(payed == true){
-					$(row).css('background-color', '#939492');
+					$(row).css('background-color', '#bfc0bf');
 				}
 				if(payed == false){
-					$(row).css('background-color', 'red');
+					$(row).css('background-color', '#ff8080');
 				}
 			}
 
+			var isItActiveNotPayed = false;
+			var isItInactiveNotPayed = false;
+			$(".tr-entity-listAllClientPackages").each(function(){
+				var state1 = $(this).find('.packageStatus').html();
+				var payed1 = $(this).find(".payedTable").prop("checked");
+				if(state1 == 'Aktivan'){
+					if(payed1 == true){
+
+					}
+					if(payed1 == false){
+						isItActiveNotPayed = true;
+					}	
+				} else {
+					if(payed1 == true){
+						
+					}
+					if(payed1 == false){
+						isItInactiveNotPayed = true;
+					}
+				}
+			});
+			if(isItActiveNotPayed){
+				$(document).find(".activeNotPayed").removeClass("visibleX");
+			} else {
+				$(document).find(".activeNotPayed").addClass("visibleX");
+			}
+			
+			if(isItInactiveNotPayed){
+				$(document).find(".inactiveNotPayed").removeClass("visibleX");
+			} else {
+				$(document).find(".inactiveNotPayed").addClass("visibleX");
+			}
 		},
 		error: function (e) {
 			alert('Desila se greska prilikom menjanja statusa klijentovog paketa!')
@@ -77,7 +109,6 @@ function useClientPackageElement(row){
 	
 	var clientPackageElementDTO = {}
 	clientPackageElementDTO["id"] = $(row).find(".clientPackageElementId").html();
-
 	
 	$.ajax({
 		type: "POST",
@@ -89,11 +120,19 @@ function useClientPackageElement(row){
 		timeout: 600000,
 		success: function (data){
 			$("#tr-entity-list .clientPackageElementId").each(function(){
+				console.log("Befor log");
+				
+				console.log(data.clientPackageElementState);
+								console.log( 'This : ' + $(this).html())
+				console.log('data.clientPackageElementId : ' + data.clientPackageElementId)
+				
 				if($(this).html() == data.clientPackageElementId){
+					console.log("Usli smo u clientPackageElement")
+
 						$(this).parent().find(".clientPackageElementActiveLeft").html(data.activeLeft);
 						$(this).parent().find(".clientPackageElementState").html(data.clientPackageElementState);
 						if($(this).parent().find(".clientPackageElementActiveLeft").html() == 0){
-							$(this).parent().find(".useUpAPackageElement").attr("disabled", false);	;
+							$(this).parent().find(".useUpAPackageElement").attr("disabled", false);
 						}
 					}
 				});
@@ -108,21 +147,54 @@ function useClientPackageElement(row){
 
 						if(state == 'Aktivan'){	
 							if(payed == true){
-								$(this).parent().css('background-color', '#56ed42');
+								$(this).parent().css('background-color', '#c0f8b9');
 							}
 							if(payed == false){
-								$(this).parent().css('background-color', '#e5ed42');
+								$(this).parent().css('background-color', '#eff48a');
 							}
 						} else {
 							if(payed == true){
-								$(this).parent().css('background-color', '#939492');
+								$(this).parent().css('background-color', '#bfc0bf');
 							}
 							if(payed == false){
-								$(this).parent().css('background-color', 'red');
+								$(this).parent().css('background-color', '#ff8080');
 							}
 						}
 					}
 				});
+			
+			var isItActiveNotPayed = false;
+			var isItInactiveNotPayed = false;
+			$(".tr-entity-listAllClientPackages").each(function(){
+				var state1 = $(this).find('.packageStatus').html();
+				var payed1 = $(this).find(".payedTable").prop("checked");
+				if(state1 == 'Aktivan'){
+					if(payed1 == true){
+
+					}
+					if(payed1 == false){
+						isItActiveNotPayed = true;
+					}	
+				} else {
+					if(payed1 == true){
+						
+					}
+					if(payed1 == false){
+						isItInactiveNotPayed = true;
+					}
+				}
+			});
+			if(isItActiveNotPayed){
+				$(document).find(".activeNotPayed").removeClass("visibleX");
+			} else {
+				$(document).find(".activeNotPayed").addClass("visibleX");
+			}
+			
+			if(isItInactiveNotPayed){
+				$(document).find(".inactiveNotPayed").removeClass("visibleX");
+			} else {
+				$(document).find(".inactiveNotPayed").addClass("visibleX");
+			}
 		},
 		error: function (e) {
 			alert('Desila se greska prilikom brisanja vežbe u krugu!')
@@ -132,12 +204,14 @@ function useClientPackageElement(row){
 
 //Add package to client
 
-function ajaxAddPackageToClient(packageId){
+function ajaxAddPackageToClient(packageId, packagePrice){
 	
 	var clientPackageDTO = {}
 	clientPackageDTO["clientId"] = $("#clientId").val();
 	clientPackageDTO["packageId"] = packageId;
 	clientPackageDTO["payed"] = $(".payed").prop("checked");
+	clientPackageDTO["priceOfClientPackage"] = packagePrice; //$(".priceOfPackage").html();
+	
 	xxx = $(".payed").prop("checked");
 	
 	$.ajax({
@@ -149,7 +223,81 @@ function ajaxAddPackageToClient(packageId){
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			//alert(data.clientPackage.nameOfPackage)
+	
+			var checkedVar = true;
+			var checkedVarChar = "checked";
+			
+			if(data["clientPackageJSON"]["payed"] == "true"){
+				checkedVarChar = "checked";
+			} else {
+				checkedVarChar = "";
+			}
+		
+			console.log(data);
+			
+			var state = data["clientPackageJSON"]["clientPackageStatus"]
+			var payed = data["clientPackageJSON"]["payed"];
+
+			var colorVar = "";
+				
+				if(payed == "true"){
+					colorVar = '"background-color: rgb(192, 248, 185);"'
+				}
+				if(payed == "false"){
+					colorVar = '"background-color: rgb(239, 244, 138);"'
+				}
+			
+			var rowCountClientPackage = $('#clientPackageBody tr').length;
+
+			if(rowCountClientPackage == 0){
+				$('#clientPackageBody').append('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageStatus"] +'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
+			} else {
+				$('#clientPackageBody tr:nth-child(1)').before('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageStatus"] +'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
+			}
+					
+			var rowCountClientPackageElements = $('#clientPackageElementBody tr').length;
+			
+			for(i = 0; i <= data["clientPackageElementsJSON"].length - 1; i++){
+				//clientPackageElementBody
+			if(rowCountClientPackageElements == 0){
+				$('#clientPackageElementBody').append('<tr id="tr-entity-list" class="clientPackageElementsTR"><td scope="row" class="clientPackageElementName">'+data["clientPackageElementsJSON"][i]["name"] +'</td><td scope="row" class="clientPackageElementDescription">'+data["clientPackageElementsJSON"][i]["description"] +'</td><td scope="row" class="clientPackageElementCount">'+data["clientPackageElementsJSON"][i]["count"] +'</td><td scope="row" class="clientPackageElementActiveLeft">'+data["clientPackageElementsJSON"][i]["activeLeft"] +'</td><td scope="row" class="clientPackageElementState">'+data["clientPackageElementsJSON"][i]["clientPackageElementStatus"] +'</td><td scope="row" class="clientPackageElementId" style="display:none;">'+data["clientPackageElementsJSON"][i]["id"] +'</td><td scope="row" class="clientPackageElementClientPackageId" style="display:none;">'+data["clientPackageElementsJSON"][i]["clientPackageId"] +'</td><td><button type="button" class="btn btn-default useUpAPackageElement">Potroši</button></td></tr>');
+			} else {
+				$('#clientPackageElementBody tr:nth-child(1)').before('<tr id="tr-entity-list" class="clientPackageElementsTR"><td scope="row" class="clientPackageElementName">'+data["clientPackageElementsJSON"][i]["name"] +'</td><td scope="row" class="clientPackageElementDescription">'+data["clientPackageElementsJSON"][i]["description"] +'</td><td scope="row" class="clientPackageElementCount">'+data["clientPackageElementsJSON"][i]["count"] +'</td><td scope="row" class="clientPackageElementActiveLeft">'+data["clientPackageElementsJSON"][i]["activeLeft"] +'</td><td scope="row" class="clientPackageElementState">'+data["clientPackageElementsJSON"][i]["clientPackageElementStatus"] +'</td><td scope="row" class="clientPackageElementId" style="display:none;">'+data["clientPackageElementsJSON"][i]["id"] +'</td><td scope="row" class="clientPackageElementClientPackageId" style="display:none;">'+data["clientPackageElementsJSON"][i]["clientPackageId"] +'</td><td><button type="button" class="btn btn-default useUpAPackageElement">Potroši</button></td></tr>');
+			}
+			}
+			
+			var isItActiveNotPayed = false;
+			var isItInactiveNotPayed = false;
+			$(".tr-entity-listAllClientPackages").each(function(){
+				var state1 = $(this).find('.packageStatus').html();
+				var payed1 = $(this).find(".payedTable").prop("checked");
+				if(state1 == 'Aktivan'){
+					if(payed1 == true){
+
+					}
+					if(payed1 == false){
+						isItActiveNotPayed = true;
+					}	
+				} else {
+					if(payed1 == true){
+						
+					}
+					if(payed1 == false){
+						isItInactiveNotPayed = true;
+					}
+				}
+			});
+			if(isItActiveNotPayed){
+				$(document).find(".activeNotPayed").removeClass("visibleX");
+			} else {
+				$(document).find(".activeNotPayed").addClass("visibleX");
+			}
+			
+			if(isItInactiveNotPayed){
+				$(document).find(".inactiveNotPayed").removeClass("visibleX");
+			} else {
+				$(document).find(".inactiveNotPayed").addClass("visibleX");
+			}
 		},
 		error: function (e) {
 			alert('Desila se greska prilikom brisanja vežbe u krugu!')
@@ -157,8 +305,8 @@ function ajaxAddPackageToClient(packageId){
 	})
 }
 
-// NEW Delete elements in packages
 function ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, thisObject){
+// NEW Delete elements in packages
 	
 	var elementsInPackagesDTOAjax = {}
 	elementsInPackagesDTOAjax["id"] = elementsInPackagesId;

@@ -89,6 +89,9 @@ public class PackageController {
 	@RequestMapping(value = {"/addPackage"} , method = RequestMethod.POST)
 	public String addPackage(Model model, @ModelAttribute("packageDTO") PackageDTO packageDTO, @RequestParam String mode){
 
+		System.out.println(packageDTO.getNameOfPackage());
+		System.out.println(packageDTO.getPrice());
+		
 		if("add".equals(mode)) {
 			packageDTO.setId(null);
 			packageService.save(packageDTOtoPackage.convert(packageDTO));

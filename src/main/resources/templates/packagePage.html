@@ -110,13 +110,15 @@ function selectPackageIdOnRowClick(row){
 	}
 
 	function syncPackage(item){
-		nameOfPackage = item.find(".nameOfPackage").html()
-	    packageId = item.find(".packageId").html()
-
+		var nameOfPackage = item.find(".nameOfPackage").html()
+	    var packageId = item.find(".packageId").html()
+		var priceOfPackage = item.find(".priceOfPackage").html()
+	    
 	    document.getElementById("editButtonPackage").disabled = false;
 		
 	    $("#nameOfPackage").val(nameOfPackage);
 	    $("#idPackage").val(packageId);
+	    $("#price").val(priceOfPackage);
 	}
 	
 	$(document).on("change keyup paste", "#numberOfElements", function(event) {
@@ -165,19 +167,20 @@ function selectPackageIdOnRowClick(row){
 		<input type="text" id="inputFilterNamePackages" class="roundedEdges" onkeyup="filterTablePackage(0,6)" placeholder="Ime paketa.."/>
 	</p>
 </div>
-<table id="clientTable" class="tablePackageClientManagement">
+<table id="clientTable" class="tablePackageClientManagement tbodyPackage tablePackage">
 	<thead class="thead">
 		<tr>
-			<th scope="col">Naziv:</th>
-			<th scope="col">Cena:</th>
+			<th style="width:15%;" scope="col">Naziv:</th>
+			<th style="width:15%;" scope="col">Cena:</th>
+			<th style="width:15%;" scope="col"></th>
 		</tr>
 	</thead>
-	<tbody class="tbodyPackage">
+	<tbody >
 		<tr	id="tr-entity-list-package" class="trP" th:each = "package : ${packages}">
-			<td class="nameOfPackage tdP" th:utext="${package.nameOfPackage}"></td>
-			<td class="priceOfPackage tdP" th:utext="${package.price}"></td>
+			<td style="width:15%;" scope="row" class="nameOfPackage tdP" th:utext="${package.nameOfPackage}"></td>
+			<td style="width:15%;" scope="row" class="priceOfPackage tdP" th:utext="${package.price}"></td>
 			<td scope="row" class="packageId tdP" th:utext="${package.id}" style="display:none;"></td>
-			<td>
+			<td style="width:15%;" scope="row">
 				<a th:href="@{/deletePackage/{id}(id=${package.id})}"><button type="button" class="btn btn-danger" onclick="return confirm('Da li ste sigurni da želite da brišete?')">Briši</button></a></td>
 		</tr>
 	</tbody>

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import training.model.Client;
+import training.model.ClientPackage;
 import training.model.ClientPackageElement;
 import training.repository.ClientPackageElementRepository;
 import training.service.ClientPackageElementService;
@@ -22,6 +24,11 @@ public class JpaClientPackageElementService implements ClientPackageElementServi
 		return clientPackageElementRepository.findOne(id);
 	}
 
+	@Override
+	public List<ClientPackageElement> filter(ClientPackage clientPackage){
+		return clientPackageElementRepository.findByClientPackage(clientPackage) ;
+	}
+	
 	@Override
 	public List<ClientPackageElement> findAll() {
 		return clientPackageElementRepository.findAll();

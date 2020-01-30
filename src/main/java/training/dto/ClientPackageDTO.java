@@ -12,12 +12,22 @@ public class ClientPackageDTO {
 	
 	private Long clientId;
 	
+	private Long priceOfClientPackage;
+	
 	private String nameOfPackage;
 	
 	private String payed;
 	
 	private String clientPackageStatus;
-	
+
+	public Long getPriceOfClientPackage() {
+		return priceOfClientPackage;
+	}
+
+	public void setPriceOfClientPackage(Long priceOfClientPackage) {
+		this.priceOfClientPackage = priceOfClientPackage;
+	}
+
 	public String getPayed() {
 		return payed;
 	}

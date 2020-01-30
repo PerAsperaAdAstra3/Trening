@@ -31,6 +31,9 @@ public class ClientPackage {
 	@Column(name = "clientPackagePayed")
 	private boolean payed = false;
 	
+	@Column(name = "clientPackagePrice")
+	private Long clientPackagePrice;
+	
 	@ManyToOne
 	@JoinColumn(name = "client")
 	private Client client;
@@ -44,6 +47,14 @@ public class ClientPackage {
 
 	public void setPayed(boolean payed) {
 		this.payed = payed;
+	}
+
+	public Long getClientPackagePrice() {
+		return clientPackagePrice;
+	}
+
+	public void setClientPackagePrice(Long clientPackagePrice) {
+		this.clientPackagePrice = clientPackagePrice;
 	}
 
 	public boolean isClientPackageStatus() {
