@@ -19,13 +19,24 @@ public class Operator{
 	@Column(name = "password")
 	private String password;
 	
+	@Column(name = "authorities")
+	private String authorities;
+	
 /*	@Column(name = "actions")
 	private List<String> actionList;*/
 	
+	public String getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(String authorities) {
+		this.authorities = authorities;
+	}
+
 	public Long getId() {
 		return id;
 	}
-
+	
 	public void setId(Long id) {
 		this.id = id;
 	}

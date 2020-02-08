@@ -58,6 +58,7 @@ public class JpaOperatorService implements OperatorService {
 		Operator oldOperator = operatorRepository.findOne(id);
 		oldOperator.setUserName(operator.getUserName());
 		oldOperator.setPassword(operator.getPassword());
+		oldOperator.setAuthorities(operator.getAuthorities());
 	/*	for(String action : operator.getActionList()) {
 			oldOperator.setActionList(action);
 		}*/

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <script src="scripts/jquery-3.2.1.min.js"></script>
 <script src="scripts/functions.js"></script>
@@ -133,7 +134,7 @@
 				<a th:href="@{/trainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
 			<td>
 				<a th:href="@{/circularTrainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj kružni trening</button></a></td>
-			<td>
+			<td sec:authorize="hasAuthority('RECEPCIJA') or hasAuthority('ADMIN')">
 				<a th:href="@{/clientManagement/{id}(id=${client.id})}"><button type="button" class="btn btn-secondary">Paketi klijenta</button></a></td>
 		</tr>
 	</tbody>

@@ -2,10 +2,13 @@ package training.util;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @Configuration
 public class ThymeleafConfiguration {
+
 @Bean
 public ClassLoaderTemplateResolver htmlToPdfTemplateResolver() {
 	ClassLoaderTemplateResolver emailTemplateResolver = new ClassLoaderTemplateResolver();
@@ -17,4 +20,10 @@ public ClassLoaderTemplateResolver htmlToPdfTemplateResolver() {
     emailTemplateResolver.setOrder(1);
     return emailTemplateResolver;
 }
+
+@Bean
+public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+}
+
 }

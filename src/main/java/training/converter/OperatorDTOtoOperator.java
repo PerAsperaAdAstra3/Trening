@@ -24,6 +24,7 @@ public class OperatorDTOtoOperator implements Converter<OperatorDTO, Operator> {
 		operator.setId(source.getId());
 		operator.setUserName(source.getUserName());
 		operator.setPassword(source.getPassword());
+		operator.setAuthorities(source.getAuthorities());
 		
 		return operator;
 	}

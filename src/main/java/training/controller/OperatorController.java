@@ -1,6 +1,10 @@
 package training.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,16 +30,27 @@ public class OperatorController {
 	@Autowired
 	private OperatorDTOtoOperator operatorDTOtoOperator;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@RequestMapping(value = { "/operatorList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
+		
+		List<String> authorities = new ArrayList<String>();
+		authorities.add("RECEPCIJA");
+		authorities.add("ADMIN");
+		authorities.add("TRENER");
+		
 		model.addAttribute("operatorDTOSearch", new OperatorDTO());
 		model.addAttribute("operatorDTO", new OperatorDTO());
 		model.addAttribute("operators", operatorToOperatorDTO.convert(operatorService.findAll()));
+		model.addAttribute("authorities", authorities);
 		return "operator";
 	}
 	
 	@RequestMapping(value = {"/addOperator"}, method = RequestMethod.POST)
 	public String addOperator(Model model, @ModelAttribute("operatorDTO") OperatorDTO operatorDTO, @RequestParam String mode){
+		operatorDTO.setPassword(passwordEncoder.encode(operatorDTO.getPassword()));
 		if("add".equals(mode)) {
 			operatorDTO.setId(null);
 			operatorService.save(operatorDTOtoOperator.convert(operatorDTO));

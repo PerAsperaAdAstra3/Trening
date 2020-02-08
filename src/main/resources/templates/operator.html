@@ -23,14 +23,16 @@
 
 	function sync(item){
 		userName = item.find(".userName").html()
-	    password = item.find(".password").html()
+	//    password = item.find(".password").html()
 	    operatorId = item.find(".operatorId").html()
+	    authorities = item.find(".authorities").html()
 	    
 	    document.getElementById("editButton").disabled = false;
 		
 	    $("#id").val(operatorId);
 	    $("#userName").val(userName);
-	    $("#password").val(password);
+	//    $("#password").val(password);
+	    $("#authority").val(authorities);
 	}
 	
 </script>
@@ -62,6 +64,17 @@
 	
 	<div class="form-group row">
 		<div class="col-xs-2">
+			<label class="label-width-1" for="authority">Autoritet :</label>
+			<select class="selectpicker form-control" data-live-search="true" th:field="*{authorities}" id="authority">
+	                         <option th:each="authority : ${authorities}"
+	                            th:value="${authority}"
+	                            th:utext="${authority}"/>
+	       </select>
+	   </div>
+	</div>
+	
+	<div class="form-group row">
+		<div class="col-xs-2">
 			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
 			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
 			<button id="resetButton" type="reset" class="btn btn-success">Iscisti</button>
@@ -85,6 +98,7 @@
 		<tr>
 			<th scope="col">Korisničko ime : </th>
 			<th scope="col">Lozinka : </th>
+			<th scope="col">Autoritet : </th>
 			<th scope="col"></th>
 			<th scope="col"></th>
 			<th scope="col"></th>
@@ -94,6 +108,7 @@
 		<tr	id="tr-entity-list" th:each = "operator : ${operators}">
 			<td class="userName" th:utext="${operator.userName}"></td>
 			<td class="password" th:utext="${operator.password}"></td>
+			<td class="authorities" th:utext="${operator.authorities}"></td>
 			<td scope="row" class="operatorId" th:utext="${operator.id}" style="display:none;"></td>
 			<td>
 				<a th:href="@{/deleteOperator/{id}(id=${operator.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
