@@ -3,6 +3,7 @@ package training;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import training.service.OperatorDetailsService;
@@ -29,7 +31,8 @@ OperatorDetailsService operatorDetailsService;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		http.csrf().disable().authorizeRequests()
+		http//.csrf().disable()
+		.authorizeRequests()
 		.antMatchers("/exerciseList/**").hasAnyAuthority("ADMIN")
 		.antMatchers("/clientList").hasAnyAuthority("TRENER", "ADMIN", "RECEPCIJA")
 		.antMatchers("/exerciseGroupList").hasAnyAuthority("ADMIN")
@@ -44,7 +47,30 @@ OperatorDetailsService operatorDetailsService;
 		.antMatchers("/getTraining/**").hasAnyAuthority("TRENER", "ADMIN")
 		.antMatchers("/trainingCreationHandler/**").hasAnyAuthority("TRENER", "ADMIN")
 		.antMatchers("/circularTrainingCreationHandler/**").hasAnyAuthority("TRENER", "ADMIN")
-		.and().httpBasic();
+		.and()
+		.formLogin()
+        .loginPage("/login")
+        .permitAll()
+        .and()
+        .logout()
+        .invalidateHttpSession(true)
+        .clearAuthentication(true)
+        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+        .logoutSuccessUrl("/login?logout")
+        .permitAll();
+		/*and()
+		.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").and().httpBasic();
+		*/
+
+	/*	.and()
+		.formLogin()
+        .loginPage("/login")
+        .permitAll()
+        .and()
+        .logout()
+        .logoutUrl("/logout")
+        .logoutSuccessUrl("/login");*/
+//		.and().httpBasic();
 	}
 	
 	@Bean

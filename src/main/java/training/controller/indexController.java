@@ -29,4 +29,9 @@ public class indexController {
 		return "redirect:/trainingList/"+isThereError;
 
 	}
+	
+	@RequestMapping("/login")
+    public String login() {
+        return "login";
+    }
 }
