@@ -19,15 +19,9 @@
 <body class="gradient1">
 
 <div class="alert div1">
+	<div align="right"><a class="home" th:href="@{/logout}">Odlogujte se</a></div>
 	<h1 align="center" th:text="${pageTitle}"></h1>
 </div>
-
-<form th:action="@{/logout}" method="post">
-  <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-  <input type="submit" value="Logout"/>
-</form>
-
-<a th:href="@{/logout}">Logout</a>
 
 <br/>
 <br/>
@@ -39,8 +33,8 @@
 			<td sec:authorize="hasAuthority('ADMIN')" class="floating-box"><button type="submit" class="button1 roundedEdgesButton" name="mode" value="exercise"><img src="/images/running2x2.png"/>Vežbe</button></td>
 			<td sec:authorize="hasAuthority('ADMIN')" class="floating-box"><button type="submit" class="button1" name="mode" value="exerciseGroup"><img src="/images/Exercise_group1.png"/>Grupa vežbi</button></td>
 			<td sec:authorize="hasAuthority('ADMIN') or hasAuthority('TRENER')" class="floating-box"><button type="submit" class="button1" name="mode" value="training"><img src="/images/treningA170.png"/><br/>Treninzi</button></td>
-			<td sec:authorize="hasAuthority('ADMIN')" class="floating-box"><button type="submit" class="button1" name="mode" value="operator"><img src="/images/treningA170.png"/><br/>Korisnici</button></td>
-			<td sec:authorize="hasAuthority('RECEPCIJA') or hasAuthority('ADMIN')" class="floating-box"><button type="submit" class="button1" name="mode" value="package"><br/>Paketi</button></td>
+			<td sec:authorize="hasAuthority('ADMIN')" class="floating-box"><button type="submit" class="button1" name="mode" value="operator"><img src="/images/Operateri170.png"/><br/>Korisnici</button></td>
+			<td sec:authorize="hasAuthority('RECEPCIJA') or hasAuthority('ADMIN')" class="floating-box"><button type="submit" class="button1" name="mode" value="package"><img src="/images/paket170.png"/><br/>Paketi</button></td>
 		</tr>
 	</table>
 	</form>

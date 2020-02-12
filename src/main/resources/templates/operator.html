@@ -37,7 +37,10 @@
 </head>
 <body>
 	<div class="alert div1" role="alert">
-		<a href="/" class="home">Početna</a>
+		<div>
+			<a href="/" class="home">Početna</a>
+			<a class="home" th:href="@{/logout}" style="float:right">Odlogujte se</a>
+		</div>
 		<h1 align="center">Operateri u sistemu</h1>
 	</div>
 	
@@ -95,7 +98,6 @@
 	<thead>
 		<tr>
 			<th scope="col">Korisničko ime : </th>
-			<th scope="col">Lozinka : </th>
 			<th scope="col">Autoritet : </th>
 			<th scope="col"></th>
 			<th scope="col"></th>
@@ -105,7 +107,6 @@
 	<tbody>
 		<tr	id="tr-entity-list" th:each = "operator : ${operators}">
 			<td class="userName" th:utext="${operator.userName}"></td>
-			<td class="password" th:utext="${operator.password}"></td>
 			<td class="authorities" th:utext="${operator.authorities}"></td>
 			<td scope="row" class="operatorId" th:utext="${operator.id}" style="display:none;"></td>
 			<td>

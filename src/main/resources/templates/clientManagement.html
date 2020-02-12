@@ -145,7 +145,10 @@ $(document).on("click", ".payedTable", function(event) {
 </head>
 <body>
 <div class="alert div1" role="alert">
-	<a href="/" class="home">Početna</a>
+	<div>
+		<a href="/" class="home">Početna</a>
+		<a class="home" th:href="@{/logout}" style="float:right">Odlogujte se</a>
+	</div>
 	<h1 align="center"><span th:utext="${client.name + ' ' + client.familyName}"></span> - Paketi</h1>
 </div>
 <h2 class = "activeNotPayed visibleX" style="color:#f5d142">Imate aktivne neplaćene pakete! <img src="/images/Exclamation2.png"/></h2>

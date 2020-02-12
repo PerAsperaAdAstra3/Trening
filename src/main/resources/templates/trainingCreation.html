@@ -541,8 +541,10 @@ function sync2(item){
 <body class="gradient" onLoad="enableAddRound()">
 	<div class="alert div1" role="alert">
 	
-	<a href="/" class="home">Početna</a>
-	
+	<div>
+		<a href="/" class="home">Početna</a>
+		<a class="home" th:href="@{/logout}" style="float:right">Odlogujte se</a>
+	</div>
 		<h1 align="center">Dodavanje treninga</h1>
 	</div>
 <br/>

@@ -1,37 +1,46 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org">
 
-    <head>
-        <title>Login</title>
-        <link th:href="@{/css/stylesheet.css}" rel="stylesheet" type="text/css"/>
-        <script type="text/javascript" th:src="@{/js/login.js}"></script>
-    </head>
-    <body>
-        <!-- show notification on error -->
-        <div th:if="${param.error}">
-            Invalid username or password.
-        </div>
+<head>
+<title>Login</title>
+<link th:href="@{/css/stylesheet.css}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<script type="text/javascript" th:src="@{/js/login.js}"></script>
+</head>
+<body>
+	<div th:if="${param.error}">Pogrešno korisničko ime ili lozinka.
+	</div>
 
-        <!-- show notification of logout -->
-        <div th:if="${param.logout}">
-            You have been logged out.
-        </div>
+	<div th:if="${param.logout}">Izlogovani ste.</div>
 
-        <!-- login form -->
-        <div>
-            <form th:action="@{/login}" method="post">
-                <h2 >Please sign in</h2>
-                <label >User Name</label>
-                <input type="text" name="username" th:required="required" th:autofocus="autofocus"/>
-                <br/>
-                
-                <label>Password</label>
-                <input type="password" name="password" th:required="required" />
-                <br/>
-               
-                <input type="submit" value="Sign In"/>
-            </form>
-        </div>
-    </body>
+	<div>
+		<form th:action="@{/login}" method="post">
+			<h2 align="center">Unesite korisničko ime i lozinku</h2>
+			<br/>
+			<br/>
+			<br/>
+			<div style="margin-left:35px" class="panel col-xs-2">
+			<div class="form-group row">
+				<div class="col-xs-2">
+					<label class="label-width-1">Korisničko ime : </label> 
+					<input type="text" class="form-control" name="username" th:required="required" th:autofocus="autofocus" />
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-xs-2">
+					<label class="label-width-1">Lozinka : </label> 
+					<input type="password" class="form-control" name="password" th:required="required" />
+				</div>
+			</div>
+			<div class="form-group row">
+				<div class="col-xs-2">
+					<input type="submit" class="btn btn-success" value="Sign In" />
+				</div>
+			</div>
+			</div>
+		</form>
+	</div>
+</body>
 </html>
