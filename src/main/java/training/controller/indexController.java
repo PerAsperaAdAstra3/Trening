@@ -24,6 +24,8 @@ public class indexController {
 			return "redirect:/packageList";
 		} else if ("clientManagement".equals(mode)) {
 			return "redirect:/clientManagement";
+		} else if ("selfSettings".equals(mode)) {
+			return "redirect:/personalInfoManagementCtrl";
 		}
 		
 		return "redirect:/trainingList/"+isThereError;

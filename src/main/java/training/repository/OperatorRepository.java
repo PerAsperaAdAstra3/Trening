@@ -11,4 +11,5 @@ import training.model.Operator;
 @Repository
 public interface OperatorRepository extends JpaRepository<Operator, Long> {
 	List<Operator> findByUserName(String userName);
+	List<Operator> findByEmail(String email);
 }

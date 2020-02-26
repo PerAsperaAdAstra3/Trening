@@ -10,6 +10,10 @@ public interface OperatorService {
 	
 	List<Operator> findAll();
 	
+	List<Operator> findByUsername(String username);
+	
+	List<Operator> findByEmail(String email);
+	
 	Operator save(Operator operator);
 	
 	List<Operator> save(List<Operator> operators);

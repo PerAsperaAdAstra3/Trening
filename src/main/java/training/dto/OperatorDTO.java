@@ -5,7 +5,28 @@ public class OperatorDTO {
 	private String userName;
 	private String password;
 	private String authorities;
+	private String familyName;
+	private String personalName;
+	private String email;
 	
+	public String getFamilyName() {
+		return familyName;
+	}
+	public void setFamilyName(String familyName) {
+		this.familyName = familyName;
+	}
+	public String getPersonalName() {
+		return personalName;
+	}
+	public void setPersonalName(String personalName) {
+		this.personalName = personalName;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public Long getId() {
 		return id;
 	}

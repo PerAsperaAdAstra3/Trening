@@ -22,9 +22,42 @@ public class Operator{
 	@Column(name = "authorities")
 	private String authorities;
 	
+	@Column(name = "personalName")
+	private String personalName;
+	
+	@Column(name = "familyName")
+	private String familyName;
+	
+	@Column(name = "email")
+	private String email;
+	
 /*	@Column(name = "actions")
 	private List<String> actionList;*/
 	
+	public String getPersonalName() {
+		return personalName;
+	}
+
+	public void setPersonalName(String personalName) {
+		this.personalName = personalName;
+	}
+
+	public String getFamilyName() {
+		return familyName;
+	}
+
+	public void setFamilyName(String familyName) {
+		this.familyName = familyName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getAuthorities() {
 		return authorities;
 	}

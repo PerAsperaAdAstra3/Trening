@@ -7,6 +7,10 @@ h2 {
     margin-left: 35px;
 }
 
+.sameRow {
+	display: flex;
+}
+
 .tbodyPackage {
 	display: block;
     height: auto;
@@ -169,3 +173,35 @@ table {
 }
 
 #search { float: right };
+
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+}
+
+.dropdown {
+  margin-right: 35px;
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  width: 150px;
+  position: absolute;
+  right: 10px;
+  background-color: #f1f1f1;
+}
+
+.dropdown-content a {
+  color: black;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}

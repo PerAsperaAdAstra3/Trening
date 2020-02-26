@@ -9,8 +9,88 @@
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 <script>
+	$(document).ready(function(){
+		
+		var isEmailSet = false;
+		var isUsernameSet = false;
+		var usernameTaken = $("#usernameTaken").val();
+		
+		$("#errorExerciseName").hide();
+		$("#errorUsername").hide();
+		
+		if(usernameTaken == "taken"){
+			$("#usernameTakenMessage").show();
+			
+		} else {
+			$("#usernameTakenMessage").hide();
+			
+		}
+		
+		if(exerciseInRoundExerciseName == ""){
+			areFieldsFilledIn = false;
+			$("#errorExerciseName").show();
+		}
+		
+		if(exerciseInRoundExerciseName == ""){
+			errorUsername
+		}
+	});
+		// script here
+
+
+	$(document).on("change keyup paste", "#email", function(event) {
+		var emailVar = $("#email").val();
+		var usernameVar = $("#userName").val();
+		
+		if(emailVar == ""){
+			$("#emailRedDot").show();
+		} else {
+			$("#emailRedDot").hide();
+		}
+		if(emailVar != ""){
+			if(usernameVar != ""){
+				$("#addButton").prop( "disabled", false);
+			} else {
+				$("#addButton").prop( "disabled", true);
+			}
+		} else {
+			$("#addButton").prop( "disabled", true);
+		}
+	});
+	
+	$(document).on("change keyup paste", "#userName", function(event) {
+		var usernameVar = $("#userName").val();
+		var emailVar = $("#email").val();
+		
+		if(usernameVar == ""){
+			$("#usernameRedDot").show();
+		} else {
+			$("#usernameRedDot").hide();
+		}
+		
+		if(usernameVar != ""){
+			if(emailVar != ""){
+				$("#addButton").prop( "disabled", false);
+			} else {
+				$("#addButton").prop( "disabled", true);
+			}
+		} else {
+			$("#addButton").prop( "disabled", true);
+		}
+	});
+	
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow(this)
+		var usernameVar = $("#userName").val();
+		var emailVar = $("#email").val();
+		if(usernameVar != ""){
+			$("#errorUsername").hide();
+			$("#usernameRedDot").hide();
+		}
+		if(emailVar != ""){
+			$("#errorExerciseName").hide();
+			$("#emailRedDot").hide();
+		}
 	});
 	
 	$(document).on("click", "#search", function(event) {
@@ -19,18 +99,26 @@
 	
 	$(document).on("click", "#resetButton", function(event) {
 			document.getElementById("editButton").disabled = true;
+			$("#errorUsername").show();
+			$("#errorExerciseName").show();
 	});
 
 	function sync(item){
 		userName = item.find(".userName").html()
 	    operatorId = item.find(".operatorId").html()
 	    authorities = item.find(".authorities").html()
+	    personalName = item.find(".personalName").html()
+	    familyName = item.find(".familyName").html()
+	    email = item.find(".email").html()
 	    
 	    document.getElementById("editButton").disabled = false;
 		
 	    $("#id").val(operatorId);
 	    $("#userName").val(userName);
 	    $("#authority").val(authorities);
+	    $("#personalName").val(personalName);
+	    $("#familyName").val(familyName);
+	    $("#email").val(email);
 	}
 	
 </script>
@@ -47,25 +135,45 @@
 <h2>Dodavanje i izmena operatera</h2>
 	
 <div class="panel">
+	<input type="hidden" th:value="${usernameTaken}" id="usernameTaken" />
 	<form style="padding-left:3em" th:action="@{/addOperator}" th:object="${operatorDTO}" method="POST">
+	<label id="errorExerciseName" class="errorText"><font color="red"><b>Unesite Email adresu!</b></font></label>
+	<label id="errorUsername" class="errorText"><font color="red"><b>Unesite korisničko ime!</b></font></label>
+	<br/>
+	<label id="usernameTakenMessage" class="errorText"><font color="red"><b>Korisničko ime zauzeto!</b></font></label>
 	<input type="hidden" th:field="*{id}" id="id" />
   	<div class="form-group row">
 		<div class="col-xs-2">
-			<label class="label-width-1" for="*{userName}">Koristničko ime:</label>
+			<label class="label-width" for="*{userName}">Koristničko ime:</label>
 			<input  type="text" th:field="*{userName}" id="userName" class="form-control" />
+			<img  id="usernameRedDot" src="/images/red-dot-icon30.png"/>
+		</div>
+	</div>
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width" for="*{personalName}">Ime:</label>
+			<input  type="text" th:field="*{personalName}" id="personalName" class="form-control" />
 		</div>
 	</div>
 	
   	<div class="form-group row">
 		<div class="col-xs-2">
-			<label class="label-width-1" for="*{password}">Lozinka:</label>
-			<input  type="text" th:field="*{password}" id="password" class="form-control" />
+			<label class="label-width" for="*{familyName}">Prezime:</label>
+			<input  type="text" th:field="*{familyName}" id="familyName" class="form-control" />
+		</div>
+	</div>
+	
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width" for="*{email}">Email:</label>
+			<input  type="text" th:field="*{email}" id="email" class="form-control" />
+			<img id="emailRedDot" src="/images/red-dot-icon30.png"/>
 		</div>
 	</div>
 	
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<label class="label-width-1" for="authority">Autoritet :</label>
+			<label class="label-width" for="authority">Autoritet :</label>
 			<select class="selectpicker form-control" data-live-search="true" th:field="*{authorities}" id="authority">
 	                         <option th:each="authority : ${authorities}"
 	                            th:value="${authority}"
@@ -76,7 +184,7 @@
 	
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
+			<button id="addButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
 			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
 			<button id="resetButton" type="reset" class="btn btn-success">Iscisti</button>
 		</div>
@@ -99,6 +207,9 @@
 		<tr>
 			<th scope="col">Korisničko ime : </th>
 			<th scope="col">Autoritet : </th>
+			<th scope="col">Ime : </th>
+			<th scope="col">Prezime : </th>
+			<th scope="col">Email : </th>
 			<th scope="col"></th>
 			<th scope="col"></th>
 			<th scope="col"></th>
@@ -108,6 +219,9 @@
 		<tr	id="tr-entity-list" th:each = "operator : ${operators}">
 			<td class="userName" th:utext="${operator.userName}"></td>
 			<td class="authorities" th:utext="${operator.authorities}"></td>
+			<td class="personalName" th:utext="${operator.personalName}"></td>
+			<td class="familyName" th:utext="${operator.familyName}"></td>
+			<td class="email" th:utext="${operator.email}"></td>
 			<td scope="row" class="operatorId" th:utext="${operator.id}" style="display:none;"></td>
 			<td>
 				<a th:href="@{/deleteOperator/{id}(id=${operator.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>

@@ -38,15 +38,17 @@ OperatorDetailsService operatorDetailsService;
 		.antMatchers("/exerciseGroupList").hasAnyAuthority("ADMIN")
 		.antMatchers("/trainingList/**").hasAnyAuthority("TRENER", "ADMIN")
 		.antMatchers("/operatorList").hasAnyAuthority("ADMIN")
-		.antMatchers("/packageList").hasAnyAuthority("ADMIN", "RECEPCIJA")
+		.antMatchers("/packageList").hasAnyAuthority("ADMIN")
 		.antMatchers("/").hasAnyAuthority("ADMIN", "RECEPCIJA", "TRENER")
 		.antMatchers("/clientManagement").hasAnyAuthority("RECEPCIJA", "ADMIN")
 		
 		//Rest of the pages
 		.antMatchers("/clientTrainingSubmit/**").hasAnyAuthority("TRENER", "ADMIN")
+		.antMatchers("/personalInfoManagementCtrl/**").hasAnyAuthority("TRENER", "ADMIN", "RECEPCIJA")
 		.antMatchers("/getTraining/**").hasAnyAuthority("TRENER", "ADMIN")
 		.antMatchers("/trainingCreationHandler/**").hasAnyAuthority("TRENER", "ADMIN")
 		.antMatchers("/circularTrainingCreationHandler/**").hasAnyAuthority("TRENER", "ADMIN")
+		.antMatchers("/sendPasswordToEmail").permitAll()
 		.and()
 		.formLogin()
         .loginPage("/login")

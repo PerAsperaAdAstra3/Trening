@@ -20,12 +20,15 @@ public class CheckAdminUtil {
 	PasswordEncoder passwordEncoder;
 	
 	@PostConstruct
-	public void checkAdming() {
+	public void checkAdming() throws Exception {
 		List<Operator> operatorList = operatorService.findAll();
 		boolean isThereAdmin = false;
 		for(Operator operator : operatorList) {
-			if(operator.getAuthorities().equals("ADMIN")){
-				isThereAdmin = true;
+			System.out.println("Operator" + operator);
+			if(operator != null) {
+				if(operator.getAuthorities() != null && operator.getAuthorities().equals("ADMIN")){
+					isThereAdmin = true;
+				}
 			}
 		}
 		if(!isThereAdmin) {

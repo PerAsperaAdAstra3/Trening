@@ -28,6 +28,16 @@ public class JpaOperatorService implements OperatorService {
 	}
 
 	@Override
+	public List<Operator> findByUsername(String username) {
+		return operatorRepository.findByUserName(username);
+	}
+	
+	@Override
+	public List<Operator> findByEmail(String email) {
+		return operatorRepository.findByEmail(email);
+	}
+	
+	@Override
 	public Operator save(Operator operator) {
 		return operatorRepository.save(operator);
 	}
@@ -57,8 +67,13 @@ public class JpaOperatorService implements OperatorService {
 	public Operator edit(Long id, Operator operator) {
 		Operator oldOperator = operatorRepository.findOne(id);
 		oldOperator.setUserName(operator.getUserName());
-		oldOperator.setPassword(operator.getPassword());
+		if(operator.getPassword() != null && !operator.getPassword().equals("")) {
+			oldOperator.setPassword(operator.getPassword());
+		}
 		oldOperator.setAuthorities(operator.getAuthorities());
+		oldOperator.setPersonalName(operator.getPersonalName());
+		oldOperator.setFamilyName(operator.getFamilyName());
+		oldOperator.setEmail(operator.getEmail());
 	/*	for(String action : operator.getActionList()) {
 			oldOperator.setActionList(action);
 		}*/

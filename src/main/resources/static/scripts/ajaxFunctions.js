@@ -1,3 +1,26 @@
+//send password with email
+function forgotEmail(emailAddress){
+	var operatorDTO = {}
+	alert(emailAddress)
+	operatorDTO["email"] = emailAddress;
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/sendPasswordToEmail",
+		data: JSON.stringify(operatorDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom brisanja  klijentovog paketa!')
+		}
+	})
+}
+
 // Change status
 
 function changeClientPackageStatus(row){

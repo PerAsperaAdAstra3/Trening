@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/functions.js"></script>
+<script src="scripts/filterTable.js"></script>
+<meta charset="utf-8"/>
+<title>Lična podešavanja</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<script>
+$(document).ready(function(){
+	
+	var isEmailSet = false;
+	var isUsernameSet = false;
+	var usernameTaken = $("#usernameTaken").val();
+	
+	if(usernameTaken == "taken"){
+		$("#usernameTakenMessage").show();
+	} else {
+		$("#usernameTakenMessage").hide();
+	}
+	
+	var usernameVar = $("#userName").val();
+	var emailVar = $("#email").val();
+	if(usernameVar != ""){
+		$("#errorUsername").hide();
+	}
+	if(emailVar != ""){
+		$("#errorExerciseName").hide();
+	}
+	
+	if(exerciseInRoundExerciseName == ""){
+		areFieldsFilledIn = false;
+		$("#errorExerciseName").show();
+	}
+	
+	if(exerciseInRoundExerciseName == ""){
+		errorUsername
+	}
+});
+
+$(document).on("change keyup paste", "#email", function(event) {
+	var emailVar = $("#email").val();
+	var usernameVar = $("#userName").val();
+	
+	if(emailVar == ""){
+		$("#errorExerciseName").show();
+	} else {
+		$("#errorExerciseName").hide();
+	}
+	if(emailVar != ""){
+		if(usernameVar != ""){
+			$("#editButton").prop( "disabled", false);
+		} else {
+			$("#editButton").prop( "disabled", true);
+		}
+	}
+});
+
+$(document).on("change keyup paste", "#userName", function(event) {
+	var usernameVar = $("#userName").val();
+	var emailVar = $("#email").val();
+	
+	if(usernameVar == ""){
+		$("#errorUsername").show();
+	} else {
+		$("#errorUsername").hide();
+	}
+	
+	if(usernameVar != ""){
+		if(emailVar != ""){
+			$("#editButton").prop( "disabled", false);
+		} else {
+			$("#editButton").prop( "disabled", true);
+		}
+	}
+});
+</script>
+</head>
+<body>
+	<div class="alert div1" role="alert">
+		<div>
+			<a href="/" class="home">Početna</a>
+			<a class="home" th:href="@{/logout}" style="float:right">Odlogujte se</a>
+		</div>
+		<h1 align="center">Lična podešavanja</h1>
+	</div>
+	
+<h2>Izmena ličnih podešavanja</h2>
+	
+<div class="panel">
+	<label id="errorExerciseName" class="errorText"><font color="red"><b>Unesite Email adresu!</b></font></label>
+	<label id="errorUsername" class="errorText"><font color="red"><b>Unesite korisničko ime!</b></font></label>
+	<form style="padding-left:3em" th:action="@{/editSelf}" th:object="${operatorDTO}" method="POST">
+	<input type="hidden" th:field="*{id}" id="id" />
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="*{userName}">Koristničko ime:</label>
+			<input  type="text" th:field="*{userName}" id="userName" class="form-control" />
+		</div>
+	</div>
+		
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="*{personalName}">Ime:</label>
+			<input  type="text" th:field="*{personalName}" id="personalName" class="form-control" />
+		</div>
+	</div>
+	
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="*{familyName}">Prezime:</label>
+			<input  type="text" th:field="*{familyName}" id="familyName" class="form-control" />
+		</div>
+	</div>
+	
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="*{email}">Email:</label>
+			<input  type="text" th:field="*{email}" id="email" class="form-control" />
+		</div>
+	</div>
+	
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+		</div>
+	</div>
+	</form>
+</div>
+<p>----------------------------------------------------------</p>
+<p>
+	<a th:href="@{/changePasswordCtrl}"><button class="btn btn-success">Izmena lozinke</button></a></p>
+</body>
+</html>
