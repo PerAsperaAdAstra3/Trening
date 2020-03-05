@@ -24,7 +24,6 @@ public class CheckAdminUtil {
 		List<Operator> operatorList = operatorService.findAll();
 		boolean isThereAdmin = false;
 		for(Operator operator : operatorList) {
-			System.out.println("Operator" + operator);
 			if(operator != null) {
 				if(operator.getAuthorities() != null && operator.getAuthorities().equals("ADMIN")){
 					isThereAdmin = true;

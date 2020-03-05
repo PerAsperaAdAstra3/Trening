@@ -543,7 +543,13 @@ function sync2(item){
 	
 	<div>
 		<a href="/" class="home">Početna</a>
-		<a class="home" th:href="@{/logout}" style="float:right">Odlogujte se</a>
+		<div style="float:right" class="dropdown">
+ 		 <img src="/images/COG2a2.png"/>
+		  <div class="dropdown-content">
+		    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
+		    <a th:href="@{/logout}">Odlogujte se</a>
+		  </div>
+	</div>
 	</div>
 		<h1 align="center">Dodavanje treninga</h1>
 	</div>

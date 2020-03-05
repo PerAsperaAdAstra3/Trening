@@ -156,9 +156,6 @@ public class RestClientManagementController {
 	@PostMapping(value = { "/changeClientPackageStatus" })
 	public ResponseEntity<?> changeClientPackageStatus(@Valid @RequestBody ClientPackageDTO clientPackageDTO) {
 		JSONObject obj = new JSONObject();	
-
-		System.out.println("Client package ID : " + clientPackageDTO.getId());
-		
 		ClientPackage clientPackage = clientPackageService.findOne(clientPackageDTO.getId()) ;
 
 		if(clientPackage.isPayed()) {

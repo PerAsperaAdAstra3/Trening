@@ -30,10 +30,7 @@ public class Operator{
 	
 	@Column(name = "email")
 	private String email;
-	
-/*	@Column(name = "actions")
-	private List<String> actionList;*/
-	
+
 	public String getPersonalName() {
 		return personalName;
 	}
@@ -89,14 +86,6 @@ public class Operator{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-/*	public List<String> getActionList() {
-		return actionList;
-	}
-
-	public void setActionList(String action) {
-		this.actionList.add(action);
-	}*/
 
 	public Operator() {}
 	

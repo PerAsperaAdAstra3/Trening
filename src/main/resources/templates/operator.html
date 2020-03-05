@@ -14,26 +14,39 @@
 		var isEmailSet = false;
 		var isUsernameSet = false;
 		var usernameTaken = $("#usernameTaken").val();
+		var emailTaken = $("#emailTaken").val();
+		var emailFormatBadVar = $("#emailFormatBad").val();
 		
+	//	emailTaken$("#usernameTaken").val();
+		
+	//emailFormatBad
+	
 		$("#errorExerciseName").hide();
 		$("#errorUsername").hide();
 		
 		if(usernameTaken == "taken"){
 			$("#usernameTakenMessage").show();
-			
+						
 		} else {
 			$("#usernameTakenMessage").hide();
 			
 		}
 		
-		if(exerciseInRoundExerciseName == ""){
-			areFieldsFilledIn = false;
-			$("#errorExerciseName").show();
+		if(emailTaken == "taken"){
+			$("#emailTakenMessage").show();
+						
+		} else {
+			$("#emailTakenMessage").hide();
+			
 		}
 		
-		if(exerciseInRoundExerciseName == ""){
-			errorUsername
+		if(emailFormatBadVar == "formatbad"){
+			$("#emailFormatBadMessage").show();
+		} else {
+			$("#emailFormatBadMessage").hide();
+			
 		}
+		
 	});
 		// script here
 
@@ -44,17 +57,19 @@
 		
 		if(emailVar == ""){
 			$("#emailRedDot").show();
+			$("#mustHaveEmailField").show();
 		} else {
 			$("#emailRedDot").hide();
+			$("#mustHaveEmailField").hide();
 		}
 		if(emailVar != ""){
 			if(usernameVar != ""){
-				$("#addButton").prop( "disabled", false);
+				$("#addButton").prop("disabled", false);
 			} else {
-				$("#addButton").prop( "disabled", true);
+				$("#addButton").prop("disabled", true);
 			}
 		} else {
-			$("#addButton").prop( "disabled", true);
+			$("#addButton").prop("disabled", true);
 		}
 	});
 	
@@ -64,8 +79,10 @@
 		
 		if(usernameVar == ""){
 			$("#usernameRedDot").show();
+			$("#mustHaveUsernameField").show();
 		} else {
 			$("#usernameRedDot").hide();
+			$("#mustHaveUsernameField").hide();
 		}
 		
 		if(usernameVar != ""){
@@ -99,8 +116,8 @@
 	
 	$(document).on("click", "#resetButton", function(event) {
 			document.getElementById("editButton").disabled = true;
-			$("#errorUsername").show();
-			$("#errorExerciseName").show();
+		//	$("#errorUsername").show();
+		//	$("#errorExerciseName").show();
 	});
 
 	function sync(item){
@@ -127,7 +144,13 @@
 	<div class="alert div1" role="alert">
 		<div>
 			<a href="/" class="home">Početna</a>
-			<a class="home" th:href="@{/logout}" style="float:right">Odlogujte se</a>
+	<div style="float:right" class="dropdown">
+ 		 <img src="/images/COG2a2.png"/>
+		  <div class="dropdown-content">
+		    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
+		    <a th:href="@{/logout}">Odlogujte se</a>
+		  </div>
+	</div>
 		</div>
 		<h1 align="center">Operateri u sistemu</h1>
 	</div>
@@ -136,17 +159,21 @@
 	
 <div class="panel">
 	<input type="hidden" th:value="${usernameTaken}" id="usernameTaken" />
+	<input type="hidden" th:value="${emailTaken}" id="emailTaken" />
+	<input type="hidden" th:value="${emailFormatBad}" id="emailFormatBad" />
 	<form style="padding-left:3em" th:action="@{/addOperator}" th:object="${operatorDTO}" method="POST">
 	<label id="errorExerciseName" class="errorText"><font color="red"><b>Unesite Email adresu!</b></font></label>
 	<label id="errorUsername" class="errorText"><font color="red"><b>Unesite korisničko ime!</b></font></label>
 	<br/>
 	<label id="usernameTakenMessage" class="errorText"><font color="red"><b>Korisničko ime zauzeto!</b></font></label>
+	<label id="emailTakenMessage" class="errorText"><font color="red"><b>Unešena email adresa već postoji u sistemu!</b></font></label>
+	<label id="emailFormatBadMessage" class="errorText"><font color="red"><b>Neodgovarajući format unešene email adrese!</b></font></label>
 	<input type="hidden" th:field="*{id}" id="id" />
   	<div class="form-group row">
 		<div class="col-xs-2">
 			<label class="label-width" for="*{userName}">Koristničko ime:</label>
 			<input  type="text" th:field="*{userName}" id="userName" class="form-control" />
-			<img  id="usernameRedDot" src="/images/red-dot-icon30.png"/>
+			&nbsp;&nbsp;<img id="usernameRedDot" src="/images/red-exclamation30.png"/> <label id="mustHaveUsernameField">(Obavezno polje)</label>
 		</div>
 	</div>
   	<div class="form-group row">
@@ -167,7 +194,7 @@
 		<div class="col-xs-2">
 			<label class="label-width" for="*{email}">Email:</label>
 			<input  type="text" th:field="*{email}" id="email" class="form-control" />
-			<img id="emailRedDot" src="/images/red-dot-icon30.png"/>
+			&nbsp;&nbsp;<img id="emailRedDot" src="/images/red-exclamation30.png"/> <label id="mustHaveEmailField">(Obavezno polje)</label>
 		</div>
 	</div>
 	

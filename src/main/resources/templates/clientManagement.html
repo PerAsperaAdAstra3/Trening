@@ -147,7 +147,13 @@ $(document).on("click", ".payedTable", function(event) {
 <div class="alert div1" role="alert">
 	<div>
 		<a href="/" class="home">Početna</a>
-		<a class="home" th:href="@{/logout}" style="float:right">Odlogujte se</a>
+		<div style="float:right" class="dropdown">
+ 		 <img src="/images/COG2a2.png"/>
+		  <div class="dropdown-content">
+		    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
+		    <a th:href="@{/logout}">Odlogujte se</a>
+		  </div>
+	</div>
 	</div>
 	<h1 align="center"><span th:utext="${client.name + ' ' + client.familyName}"></span> - Paketi</h1>
 </div>

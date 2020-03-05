@@ -13,6 +13,7 @@
 <link rel="stylesheet" type="text/css" th:href="@{/css/test/main.css}"/>
 <link rel="stylesheet" type="text/css" th:href="@{/css/test/util.css}"/>
 <script type="text/javascript">
+
 $(document).on("click", "#forgotPassword", function(event) {
 	$("#myModal").show();
 });
@@ -29,14 +30,29 @@ $(document).on("click", "#sendMail", function(event) {
 
 
 </script>
+<script th:inline="javascript">
+/*<![CDATA[*/    
 
+    var error = /*[[${param.error}]]*/ 'default';
+    var logedout = /*[[${param.logout}]]*/ 'default';
+    var noEmail = /*[[${emailNotInDB}]]*/ 'default';
+    window.onload = function() {
+        if(error){
+        	$('#modalError').modal('show');
+        } 
+        if(logedout){
+        	$('#modalLogout').modal('show');
+        } 
+        if(noEmail){
+        	$('#modalNoEmail').modal('show');
+        }
+    };
+
+/*]]>*/
+</script>
 </head>
 <body>
-	<div th:if="${param.error}">Pogrešno korisničko ime ili lozinka.
-	</div>
-
-	<div th:if="${param.logout}">Izlogovani ste.</div>
-
+<input type="hidden" th:value="${emailNotInDB}" id="emailNotInDB"/>
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
@@ -117,6 +133,65 @@ $(document).on("click", "#sendMail", function(event) {
   </div>
 </div>
 
+<div id="modalLogout" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:300px;">
+
+    <!-- Modal content-->
+<div class="modal-content">
+	<div class="modal-header">
+    </div>
+<div class="modal-body">
+
+<div class="container-responsive">
+<h4 align="center" class="modal-title">Izlogovani ste</h4>
+	<br/><br/>
+	<div align="center"><button style="float:center" id="hideModal" type="button" class="btn btn-success" data-dismiss="modal">Zatvori</button></div>
+	
+</div>
+      </div>
+    </div>
+  </div>
+</div>
+	
+<div id="modalError" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:300px;">
+
+    <!-- Modal content-->
+<div class="modal-content">
+	<div class="modal-header">
+    </div>
+<div class="modal-body">
+
+<div class="container-responsive">
+<h4 align="center" class="modal-title">Neispravni podaci!</h4>
+	<br/><br/>
+	<div align="center"><button id="hideModal" type="button" class="btn btn-success" data-dismiss="modal">Zatvori</button></div>
+	
+</div>
+      </div>
+    </div>
+  </div>
+</div>	
+	
+<div id="modalNoEmail" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:300px;">
+
+    <!-- Modal content-->
+<div class="modal-content">
+	<div class="modal-header">
+    </div>
+<div class="modal-body">
+
+<div class="container-responsive">
+<h4 align="center" class="modal-title">Uneseni email ne postoji u bazi!</h4>
+	<br/><br/>
+	<div align="center"><button id="hideModal" type="button" class="btn btn-success" data-dismiss="modal">Zatvori</button></div>
+	
+</div>
+      </div>
+    </div>
+  </div>
+</div>
 	
 </body>
 </html>

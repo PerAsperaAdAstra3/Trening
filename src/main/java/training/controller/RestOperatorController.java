@@ -38,7 +38,6 @@ public class RestOperatorController {
 	
 	@PostMapping(value = { "/sendPasswordToEmail" })
 	public ResponseEntity<?> sendPasswordToEmail(@Valid @RequestBody OperatorDTO operatorDTO) {
-		System.out.println(operatorDTO.getEmail());
 		List<Operator> operator = operatorService.findByEmail(operatorDTO.getEmail());
 		
 		String newPassword = PasswordGenUtil.alphaNumericString(10);

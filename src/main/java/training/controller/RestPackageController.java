@@ -48,8 +48,6 @@ public class RestPackageController {
 
 		List<ElementsInPackagesDTO> elementsInPackagesDTOList = new ArrayList<ElementsInPackagesDTO>();
 		
-		//for(int i=0; i < packageDTOAjax.getNumnerOfElements();i++) {
-		
 		PackageElement packageElement = packageElementService.findOne(packageDTOAjax.getPackageElementId() );
 		ElementsInPackages elementsInPackages = new ElementsInPackages();
 		elementsInPackages.setPackage(packageUnit);
@@ -60,7 +58,7 @@ public class RestPackageController {
 		
 		ElementsInPackages elementsInPackagesNew = new ElementsInPackages();
 		Long elementsInPackageID ;
-	//	ElementsInPackages elementsInPackageFromDB = elementsInPackagesService.findOne(packageDTOAjax.getPackageElementId() /*getElementsInPackages()*/);
+
 		if(null != filteredNewElementsInPackage) {
 			obj.put("modOfOperation", "edit");
 			elementsInPackages.setNumber(packageDTOAjax.getNumnerOfElements() + filteredNewElementsInPackage.getNumber());
@@ -71,23 +69,11 @@ public class RestPackageController {
 			elementsInPackages = elementsInPackagesService.save(elementsInPackages);
 			elementsInPackageID = elementsInPackages.getElemInPackagesId();
 			packageUnit.addElementsInPackages(elementsInPackages);
-			System.out.println("Nember of new elements : " + packageDTOAjax.getNumnerOfElements());
 			packageService.save(packageUnit);
 		}
 		
-/*		ElementsInPackagesDTO elementsInPackagesDTO = new ElementsInPackagesDTO();
-		elementsInPackagesDTO.setElemInPackagesId(elementsInPackages.getElemInPackagesId());
-		elementsInPackagesDTO.setPackageElementName(packageElement.getName());
-		elementsInPackagesDTO.setPackageElementDescription(packageElement.getDescription());
-		elementsInPackagesDTO.setNumber(packageDTOAjax.getNumnerOfElements());
-		elementsInPackagesDTO.setPackageId(elementsInPackages.getPackage().getId());
-		elementsInPackagesDTO.setPackageElementId(elementsInPackages.getPackageElementEIP().getPackageElementID());*/
-//		PackageDTOAjax packageDTOAjax1 = new PackageDTOAjax();
-//		elementsInPackagesDTOList.add(elementsInPackagesDTO);
-	//	}
-		System.out.println("Return list size : " + elementsInPackagesDTOList.size());
 	//	obj.put("list", elementsInPackagesDTOList);
-//		obj.put("elementsInPackagesDTO", elementsInPackagesDTO);
+	//	obj.put("elementsInPackagesDTO", elementsInPackagesDTO);
 		obj.put("packElName", packageElement.getName());
 		obj.put("packElDescription", packageElement.getDescription());
 		obj.put("packElId", elementsInPackages.getPackageElementEIP().getPackageElementID());

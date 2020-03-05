@@ -15,6 +15,8 @@ $(document).ready(function(){
 	var isUsernameSet = false;
 	var usernameTaken = $("#usernameTaken").val();
 	
+	$("#errorExerciseName").hide();
+	
 	if(usernameTaken == "taken"){
 		$("#usernameTakenMessage").show();
 	} else {
@@ -27,12 +29,14 @@ $(document).ready(function(){
 		$("#errorUsername").hide();
 	}
 	if(emailVar != ""){
-		$("#errorExerciseName").hide();
+		$("#emailRedDot").hide();
+		$("#mustHaveEmailField").hide();
 	}
 	
 	if(exerciseInRoundExerciseName == ""){
 		areFieldsFilledIn = false;
-		$("#errorExerciseName").show();
+		$("#emailRedDot").show();
+		$("#mustHaveEmailField").show();
 	}
 	
 	if(exerciseInRoundExerciseName == ""){
@@ -45,17 +49,21 @@ $(document).on("change keyup paste", "#email", function(event) {
 	var usernameVar = $("#userName").val();
 	
 	if(emailVar == ""){
-		$("#errorExerciseName").show();
+		$("#emailRedDot").show();
+		$("#mustHaveEmailField").show();
+		$("#editButton").prop("disabled",true);
 	} else {
-		$("#errorExerciseName").hide();
+		$("#emailRedDot").hide();
+		$("#mustHaveEmailField").hide();
+		$("#editButton").prop("disabled",false);
 	}
-	if(emailVar != ""){
+/*	if(emailVar != ""){
 		if(usernameVar != ""){
 			$("#editButton").prop( "disabled", false);
 		} else {
 			$("#editButton").prop( "disabled", true);
 		}
-	}
+	}*/
 });
 
 $(document).on("change keyup paste", "#userName", function(event) {
@@ -82,7 +90,13 @@ $(document).on("change keyup paste", "#userName", function(event) {
 	<div class="alert div1" role="alert">
 		<div>
 			<a href="/" class="home">Početna</a>
-			<a class="home" th:href="@{/logout}" style="float:right">Odlogujte se</a>
+			<div style="float:right" class="dropdown">
+ 		 <img src="/images/COG2a2.png"/>
+		  <div class="dropdown-content">
+		    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
+		    <a th:href="@{/logout}">Odlogujte se</a>
+		  </div>
+	</div>
 		</div>
 		<h1 align="center">Lična podešavanja</h1>
 	</div>
@@ -94,13 +108,7 @@ $(document).on("change keyup paste", "#userName", function(event) {
 	<label id="errorUsername" class="errorText"><font color="red"><b>Unesite korisničko ime!</b></font></label>
 	<form style="padding-left:3em" th:action="@{/editSelf}" th:object="${operatorDTO}" method="POST">
 	<input type="hidden" th:field="*{id}" id="id" />
-  	<div class="form-group row">
-		<div class="col-xs-2">
-			<label class="label-width-1" for="*{userName}">Koristničko ime:</label>
-			<input  type="text" th:field="*{userName}" id="userName" class="form-control" />
-		</div>
-	</div>
-		
+	
   	<div class="form-group row">
 		<div class="col-xs-2">
 			<label class="label-width-1" for="*{personalName}">Ime:</label>
@@ -119,12 +127,13 @@ $(document).on("change keyup paste", "#userName", function(event) {
 		<div class="col-xs-2">
 			<label class="label-width-1" for="*{email}">Email:</label>
 			<input  type="text" th:field="*{email}" id="email" class="form-control" />
+			&nbsp;&nbsp;<img id="emailRedDot" src="/images/red-exclamation30.png"/> <label id="mustHaveEmailField">(Obavezno polje)</label>
 		</div>
 	</div>
 	
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+			<button id="editButton" type="submit" class="btn btn-success" name="mode" value="edit">Izmeni</button>
 		</div>
 	</div>
 	</form>

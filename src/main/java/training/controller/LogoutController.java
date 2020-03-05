@@ -18,7 +18,6 @@ public class LogoutController {
 
 	@RequestMapping(value="/bla", method = RequestMethod.GET)
 	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("LOGOUTTTTTTTTTTTT");
 		/* HttpSession session = request.getSession(false);
 		 
 	        SecurityContextHolder.clearContext();

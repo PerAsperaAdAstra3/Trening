@@ -76,11 +76,9 @@ public class ClientController {
 	public String clientDetail(Model model, @PathVariable String id) {
 		Client client = clientService.findOne(Long.parseLong(id));
 		ClientPackage clientPackage = clientPackageService.findOne(Long.parseLong(id));
-		System.out.println("U klijent Detail-usmo");
 		model.addAttribute("clientDTO", clientToClientDTO.convert(client));
 		model.addAttribute("clientPackage", new ClientPackageDTO());
 		model.addAttribute("clientPackages", client.getClientPackages());
-		//model.addAttribute("familyName", client.getFamilyName());
 		return "clientDetails";
 	}
 }
