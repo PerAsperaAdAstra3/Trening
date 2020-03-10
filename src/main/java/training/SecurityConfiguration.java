@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import training.enumerations.Roles;
 import training.service.OperatorDetailsService;
 
 @Configuration
@@ -31,23 +32,23 @@ OperatorDetailsService operatorDetailsService;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		http//.csrf().disable()
+		http
 		.authorizeRequests()
-		.antMatchers("/exerciseList/**").hasAnyAuthority("ADMIN")
-		.antMatchers("/clientList").hasAnyAuthority("TRENER", "ADMIN", "RECEPCIJA")
-		.antMatchers("/exerciseGroupList").hasAnyAuthority("ADMIN")
-		.antMatchers("/trainingList/**").hasAnyAuthority("TRENER", "ADMIN")
-		.antMatchers("/operatorList").hasAnyAuthority("ADMIN")
-		.antMatchers("/packageList").hasAnyAuthority("ADMIN")
-		.antMatchers("/").hasAnyAuthority("ADMIN", "RECEPCIJA", "TRENER")
-		.antMatchers("/clientManagement").hasAnyAuthority("RECEPCIJA", "ADMIN")
+		.antMatchers("/exerciseList/**").hasAnyAuthority(Roles.ADMIN.getNameText())
+		.antMatchers("/clientList").hasAnyAuthority(Roles.ADMIN.getNameText(), Roles.TRAINER.getNameText(), Roles.FRONTDESK.getNameText())
+		.antMatchers("/exerciseGroupList").hasAnyAuthority(Roles.ADMIN.getNameText())
+		.antMatchers("/trainingList/**").hasAnyAuthority(Roles.TRAINER.getNameText(), Roles.ADMIN.getNameText())
+		.antMatchers("/operatorList").hasAnyAuthority(Roles.ADMIN.getNameText())
+		.antMatchers("/packageList").hasAnyAuthority(Roles.ADMIN.getNameText())
+		.antMatchers("/").hasAnyAuthority(Roles.ADMIN.getNameText(), Roles.FRONTDESK.getNameText(), Roles.TRAINER.getNameText())
+		.antMatchers("/clientManagement").hasAnyAuthority(Roles.FRONTDESK.getNameText(), Roles.ADMIN.getNameText())
 		
 		//Rest of the pages
-		.antMatchers("/clientTrainingSubmit/**").hasAnyAuthority("TRENER", "ADMIN")
-		.antMatchers("/personalInfoManagementCtrl/**").hasAnyAuthority("TRENER", "ADMIN", "RECEPCIJA")
-		.antMatchers("/getTraining/**").hasAnyAuthority("TRENER", "ADMIN")
-		.antMatchers("/trainingCreationHandler/**").hasAnyAuthority("TRENER", "ADMIN")
-		.antMatchers("/circularTrainingCreationHandler/**").hasAnyAuthority("TRENER", "ADMIN")
+		.antMatchers("/clientTrainingSubmit/**").hasAnyAuthority(Roles.TRAINER.getNameText(), Roles.ADMIN.getNameText())
+		.antMatchers("/personalInfoManagementCtrl/**").hasAnyAuthority(Roles.TRAINER.getNameText(), Roles.ADMIN.getNameText(), Roles.FRONTDESK.getNameText())
+		.antMatchers("/getTraining/**").hasAnyAuthority(Roles.TRAINER.getNameText(), Roles.ADMIN.getNameText())
+		.antMatchers("/trainingCreationHandler/**").hasAnyAuthority(Roles.TRAINER.getNameText(), Roles.ADMIN.getNameText())
+		.antMatchers("/circularTrainingCreationHandler/**").hasAnyAuthority(Roles.TRAINER.getNameText(), Roles.ADMIN.getNameText())
 		.antMatchers("/sendPasswordToEmail").permitAll()
 		.and()
 		.formLogin()
@@ -60,19 +61,7 @@ OperatorDetailsService operatorDetailsService;
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         .logoutSuccessUrl("/login?logout")
         .permitAll();
-		/*and()
-		.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").and().httpBasic();
-		*/
 
-	/*	.and()
-		.formLogin()
-        .loginPage("/login")
-        .permitAll()
-        .and()
-        .logout()
-        .logoutUrl("/logout")
-        .logoutSuccessUrl("/login");*/
-//		.and().httpBasic();
 	}
 	
 	@Bean

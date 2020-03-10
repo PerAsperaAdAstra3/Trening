@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,10 +77,7 @@ public class RestClientManagementController {
 				clientPackage.setClientPackagePrice(0l);
 			}
 
-		
-		//obj.put("clientPackage", jSONWriter.valueToString(clientPackageToClientPackageDTO.convert(clientPackage)));//clientPackageToClientPackageDTO.convert(clientPackage));
-		JSONObject clientPackageJSON = new JSONObject(clientPackageToClientPackageDTO.convert(clientPackage));
-		
+		JSONObject clientPackageJSON = new JSONObject(clientPackageToClientPackageDTO.convert(clientPackage));		
 		JSONObject clientPackageElementsJSON = new JSONObject(clientPackageElementToClientPackageElementDTO.convert(clientPackageElementsList));
 
 		List<ClientPackageElementDTO> clientPackageElementsDTOList = clientPackageElementToClientPackageElementDTO.convert(clientPackageElementsList);

@@ -18,7 +18,6 @@ import training.dto.ElementsInPackagesDTO;
 import training.dto.ElementsInPackagesDTOAjax;
 import training.dto.PackageDTOAjax;
 import training.model.ElementsInPackages;
-import training.model.ExerciseInRound;
 import training.model.Package;
 import training.model.PackageElement;
 import training.service.ElementsInPackagesService;
@@ -72,14 +71,12 @@ public class RestPackageController {
 			packageService.save(packageUnit);
 		}
 		
-	//	obj.put("list", elementsInPackagesDTOList);
-	//	obj.put("elementsInPackagesDTO", elementsInPackagesDTO);
 		obj.put("packElName", packageElement.getName());
 		obj.put("packElDescription", packageElement.getDescription());
 		obj.put("packElId", elementsInPackages.getPackageElementEIP().getPackageElementID());
 		obj.put("elementsInPackagesNumber", elementsInPackages.getNumber());
 		obj.put("packElpackageId", elementsInPackages.getPackage().getId());
-		obj.put("elemInPackagesId", elementsInPackageID);//elementsInPackages.getElemInPackagesId());
+		obj.put("elemInPackagesId", elementsInPackageID);
 
 		return ResponseEntity.ok(obj.toString());
 	}

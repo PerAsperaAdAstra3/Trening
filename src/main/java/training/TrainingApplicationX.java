@@ -15,13 +15,17 @@ public class TrainingApplicationX extends SpringBootServletInitializer {
 		return application.sources(TrainingApplicationX.class) ;
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		SpringApplication.run(TrainingApplicationX.class, args);
 		openHomePage();
 	}
 	
-	private static void openHomePage() throws IOException {
-	       Runtime rt = Runtime.getRuntime();
-	       rt.exec("rundll32 url.dll,FileProtocolHandler " + "http://localhost:8080/login");
-	    }
+	private static void openHomePage() {
+	      try {
+		      Runtime rt = Runtime.getRuntime();
+	          rt.exec("rundll32 url.dll,FileProtocolHandler " + "http://localhost:8080/login");
+	      } catch(IOException e) {
+	    	  e.printStackTrace();
+	      }
+	 }
 }

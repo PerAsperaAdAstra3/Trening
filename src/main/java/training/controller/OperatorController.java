@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +20,7 @@ import training.converter.OperatorToOperatorDTO;
 import training.dto.OperatorDTO;
 import training.dto.PasswordChangeDTO;
 import training.emailService.MailService;
+import training.enumerations.Roles;
 import training.model.Operator;
 import training.service.OperatorService;
 import training.util.PasswordGenUtil;
@@ -40,9 +39,6 @@ public class OperatorController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-    private JavaMailSender javaMailSender;
 
 	@Autowired
 	private MailService mailService;
@@ -66,9 +62,9 @@ public class OperatorController {
 	
 	private List<String> authorities(){
 		List<String> authorities = new ArrayList<String>();
-		authorities.add("RECEPCIJA");
-		authorities.add("ADMIN");
-		authorities.add("TRENER");
+		authorities.add(Roles.FRONTDESK.getNameText());
+		authorities.add(Roles.ADMIN.getNameText());
+		authorities.add(Roles.TRAINER.getNameText());
 		return authorities;
 	}
 	
@@ -81,7 +77,7 @@ public class OperatorController {
 		try {
 		String ss = PasswordGenUtil.alphaNumericString(10);
 		mailService.sendEmail(operatorDTO, ss);
-		operatorDTO.setPassword(passwordEncoder.encode(ss)); //operatorDTO.getPassword()));
+		operatorDTO.setPassword(passwordEncoder.encode(ss));
 		List<Operator> operators = operatorService.findAll();
 		boolean itCanBeAdded = true;
 		if("add".equals(mode)) {
@@ -143,19 +139,14 @@ public class OperatorController {
 	
 	@RequestMapping(value = {"/editSelf"}, method = RequestMethod.POST)
 	public String editSelf(Model model, @ModelAttribute("operatorDTO") OperatorDTO operatorDTO, @RequestParam String mode){
-		//operatorDTO.setPassword(passwordEncoder.encode(operatorDTO.getPassword()));
-	//	if("add".equals(mode)) {
+		
 			Operator operatorVar = operatorService.findOne(operatorDTO.getId());
 			operatorVar.setPersonalName(operatorDTO.getPersonalName());
 			operatorVar.setFamilyName(operatorDTO.getFamilyName());
 			operatorVar.setEmail(operatorDTO.getEmail());
 			
-			
-			//operatorDTO.setId(null);
-			operatorService.save(operatorVar); //operatorDTOtoOperator.convert(operatorDTO));
-	//	} else {
-	//		operatorService.edit(operatorDTO.getId(), operatorDTOtoOperator.convert(operatorDTO));
-	//	}
+			operatorService.save(operatorVar);
+
 		return "redirect:/";
 	}
 	
@@ -168,7 +159,6 @@ public class OperatorController {
 		} else {
 			username = principal.toString();
 		}
-		Operator currentOperator = operatorService.findByUsername(username).get(0);
 		
 		PasswordChangeDTO passwordChangeDTO = new PasswordChangeDTO();
 		
@@ -190,8 +180,6 @@ public class OperatorController {
 		}
 		
 		Operator currentOperator = operatorService.findByUsername(username).get(0);
-		
-		String oldPassword = passwordEncoder.encode(passwordChangeDTO.getOldPassword());
 		
 		if(passwordEncoder.matches(passwordChangeDTO.getOldPassword(), currentOperator.getPassword())) {
 			if(passwordChangeDTO.getNewPassword1().equals(passwordChangeDTO.getNewPassword2())) {
