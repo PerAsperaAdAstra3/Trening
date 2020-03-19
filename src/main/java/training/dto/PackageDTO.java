@@ -4,7 +4,7 @@ public class PackageDTO {
 
 	private Long id;
 	
-	private String nameOfPackage;
+	private String packageName;
 
 	private Long price;
 	
@@ -24,19 +24,19 @@ public class PackageDTO {
 		this.id = id;
 	}
 
-	public String getNameOfPackage() {
-		return nameOfPackage;
+	public String getPackageName() {
+		return packageName;
 	}
 
-	public void setNameOfPackage(String nameOfPackage) {
-		this.nameOfPackage = nameOfPackage;
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
 	}
 
 	public PackageDTO() {}
 
-	public PackageDTO(String nameOfPackage) {
+	public PackageDTO(String packageName) {
 		super();
-		this.nameOfPackage = nameOfPackage;
+		this.packageName = packageName;
 	}
 	
 }

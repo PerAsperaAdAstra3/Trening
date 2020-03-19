@@ -16,9 +16,11 @@ public class ClientPackageDTO {
 	
 	private String nameOfPackage;
 	
-	private String payed;
+	private boolean payed;
 	
-	private String clientPackageStatus;
+	private String clientPackageActive;
+	
+	private List<ClientPackageElement> clientPackageElements;
 
 	public Long getPriceOfClientPackage() {
 		return priceOfClientPackage;
@@ -28,23 +30,21 @@ public class ClientPackageDTO {
 		this.priceOfClientPackage = priceOfClientPackage;
 	}
 
-	public String getPayed() {
+	public boolean getPayed() {
 		return payed;
 	}
 
-	public void setPayed(String payed) {
+	public void setPayed(boolean payed) {
 		this.payed = payed;
 	}
 
-	public String getClientPackageStatus() {
-		return clientPackageStatus;
+	public String getClientPackageActive() {
+		return clientPackageActive;
 	}
 
-	public void setClientPackageStatus(String clientPackageStatus) {
-		this.clientPackageStatus = clientPackageStatus;
+	public void setClientPackageActive(String clientPackageActive) {
+		this.clientPackageActive = clientPackageActive;
 	}
-
-	private List<ClientPackageElement> clientPackageElements;
 
 	public String getNameOfPackage() {
 		return nameOfPackage;

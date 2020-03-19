@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import training.converter.OperatorDTOtoOperator;
-import training.dto.ClientPackageDTO;
 import training.dto.OperatorDTO;
 import training.emailService.MailService;
-import training.model.ClientPackage;
 import training.model.Operator;
 import training.service.OperatorService;
 import training.util.PasswordGenUtil;

@@ -22,19 +22,13 @@ public class ClientPackageToClientPackageDTO implements Converter<ClientPackage,
 		
 		ModelMapper modelMapper = new ModelMapper();
 		ClientPackageDTO clientPackageDTO = modelMapper.map(source, ClientPackageDTO.class);
-		
 		clientPackageDTO.setPriceOfClientPackage(source.getClientPackagePrice());
-		
-		if(source.isClientPackageStatus()) {
-			clientPackageDTO.setClientPackageStatus("Aktivan");
+		clientPackageDTO.setPayed(source.isPayed());
+
+		if(source.isClientPackageActive()) {
+			clientPackageDTO.setClientPackageActive("Aktivan");
 		} else { 
-			clientPackageDTO.setClientPackageStatus("Neaktivan");
-		}
-		
-		if(source.isPayed()) {
-			clientPackageDTO.setPayed("true");
-		} else {
-			clientPackageDTO.setPayed("false");
+			clientPackageDTO.setClientPackageActive("Neaktivan");
 		}
 
 		return clientPackageDTO;

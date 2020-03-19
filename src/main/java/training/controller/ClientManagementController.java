@@ -1,11 +1,9 @@
 package training.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.modelmapper.internal.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +19,7 @@ import training.converter.ClientToClientDTO;
 import training.converter.ElementsInPackagesToElementsInPackagesDTO;
 import training.converter.PackageDTOtoPackage;
 import training.converter.PackageToPackageDTO;
-import training.dto.ClientDTO;
 import training.dto.ClientPackageDTO;
-import training.model.Client;
 import training.model.ClientPackage;
 import training.model.ClientPackageElement;
 import training.model.Package;
@@ -79,25 +75,20 @@ ElementsInPackagesService elementsInPackagesService;
 	public String clientManagement(Model model, @PathVariable String id) {
 
 		List<Package> packageList = packageService.findAll();
-		List<ClientPackage> clientPackageForClient = clientPackageService.filter(clientService.findOne(Long.parseLong(id)));
+		List<ClientPackage> clientPackageForClient = clientPackageService.filter(clientService.findOne(Long.parseLong(id))); 
+		List<ClientPackageDTO> clientPackageDTOList = clientPackageToClientPackageDTO.convert(clientPackageForClient);
+		Collections.reverse(clientPackageDTOList);
 		 
-		 List<ClientPackageDTO> clientPackageDTOList = clientPackageToClientPackageDTO.convert(clientPackageForClient);
-		 Collections.reverse(clientPackageDTOList);
-		 
-		 for(ClientPackageDTO var1 : clientPackageDTOList) {
+		for(ClientPackageDTO var1 : clientPackageDTOList) {
 			if(var1.getPriceOfClientPackage() == null) {
 				var1.setPriceOfClientPackage(0l);
 			}
-		 }
+		}
 		 
 		model.addAttribute("clientId", id);
-		model.addAttribute("client", clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));
-		model.addAttribute("clientDTOSearch", new ClientDTO());
-		model.addAttribute("clientDTO", new ClientDTO());
-		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
-		model.addAttribute("allPackages", packageToPackageDTO.convert(packageList));
-		model.addAttribute("clientPackages", clientPackageDTOList);
-		model.addAttribute("clientPackagesForClient", clientPackageForClient);
+		model.addAttribute("client", clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));//Information of client in question.
+		model.addAttribute("allPackages", packageToPackageDTO.convert(packageList));	//List of all packages that exist in the system. These can be added to client.
+		model.addAttribute("clientPackages", clientPackageDTOList);	// List of client packages.
 		
 		List<ClientPackageElement> clientPackageElementList = new ArrayList<ClientPackageElement>();
 		

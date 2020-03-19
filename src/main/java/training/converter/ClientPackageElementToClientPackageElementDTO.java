@@ -27,7 +27,7 @@ public class ClientPackageElementToClientPackageElementDTO implements Converter<
 			clientPackageElementDTO.setClientPackageElementStatus("Neaktivan");			
 		}
 		clientPackageElementDTO.setDescription(source.getElementsInPackages().getPackageElementEIP().getDescription());
-		clientPackageElementDTO.setName(source.getElementsInPackages().getPackageElementEIP().getName());
+		clientPackageElementDTO.setName(source.getElementsInPackages().getPackageElementEIP().getPackageElementName());
 		clientPackageElementDTO.setCount(source.getCounter());
 		clientPackageElementDTO.setActiveLeft(source.getActiveLeft());
 		return clientPackageElementDTO;

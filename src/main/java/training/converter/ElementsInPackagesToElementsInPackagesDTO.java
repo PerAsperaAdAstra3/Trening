@@ -30,7 +30,7 @@ public class ElementsInPackagesToElementsInPackagesDTO implements Converter<Elem
 		
 		elementsInPackagesDTO.setElemInPackagesId(source.getElemInPackagesId());
 		elementsInPackagesDTO.setPackageElementDescription(source.getPackageElementEIP().getDescription());
-		elementsInPackagesDTO.setPackageElementName(source.getPackageElementEIP().getName());
+		elementsInPackagesDTO.setPackageElementName(source.getPackageElementEIP().getPackageElementName());
 		elementsInPackagesDTO.setNumber(source.getNumber());
 		elementsInPackagesDTO.setPackageElementId(source.getPackageElementEIP().getPackageElementID());
 		elementsInPackagesDTO.setPackageId(source.getPackage().getId());

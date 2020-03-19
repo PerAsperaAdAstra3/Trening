@@ -32,7 +32,7 @@ OperatorDetailsService operatorDetailsService;
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
-		http
+		http.csrf().disable()
 		.authorizeRequests()
 		.antMatchers("/exerciseList/**").hasAnyAuthority(Roles.ADMIN.getNameText())
 		.antMatchers("/clientList").hasAnyAuthority(Roles.ADMIN.getNameText(), Roles.TRAINER.getNameText(), Roles.FRONTDESK.getNameText())
@@ -49,6 +49,10 @@ OperatorDetailsService operatorDetailsService;
 		.antMatchers("/getTraining/**").hasAnyAuthority(Roles.TRAINER.getNameText(), Roles.ADMIN.getNameText())
 		.antMatchers("/trainingCreationHandler/**").hasAnyAuthority(Roles.TRAINER.getNameText(), Roles.ADMIN.getNameText())
 		.antMatchers("/circularTrainingCreationHandler/**").hasAnyAuthority(Roles.TRAINER.getNameText(), Roles.ADMIN.getNameText())
+		//new
+		.antMatchers("/deleteClientPackage/**").hasAnyAuthority(Roles.FRONTDESK.getNameText(), Roles.ADMIN.getNameText())
+		.antMatchers("/useUpAPackageElement/**").hasAnyAuthority(Roles.FRONTDESK.getNameText(), Roles.ADMIN.getNameText())
+		.antMatchers("/changeClientPackageStatus/**").hasAnyAuthority(Roles.FRONTDESK.getNameText(), Roles.ADMIN.getNameText())
 		.antMatchers("/sendPasswordToEmail").permitAll()
 		.and()
 		.formLogin()

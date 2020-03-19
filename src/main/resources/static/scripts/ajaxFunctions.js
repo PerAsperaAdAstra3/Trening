@@ -162,10 +162,10 @@ function useClientPackageElement(row){
 			
 			$(".tr-entity-listAllClientPackages .clientPackageId").each(function(){
 				if($(this).html() == data.clientPackageId){
-						$(this).parent().find(".packageStatus").html(data.clientPackageStatus);
+						$(this).parent().find(".packageStatus").html(data.clientPackageActive);
 						
 						
-						var state = data.clientPackageStatus;
+						var state = data.clientPackageActive;
 						var payed = data.clientPackagePayed;
 
 						if(state == 'Aktivan'){	
@@ -258,7 +258,7 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 		
 			console.log(data);
 			
-			var state = data["clientPackageJSON"]["clientPackageStatus"]
+			var state = data["clientPackageJSON"]["clientPackageActive"]
 			var payed = data["clientPackageJSON"]["payed"];
 
 			var colorVar = "";
@@ -273,9 +273,9 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 			var rowCountClientPackage = $('#clientPackageBody tr').length;
 
 			if(rowCountClientPackage == 0){
-				$('#clientPackageBody').append('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageStatus"] +'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
+				$('#clientPackageBody').append('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
 			} else {
-				$('#clientPackageBody tr:nth-child(1)').before('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageStatus"] +'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
+				$('#clientPackageBody tr:nth-child(1)').before('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
 			}
 					
 			var rowCountClientPackageElements = $('#clientPackageElementBody tr').length;
@@ -344,7 +344,7 @@ function ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, thisObjec
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			if(data.zeroLeft == "yes"){
+			if(data.zeroLeft){
 			  thisObject.parent().parent().remove();
 			}
 		},

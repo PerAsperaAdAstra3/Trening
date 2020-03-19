@@ -59,10 +59,7 @@ public class JpaPackageElementService implements PackageElementService {
 	public PackageElement edit(Long id, PackageElement packageElement) {
 		PackageElement oldPackageElement = packageElementRepository.findOne(id);
 		oldPackageElement.setDescription(packageElement.getDescription());
-		oldPackageElement.setName(packageElement.getName());
-		/*for(ClientPackageElement clientPackageElement : packageElement.getClientPackageElements()) {
-			oldPackageElement.addClientPackageElements(clientPackageElement);
-		}*/
+		oldPackageElement.setPackageElementName(packageElement.getPackageElementName());
 		packageElementRepository.save(oldPackageElement);
 		return null;
 	}

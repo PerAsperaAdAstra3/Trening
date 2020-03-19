@@ -32,17 +32,15 @@ public class ClientPackageDTOtoClientPackage implements Converter<ClientPackageD
 		clientPackage.setPackageUnit(packageUnit);
 		clientPackage.setClientPackagePrice(source.getPriceOfClientPackage());
 		
-		if(source.getPayed().equals("true")) {
-			clientPackage.setPayed(true);
-		} else {
-			clientPackage.setPayed(false);
-		}
+		clientPackage.setPayed(source.getPayed());
 		
-		if(source.getClientPackageStatus().equals("Aktivan")) {
-			clientPackage.setClientPackageStatus(true);
+		if(source.getClientPackageActive().equals("Aktivan")) {
+			clientPackage.setClientPackageActive(true);
 		} else {
-			clientPackage.setClientPackageStatus(false);
+			clientPackage.setClientPackageActive(false);
 		}
+	
+		
 		return clientPackage;
 	}
 

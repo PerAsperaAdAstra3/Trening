@@ -52,7 +52,7 @@ public class RestClientManagementController {
 		JSONObject obj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		
-		clientPackageDTO.setClientPackageStatus("Aktivan");
+		clientPackageDTO.setClientPackageActive("Aktivan");
 		ClientPackage clientPackage = clientPackageDTOtoClientPackage.convert(clientPackageDTO);
 		clientPackageService.save(clientPackage);
 		List<ClientPackageElement> clientPackageElementsList = new ArrayList<ClientPackageElement>();
@@ -109,10 +109,10 @@ public class RestClientManagementController {
 		
 		ClientPackage clientPackage = clientPackageElement.getClientPackage();
 		
-		clientPackage.setClientPackageStatus(false);
+		clientPackage.setClientPackageActive(false);
 		for(ClientPackageElement clientPackageElementX : clientPackage.getClientPackageElements()) {
 			if(clientPackageElementX.isClientPackageElementStatus()) {
-				clientPackage.setClientPackageStatus(true);
+				clientPackage.setClientPackageActive(true);
 			}
 		}
 		
@@ -124,11 +124,11 @@ public class RestClientManagementController {
 		obj.put("clientPackageId", clientPackage.getId());
 		obj.put("clientPackagePayed", clientPackage.isPayed());
 		
-		obj.put("clientPackageStatus", clientPackage.isClientPackageStatus());
-		if(clientPackage.isClientPackageStatus()) {
-			obj.put("clientPackageStatus", "Aktivan");
+		obj.put("clientPackageActive", clientPackage.isClientPackageActive());
+		if(clientPackage.isClientPackageActive()) {
+			obj.put("clientPackageActive", "Aktivan");
 		} else {
-			obj.put("clientPackageStatus", "Neaktivan");
+			obj.put("clientPackageActive", "Neaktivan");
 		}
 		
 		if(clientPackageElement.isClientPackageElementStatus()) {

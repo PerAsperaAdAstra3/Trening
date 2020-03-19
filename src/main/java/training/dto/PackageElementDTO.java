@@ -4,7 +4,7 @@ public class PackageElementDTO {
 
 	private Long packageElementID;
 	
-	private String name;
+	private String packageElementName;
 	
 	private String description;
 	
@@ -18,12 +18,12 @@ public class PackageElementDTO {
 		this.packageElementID = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getPackageElementName() {
+		return packageElementName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPackageElementName(String packageElementName) {
+		this.packageElementName = packageElementName;
 	}
 
 	public String getDescription() {
@@ -44,9 +44,9 @@ public class PackageElementDTO {
 
 	public PackageElementDTO() {}
 	
-	public PackageElementDTO(String name, String description, Long packageId) {
+	public PackageElementDTO(String packageElementName, String description, Long packageId) {
 		super();
-		this.name = name;
+		this.packageElementName = packageElementName;
 		this.description = description;
 		this.packageId = packageId;
 	}

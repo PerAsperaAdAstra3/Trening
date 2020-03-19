@@ -29,11 +29,7 @@ public class OperatorDetailsService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-/*		 final String ip = getClientIP();
-	        if (loginAttemptService.isBlocked(ip)) {
-	            throw new RuntimeException("blocked");
-	        }
-*/
+
 	        try {
 	            final List<Operator> operator = operatorRepository.findByUserName(username);
 	            if (operator == null) {
@@ -48,7 +44,7 @@ public class OperatorDetailsService implements UserDetailsService {
 	        }
 	}
 
-	 private final Collection<? extends GrantedAuthority> getAuthorities(List<String> roles){//final Collection<Role> roles) {
+	 private final Collection<? extends GrantedAuthority> getAuthorities(List<String> roles){
 	        return getGrantedAuthorities(roles);
 	    }
 	

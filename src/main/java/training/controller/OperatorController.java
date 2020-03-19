@@ -43,9 +43,9 @@ public class OperatorController {
 	@Autowired
 	private MailService mailService;
 	
-	private String nameTaken = "notTaken";
-	private String emailTaken = "notTaken";
-	private String emailFormatBad = "formatok";
+	private boolean nameTaken = false;
+	private boolean emailTaken = false;
+	private boolean emailFormatBad = false;
 	
 	@RequestMapping(value = { "/operatorList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
@@ -70,9 +70,9 @@ public class OperatorController {
 	
 	@RequestMapping(value = {"/addOperator"}, method = RequestMethod.POST)
 	public String addOperator(Model model, @ModelAttribute("operatorDTO") OperatorDTO operatorDTO, @RequestParam String mode) {
-		nameTaken = "nottaken";
-		emailTaken = "nottaken";
-		emailFormatBad = "formatok";
+		nameTaken = false;
+		emailTaken = false;
+		emailFormatBad = false;
 
 		try {
 		String ss = PasswordGenUtil.alphaNumericString(10);
@@ -84,19 +84,19 @@ public class OperatorController {
 			operatorDTO.setId(null);
 			for(Operator operator : operators) {
 				if(operator.getUserName().equals(operatorDTO.getUserName())) {
-					nameTaken = "taken";
+					nameTaken = true;
 					itCanBeAdded = false;
 					break;
 				}
 				if(operator.getEmail().equals(operatorDTO.getEmail())) {
-					emailTaken = "taken";
+					emailTaken = true;
 					itCanBeAdded = false;
 					break;
 				}
 			}
 			if(itCanBeAdded) {
-				nameTaken = "notTaken";
-				emailTaken = "notTaken";
+				nameTaken = false;
+				emailTaken = false;
 				operatorService.save(operatorDTOtoOperator.convert(operatorDTO));
 			}
 		} else {
@@ -104,20 +104,18 @@ public class OperatorController {
 		}
 		
 		} catch (Exception e) {
-			emailFormatBad = "formatbad";
+			emailFormatBad = true;
 			e.printStackTrace();
 		}
-		
-
-		model.addAttribute("emailFormatBad", emailFormatBad);
-		model.addAttribute("usernameTaken", nameTaken);
-		model.addAttribute("emailTaken", emailTaken);
 		
 		return "redirect:/operatorList";
 	}
 	
 	@RequestMapping(value = {"/deleteOperator/{id}"}, method = RequestMethod.GET)
 	public String deleteOperator(@PathVariable String id ) {
+		nameTaken = false;
+		emailTaken = false;
+		emailFormatBad = false;
 		operatorService.delete(Long.parseLong(id));
 		return "redirect:/operatorList";
 	}

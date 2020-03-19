@@ -11,6 +11,4 @@ import training.model.ClientPackage;
 @Repository
 public interface ClientPackageRepository extends JpaRepository<ClientPackage, Long> {
 	List<ClientPackage> findByClient(Client client);
-	
-//	findByNameIgnoreCaseContainingAndFamilyNameIgnoreCaseContaining(String name, String familyName);
 }

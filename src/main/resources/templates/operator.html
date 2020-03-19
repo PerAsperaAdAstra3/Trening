@@ -8,43 +8,35 @@
 <title>Users</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
-<script>
+<script th:inline="javascript">
+/*<![CDATA[*/  
 	$(document).ready(function(){
 		
 		var isEmailSet = false;
 		var isUsernameSet = false;
-		var usernameTaken = $("#usernameTaken").val();
-		var emailTaken = $("#emailTaken").val();
-		var emailFormatBadVar = $("#emailFormatBad").val();
-		
-	//	emailTaken$("#usernameTaken").val();
-		
-	//emailFormatBad
+		var usernameTaken = /*[[${usernameTaken}]]*/ 'default';
+		var emailTaken = /*[[${emailTaken}]]*/ 'default';
+		var emailFormatBadVar = /*[[${emailFormatBad}]]*/ 'default';
 	
 		$("#errorExerciseName").hide();
 		$("#errorUsername").hide();
 		
-		if(usernameTaken == "taken"){
+		if(usernameTaken){
 			$("#usernameTakenMessage").show();
-						
 		} else {
 			$("#usernameTakenMessage").hide();
-			
 		}
 		
-		if(emailTaken == "taken"){
+		if(emailTaken){
 			$("#emailTakenMessage").show();
-						
 		} else {
 			$("#emailTakenMessage").hide();
-			
 		}
 		
-		if(emailFormatBadVar == "formatbad"){
+		if(emailFormatBadVar){
 			$("#emailFormatBadMessage").show();
 		} else {
 			$("#emailFormatBadMessage").hide();
-			
 		}
 		
 	});
@@ -116,8 +108,6 @@
 	
 	$(document).on("click", "#resetButton", function(event) {
 			document.getElementById("editButton").disabled = true;
-		//	$("#errorUsername").show();
-		//	$("#errorExerciseName").show();
 	});
 
 	function sync(item){
@@ -137,7 +127,7 @@
 	    $("#familyName").val(familyName);
 	    $("#email").val(email);
 	}
-	
+/*]]>*/
 </script>
 </head>
 <body>
@@ -158,9 +148,6 @@
 <h2>Dodavanje i izmena operatera</h2>
 	
 <div class="panel">
-	<input type="hidden" th:value="${usernameTaken}" id="usernameTaken" />
-	<input type="hidden" th:value="${emailTaken}" id="emailTaken" />
-	<input type="hidden" th:value="${emailFormatBad}" id="emailFormatBad" />
 	<form style="padding-left:3em" th:action="@{/addOperator}" th:object="${operatorDTO}" method="POST">
 	<label id="errorExerciseName" class="errorText"><font color="red"><b>Unesite Email adresu!</b></font></label>
 	<label id="errorUsername" class="errorText"><font color="red"><b>Unesite korisničko ime!</b></font></label>

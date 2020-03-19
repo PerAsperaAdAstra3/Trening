@@ -19,7 +19,7 @@ public class PackageElement {
 	private Long packageElementID;
 	
 	@Column(name="name")
-	private String name;
+	private String packageElementName;
 	
 	@Column(name="description")
 	private String description;
@@ -35,12 +35,12 @@ public class PackageElement {
 		this.packageElementID = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getPackageElementName() {
+		return packageElementName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPackageElementName(String packageElementName) {
+		this.packageElementName = packageElementName;
 	}
 
 	public String getDescription() {
@@ -64,7 +64,7 @@ public class PackageElement {
 
 	public PackageElement(String name, String description) {
 		super();
-		this.name = name;
+		this.packageElementName = name;
 		this.description = description;
 	}
 		

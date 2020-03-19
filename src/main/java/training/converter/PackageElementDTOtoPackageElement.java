@@ -23,11 +23,8 @@ public class PackageElementDTOtoPackageElement implements Converter<PackageEleme
 		
 		PackageElement packageElement = new PackageElement();
 		packageElement.setPackageElementID(source.getPackageElementID());
-		packageElement.setName(source.getName());
+		packageElement.setPackageElementName(source.getPackageElementName());
 		packageElement.setDescription(source.getDescription());
-		/*if(source.getPackageId() != null) {
-			packageElement.setPackageUnitPE(PackageService.findOne(source.getPackageId()));
-		}*/
 		return packageElement;
 	}
 

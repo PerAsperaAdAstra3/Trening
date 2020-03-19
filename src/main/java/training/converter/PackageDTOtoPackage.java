@@ -18,7 +18,7 @@ public class PackageDTOtoPackage implements Converter<PackageDTO, Package> {
 		
 		Package packageUnit = new Package();
 		packageUnit.setId(source.getId());
-		packageUnit.setNameOfPackage(source.getNameOfPackage());
+		packageUnit.setPackageName(source.getPackageName());
 		packageUnit.setPrice(source.getPrice());
 		
 		return packageUnit;

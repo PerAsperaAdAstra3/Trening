@@ -71,7 +71,7 @@ public class RestPackageController {
 			packageService.save(packageUnit);
 		}
 		
-		obj.put("packElName", packageElement.getName());
+		obj.put("packElName", packageElement.getPackageElementName());
 		obj.put("packElDescription", packageElement.getDescription());
 		obj.put("packElId", elementsInPackages.getPackageElementEIP().getPackageElementID());
 		obj.put("elementsInPackagesNumber", elementsInPackages.getNumber());
@@ -92,7 +92,7 @@ public class RestPackageController {
 		} else {
 			try {
 				ElementsInPackages elementsInPackages = elementsInPackagesService.delete(Long.parseLong(elementsInPackagesDTOAjax.getId()));
-				obj.put("zeroLeft", "yes");
+				obj.put("zeroLeft", true);
 			} catch(Exception e) {
 				LoggingUtil.LoggingMethod(logger, e);
 			}

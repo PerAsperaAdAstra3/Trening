@@ -19,7 +19,7 @@ public class Package {
 	private Long id;
 	
 	@Column
-	private String nameOfPackage;
+	private String packageName;
 
 	@Column
 	private Long price;
@@ -64,19 +64,19 @@ public class Package {
 		this.clientPackages.add(clientPackage);
 	}
 
-	public String getNameOfPackage() {
-		return nameOfPackage;
+	public String getPackageName() {
+		return packageName;
 	}
 
-	public void setNameOfPackage(String nameOfPackage) {
-		this.nameOfPackage = nameOfPackage;
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
 	}
 
 	public Package() {}
 	
-	public Package(String nameOfPackage) {
+	public Package(String packageName) {
 		super();
-		this.nameOfPackage = nameOfPackage;
+		this.packageName = packageName;
 	}
 	
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 <script src="../../scripts/jquery-3.2.1.min.js"></script>
 <script src="../../scripts/bootstrap.min.js"></script>
@@ -317,8 +318,8 @@ $(document).on("click", ".payedTable", function(event) {
 	<tbody id="clientPackageBody">
 		<tr	class="tr-entity-listAllClientPackages tableEdges" th:each = "clientPackage : ${clientPackages}">
 			<td style="width:15%;" class="packageName" th:utext="${clientPackage.nameOfPackage}"></td>
-			<td style="width:15%;" class="packageStatus" th:utext="${clientPackage.clientPackageStatus}"></td>
-			<td><input type="checkbox" name="payedTable" class="payedTable" th:checked="${clientPackage.payed}"/></td>
+			<td style="width:15%;" class="packageStatus" th:utext="${clientPackage.clientPackageActive}"></td>
+			<td sec:authorize="hasAuthority('RECEPCIJA') or hasAuthority('ADMIN')"><input type="checkbox" name="payedTable" class="payedTable" th:checked="${clientPackage.payed}"/></td>
 			<td style="width:15%;" class="packagePrice" th:utext="${clientPackage.priceOfClientPackage}"></td>
 			<td scope="row" class="clientPackageId" th:utext="${clientPackage.id}" style="display:none;"></td>
 			<td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td>

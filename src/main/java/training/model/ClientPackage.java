@@ -26,7 +26,7 @@ public class ClientPackage {
 	private Package packageUnitCP;
 	
 	@Column(name = "clientPackageStatus")
-	private boolean clientPackageStatus;
+	private boolean clientPackageActive;
 	
 	@Column(name = "clientPackagePayed")
 	private boolean payed = false;
@@ -57,12 +57,12 @@ public class ClientPackage {
 		this.clientPackagePrice = clientPackagePrice;
 	}
 
-	public boolean isClientPackageStatus() {
-		return clientPackageStatus;
+	public boolean isClientPackageActive() {
+		return clientPackageActive;
 	}
 
-	public void setClientPackageStatus(boolean clientPackageStatus) {
-		this.clientPackageStatus = clientPackageStatus;
+	public void setClientPackageActive(boolean clientPackageActive) {
+		this.clientPackageActive = clientPackageActive;
 	}
 
 	public Long getId() {
