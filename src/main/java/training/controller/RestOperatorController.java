@@ -36,12 +36,12 @@ public class RestOperatorController {
 	
 	@PostMapping(value = { "/sendPasswordToEmail" })
 	public ResponseEntity<?> sendPasswordToEmail(@Valid @RequestBody OperatorDTO operatorDTO) {
-		List<Operator> operator = operatorService.findByEmail(operatorDTO.getEmail());
+		Operator operator = operatorService.findOneByEmail(operatorDTO.getEmail());
 		
 		String newPassword = PasswordGenUtil.alphaNumericString(10);
-		operator.get(0).setPassword(passwordEncoder.encode(newPassword));
-		operatorService.save(operator.get(0));
-		mailService.sendEmail(operator.get(0), newPassword);
+		operator.setPassword(passwordEncoder.encode(newPassword));
+		operatorService.save(operator);
+		mailService.sendEmail(operator, newPassword);
 		
 		JSONObject obj = new JSONObject();
 		return ResponseEntity.ok(obj.toString());

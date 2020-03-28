@@ -18,6 +18,7 @@ import training.converter.ClientPackageElementToClientPackageElementDTO;
 import training.converter.ClientPackageToClientPackageDTO;
 import training.dto.ClientPackageDTO;
 import training.dto.ClientPackageElementDTO;
+import training.enumerations.ClientPackageStateEnum;
 import training.model.ClientPackage;
 import training.model.ClientPackageElement;
 import training.model.ElementsInPackages;
@@ -52,7 +53,7 @@ public class RestClientManagementController {
 		JSONObject obj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		
-		clientPackageDTO.setClientPackageActive("Aktivan");
+		clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.ACTIVE.getNameText());
 		ClientPackage clientPackage = clientPackageDTOtoClientPackage.convert(clientPackageDTO);
 		clientPackageService.save(clientPackage);
 		List<ClientPackageElement> clientPackageElementsList = new ArrayList<ClientPackageElement>();
@@ -126,15 +127,15 @@ public class RestClientManagementController {
 		
 		obj.put("clientPackageActive", clientPackage.isClientPackageActive());
 		if(clientPackage.isClientPackageActive()) {
-			obj.put("clientPackageActive", "Aktivan");
+			obj.put("clientPackageActive", ClientPackageStateEnum.ACTIVE.getNameText());
 		} else {
-			obj.put("clientPackageActive", "Neaktivan");
+			obj.put("clientPackageActive", ClientPackageStateEnum.NOTACTIVE.getNameText());
 		}
 		
 		if(clientPackageElement.isClientPackageElementStatus()) {
-			obj.put("clientPackageElementState", "Aktivan");
+			obj.put("clientPackageElementState", ClientPackageStateEnum.ACTIVE.getNameText());
 		} else {
-			obj.put("clientPackageElementState", "Neaktivan");
+			obj.put("clientPackageElementState", ClientPackageStateEnum.NOTACTIVE.getNameText());
 		}
 		return ResponseEntity.ok(obj.toString());
 	}

@@ -82,4 +82,14 @@ public class JpaOperatorService implements OperatorService {
 		return oldOperator;
 	}
 
+	@Override
+	public Operator findOneByUserName(String username) {
+		return operatorRepository.findOneByUserName(username);
+	}
+
+	@Override
+	public Operator findOneByEmail(String email) {
+		return operatorRepository.findOneByEmail(email);
+	}
+
 }

@@ -15,5 +15,5 @@ public enum Roles {
 	
 	Roles(final String nameText) {
 		  this.nameText = nameText;
-		  }
+	}
 }

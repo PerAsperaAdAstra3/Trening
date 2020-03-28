@@ -380,7 +380,6 @@ $(document).on("click", "#modal_button", function(event) {
 			if(nooo == 3){
 				el.style.backgroundColor = "yellow"
 			}
-			console.log(el.tagName);
 		});
 	document.getElementById("myDropdown").classList.toggle("show");
 });
@@ -434,7 +433,6 @@ $(document).on("click", "#hideTableRows", function(event) {
 	var els = $(".hidden_input");
 	Array.prototype.forEach.call(els, function(el) {
 		el.style.visibility = 'hidden'
-		console.log(el.tagName);
 	});
 });
 	//Keeping position on page

@@ -1,7 +1,6 @@
-//send password with email
 function forgotEmail(emailAddress){
+//send password with email
 	var operatorDTO = {}
-	alert(emailAddress)
 	operatorDTO["email"] = emailAddress;
 	
 	$.ajax({
@@ -21,12 +20,9 @@ function forgotEmail(emailAddress){
 	})
 }
 
-// Change status
-
 function changeClientPackageStatus(row){
-	
+// Change status
 	var clientPackageDTO = {}
-//	alert($(row).find(".clientPackageId").html())
 	clientPackageDTO["id"] = $(row).find(".clientPackageId").html();
 
 	$.ajax({
@@ -44,15 +40,13 @@ function changeClientPackageStatus(row){
 			if(state == 'Aktivan'){	
 				if(payed == true){
 					$(row).css('background-color', '#c0f8b9');
-				}
-				if(payed == false){
+				} else {
 					$(row).css('background-color', '#eff48a');
 				}
 			} else {
 				if(payed == true){
 					$(row).css('background-color', '#bfc0bf');
-				}
-				if(payed == false){
+				} else {
 					$(row).css('background-color', '#ff8080');
 				}
 			}
@@ -63,31 +57,25 @@ function changeClientPackageStatus(row){
 				var state1 = $(this).find('.packageStatus').html();
 				var payed1 = $(this).find(".payedTable").prop("checked");
 				if(state1 == 'Aktivan'){
-					if(payed1 == true){
-
-					}
 					if(payed1 == false){
 						isItActiveNotPayed = true;
 					}	
 				} else {
-					if(payed1 == true){
-						
-					}
 					if(payed1 == false){
 						isItInactiveNotPayed = true;
 					}
 				}
 			});
 			if(isItActiveNotPayed){
-				$(document).find(".activeNotPayed").removeClass("visibleX");
+				$(document).find(".activeNotPayed").removeClass("visibleClientPackage");
 			} else {
-				$(document).find(".activeNotPayed").addClass("visibleX");
+				$(document).find(".activeNotPayed").addClass("visibleClientPackage");
 			}
 			
 			if(isItInactiveNotPayed){
-				$(document).find(".inactiveNotPayed").removeClass("visibleX");
+				$(document).find(".inactiveNotPayed").removeClass("visibleClientPackage");
 			} else {
-				$(document).find(".inactiveNotPayed").addClass("visibleX");
+				$(document).find(".inactiveNotPayed").addClass("visibleClientPackage");
 			}
 		},
 		error: function (e) {
@@ -96,10 +84,8 @@ function changeClientPackageStatus(row){
 	})
 }
 
-// Delete clients package
-
 function deleteClientPackage(row){
-	
+// Delete clients package
 	var clientPackageDTO = {}
 	clientPackageDTO["id"] = $(row).find(".clientPackageId").html();
 
@@ -112,7 +98,7 @@ function deleteClientPackage(row){
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			$(row).hide()
+			$(row).remove()
 			
 			$("#tr-entity-list .clientPackageElementId").each(function(){
 				if($(row).find(".clientPackageId").html() == $(this).parent().find(".clientPackageElementClientPackageId").html()){
@@ -126,10 +112,8 @@ function deleteClientPackage(row){
 	})
 }
 
-//Use up a package from client.
-
 function useClientPackageElement(row){
-	
+//Use up a package from client.
 	var clientPackageElementDTO = {}
 	clientPackageElementDTO["id"] = $(row).find(".clientPackageElementId").html();
 	
@@ -143,15 +127,7 @@ function useClientPackageElement(row){
 		timeout: 600000,
 		success: function (data){
 			$("#tr-entity-list .clientPackageElementId").each(function(){
-				console.log("Befor log");
-				
-				console.log(data.clientPackageElementState);
-								console.log( 'This : ' + $(this).html())
-				console.log('data.clientPackageElementId : ' + data.clientPackageElementId)
-				
 				if($(this).html() == data.clientPackageElementId){
-					console.log("Usli smo u clientPackageElement")
-
 						$(this).parent().find(".clientPackageElementActiveLeft").html(data.activeLeft);
 						$(this).parent().find(".clientPackageElementState").html(data.clientPackageElementState);
 						if($(this).parent().find(".clientPackageElementActiveLeft").html() == 0){
@@ -163,23 +139,19 @@ function useClientPackageElement(row){
 			$(".tr-entity-listAllClientPackages .clientPackageId").each(function(){
 				if($(this).html() == data.clientPackageId){
 						$(this).parent().find(".packageStatus").html(data.clientPackageActive);
-						
-						
 						var state = data.clientPackageActive;
 						var payed = data.clientPackagePayed;
 
 						if(state == 'Aktivan'){	
 							if(payed == true){
 								$(this).parent().css('background-color', '#c0f8b9');
-							}
-							if(payed == false){
+							} else {
 								$(this).parent().css('background-color', '#eff48a');
 							}
 						} else {
 							if(payed == true){
 								$(this).parent().css('background-color', '#bfc0bf');
-							}
-							if(payed == false){
+							} else {
 								$(this).parent().css('background-color', '#ff8080');
 							}
 						}
@@ -192,31 +164,25 @@ function useClientPackageElement(row){
 				var state1 = $(this).find('.packageStatus').html();
 				var payed1 = $(this).find(".payedTable").prop("checked");
 				if(state1 == 'Aktivan'){
-					if(payed1 == true){
-
-					}
 					if(payed1 == false){
 						isItActiveNotPayed = true;
 					}	
 				} else {
-					if(payed1 == true){
-						
-					}
 					if(payed1 == false){
 						isItInactiveNotPayed = true;
 					}
 				}
 			});
 			if(isItActiveNotPayed){
-				$(document).find(".activeNotPayed").removeClass("visibleX");
+				$(document).find(".activeNotPayed").removeClass("visibleClientPackage");
 			} else {
-				$(document).find(".activeNotPayed").addClass("visibleX");
+				$(document).find(".activeNotPayed").addClass("visibleClientPackage");
 			}
 			
 			if(isItInactiveNotPayed){
-				$(document).find(".inactiveNotPayed").removeClass("visibleX");
+				$(document).find(".inactiveNotPayed").removeClass("visibleClientPackage");
 			} else {
-				$(document).find(".inactiveNotPayed").addClass("visibleX");
+				$(document).find(".inactiveNotPayed").addClass("visibleClientPackage");
 			}
 		},
 		error: function (e) {
@@ -225,10 +191,8 @@ function useClientPackageElement(row){
 	})
 }
 
-//Add package to client
-
 function ajaxAddPackageToClient(packageId, packagePrice){
-	
+//Add package to client
 	var clientPackageDTO = {}
 	clientPackageDTO["clientId"] = $("#clientId").val();
 	clientPackageDTO["packageId"] = packageId;
@@ -255,12 +219,8 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 			} else {
 				checkedVarChar = "";
 			}
-		
-			console.log(data);
-			
 			var state = data["clientPackageJSON"]["clientPackageActive"]
 			var payed = data["clientPackageJSON"]["payed"];
-
 			var colorVar = "";
 				
 				if(payed == "true"){
@@ -311,15 +271,15 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 				}
 			});
 			if(isItActiveNotPayed){
-				$(document).find(".activeNotPayed").removeClass("visibleX");
+				$(document).find(".activeNotPayed").removeClass("visibleClientPackage");
 			} else {
-				$(document).find(".activeNotPayed").addClass("visibleX");
+				$(document).find(".activeNotPayed").addClass("visibleClientPackage");
 			}
 			
 			if(isItInactiveNotPayed){
-				$(document).find(".inactiveNotPayed").removeClass("visibleX");
+				$(document).find(".inactiveNotPayed").removeClass("visibleClientPackage");
 			} else {
-				$(document).find(".inactiveNotPayed").addClass("visibleX");
+				$(document).find(".inactiveNotPayed").addClass("visibleClientPackage");
 			}
 		},
 		error: function (e) {
@@ -375,7 +335,6 @@ $.ajax({
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			console.log(data);	
 			var idTraining = $(".idTraining").val();
 			if(data.modOfOperation == "add"){
 				$("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list" class="trow"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +'</td><td><input type="number" class="packElNumber" name="quantity" min="1" max="99" value="' + data.elementsInPackagesNumber + '"/></td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
@@ -484,7 +443,6 @@ $.ajax({
 		success: function (data){
 			
 		var idTraining = $(".idTraining").val();
-		console.log(data);	
 	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +'</td><td class="roundId" style="display:none;">'+ data.roundId +'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
        	$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
 		$("#exerciseInRoundExerciseId").val(data.exerciseInRoundExerciseId);
@@ -549,7 +507,6 @@ $.ajax({
 		success: function (data){
 			
 		var idTraining = $(".idTraining").val();
-		console.log(data);	
 	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +'</td><td class="roundId" style="display:none;">'+ data.roundId +'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
        	$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
 			
@@ -640,7 +597,6 @@ $.ajax({
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			console.log(data);	
 			var idTraining = $(".idTraining").val();			
 				$("#roundsTable tr").each(function() {
 					removeHighlights(this)
@@ -684,10 +640,8 @@ function ajaxDeleteRound(roundId, thisObject){
 	})
 }
 
-// AJAX Delete Exercise In Round
-
 function ajaxDeleteExerciseInRound(roundId, thisObject){
-	
+// AJAX Delete Exercise In Round
 	var round = {}
 	round["id"] = roundId;
 	

@@ -38,7 +38,8 @@ public class OperatorDetailsService implements UserDetailsService {
 	            List<String> roles = new ArrayList<String>();
 	            roles.add(operator.get(0).getAuthorities());
 	            
-	            return new org.springframework.security.core.userdetails.User(operator.get(0).getUserName(), operator.get(0).getPassword(), true, true, true, true, getAuthorities(roles));
+	            return new org.springframework.security.core.userdetails.User(operator.get(0).getUserName(),
+	            		operator.get(0).getPassword(), true, true, true, true, getAuthorities(roles));
 	        } catch (final Exception e) {
 	            throw new RuntimeException(e);
 	        }

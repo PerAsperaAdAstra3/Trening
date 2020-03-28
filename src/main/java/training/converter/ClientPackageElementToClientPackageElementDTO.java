@@ -8,6 +8,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import training.dto.ClientPackageElementDTO;
+import training.enumerations.ClientPackageStateEnum;
 import training.model.ClientPackageElement;
 
 @Component
@@ -22,9 +23,9 @@ public class ClientPackageElementToClientPackageElementDTO implements Converter<
 		ModelMapper modelMapper = new ModelMapper();
 		ClientPackageElementDTO clientPackageElementDTO = modelMapper.map(source, ClientPackageElementDTO.class);
 		if(source.isClientPackageElementStatus()) {
-			clientPackageElementDTO.setClientPackageElementStatus("Aktivan");
+			clientPackageElementDTO.setClientPackageElementStatus(ClientPackageStateEnum.ACTIVE.getNameText());
 		} else {
-			clientPackageElementDTO.setClientPackageElementStatus("Neaktivan");			
+			clientPackageElementDTO.setClientPackageElementStatus(ClientPackageStateEnum.NOTACTIVE.getNameText());			
 		}
 		clientPackageElementDTO.setDescription(source.getElementsInPackages().getPackageElementEIP().getDescription());
 		clientPackageElementDTO.setName(source.getElementsInPackages().getPackageElementEIP().getPackageElementName());

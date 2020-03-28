@@ -78,21 +78,20 @@ public class OperatorController {
 		String ss = PasswordGenUtil.alphaNumericString(10);
 		mailService.sendEmail(operatorDTO, ss);
 		operatorDTO.setPassword(passwordEncoder.encode(ss));
-		List<Operator> operators = operatorService.findAll();
+
+		List<Operator> operatorsByUsername = operatorService.findByUsername(operatorDTO.getUserName());
+		List<Operator> operatorsByEmail = operatorService.findByEmail(operatorDTO.getEmail());
+		
 		boolean itCanBeAdded = true;
 		if("add".equals(mode)) {
 			operatorDTO.setId(null);
-			for(Operator operator : operators) {
-				if(operator.getUserName().equals(operatorDTO.getUserName())) {
-					nameTaken = true;
-					itCanBeAdded = false;
-					break;
-				}
-				if(operator.getEmail().equals(operatorDTO.getEmail())) {
-					emailTaken = true;
-					itCanBeAdded = false;
-					break;
-				}
+			if(operatorsByUsername.size() > 0) {
+				nameTaken = true;
+				itCanBeAdded = false;
+			}
+			if(operatorsByEmail.size() > 0) {
+				emailTaken = true;
+				itCanBeAdded = false;
 			}
 			if(itCanBeAdded) {
 				nameTaken = false;
@@ -130,7 +129,7 @@ public class OperatorController {
 			username = principal.toString();
 		}
 		
-		model.addAttribute("operatorDTO", operatorToOperatorDTO.convert(operatorService.findByUsername(username).get(0)));
+		model.addAttribute("operatorDTO", operatorToOperatorDTO.convert(operatorService.findOneByUserName(username)));
 		model.addAttribute("authorities", authorities());
 		return "personalInfoManagement";
 	}
@@ -177,7 +176,7 @@ public class OperatorController {
 			username = principal.toString();
 		}
 		
-		Operator currentOperator = operatorService.findByUsername(username).get(0);
+		Operator currentOperator = operatorService.findOneByUserName(username);
 		
 		if(passwordEncoder.matches(passwordChangeDTO.getOldPassword(), currentOperator.getPassword())) {
 			if(passwordChangeDTO.getNewPassword1().equals(passwordChangeDTO.getNewPassword2())) {
@@ -198,14 +197,13 @@ public class OperatorController {
 	
 	@RequestMapping(value = {"/sendEmail"}, method = RequestMethod.POST)
 	public String sendEmail(Model model, @RequestParam String emailAddress) {
-
-		List<Operator> operator = operatorService.findByEmail(emailAddress);
+		Operator operator = operatorService.findOneByEmail(emailAddress);
 		
-		if(operator.size() > 0 ) {
+		if(operator != null) {
 			String newPassword = PasswordGenUtil.alphaNumericString(10);
-			operator.get(0).setPassword(passwordEncoder.encode(newPassword));
-			operatorService.save(operator.get(0));
-			mailService.sendEmail(operator.get(0), newPassword);
+			operator.setPassword(passwordEncoder.encode(newPassword));
+			operatorService.save(operator);
+			mailService.sendEmail(operator, newPassword);
 		} else {
 			model.addAttribute("emailNotInDB", true);
 		}

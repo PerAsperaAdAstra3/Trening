@@ -8,6 +8,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import training.dto.ClientPackageDTO;
+import training.enumerations.ClientPackageStateEnum;
 import training.model.ClientPackage;
 
 @Component
@@ -26,9 +27,9 @@ public class ClientPackageToClientPackageDTO implements Converter<ClientPackage,
 		clientPackageDTO.setPayed(source.isPayed());
 
 		if(source.isClientPackageActive()) {
-			clientPackageDTO.setClientPackageActive("Aktivan");
+			clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.ACTIVE.getNameText());
 		} else { 
-			clientPackageDTO.setClientPackageActive("Neaktivan");
+			clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE.getNameText());
 		}
 
 		return clientPackageDTO;
