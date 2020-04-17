@@ -15,7 +15,7 @@ function forgotEmail(emailAddress){
 			
 		},
 		error: function (e) {
-			alert('Desila se greska prilikom brisanja  klijentovog paketa!')
+			alert('Desila se greska prilikom rešavanja problema zaboravljene lozinke!')
 		}
 	})
 }
@@ -51,32 +51,8 @@ function changeClientPackageStatus(row){
 				}
 			}
 
-			var isItActiveNotPayed = false;
-			var isItInactiveNotPayed = false;
-			$(".tr-entity-listAllClientPackages").each(function(){
-				var state1 = $(this).find('.packageStatus').html();
-				var payed1 = $(this).find(".payedTable").prop("checked");
-				if(state1 == 'Aktivan'){
-					if(payed1 == false){
-						isItActiveNotPayed = true;
-					}	
-				} else {
-					if(payed1 == false){
-						isItInactiveNotPayed = true;
-					}
-				}
-			});
-			if(isItActiveNotPayed){
-				$(document).find(".activeNotPayed").removeClass("visibleClientPackage");
-			} else {
-				$(document).find(".activeNotPayed").addClass("visibleClientPackage");
-			}
-			
-			if(isItInactiveNotPayed){
-				$(document).find(".inactiveNotPayed").removeClass("visibleClientPackage");
-			} else {
-				$(document).find(".inactiveNotPayed").addClass("visibleClientPackage");
-			}
+			payedAndStatusCheck()
+		
 		},
 		error: function (e) {
 			alert('Desila se greska prilikom menjanja statusa klijentovog paketa!')
@@ -158,32 +134,8 @@ function useClientPackageElement(row){
 					}
 				});
 			
-			var isItActiveNotPayed = false;
-			var isItInactiveNotPayed = false;
-			$(".tr-entity-listAllClientPackages").each(function(){
-				var state1 = $(this).find('.packageStatus').html();
-				var payed1 = $(this).find(".payedTable").prop("checked");
-				if(state1 == 'Aktivan'){
-					if(payed1 == false){
-						isItActiveNotPayed = true;
-					}	
-				} else {
-					if(payed1 == false){
-						isItInactiveNotPayed = true;
-					}
-				}
-			});
-			if(isItActiveNotPayed){
-				$(document).find(".activeNotPayed").removeClass("visibleClientPackage");
-			} else {
-				$(document).find(".activeNotPayed").addClass("visibleClientPackage");
-			}
+			payedAndStatusCheck()
 			
-			if(isItInactiveNotPayed){
-				$(document).find(".inactiveNotPayed").removeClass("visibleClientPackage");
-			} else {
-				$(document).find(".inactiveNotPayed").addClass("visibleClientPackage");
-			}
 		},
 		error: function (e) {
 			alert('Desila se greska prilikom brisanja vežbe u krugu!')
@@ -233,54 +185,38 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 			var rowCountClientPackage = $('#clientPackageBody tr').length;
 
 			if(rowCountClientPackage == 0){
-				$('#clientPackageBody').append('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
+				$('#clientPackageBody').append('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +
+						'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +
+						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +
+						'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
 			} else {
-				$('#clientPackageBody tr:nth-child(1)').before('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
+				$('#clientPackageBody tr:nth-child(1)').before('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +
+						'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +
+						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +
+						'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
 			}
 					
 			var rowCountClientPackageElements = $('#clientPackageElementBody tr').length;
 			
 			for(i = 0; i <= data["clientPackageElementsJSON"].length - 1; i++){
 				//clientPackageElementBody
-			if(rowCountClientPackageElements == 0){
-				$('#clientPackageElementBody').append('<tr id="tr-entity-list" class="clientPackageElementsTR"><td scope="row" class="clientPackageElementName">'+data["clientPackageElementsJSON"][i]["name"] +'</td><td scope="row" class="clientPackageElementDescription">'+data["clientPackageElementsJSON"][i]["description"] +'</td><td scope="row" class="clientPackageElementCount">'+data["clientPackageElementsJSON"][i]["count"] +'</td><td scope="row" class="clientPackageElementActiveLeft">'+data["clientPackageElementsJSON"][i]["activeLeft"] +'</td><td scope="row" class="clientPackageElementState">'+data["clientPackageElementsJSON"][i]["clientPackageElementStatus"] +'</td><td scope="row" class="clientPackageElementId" style="display:none;">'+data["clientPackageElementsJSON"][i]["id"] +'</td><td scope="row" class="clientPackageElementClientPackageId" style="display:none;">'+data["clientPackageElementsJSON"][i]["clientPackageId"] +'</td><td><button type="button" class="btn btn-default useUpAPackageElement">Potroši</button></td></tr>');
-			} else {
-				$('#clientPackageElementBody tr:nth-child(1)').before('<tr id="tr-entity-list" class="clientPackageElementsTR"><td scope="row" class="clientPackageElementName">'+data["clientPackageElementsJSON"][i]["name"] +'</td><td scope="row" class="clientPackageElementDescription">'+data["clientPackageElementsJSON"][i]["description"] +'</td><td scope="row" class="clientPackageElementCount">'+data["clientPackageElementsJSON"][i]["count"] +'</td><td scope="row" class="clientPackageElementActiveLeft">'+data["clientPackageElementsJSON"][i]["activeLeft"] +'</td><td scope="row" class="clientPackageElementState">'+data["clientPackageElementsJSON"][i]["clientPackageElementStatus"] +'</td><td scope="row" class="clientPackageElementId" style="display:none;">'+data["clientPackageElementsJSON"][i]["id"] +'</td><td scope="row" class="clientPackageElementClientPackageId" style="display:none;">'+data["clientPackageElementsJSON"][i]["clientPackageId"] +'</td><td><button type="button" class="btn btn-default useUpAPackageElement">Potroši</button></td></tr>');
-			}
-			}
-			
-			var isItActiveNotPayed = false;
-			var isItInactiveNotPayed = false;
-			$(".tr-entity-listAllClientPackages").each(function(){
-				var state1 = $(this).find('.packageStatus').html();
-				var payed1 = $(this).find(".payedTable").prop("checked");
-				if(state1 == 'Aktivan'){
-					if(payed1 == true){
-
-					}
-					if(payed1 == false){
-						isItActiveNotPayed = true;
-					}	
+				if(rowCountClientPackageElements == 0){
+					$('#clientPackageElementBody').append('<tr id="tr-entity-list" class="clientPackageElementsTR"><td scope="row" class="clientPackageElementName">'+data["clientPackageElementsJSON"][i]["name"] +
+							'</td><td scope="row" class="clientPackageElementDescription">'+data["clientPackageElementsJSON"][i]["description"] +'</td><td scope="row" class="clientPackageElementCount">'+data["clientPackageElementsJSON"][i]["count"] +
+							'</td><td scope="row" class="clientPackageElementActiveLeft">'+data["clientPackageElementsJSON"][i]["activeLeft"] +'</td><td scope="row" class="clientPackageElementState">'+data["clientPackageElementsJSON"][i]["clientPackageElementStatus"] +
+							'</td><td scope="row" class="clientPackageElementId" style="display:none;">'+data["clientPackageElementsJSON"][i]["id"] +'</td><td scope="row" class="clientPackageElementClientPackageId" style="display:none;">'+data["clientPackageElementsJSON"][i]["clientPackageId"] +
+							'</td><td><button type="button" class="btn btn-default useUpAPackageElement">Potroši</button></td></tr>');
 				} else {
-					if(payed1 == true){
-						
-					}
-					if(payed1 == false){
-						isItInactiveNotPayed = true;
-					}
+					$('#clientPackageElementBody tr:nth-child(1)').before('<tr id="tr-entity-list" class="clientPackageElementsTR"><td scope="row" class="clientPackageElementName">'+data["clientPackageElementsJSON"][i]["name"] +
+							'</td><td scope="row" class="clientPackageElementDescription">'+data["clientPackageElementsJSON"][i]["description"] +'</td><td scope="row" class="clientPackageElementCount">'+data["clientPackageElementsJSON"][i]["count"] +
+							'</td><td scope="row" class="clientPackageElementActiveLeft">'+data["clientPackageElementsJSON"][i]["activeLeft"] +'</td><td scope="row" class="clientPackageElementState">'+data["clientPackageElementsJSON"][i]["clientPackageElementStatus"] +
+							'</td><td scope="row" class="clientPackageElementId" style="display:none;">'+data["clientPackageElementsJSON"][i]["id"] +'</td><td scope="row" class="clientPackageElementClientPackageId" style="display:none;">'+data["clientPackageElementsJSON"][i]["clientPackageId"] +
+							'</td><td><button type="button" class="btn btn-default useUpAPackageElement">Potroši</button></td></tr>');
 				}
-			});
-			if(isItActiveNotPayed){
-				$(document).find(".activeNotPayed").removeClass("visibleClientPackage");
-			} else {
-				$(document).find(".activeNotPayed").addClass("visibleClientPackage");
 			}
 			
-			if(isItInactiveNotPayed){
-				$(document).find(".inactiveNotPayed").removeClass("visibleClientPackage");
-			} else {
-				$(document).find(".inactiveNotPayed").addClass("visibleClientPackage");
-			}
+			payedAndStatusCheck()
+			
 		},
 		error: function (e) {
 			alert('Desila se greska prilikom brisanja vežbe u krugu!')
@@ -337,7 +273,9 @@ $.ajax({
 		success: function (data){
 			var idTraining = $(".idTraining").val();
 			if(data.modOfOperation == "add"){
-				$("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list" class="trow"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +'</td><td><input type="number" class="packElNumber" name="quantity" min="1" max="99" value="' + data.elementsInPackagesNumber + '"/></td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
+				$("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list" class="trow"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +
+						'</td><td><input type="number" class="packElNumber" name="quantity" min="1" max="99" value="' + data.elementsInPackagesNumber + '"/></td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +
+						'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
 			} else {
 				$("#tr-entity-list .elemInPackagesId").each(function(){
 					if($(this).html() == data.elemInPackagesId){
@@ -372,7 +310,9 @@ $.ajax({
 		timeout: 600000,
 		success: function (data){
 
-		    $("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +'</td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
+		    $("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +
+		    		'</td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +
+		    		'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
 		},
 		error: function (e) {
 			 var json = "<h4>Ajax Response</h4>";
@@ -443,7 +383,9 @@ $.ajax({
 		success: function (data){
 			
 		var idTraining = $(".idTraining").val();
-	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +'</td><td class="roundId" style="display:none;">'+ data.roundId +'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +
+	    		'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +
+	    		'</td><td class="roundId" style="display:none;">'+ data.roundId +'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
        	$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
 		$("#exerciseInRoundExerciseId").val(data.exerciseInRoundExerciseId);
 		},
@@ -507,7 +449,10 @@ $.ajax({
 		success: function (data){
 			
 		var idTraining = $(".idTraining").val();
-	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +'</td><td class="roundId" style="display:none;">'+ data.roundId +'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +
+	    		'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +
+	    		'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +'</td><td class="roundId" style="display:none;">'+ data.roundId +
+	    		'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
        	$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
 			
 		},
@@ -601,7 +546,8 @@ $.ajax({
 				$("#roundsTable tr").each(function() {
 					removeHighlights(this)
 				});
-		    $("#roundsTable tr:last").after('<tr id="round-id-sync" class="highlighted"><td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber">'+ data.roundRoundSequenceNumber +'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><a href="/deleteRound/'+data.selectedRoundId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+		    $("#roundsTable tr:last").after('<tr id="round-id-sync" class="highlighted"><td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber">'+ data.roundRoundSequenceNumber +
+		    		'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><a href="/deleteRound/'+data.selectedRoundId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
 		    selectRoundIdOnRowClick($(".highlighted"));
 		},
 		error: function (e) {
@@ -704,4 +650,33 @@ function PDFprintAjaxListPage(trainingId){
 			alert('Desila se greška prilikom štampanja PDF-a - dokument otvoren!')
 		}
 	})
+}
+
+function payedAndStatusCheck(){
+	var isItActiveNotPayed = false;
+	var isItInactiveNotPayed = false;
+	$(".tr-entity-listAllClientPackages").each(function(){
+		var state1 = $(this).find('.packageStatus').html();
+		var payed1 = $(this).find(".payedTable").prop("checked");
+		if(state1 == 'Aktivan'){
+			if(payed1 == false){
+				isItActiveNotPayed = true;
+			}	
+		} else {
+			if(payed1 == false){
+				isItInactiveNotPayed = true;
+			}
+		}
+	});
+	if(isItActiveNotPayed){
+		$(document).find(".activeNotPayed").removeClass("visibleClientPackage");
+	} else {
+		$(document).find(".activeNotPayed").addClass("visibleClientPackage");
+	}
+
+	if(isItInactiveNotPayed){
+		$(document).find(".inactiveNotPayed").removeClass("visibleClientPackage");
+	} else {
+		$(document).find(".inactiveNotPayed").addClass("visibleClientPackage");
+	}
 }

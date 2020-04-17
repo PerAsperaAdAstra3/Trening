@@ -63,8 +63,8 @@ public class ElementsInPackages {
 		return package1;
 	}
 
-	public void setPackage(Package package2) {
-		this.package1 = package2;
+	public void setPackage(Package package1) {
+		this.package1 = package1;
 	}
 	
 	public PackageElement getPackageElementEIP() {
@@ -77,9 +77,9 @@ public class ElementsInPackages {
 
 	public ElementsInPackages() {}
 	
-	public ElementsInPackages(Long packageElementId, Package package2) {
+	public ElementsInPackages(Long packageElementId, Package package1) {
 		super();
-		this.package1 = package2;
+		this.package1 = package1;
 	}
 	
 }

@@ -74,9 +74,6 @@ public class JpaOperatorService implements OperatorService {
 		oldOperator.setPersonalName(operator.getPersonalName());
 		oldOperator.setFamilyName(operator.getFamilyName());
 		oldOperator.setEmail(operator.getEmail());
-	/*	for(String action : operator.getActionList()) {
-			oldOperator.setActionList(action);
-		}*/
 		operatorRepository.save(oldOperator);
 		
 		return oldOperator;

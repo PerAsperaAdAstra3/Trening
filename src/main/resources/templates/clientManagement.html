@@ -218,7 +218,7 @@ $(document).on("click", ".payedTable", function(event) {
 	</thead>
 	<tbody>
 		<tr	id="tr-entity-listAllPackages" class="trP" th:each = "package : ${allPackages}">
-			<td style="width:25%;" class="packageName" th:utext="${package.nameOfPackage}"></td>
+			<td style="width:25%;" class="packageName" th:utext="${package.packageName}"></td>
 			<td style="width:25%;" class="priceOfPackage tdP" th:utext="${package.price}"></td>
 			<td scope="row" class="packageId" th:utext="${package.id}" style="display:none;"></td>
 							<td>

@@ -153,7 +153,7 @@ function selectPackageIdOnRowClick(row){
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label class="label-width-1" for="name">Naziv:</label>
-			<input  type="text" th:field="*{nameOfPackage}" id="nameOfPackage" class="form-control" />
+			<input  type="text" th:field="*{packageName}" id="nameOfPackage" class="form-control" />
 		</div>
 	<div class="col-xs-2">
 			<label class="label-width-1" for="name">Cena:</label>
@@ -186,7 +186,7 @@ function selectPackageIdOnRowClick(row){
 	</thead>
 	<tbody >
 		<tr	id="tr-entity-list-package" class="trP" th:each = "package : ${packages}">
-			<td style="width:15%;" scope="row" class="nameOfPackage tdP" th:utext="${package.nameOfPackage}"></td>
+			<td style="width:15%;" scope="row" class="nameOfPackage tdP" th:utext="${package.packageName}"></td>
 			<td style="width:15%;" scope="row" class="priceOfPackage tdP" th:utext="${package.price}"></td>
 			<td scope="row" class="packageId tdP" th:utext="${package.id}" style="display:none;"></td>
 			<td style="width:15%;" scope="row">
