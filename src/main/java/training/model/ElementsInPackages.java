@@ -25,7 +25,7 @@ public class ElementsInPackages {
 	
 	@ManyToOne
 	@JoinColumn(name = "elementsInPackages")
-	private Package package1;
+	private Package elementsPackage;
 	
 	@ManyToOne
 	@JoinColumn(name = "elementsInPackagesPE")
@@ -60,11 +60,11 @@ public class ElementsInPackages {
 	}
 
 	public Package getPackage() {
-		return package1;
+		return elementsPackage;
 	}
 
-	public void setPackage(Package package1) {
-		this.package1 = package1;
+	public void setPackage(Package elementsPackage) {
+		this.elementsPackage = elementsPackage;
 	}
 	
 	public PackageElement getPackageElementEIP() {
@@ -77,9 +77,9 @@ public class ElementsInPackages {
 
 	public ElementsInPackages() {}
 	
-	public ElementsInPackages(Long packageElementId, Package package1) {
+	public ElementsInPackages(Long packageElementId, Package elementsPackage) {
 		super();
-		this.package1 = package1;
+		this.elementsPackage = elementsPackage;
 	}
 	
 }

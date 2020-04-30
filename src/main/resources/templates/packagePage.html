@@ -129,16 +129,7 @@ function selectPackageIdOnRowClick(row){
 </head>
 <body>
 	<div class="alert div1" role="alert">
-	<div>
-		<a href="/" class="home">Početna</a>
-	<div style="float:right" class="dropdown">
- 		 <img src="/images/COG2a2.png"/>
-		  <div class="dropdown-content">
-		    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
-		    <a th:href="@{/logout}">Odlogujte se</a>
-		  </div>
-	</div>
-		</div>
+	<div th:include="fragments/header :: header"></div>
 		<h1 align="center">Paketi u sistemu</h1>
 	</div>
 

@@ -69,8 +69,8 @@ public class JpaElementsInPackagesService implements ElementsInPackagesService {
 	}
 
 	@Override
-	public ElementsInPackages filter(Package package1, PackageElement packageElement) {
-		return elementsInPackagesRepository.findByPackage1AndPackageElementEIP(package1, packageElement);
+	public ElementsInPackages filter(Package elementsPackage, PackageElement packageElement) {
+		return elementsInPackagesRepository.findByElementsPackageAndPackageElementEIP(elementsPackage, packageElement);
 	}
 
 }

@@ -34,14 +34,14 @@ $(document).ready(function(){
 		var state = $(el).find(".packageStatus").html();
 		var payed = $(el).find(".payedTable").prop("checked");
 		if(state == 'Aktivan'){	
-			if(payed == true){
+			if(payed){
 				el.style.backgroundColor = "#c0f8b9"	
 			} else {
 				$(document).find(".activeNotPayed").removeClass("visibleClientPackage");
 				el.style.backgroundColor = "#eff48a"
 			}
 		} else {
-			if(payed == true){
+			if(payed){
 				el.style.backgroundColor = "#bfc0bf"
 			} else {
 				$(document).find(".inactiveNotPayed").removeClass("visibleClientPackage");
@@ -63,10 +63,6 @@ $(document).on("click", ".addPackageToClient", function(event) {
 	var packageId = $(this).parent().parent().find(".packageId").html();
 	var packagePrice = $(this).parent().parent().find(".priceOfPackage").html();
 	ajaxAddPackageToClient(packageId, packagePrice);
-	
-	/*$(".numberOfElements").val("");
-	var packageId = $(this).parent().parent().find(".packageId").html();
-	$(".packageElementHidden").val(packageId); */
 });
 
 $(document).on("click", "#setNumber", function(event) {
@@ -85,8 +81,8 @@ function sync1(item){
 	$("#tr-entity-list .clientPackageElementClientPackageId").each(function(){
 		if ($(this).html() != clientPackageId)
 			$(this).parent().hide()
-			else
-				$(this).parent().show()
+		else
+			$(this).parent().show()
 	});
 }
 
@@ -95,15 +91,9 @@ function sync2(item){
 	$("#tr-entity-list-modal .packElpackageId").each(function(){
 		if ($(this).html() != clientPackageId)
 			$(this).parent().hide()
-			else
-				$(this).parent().show()
+		else
+			$(this).parent().show()
 	});
-}
-
-function selectPackageIdOnRowClick2(row){
-
-	sync2($(row));
-
 }
 
 function selectPackageIdOnRowClick(row){
@@ -111,12 +101,11 @@ function selectPackageIdOnRowClick(row){
 	$(row).parent().find(".highlighted").removeClass("highlighted");
 	$(row).addClass("highlighted");
 	sync1($(row));
-
 }
 
 $(document).on("click", "#modal_button", function(event) {
 	var tableRow = $(this).parent().parent();
-	selectPackageIdOnRowClick2(tableRow)
+	sync2(tableRow);
 });
 
 $(document).on("click", ".useUpAPackageElement", function(event) {
@@ -128,8 +117,6 @@ $(document).on("click", ".deleteClientPackage", function(event) {
 	var tableRow = $(this).parent().parent();
 	if (confirm('Da li ste sigurni da želite da brišete klijentov paket?')) {
 		deleteClientPackage(tableRow)
-	} else {
-
 	}
 });
 
@@ -143,16 +130,7 @@ $(document).on("click", ".payedTable", function(event) {
 </head>
 <body>
 <div class="alert div1" role="alert">
-	<div>
-		<a href="/" class="home">Početna</a>
-		<div style="float:right" class="dropdown">
- 		 <img src="/images/COG2a2.png"/>
-		  <div class="dropdown-content">
-		    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
-		    <a th:href="@{/logout}">Odlogujte se</a>
-		  </div>
-	</div>
-	</div>
+	<div th:include="fragments/header :: header"></div>
 	<h1 align="center"><span th:utext="${client.name + ' ' + client.familyName}"></span> - Paketi</h1>
 </div>
 <h2 class = "activeNotPayed visibleClientPackage" style="color:#f5d142">Imate aktivne neplaćene pakete! <img src="/images/Exclamation2.png"/></h2>
@@ -171,14 +149,14 @@ $(document).on("click", ".payedTable", function(event) {
 		<br/>
 	</div>
 	<table id="clientPackageElementsTable" class="tbodyPackage tablePackage">
-		<thead class="thead">
+	<thead class="thead">
 			<tr>
-			<th  style="width:15%;" scope="col">Naziv</th>
-			<th  style="width:15%;" scope="col">Opis</th>
-			<th  style="width:15%;" scope="col">Broj Aktivnih</th>
-			<th  style="width:15%;" scope="col">Preostalo</th>
-			<th  style="width:15%;" scope="col">Stanje</th>
-			<th  style="width:15%;" scope="col"></th>
+			<th style="width:15%;" scope="col">Naziv</th>
+			<th style="width:15%;" scope="col">Opis</th>
+			<th style="width:15%;" scope="col">Broj Aktivnih</th>
+			<th style="width:15%;" scope="col">Preostalo</th>
+			<th style="width:15%;" scope="col">Stanje</th>
+			<th style="width:15%;" scope="col"></th>
 		</tr>
 	</thead>
 	<tbody id="clientPackageElementBody">
@@ -198,7 +176,7 @@ $(document).on("click", ".payedTable", function(event) {
 </div>
 
 <div style="width:40%" class="col-xs-2 divPackage roundedEdges">
-<h2>Paketi u sistemu : </h2>
+<h2>Paketi u sistemu :</h2>
 <form method="POST">
 	<br/>
 	<div>
@@ -221,11 +199,8 @@ $(document).on("click", ".payedTable", function(event) {
 			<td style="width:25%;" class="packageName" th:utext="${package.packageName}"></td>
 			<td style="width:25%;" class="priceOfPackage tdP" th:utext="${package.price}"></td>
 			<td scope="row" class="packageId" th:utext="${package.id}" style="display:none;"></td>
-							<td>
-			<button type="button" class="btn btn-success addPackageToClient">Dodaj</button></td>
-			<td>
-			<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Detalji</button></td>
-
+			<td><button type="button" class="btn btn-success addPackageToClient">Dodaj</button></td>
+			<td><button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Detalji</button></td>
 		</tr>
 	</tbody>
 </table>
@@ -282,8 +257,7 @@ $(document).on("click", ".payedTable", function(event) {
 		</tr>
 	</tbody>
 	</table>
-	</div>
-
+	    </div>
       </div>
     </div>
   </div>
@@ -305,11 +279,11 @@ $(document).on("click", ".payedTable", function(event) {
 	<table id="packageTable" class="tbodyPackage tablePackage tableEdges">
 		<thead class="thead">
 			<tr class="tableEdges">
-			<th  style="width:15%;" scope="col">Naziv</th>
-			<th  style="width:15%;" scope="col">Aktivan</th>
-			<th  style="width:15%;" scope="col">Plaćen</th>
-			<th  style="width:15%;" scope="col">Cena</th>
-			<th  style="width:15%;" scope="col"></th>
+			<th style="width:15%;" scope="col">Naziv</th>
+			<th style="width:15%;" scope="col">Aktivan</th>
+			<th style="width:15%;" scope="col">Plaćen</th>
+			<th style="width:15%;" scope="col">Cena</th>
+			<th style="width:15%;" scope="col"></th>
 		</tr>
 	</thead>
 	<tbody id="clientPackageBody">

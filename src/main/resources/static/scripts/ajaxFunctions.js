@@ -38,13 +38,13 @@ function changeClientPackageStatus(row){
 			var state = $(row).find(".packageStatus").html();
 			var payed = $(row).find(".payedTable").prop("checked");
 			if(state == 'Aktivan'){	
-				if(payed == true){
+				if(payed){
 					$(row).css('background-color', '#c0f8b9');
 				} else {
 					$(row).css('background-color', '#eff48a');
 				}
 			} else {
-				if(payed == true){
+				if(payed){
 					$(row).css('background-color', '#bfc0bf');
 				} else {
 					$(row).css('background-color', '#ff8080');
@@ -119,13 +119,13 @@ function useClientPackageElement(row){
 						var payed = data.clientPackagePayed;
 
 						if(state == 'Aktivan'){	
-							if(payed == true){
+							if(payed){
 								$(this).parent().css('background-color', '#c0f8b9');
 							} else {
 								$(this).parent().css('background-color', '#eff48a');
 							}
 						} else {
-							if(payed == true){
+							if(payed){
 								$(this).parent().css('background-color', '#bfc0bf');
 							} else {
 								$(this).parent().css('background-color', '#ff8080');
@@ -149,9 +149,7 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 	clientPackageDTO["clientId"] = $("#clientId").val();
 	clientPackageDTO["packageId"] = packageId;
 	clientPackageDTO["payed"] = $(".payed").prop("checked");
-	clientPackageDTO["priceOfClientPackage"] = packagePrice; //$(".priceOfPackage").html();
-	
-	xxx = $(".payed").prop("checked");
+	clientPackageDTO["priceOfClientPackage"] = packagePrice;
 	
 	$.ajax({
 		type: "POST",
@@ -164,7 +162,6 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 		success: function (data){
 	
 			var checkedVar = true;
-			var checkedVarChar = "checked";
 			
 			if(data["clientPackageJSON"]["payed"] == "true"){
 				checkedVarChar = "checked";
@@ -173,14 +170,12 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 			}
 			var state = data["clientPackageJSON"]["clientPackageActive"]
 			var payed = data["clientPackageJSON"]["payed"];
-			var colorVar = "";
 				
-				if(payed == "true"){
-					colorVar = '"background-color: rgb(192, 248, 185);"'
-				}
-				if(payed == "false"){
-					colorVar = '"background-color: rgb(239, 244, 138);"'
-				}
+			if(payed == "true"){
+				colorVar = '"background-color: rgb(192, 248, 185);"'
+			} else {
+				colorVar = '"background-color: rgb(239, 244, 138);"'
+			}
 			
 			var rowCountClientPackage = $('#clientPackageBody tr').length;
 
@@ -659,11 +654,11 @@ function payedAndStatusCheck(){
 		var state1 = $(this).find('.packageStatus').html();
 		var payed1 = $(this).find(".payedTable").prop("checked");
 		if(state1 == 'Aktivan'){
-			if(payed1 == false){
+			if(!payed1){
 				isItActiveNotPayed = true;
 			}	
 		} else {
-			if(payed1 == false){
+			if(!payed1){
 				isItInactiveNotPayed = true;
 			}
 		}

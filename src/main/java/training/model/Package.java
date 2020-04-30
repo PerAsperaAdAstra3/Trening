@@ -24,7 +24,7 @@ public class Package {
 	@Column
 	private Long price;
 	
-	@OneToMany(mappedBy = "package1", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "elementsPackage", cascade = CascadeType.ALL)
 	private List<ElementsInPackages> elementsInPackages = new ArrayList<ElementsInPackages>();
 	
 	@OneToMany(mappedBy = "packageUnitCP", cascade = CascadeType.ALL)
