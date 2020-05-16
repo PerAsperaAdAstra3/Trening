@@ -7,6 +7,16 @@ h2 {
     margin-left: 35px;
 }
 
+.errorText {
+	font-weight: bold;
+	color: red;
+}
+
+.successText {
+	font-weight: bold;
+	color: green;
+}
+
 .sameRow {
 	display: flex;
 }
@@ -198,6 +208,10 @@ table {
   color: black;
   text-decoration: none;
   display: block;
+}
+
+.left-spacing-nbsp {
+  margin-left: 10px;
 }
 
 .dropdown-content a:hover {background-color: #ddd;}

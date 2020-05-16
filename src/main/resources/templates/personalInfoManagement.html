@@ -39,9 +39,6 @@ $(document).ready(function(){
 		$("#mustHaveEmailField").show();
 	}
 	
-	if(exerciseInRoundExerciseName == ""){
-		errorUsername
-	}
 });
 
 $(document).on("change keyup paste", "#email", function(event) {
@@ -57,13 +54,6 @@ $(document).on("change keyup paste", "#email", function(event) {
 		$("#mustHaveEmailField").hide();
 		$("#editButton").prop("disabled",false);
 	}
-/*	if(emailVar != ""){
-		if(usernameVar != ""){
-			$("#editButton").prop( "disabled", false);
-		} else {
-			$("#editButton").prop( "disabled", true);
-		}
-	}*/
 });
 
 $(document).on("change keyup paste", "#userName", function(event) {
@@ -95,8 +85,8 @@ $(document).on("change keyup paste", "#userName", function(event) {
 <h2>Izmena ličnih podešavanja</h2>
 	
 <div class="panel">
-	<label id="errorExerciseName" class="errorText"><font color="red"><b>Unesite Email adresu!</b></font></label>
-	<label id="errorUsername" class="errorText"><font color="red"><b>Unesite korisničko ime!</b></font></label>
+	<label id="errorExerciseName" class="errorText">Unesite Email adresu!</label>
+	<label id="errorUsername" class="errorText">Unesite korisničko ime!</label>
 	<form style="padding-left:3em" th:action="@{/editSelf}" th:object="${operatorDTO}" method="POST">
 	<input type="hidden" th:field="*{id}" id="id" />
 	
@@ -118,7 +108,7 @@ $(document).on("change keyup paste", "#userName", function(event) {
 		<div class="col-xs-2">
 			<label class="label-width-1" for="*{email}">Email:</label>
 			<input  type="text" th:field="*{email}" id="email" class="form-control" />
-			&nbsp;&nbsp;<img id="emailRedDot" src="/images/red-exclamation30.png"/> <label id="mustHaveEmailField">(Obavezno polje)</label>
+			<img id="emailRedDot" class="left-spacing-nbsp" src="/images/red-exclamation30.png"/><label id="mustHaveEmailField">(Obavezno polje)</label>
 		</div>
 	</div>
 	

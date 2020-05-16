@@ -1,25 +1,26 @@
 function highlightRow(row){
 	if(!$(row).hasClass("header")){
-		$(row).parent().find(".highlighted").removeClass("highlighted");
-    	$(row).addClass("highlighted");
+		rowHighlightPart(row)
     	sync($(row));
     }
 }
 
 function highlightRowPackage(row){
 	if(!$(row).hasClass("header")){
-		$(row).parent().find(".highlighted").removeClass("highlighted");
-    	$(row).addClass("highlighted");
+		rowHighlightPart(row)
     	syncPackage($(row));
     }
 }
 
 function highlightRowClientPackage(row){
 	if(!$(row).hasClass("header")){
-		$(row).parent().find(".highlighted").removeClass("highlighted");
-    	$(row).addClass("highlighted");
-    	//syncClientPackageELement($(row));
+		rowHighlightPart(row)
     }
+}
+
+function rowHighlightPart(row){
+	$(row).parent().find(".highlighted").removeClass("highlighted");
+	$(row).addClass("highlighted");
 }
 
 function goFirst(){

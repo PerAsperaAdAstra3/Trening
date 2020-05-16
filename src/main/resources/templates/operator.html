@@ -10,148 +10,139 @@
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 <script th:inline="javascript">
 /*<![CDATA[*/  
-	$(document).ready(function(){
+$(document).ready(function(){
 		
-		var isEmailSet = false;
-		var isUsernameSet = false;
-		var usernameTaken = /*[[${usernameTaken}]]*/ 'default';
-		var emailTaken = /*[[${emailTaken}]]*/ 'default';
-		var emailFormatBadVar = /*[[${emailFormatBad}]]*/ 'default';
+	var isEmailSet = false;
+	var isUsernameSet = false;
+	var usernameTaken = /*[[${usernameTaken}]]*/ 'default';
+	var emailTaken = /*[[${emailTaken}]]*/ 'default';
+	var emailFormatBadVar = /*[[${emailFormatBad}]]*/ 'default';
 	
-		$("#errorExerciseName").hide();
-		$("#errorUsername").hide();
+	$("#errorExerciseName").hide();
+	$("#errorUsername").hide();
 		
-		if(usernameTaken){
-			$("#usernameTakenMessage").show();
-		} else {
-			$("#usernameTakenMessage").hide();
-		}
+/*	if(usernameTaken){
+		$("#usernameTakenMessage").show();
+	} else {
+		$("#usernameTakenMessage").hide();
+	}*/
 		
-		if(emailTaken){
-			$("#emailTakenMessage").show();
-		} else {
-			$("#emailTakenMessage").hide();
-		}
+/*	if(emailTaken){
+		$("#emailTakenMessage").show();
+	} else {
+		$("#emailTakenMessage").hide();
+	}*/
 		
-		if(emailFormatBadVar){
-			$("#emailFormatBadMessage").show();
-		} else {
-			$("#emailFormatBadMessage").hide();
-		}
-		
-	});
-		// script here
+	if(emailFormatBadVar){
+		$("#emailFormatBadMessage").show();
+	} else {
+		$("#emailFormatBadMessage").hide();
+	}
+});
 
-
-	$(document).on("change keyup paste", "#email", function(event) {
-		var emailVar = $("#email").val();
-		var usernameVar = $("#userName").val();
+$(document).on("change keyup paste", "#email", function(event) {
+	var emailVar = $("#email").val();
+	var usernameVar = $("#userName").val();
 		
-		if(emailVar == ""){
-			$("#emailRedDot").show();
-			$("#mustHaveEmailField").show();
-		} else {
-			$("#emailRedDot").hide();
-			$("#mustHaveEmailField").hide();
-		}
-		if(emailVar != ""){
-			if(usernameVar != ""){
-				$("#addButton").prop("disabled", false);
-			} else {
-				$("#addButton").prop("disabled", true);
-			}
+	if(emailVar == ""){
+		$("#emailRedDot").show();
+		$("#mustHaveEmailField").show();
+		$("#addButton").prop("disabled", true);
+	} else {
+		$("#emailRedDot").hide();
+		$("#mustHaveEmailField").hide();
+			
+		if(usernameVar != ""){
+			$("#addButton").prop("disabled", false);
 		} else {
 			$("#addButton").prop("disabled", true);
 		}
-	});
+	}
+});
 	
-	$(document).on("change keyup paste", "#userName", function(event) {
-		var usernameVar = $("#userName").val();
-		var emailVar = $("#email").val();
+$(document).on("change keyup paste", "#userName", function(event) {
+	var usernameVar = $("#userName").val();
+	var emailVar = $("#email").val();
 		
-		if(usernameVar == ""){
-			$("#usernameRedDot").show();
-			$("#mustHaveUsernameField").show();
-		} else {
-			$("#usernameRedDot").hide();
-			$("#mustHaveUsernameField").hide();
-		}
-		
-		if(usernameVar != ""){
-			if(emailVar != ""){
-				$("#addButton").prop( "disabled", false);
-			} else {
-				$("#addButton").prop( "disabled", true);
-			}
+	if(usernameVar == ""){
+		$("#usernameRedDot").show();
+		$("#mustHaveUsernameField").show();
+		$("#addButton").prop( "disabled", true);
+	} else {
+		$("#usernameRedDot").hide();
+		$("#mustHaveUsernameField").hide();
+		if(emailVar != ""){
+			$("#addButton").prop( "disabled", false);
 		} else {
 			$("#addButton").prop( "disabled", true);
 		}
-	});
-	
-	$(document).on("click", "#tr-entity-list", function(event) {
-		highlightRow(this)
-		var usernameVar = $("#userName").val();
-		var emailVar = $("#email").val();
-		if(usernameVar != ""){
-			$("#errorUsername").hide();
-			$("#usernameRedDot").hide();
-		}
-		if(emailVar != ""){
-			$("#errorExerciseName").hide();
-			$("#emailRedDot").hide();
-		}
-	});
-	
-	$(document).on("click", "#search", function(event) {
-		$("#hidden_input").css('display','table-row');
-	});
-	
-	$(document).on("click", "#resetButton", function(event) {
-			document.getElementById("editButton").disabled = true;
-	});
-
-	function sync(item){
-		userName = item.find(".userName").html()
-	    operatorId = item.find(".operatorId").html()
-	    authorities = item.find(".authorities").html()
-	    personalName = item.find(".personalName").html()
-	    familyName = item.find(".familyName").html()
-	    email = item.find(".email").html()
-	    
-	    document.getElementById("editButton").disabled = false;
-		
-	    $("#id").val(operatorId);
-	    $("#userName").val(userName);
-	    $("#authority").val(authorities);
-	    $("#personalName").val(personalName);
-	    $("#familyName").val(familyName);
-	    $("#email").val(email);
 	}
+});
+	
+$(document).on("click", "#tr-entity-list", function(event) {
+	highlightRow(this)
+	var usernameVar = $("#userName").val();
+	var emailVar = $("#email").val();
+	if(usernameVar != ""){
+		$("#errorUsername").hide();
+		$("#usernameRedDot").hide();
+	}
+	if(emailVar != ""){
+		$("#errorExerciseName").hide();
+		$("#emailRedDot").hide();
+	}
+});
+	
+$(document).on("click", "#search", function(event) {
+	$("#hidden_input").css('display','table-row');
+});
+	
+$(document).on("click", "#resetButton", function(event) {
+	document.getElementById("editButton").disabled = true;
+});
+
+function sync(item){
+	userName = item.find(".userName").html()
+    operatorId = item.find(".operatorId").html()
+    authorities = item.find(".authorities").html()
+    personalName = item.find(".personalName").html()
+    familyName = item.find(".familyName").html()
+    email = item.find(".email").html()
+    
+    document.getElementById("editButton").disabled = false;
+	
+    $("#id").val(operatorId);
+    $("#userName").val(userName);
+    $("#authority").val(authorities);
+    $("#personalName").val(personalName);
+    $("#familyName").val(familyName);
+    $("#email").val(email);
+}
 /*]]>*/
 </script>
 </head>
 <body>
 	<div class="alert div1" role="alert">
 		<div th:include="fragments/header :: header"></div>
-		<h1 align="center">Operateri u sistemu</h1>
+		<h1 align="center">Korisnici u sistemu</h1>
 	</div>
 	
 <h2>Dodavanje i izmena operatera</h2>
 	
 <div class="panel">
 	<form style="padding-left:3em" th:action="@{/addOperator}" th:object="${operatorDTO}" method="POST">
-	<label id="errorExerciseName" class="errorText"><font color="red"><b>Unesite Email adresu!</b></font></label>
-	<label id="errorUsername" class="errorText"><font color="red"><b>Unesite korisničko ime!</b></font></label>
+	<label id="errorExerciseName" class="errorText">Unesite Email adresu!</label>
+	<label id="errorUsername" class="errorText">Unesite korisničko ime!</label>
 	<br/>
-	<label id="usernameTakenMessage" class="errorText"><font color="red"><b>Korisničko ime zauzeto!</b></font></label>
-	<label id="emailTakenMessage" class="errorText"><font color="red"><b>Unešena email adresa već postoji u sistemu!</b></font></label>
-	<label id="emailFormatBadMessage" class="errorText"><font color="red"><b>Neodgovarajući format unešene email adrese!</b></font></label>
+	<label th:if="${usernameTaken}" id="usernameTakenMessage" class="errorText">Korisničko ime zauzeto!</label>
+	<label th:if="${emailTaken}" id="emailTakenMessage" class="errorText">Unešena email adresa već postoji u sistemu!</label>
+	<label th:if="${emailFormatBad}" id="emailFormatBadMessage" class="errorText">Neodgovarajući format unešene email adrese!</label>
 	<input type="hidden" th:field="*{id}" id="id" />
   	<div class="form-group row">
 		<div class="col-xs-2">
 			<label class="label-width" for="*{userName}">Koristničko ime:</label>
 			<input  type="text" th:field="*{userName}" id="userName" class="form-control" />
-			&nbsp;&nbsp;<img id="usernameRedDot" src="/images/red-exclamation30.png"/> <label id="mustHaveUsernameField">(Obavezno polje)</label>
+			<img id="usernameRedDot" class="left-spacing-nbsp" src="/images/red-exclamation30.png"/> <label id="mustHaveUsernameField">(Obavezno polje)</label>
 		</div>
 	</div>
   	<div class="form-group row">
@@ -172,13 +163,13 @@
 		<div class="col-xs-2">
 			<label class="label-width" for="*{email}">Email:</label>
 			<input  type="text" th:field="*{email}" id="email" class="form-control" />
-			&nbsp;&nbsp;<img id="emailRedDot" src="/images/red-exclamation30.png"/> <label id="mustHaveEmailField">(Obavezno polje)</label>
+			<img id="emailRedDot" class="left-spacing-nbsp" src="/images/red-exclamation30.png"/> <label id="mustHaveEmailField">(Obavezno polje)</label>
 		</div>
 	</div>
 	
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<label class="label-width" for="authority">Autoritet :</label>
+			<label class="label-width" for="authority">Tip profila :</label>
 			<select class="selectpicker form-control" data-live-search="true" th:field="*{authorities}" id="authority">
 	                         <option th:each="authority : ${authorities}"
 	                            th:value="${authority}"
@@ -191,7 +182,7 @@
 		<div class="col-xs-2">
 			<button id="addButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="add"><b>Dodaj novog</b></button>
 			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
-			<button id="resetButton" type="reset" class="btn btn-success">Iscisti</button>
+			<button id="resetButton" type="reset" class="btn btn-success">Iščisti</button>
 		</div>
 	</div>
 </form>
