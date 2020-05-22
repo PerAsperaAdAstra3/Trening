@@ -1,0 +1,12 @@
+.roundedEdges {
+	border-radius: 0.25rem;
+    border: 1px solid #ddd;
+}
+
+.roundedEdgesButton {
+	border-radius: 20%;
+}
+
+.visibleClientPackage{
+	display:none;
+}

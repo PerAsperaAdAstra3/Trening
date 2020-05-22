@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="scripts/jquery-3.2.1.min.js"></script>
+<script src="scripts/functions.js"></script>
+<script src="scripts/filterTable.js"></script>
+<meta charset="utf-8"/>
+<title>Client Detail</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="alert div1" role="alert">
+	<div th:include="fragments/header :: header"></div>
+	<h1 align="center">Detalji o klijentu :</h1>
+</div>
+
+<span align="bottom" th:utext="${clientDTO.name + ' ' + clientDTO.familyName}"/>
+
+<form style="padding-left:3em" th:action="@{/addClient}" th:object="${clientDTO}" method="POST">
+
+<span align="bottom" th:utext="${clientDTO.name + ' ' + clientDTO.familyName}"/>
+</form>
+
+<form style="padding-left:3em" th:action="@{/addClient}" th:object="${clientDTO}" method="POST">
+
+</form>
+</body>
+</html>

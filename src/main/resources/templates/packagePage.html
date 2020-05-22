@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../scripts/functions.js"></script>
+<script src="../../scripts/filterTable.js"></script>
+<script src="../../scripts/filterPackageTable.js"></script>
+<script src="../../scripts/ajaxFunctions.js"></script>
+<meta charset="utf-8"/>
+<title>Paketi</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/stylePackage.css}"/>
+<script>
+
+$(document).ready(function(){
+	$("#tr-entity-list .packElpackageId").each(function(){
+			$(this).parent().hide()
+	});
+	selectPackageIdOnRowClick($("#tr-entity-list-package"))
+	highlightRowPackage(this)
+})
+
+function sync1(item){
+	roundId = item.find(".packageId").html()
+	$("#tr-entity-list .packElpackageId").each(function(){
+		if ($(this).html() != roundId)
+			$(this).parent().hide()
+		else
+			$(this).parent().show()
+	});
+}
+
+$(document).on("click", "#setNumber", function(event) {
+	$("#editButtonPackage").prop('disabled', true);
+	var packageElementHidden = $(".packageElementHidden").val();
+	packageAddPackageElementNumber(packageElementHidden);
+	$('#packagePageModal').modal('hide')
+});
+
+
+$(document).on("click", "#modal_button", function(event) {
+	$(".numberOfElements").val("");
+	$("#setNumber").prop("disabled", true);
+	packageElementId = $(this).parent().parent().find(".packageElementId").html();
+	$(".packageElementHidden").val(packageElementId);
+});
+
+
+$(document).on("click", ".addToPackage", function(event) {
+	$("#editButtonPackage").prop('disabled', true);
+	var packageElementId = $(this).parent().parent().find(".packageElementId").html();
+	packageAddPackageElement(packageElementId);
+});
+
+function selectPackageIdOnRowClick(row){
+	$(row).parent().find(".highlighted").removeClass("highlighted");
+	$(row).addClass("highlighted");
+	sync1($(row));
+}
+	
+$(document).on('focusout', '.packElNumber', function(event) {
+	elementsInPackagesId = $(this).parent().parent().find(".elemInPackagesId").html();
+	newNumber = $(this).val();
+	ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, $(this))
+});
+
+	
+$(document).on("click", "#tr-entity-list-package", function(event) {
+	selectPackageIdOnRowClick(this)
+	highlightRowPackage(this)
+});
+	
+$(document).on("click", "#tr-entity-listPE", function(event) {
+	highlightRow(this)
+});
+	
+$(document).on("click", "#search", function(event) {
+	$("#hidden_input").css('display','table-row');
+});
+	
+$(document).on("click", "#resetButton", function(event) {
+	$("#editButton").prop('disabled', true);
+});
+	
+$(document).on("click", "#resetButtonPackage", function(event) {
+	$("#editButtonPackage").prop('disabled', true);
+});
+	
+function sync(item){
+	packageElementName = item.find(".packageElementName").html()
+    packageElementDescription = item.find(".packageElementDescription").html()
+    packageElementId = item.find(".packageElementId").html()
+	packageElementPackageId = item.find(".packageElementPackageId").html()
+
+	$("#editButton").prop('disabled', false);
+		
+    $("#name").val(packageElementName);
+	$("#description").val(packageElementDescription);
+    $("#id").val(packageElementId);
+    $("#packageId").val(packageElementPackageId);
+}
+
+function syncPackage(item){
+	var nameOfPackage = item.find(".nameOfPackage").html()
+	var packageId = item.find(".packageId").html()
+	var priceOfPackage = item.find(".priceOfPackage").html()
+	    
+	$("#editButtonPackage").prop('disabled', false);
+	
+    $("#nameOfPackage").val(nameOfPackage);
+    $("#idPackage").val(packageId);
+   $("#price").val(priceOfPackage);
+}
+	
+$(document).on("change keyup paste", "#numberOfElements", function(event) {
+	$("#setNumber").prop("disabled", false);
+});
+	
+	</script>
+</head>
+<body>
+	<div class="alert div1" role="alert">
+	<div th:include="fragments/header :: header"></div>
+		<h1 align="center">Paketi u sistemu</h1>
+	</div>
+
+<div style="width:100%" class="form-group row">
+
+<div style="width:40%" class="col-xs-2 divPackage roundedEdges">
+<h2>Paketi</h2>
+<br/>
+<form style="padding-left:3em" th:action="@{/addPackage}" th:object="${packageDTO}" method="POST">
+
+	<input type="hidden" th:field="*{id}" id="idPackage" />
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="name">Naziv:</label>
+			<input  type="text" th:field="*{packageName}" id="nameOfPackage" class="form-control" />
+		</div>
+	<div class="col-xs-2">
+			<label class="label-width-1" for="name">Cena:</label>
+			<input  type="text" th:field="*{price}" id="price" class="form-control" />
+  		</div>
+  	</div>
+  
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button type="submit" class="btn btn-success fontWeightBold" name="mode" value="add">Dodaj novi</button>
+			<button id="editButtonPackage" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+			<button id="resetButtonPackage" type="reset" class="btn btn-success">Isčisti</button>
+		</div>
+	</div>
+</form>
+<form method="POST">
+<br/>
+<div>
+	<p class="fontWeightBold"> Filtriranje:
+		<input type="text" id="inputFilterNamePackages" class="roundedEdges" onkeyup="filterTablePackage(0,6)" placeholder="Ime paketa.."/>
+	</p>
+</div>
+<table id="clientTable" class="tablePackageClientManagement tbodyPackage tablePackage">
+	<thead class="thead">
+		<tr>
+			<th style="width:15%;" scope="col">Naziv:</th>
+			<th style="width:15%;" scope="col">Cena:</th>
+			<th style="width:15%;" scope="col"></th>
+		</tr>
+	</thead>
+	<tbody >
+		<tr	id="tr-entity-list-package" class="trP" th:each = "package : ${packages}">
+			<td style="width:15%;" scope="row" class="nameOfPackage tdP" th:utext="${package.packageName}"></td>
+			<td style="width:15%;" scope="row" class="priceOfPackage tdP" th:utext="${package.price}"></td>
+			<td scope="row" class="packageId tdP" th:utext="${package.id}" style="display:none;"></td>
+			<td style="width:15%;" scope="row">
+				<a th:href="@{/deletePackage/{id}(id=${package.id})}">
+					<button type="button" class="btn btn-danger" onclick="return confirm('Da li ste sigurni da želite da brišete?')">Briši</button>
+				</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</form>
+<br/>
+<div>
+	<p class="fontWeightBold">
+		Stavke u paketu :
+	</p>
+</div>
+<table id="elementsInPackagesTable" class="tablePackage">
+	<thead class="thead">
+		<tr>
+			<th scope="col">Naziv</th>
+			<th scope="col">Opis</th>
+			<th scope="col">Količina</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody class="elementsInPackagesTbody">
+		<tr	id="tr-entity-list" th:each = "elementsInPackage : ${elementsInPackages}">
+
+			<td class="packElName" th:utext="${elementsInPackage.packageElementName}"></td>
+			<td class="packElDescription" th:utext="${elementsInPackage.packageElementDescription}"></td>
+			<td><input type="number" class="packElNumber" name="quantity" min="1" max="999" th:value="${elementsInPackage.number}"/></td>
+			<td scope="row" class="packElId" th:utext="${elementsInPackage.packageElementId}" style="display:none;"></td>
+			<td scope="row" class="packElpackageId" th:utext="${elementsInPackage.packageId}" style="display:none;"></td>
+			<td scope="row" class="elemInPackagesId" th:utext="${elementsInPackage.elemInPackagesId}" style="display:none;"></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+<!-- ELEMENTI PAKETA -->
+<div style="width:1%" class="col-xs-2">
+</div>
+<div style="width:40%" class="col-xs-2 divPackage roundedEdges">
+	<h2>Stavke</h2>
+	<br/>
+	<form style="padding-left:3em" th:action="@{/addPackageElement}" th:object="${packageElementDTO}" method="POST">
+
+	<input type="hidden" th:field="*{packageElementID}" id="id" />
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="name">Naziv:</label>
+			<input type="text" th:field="*{packageElementName}" id="name" class="form-control" />
+		</div>
+  	</div>
+  
+  	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width-1" for="description">Opis:</label>
+			<input  type="text" th:field="*{description}" id="description" class="form-control" />
+		</div>
+  	</div>
+	<input type="hidden" th:field="*{packageId}" id="packageId" />
+	
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<button type="submit" class="btn btn-success fontWeightBold" name="mode" value="add">Dodaj novu</button>
+			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
+			<button id="resetButton" type="reset" class="btn btn-success">Isčisti</button>
+		</div>
+	</div>
+</form>
+<!-- Modal -->
+<div id="packagePageModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:300px;">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+<div class="modal-body">
+<div class="container-responsive">
+<h4 align="center" class="modal-title">Broj stavki</h4>
+	<table  id = "myTableExercises">
+		<thead>
+		</thead>
+		<tbody>
+			<tr class="modal-table-coloring" id="tr-entity-list-modal">
+				<td><label>Količina : </label> <input type="number" name="quantity" min="1" max="999" id="numberOfElements" class="numberOfElements" /></td>
+				<td><input type="hidden" class="packageElementHidden" /></td>
+			</tr>
+			<tr>
+			<td><button id="setNumber" disabled="disabled" class="btn btn-default">Dodaj</button><button type="button" class="btn btn-default left-spacing-nbsp" data-dismiss="modal">Zatvori</button></td></tr>
+		</tbody>
+	</table>
+</div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<br/>
+<form method="POST">
+<div>
+	<p class="fontWeightBold"> Filtriranje:
+		<input type="text" id="inputFilterName" class="roundedEdges" onkeyup="filterTablePE(0,7)" placeholder="Filtriranje po nazivu.."/>
+		<input type="text" id="inputFilterDescription" class="roundedEdges" onkeyup="filterTablePE(1,7)" placeholder="Filtriranje po opisu.."/>
+	</p>
+</div>
+<div>
+<table id="clientTable" class="tablePackage">
+	<thead class="thead">
+		<tr>
+			<th scope="col">Naziv</th>
+			<th scope="col">Opis</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr	id="tr-entity-listPE" class="trPE" th:each = "packageElement : ${packageElements}">
+			<td class="packageElementName tdPE" th:utext="${packageElement.packageElementName}"></td>
+			<td class="packageElementDescription tdPE" th:utext="${packageElement.description}"></td>
+			<td scope="row" class="packageElementId" th:utext="${packageElement.packageElementID}" style="display:none;"></td>
+			<td scope="row" class="packageElementPackageId" th:utext="${packageElement.packageId}" style="display:none;"></td>
+			<td>
+				<a th:href="@{/deletePackageElement/{id}(id=${packageElement.packageElementID})}" onclick="return confirm('Da li ste sigurni da želite da brišete?')"><button type="button" class="btn btn-danger">Briši</button></a></td>
+			<td><button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#packagePageModal">Dodaj u paket</button></td>
+		</tr>
+	</tbody>
+</table>
+</div>
+</form>
+</div>
+</div>
+</body>
+</html>

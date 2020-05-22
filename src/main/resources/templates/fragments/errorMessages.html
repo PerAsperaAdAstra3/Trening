@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+	<div th:fragment="errorMessages">
+			<label th:if="${outcomeMessage == 'passwordsDontMach'}" id="errorMessageNoMach" class="errorText">Šifre se ne poklapaju!</label>
+			<label id="errorMessageWrongOld" class="errorText">Stara lozinka pogrešna!</label>
+			<label id="successMessage" class="successText">Uspešno izmenjena lozinka!</label>
+    </div>
+</body>
+</html>

@@ -380,7 +380,6 @@ $(document).on("click", "#modal_button", function(event) {
 			if(nooo == 3){
 				el.style.backgroundColor = "yellow"
 			}
-			console.log(el.tagName);
 		});
 	document.getElementById("myDropdown").classList.toggle("show");
 });
@@ -434,7 +433,6 @@ $(document).on("click", "#hideTableRows", function(event) {
 	var els = $(".hidden_input");
 	Array.prototype.forEach.call(els, function(el) {
 		el.style.visibility = 'hidden'
-		console.log(el.tagName);
 	});
 });
 	//Keeping position on page
@@ -541,8 +539,7 @@ function sync2(item){
 <body class="gradient" onLoad="enableAddRound()">
 	<div class="alert div1" role="alert">
 	
-	<a href="/" class="home">Početna</a>
-	
+	<div th:include="fragments/header :: header"></div>
 		<h1 align="center">Dodavanje treninga</h1>
 	</div>
 <br/>
@@ -700,10 +697,10 @@ function sync2(item){
 					<button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Izbor</button>
 				
 				<div class="col">
-					<label id="errorExerciseName" class="errorText"><font color="red"><b>Exercise Name Error message!!</b></font></label>
+					<label id="errorExerciseName" class="errorText">Exercise Name Error message!!</label>
 				</div>
 				<div class="col">
-					<label id="errorExerciseId" class="errorText"><font color="red"><b>Id Vežbe nema vrednost!!</b></font></label>
+					<label id="errorExerciseId" class="errorText">Id Vežbe nema vrednost!!</label>
 				</div>
 			</div>
 			<input type="hidden" th:field="*{exerciseInRoundExerciseId}" id="exerciseInRoundExerciseId"/>
@@ -811,10 +808,9 @@ function sync2(item){
 			</tr>
 		</tbody>
 	</table>
-	      	<button id="selectExercises">Selektuj</button>
+	      	<button type="button" class="btn btn-default" id="selectExercises">Selektuj</button>
+	</div>
 </div>
-
-      </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
       </div>
