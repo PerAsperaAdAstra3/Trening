@@ -144,6 +144,7 @@ function useClientPackageElement(row){
 }
 
 function ajaxAddPackageToClient(packageId, packagePrice){
+	import { COLOR_GREEN, COLOR_YELLOW } from 'constants';
 //Add package to client
 	var clientPackageDTO = {}
 	clientPackageDTO["clientId"] = $("#clientId").val();
@@ -172,7 +173,7 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 			var payed = data["clientPackageJSON"]["payed"];
 				
 			if(payed == "true"){
-				colorVar = '"background-color: rgb(192, 248, 185);"'
+				colorVar = '"background-color: '+ COLOR_GREEN +';"'
 			} else {
 				colorVar = '"background-color: rgb(239, 244, 138);"'
 			}
@@ -257,7 +258,7 @@ function packageAddPackageElementNumber(packageElementId){
 	packageUnit["packageElementId"] = packageElementId;
 	packageUnit["numnerOfElements"] = numberOfElements;
 	
-$.ajax({
+	$.ajax({
 		type: "POST",
 		contentType: "application/json",
 		url:	"/addPackagePackageElement",
@@ -295,7 +296,7 @@ function packageAddPackageElement(packageElementId){
 	packageUnit["nameOfPackage"] = $("#nameOfPackage").val();
 	packageUnit["packageElementId"] = packageElementId;
 	
-$.ajax({
+	$.ajax({
 		type: "POST",
 		contentType: "application/json",
 		url:	"/addPackagePackageElement",
@@ -324,7 +325,7 @@ function ajaxAddMultipleExerciseInRound(attrList , attr, highlightedRoundID){
 	multipleExerciseInRound["trainingId"] = attr;
 	multipleExerciseInRound["highlightedRoundId"] = highlightedRoundID;
 	multipleExerciseInRound["circularRoundYN"] = $('#circularYN').val();
-$.ajax({
+	$.ajax({
 		type: "POST",
 		contentType: "application/json",
 		url:	"/addMultipleExerciseInRound",
@@ -367,7 +368,7 @@ function ajaxExerciseInRoundAddExercise(){
 	exerciseInRound["exerciseInRoundDifficulty"] = $("#exerciseInRoundDifficulty").val();
 	exerciseInRound["roundId"] = $("#hiddenRoundInTraining").val();
 	
-$.ajax({
+	$.ajax({
 		type: "POST",
 		contentType: "application/json",
 		url:	"/addExerciseInRoundAjaxAddRound",
@@ -433,7 +434,7 @@ function ajaxExerciseInRound(){
 	exerciseInRound["exerciseInRoundDifficulty"] = $("#exerciseInRoundDifficulty").val();
 	exerciseInRound["roundId"] = $("#hiddenRoundInTraining").val();
 	
-$.ajax({
+	$.ajax({
 		type: "POST",
 		contentType: "application/json",
 		url:	"/addExerciseInRoundAjax",
@@ -475,7 +476,7 @@ function ajaxExerciseInRoundChange(){
 	exerciseInRound["roundId"] = $("#hiddenRoundInTraining").val();
 	exerciseInRound["exerciseExecId"] = $("#idExerciseInRound").val();
 	
-$.ajax({
+	$.ajax({
 		type: "POST",
 		contentType: "application/json",
 		url:	"/changeExerciseInRoundAjax",
@@ -528,7 +529,7 @@ function ajaxAddRound(){
 	var round = {}
 	round["id"] = $("#id").val();
 	
-$.ajax({
+	$.ajax({
 		type: "POST",
 		contentType: "application/json",
 		url:	"/addRoundAjax",

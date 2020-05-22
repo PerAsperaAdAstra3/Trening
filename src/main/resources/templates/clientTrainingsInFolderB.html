@@ -207,16 +207,9 @@ xmlns=http://www.w3.org/1999/xhtml"
 </script>
 <body>
 	<br/>
-	<div>
-		<a href="/" class="home">Početna</a>
-		<div style="float:right" class="dropdown">
- 		 <img src="/images/COG2a2.png"/>
-		  <div class="dropdown-content">
-		    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
-		    <a th:href="@{/logout}">Odlogujte se</a>
-		  </div>
-	</div>
-	</div>
+
+	<div th:include="fragments/header :: header"></div>
+	
     <h2 id="pageTitle" class="modal-title"></h2>
   
   <br/>  

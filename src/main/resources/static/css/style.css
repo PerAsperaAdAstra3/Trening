@@ -17,6 +17,10 @@ h2 {
 	color: green;
 }
 
+.fontWeightBold {
+		font-weight: bold;
+	}
+
 .sameRow {
 	display: flex;
 }

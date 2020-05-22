@@ -14,30 +14,9 @@ $(document).ready(function(){
 		
 	var isEmailSet = false;
 	var isUsernameSet = false;
-	var usernameTaken = /*[[${usernameTaken}]]*/ 'default';
-	var emailTaken = /*[[${emailTaken}]]*/ 'default';
-	var emailFormatBadVar = /*[[${emailFormatBad}]]*/ 'default';
 	
-	$("#errorExerciseName").hide();
+	$("#errorEmailAddress").hide();
 	$("#errorUsername").hide();
-		
-/*	if(usernameTaken){
-		$("#usernameTakenMessage").show();
-	} else {
-		$("#usernameTakenMessage").hide();
-	}*/
-		
-/*	if(emailTaken){
-		$("#emailTakenMessage").show();
-	} else {
-		$("#emailTakenMessage").hide();
-	}*/
-		
-	if(emailFormatBadVar){
-		$("#emailFormatBadMessage").show();
-	} else {
-		$("#emailFormatBadMessage").hide();
-	}
 });
 
 $(document).on("change keyup paste", "#email", function(event) {
@@ -88,7 +67,7 @@ $(document).on("click", "#tr-entity-list", function(event) {
 		$("#usernameRedDot").hide();
 	}
 	if(emailVar != ""){
-		$("#errorExerciseName").hide();
+		$("#errorEmailAddress").hide();
 		$("#emailRedDot").hide();
 	}
 });
@@ -131,7 +110,7 @@ function sync(item){
 	
 <div class="panel">
 	<form style="padding-left:3em" th:action="@{/addOperator}" th:object="${operatorDTO}" method="POST">
-	<label id="errorExerciseName" class="errorText">Unesite Email adresu!</label>
+	<label id="errorEmailAddress" class="errorText">Unesite Email adresu!</label>
 	<label id="errorUsername" class="errorText">Unesite korisničko ime!</label>
 	<br/>
 	<label th:if="${usernameTaken}" id="usernameTakenMessage" class="errorText">Korisničko ime zauzeto!</label>
@@ -169,7 +148,7 @@ function sync(item){
 	
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<label class="label-width" for="authority">Tip profila :</label>
+			<label class="label-width" for="authority">Tip profila:</label>
 			<select class="selectpicker form-control" data-live-search="true" th:field="*{authorities}" id="authority">
 	                         <option th:each="authority : ${authorities}"
 	                            th:value="${authority}"
@@ -202,7 +181,7 @@ function sync(item){
 	<thead>
 		<tr>
 			<th scope="col">Korisničko ime : </th>
-			<th scope="col">Autoritet : </th>
+			<th scope="col">Tip profila : </th>
 			<th scope="col">Ime : </th>
 			<th scope="col">Prezime : </th>
 			<th scope="col">Email : </th>

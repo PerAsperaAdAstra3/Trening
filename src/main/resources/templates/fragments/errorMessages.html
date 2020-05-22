@@ -6,7 +6,7 @@
 </head>
 <body>
 	<div th:fragment="errorMessages">
-			<label id="errorMessageNoMach" class="errorText">Šifre se ne poklapaju!</label>
+			<label th:if="${outcomeMessage == 'passwordsDontMach'}" id="errorMessageNoMach" class="errorText">Šifre se ne poklapaju!</label>
 			<label id="errorMessageWrongOld" class="errorText">Stara lozinka pogrešna!</label>
 			<label id="successMessage" class="successText">Uspešno izmenjena lozinka!</label>
     </div>

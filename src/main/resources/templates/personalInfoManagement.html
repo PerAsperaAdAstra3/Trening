@@ -13,15 +13,7 @@ $(document).ready(function(){
 	
 	var isEmailSet = false;
 	var isUsernameSet = false;
-	var usernameTaken = $("#usernameTaken").val();
-	
-	$("#errorExerciseName").hide();
-	
-	if(usernameTaken == "taken"){
-		$("#usernameTakenMessage").show();
-	} else {
-		$("#usernameTakenMessage").hide();
-	}
+	$("#errorEmailAddress").hide();
 	
 	var usernameVar = $("#userName").val();
 	var emailVar = $("#email").val();
@@ -85,7 +77,7 @@ $(document).on("change keyup paste", "#userName", function(event) {
 <h2>Izmena ličnih podešavanja</h2>
 	
 <div class="panel">
-	<label id="errorExerciseName" class="errorText">Unesite Email adresu!</label>
+	<label id="errorEmailAddress" class="errorText">Unesite Email adresu!</label>
 	<label id="errorUsername" class="errorText">Unesite korisničko ime!</label>
 	<form style="padding-left:3em" th:action="@{/editSelf}" th:object="${operatorDTO}" method="POST">
 	<input type="hidden" th:field="*{id}" id="id" />

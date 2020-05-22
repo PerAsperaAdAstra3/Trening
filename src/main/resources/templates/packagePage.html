@@ -18,8 +18,8 @@ $(document).ready(function(){
 	$("#tr-entity-list .packElpackageId").each(function(){
 			$(this).parent().hide()
 	});
-		selectPackageIdOnRowClick($("#tr-entity-list-package"))
-		highlightRowPackage(this)
+	selectPackageIdOnRowClick($("#tr-entity-list-package"))
+	highlightRowPackage(this)
 })
 
 function sync1(item){
@@ -27,17 +27,16 @@ function sync1(item){
 	$("#tr-entity-list .packElpackageId").each(function(){
 		if ($(this).html() != roundId)
 			$(this).parent().hide()
-			else
-				$(this).parent().show()
+		else
+			$(this).parent().show()
 	});
 }
 
 $(document).on("click", "#setNumber", function(event) {
-
-	document.getElementById("editButtonPackage").disabled = true;
+	$("#editButtonPackage").prop('disabled', true);
 	var packageElementHidden = $(".packageElementHidden").val();
 	packageAddPackageElementNumber(packageElementHidden);
-	$('#myModal').modal('hide')
+	$('#packagePageModal').modal('hide')
 });
 
 
@@ -50,80 +49,74 @@ $(document).on("click", "#modal_button", function(event) {
 
 
 $(document).on("click", ".addToPackage", function(event) {
-	document.getElementById("editButtonPackage").disabled = true;
+	$("#editButtonPackage").prop('disabled', true);
 	var packageElementId = $(this).parent().parent().find(".packageElementId").html();
 	packageAddPackageElement(packageElementId);
 });
 
 function selectPackageIdOnRowClick(row){
-
-		$(row).parent().find(".highlighted").removeClass("highlighted");
-		$(row).addClass("highlighted");
-		sync1($(row));
-
+	$(row).parent().find(".highlighted").removeClass("highlighted");
+	$(row).addClass("highlighted");
+	sync1($(row));
 }
 	
-	$(document).on('focusout', '.packElNumber', function(event) {
-		elementsInPackagesId = $(this).parent().parent().find(".elemInPackagesId").html();
-		newNumber = $(this).val();
-		ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, $(this))
-	});
+$(document).on('focusout', '.packElNumber', function(event) {
+	elementsInPackagesId = $(this).parent().parent().find(".elemInPackagesId").html();
+	newNumber = $(this).val();
+	ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, $(this))
+});
 
 	
-	$(document).on("click", "#tr-entity-list-package", function(event) {
-		selectPackageIdOnRowClick(this)
-		highlightRowPackage(this)
-	});
+$(document).on("click", "#tr-entity-list-package", function(event) {
+	selectPackageIdOnRowClick(this)
+	highlightRowPackage(this)
+});
 	
-/*	$(document).on("click", "#tr-entity-list-package", function(event) {
-		highlightRowPackage(this)
-	});*/
+$(document).on("click", "#tr-entity-listPE", function(event) {
+	highlightRow(this)
+});
 	
-	$(document).on("click", "#tr-entity-listPE", function(event) {
-		highlightRow(this)
-	});
+$(document).on("click", "#search", function(event) {
+	$("#hidden_input").css('display','table-row');
+});
 	
-	$(document).on("click", "#search", function(event) {
-		$("#hidden_input").css('display','table-row');
-	});
+$(document).on("click", "#resetButton", function(event) {
+	$("#editButton").prop('disabled', true);
+});
 	
-	$(document).on("click", "#resetButton", function(event) {
-			document.getElementById("editButton").disabled = true;
-	});
+$(document).on("click", "#resetButtonPackage", function(event) {
+	$("#editButtonPackage").prop('disabled', true);
+});
 	
-	$(document).on("click", "#resetButtonPackage", function(event) {
-		document.getElementById("editButtonPackage").disabled = true;
-	});
-	
-	function sync(item){
-		packageElementName = item.find(".packageElementName").html()
-	    packageElementDescription = item.find(".packageElementDescription").html()
-	    packageElementId = item.find(".packageElementId").html()
-	    packageElementPackageId = item.find(".packageElementPackageId").html()
+function sync(item){
+	packageElementName = item.find(".packageElementName").html()
+    packageElementDescription = item.find(".packageElementDescription").html()
+    packageElementId = item.find(".packageElementId").html()
+	packageElementPackageId = item.find(".packageElementPackageId").html()
 
-	    document.getElementById("editButton").disabled = false;
+	$("#editButton").prop('disabled', false);
 		
-	    $("#name").val(packageElementName);
-	    $("#description").val(packageElementDescription);
-	    $("#id").val(packageElementId);
-	    $("#packageId").val(packageElementPackageId);
-	}
+    $("#name").val(packageElementName);
+	$("#description").val(packageElementDescription);
+    $("#id").val(packageElementId);
+    $("#packageId").val(packageElementPackageId);
+}
 
-	function syncPackage(item){
-		var nameOfPackage = item.find(".nameOfPackage").html()
-	    var packageId = item.find(".packageId").html()
-		var priceOfPackage = item.find(".priceOfPackage").html()
+function syncPackage(item){
+	var nameOfPackage = item.find(".nameOfPackage").html()
+	var packageId = item.find(".packageId").html()
+	var priceOfPackage = item.find(".priceOfPackage").html()
 	    
-	    document.getElementById("editButtonPackage").disabled = false;
-		
-	    $("#nameOfPackage").val(nameOfPackage);
-	    $("#idPackage").val(packageId);
-	    $("#price").val(priceOfPackage);
-	}
+	$("#editButtonPackage").prop('disabled', false);
 	
-	$(document).on("change keyup paste", "#numberOfElements", function(event) {
+    $("#nameOfPackage").val(nameOfPackage);
+    $("#idPackage").val(packageId);
+   $("#price").val(priceOfPackage);
+}
+	
+$(document).on("change keyup paste", "#numberOfElements", function(event) {
 	$("#setNumber").prop("disabled", false);
-	});
+});
 	
 	</script>
 </head>
@@ -154,7 +147,7 @@ function selectPackageIdOnRowClick(row){
   
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novi</b></button>
+			<button type="submit" class="btn btn-success fontWeightBold" name="mode" value="add">Dodaj novi</button>
 			<button id="editButtonPackage" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
 			<button id="resetButtonPackage" type="reset" class="btn btn-success">Isčisti</button>
 		</div>
@@ -163,7 +156,7 @@ function selectPackageIdOnRowClick(row){
 <form method="POST">
 <br/>
 <div>
-	<p><b> Filtriranje: </b>
+	<p class="fontWeightBold"> Filtriranje:
 		<input type="text" id="inputFilterNamePackages" class="roundedEdges" onkeyup="filterTablePackage(0,6)" placeholder="Ime paketa.."/>
 	</p>
 </div>
@@ -181,15 +174,18 @@ function selectPackageIdOnRowClick(row){
 			<td style="width:15%;" scope="row" class="priceOfPackage tdP" th:utext="${package.price}"></td>
 			<td scope="row" class="packageId tdP" th:utext="${package.id}" style="display:none;"></td>
 			<td style="width:15%;" scope="row">
-				<a th:href="@{/deletePackage/{id}(id=${package.id})}"><button type="button" class="btn btn-danger" onclick="return confirm('Da li ste sigurni da želite da brišete?')">Briši</button></a></td>
+				<a th:href="@{/deletePackage/{id}(id=${package.id})}">
+					<button type="button" class="btn btn-danger" onclick="return confirm('Da li ste sigurni da želite da brišete?')">Briši</button>
+				</a>
+			</td>
 		</tr>
 	</tbody>
 </table>
 </form>
 <br/>
 <div>
-	<p>
-		<b>Stavke u paketu :</b>
+	<p class="fontWeightBold">
+		Stavke u paketu :
 	</p>
 </div>
 <table id="elementsInPackagesTable" class="tablePackage">
@@ -226,7 +222,7 @@ function selectPackageIdOnRowClick(row){
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label class="label-width-1" for="name">Naziv:</label>
-			<input type="text" th:field="*{name}" id="name" class="form-control" />
+			<input type="text" th:field="*{packageElementName}" id="name" class="form-control" />
 		</div>
   	</div>
   
@@ -240,15 +236,14 @@ function selectPackageIdOnRowClick(row){
 	
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button type="submit" class="btn btn-success" name="mode" value="add"><b>Dodaj novu</b></button>
+			<button type="submit" class="btn btn-success fontWeightBold" name="mode" value="add">Dodaj novu</button>
 			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
 			<button id="resetButton" type="reset" class="btn btn-success">Isčisti</button>
 		</div>
 	</div>
 </form>
-<!-- TEST -->
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
+<div id="packagePageModal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg" style="width:300px;">
 
     <!-- Modal content-->
@@ -274,14 +269,13 @@ function selectPackageIdOnRowClick(row){
     </div>
   </div>
 </div>
-      <!-- TEST DRUGI -->
 <br/>
 <form method="POST">
 <div>
-	<p><b> Filtriranje: </b>
+	<p class="fontWeightBold"> Filtriranje:
 		<input type="text" id="inputFilterName" class="roundedEdges" onkeyup="filterTablePE(0,7)" placeholder="Filtriranje po nazivu.."/>
 		<input type="text" id="inputFilterDescription" class="roundedEdges" onkeyup="filterTablePE(1,7)" placeholder="Filtriranje po opisu.."/>
-		</p>
+	</p>
 </div>
 <div>
 <table id="clientTable" class="tablePackage">
@@ -295,13 +289,13 @@ function selectPackageIdOnRowClick(row){
 	</thead>
 	<tbody>
 		<tr	id="tr-entity-listPE" class="trPE" th:each = "packageElement : ${packageElements}">
-			<td class="packageElementName tdPE" th:utext="${packageElement.name}"></td>
+			<td class="packageElementName tdPE" th:utext="${packageElement.packageElementName}"></td>
 			<td class="packageElementDescription tdPE" th:utext="${packageElement.description}"></td>
 			<td scope="row" class="packageElementId" th:utext="${packageElement.packageElementID}" style="display:none;"></td>
 			<td scope="row" class="packageElementPackageId" th:utext="${packageElement.packageId}" style="display:none;"></td>
 			<td>
 				<a th:href="@{/deletePackageElement/{id}(id=${packageElement.packageElementID})}" onclick="return confirm('Da li ste sigurni da želite da brišete?')"><button type="button" class="btn btn-danger">Briši</button></a></td>
-			<td><button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Dodaj u paket</button></td>
+			<td><button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#packagePageModal">Dodaj u paket</button></td>
 		</tr>
 	</tbody>
 </table>
