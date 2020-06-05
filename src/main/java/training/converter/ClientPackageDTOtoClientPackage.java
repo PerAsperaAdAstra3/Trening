@@ -36,12 +36,11 @@ public class ClientPackageDTOtoClientPackage implements Converter<ClientPackageD
 		clientPackage.setPayed(source.getPayed());
 		
 		if(source.getClientPackageActive().equals(ClientPackageStateEnum.ACTIVE.getNameText())) {
-			clientPackage.setClientPackageActive(true);
+			clientPackage.setClientPackageActive(ClientPackageStateEnum.ACTIVE); //true);
 		} else {
-			clientPackage.setClientPackageActive(false);
+			clientPackage.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE); //false);
 		}
 	
-		
 		return clientPackage;
 	}
 

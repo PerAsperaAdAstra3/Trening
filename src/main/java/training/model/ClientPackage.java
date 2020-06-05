@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import training.enumerations.ClientPackageStateEnum;
+
 
 @Entity(name="ClientPackage")
 public class ClientPackage {
@@ -26,7 +28,8 @@ public class ClientPackage {
 	private Package packageUnitCP;
 	
 	@Column(name = "clientPackageStatus")
-	private boolean clientPackageActive;
+//	private boolean clientPackageActive;
+	private ClientPackageStateEnum clientPackageActive;
 	
 	@Column(name = "clientPackagePayed")
 	private boolean payed = false;
@@ -57,16 +60,24 @@ public class ClientPackage {
 		this.clientPackagePrice = clientPackagePrice;
 	}
 
-	public boolean isClientPackageActive() {
+/*	public boolean isClientPackageActive() {
 		return clientPackageActive;
 	}
 
 	public void setClientPackageActive(boolean clientPackageActive) {
 		this.clientPackageActive = clientPackageActive;
-	}
+	}*/
 
 	public Long getId() {
 		return id;
+	}
+
+	public ClientPackageStateEnum getClientPackageActive() {
+		return clientPackageActive;
+	}
+
+	public void setClientPackageActive(ClientPackageStateEnum clientPackageActive) {
+		this.clientPackageActive = clientPackageActive;
 	}
 
 	public void setId(Long id) {

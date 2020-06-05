@@ -144,7 +144,7 @@ function useClientPackageElement(row){
 }
 
 function ajaxAddPackageToClient(packageId, packagePrice){
-	import { COLOR_GREEN, COLOR_YELLOW } from 'constants';
+//	import { COLOR_GREEN, COLOR_YELLOW } from 'constants';
 //Add package to client
 	var clientPackageDTO = {}
 	clientPackageDTO["clientId"] = $("#clientId").val();
@@ -173,7 +173,7 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 			var payed = data["clientPackageJSON"]["payed"];
 				
 			if(payed == "true"){
-				colorVar = '"background-color: '+ COLOR_GREEN +';"'
+				colorVar = '"background-color: rgb(192, 248, 185);"'
 			} else {
 				colorVar = '"background-color: rgb(239, 244, 138);"'
 			}

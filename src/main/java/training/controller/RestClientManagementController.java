@@ -110,10 +110,10 @@ public class RestClientManagementController {
 		
 		ClientPackage clientPackage = clientPackageElement.getClientPackage();
 		
-		clientPackage.setClientPackageActive(false);
+		clientPackage.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE);
 		for(ClientPackageElement clientPackageElementX : clientPackage.getClientPackageElements()) {
 			if(clientPackageElementX.isClientPackageElementStatus()) {
-				clientPackage.setClientPackageActive(true);
+				clientPackage.setClientPackageActive(ClientPackageStateEnum.ACTIVE);
 			}
 		}
 		
@@ -125,8 +125,8 @@ public class RestClientManagementController {
 		obj.put("clientPackageId", clientPackage.getId());
 		obj.put("clientPackagePayed", clientPackage.isPayed());
 		
-		obj.put("clientPackageActive", clientPackage.isClientPackageActive());
-		if(clientPackage.isClientPackageActive()) {
+		obj.put("clientPackageActive", clientPackage.getClientPackageActive()); //clientPackage.isClientPackageActive());
+		if(clientPackage.getClientPackageActive() == ClientPackageStateEnum.ACTIVE) { //isClientPackageActive()) {
 			obj.put("clientPackageActive", ClientPackageStateEnum.ACTIVE.getNameText());
 		} else {
 			obj.put("clientPackageActive", ClientPackageStateEnum.NOTACTIVE.getNameText());

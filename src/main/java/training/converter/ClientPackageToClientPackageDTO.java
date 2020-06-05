@@ -26,9 +26,9 @@ public class ClientPackageToClientPackageDTO implements Converter<ClientPackage,
 		clientPackageDTO.setPriceOfClientPackage(source.getClientPackagePrice());
 		clientPackageDTO.setPayed(source.isPayed());
 
-		if(source.isClientPackageActive()) {
+		if(source.getClientPackageActive() == ClientPackageStateEnum.ACTIVE) {
 			clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.ACTIVE.getNameText());
-		} else { 
+		} else {
 			clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE.getNameText());
 		}
 

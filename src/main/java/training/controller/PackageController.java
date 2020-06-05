@@ -1,5 +1,7 @@
 package training.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import training.dto.PackageElementDTO;
 import training.service.ElementsInPackagesService;
 import training.service.PackageElementService;
 import training.service.PackageService;
+import training.util.LoggingUtil;
 
 @Controller
 public class PackageController {
@@ -46,6 +49,8 @@ public class PackageController {
 	
 	@Autowired
 	ElementsInPackagesToElementsInPackagesDTO elementsInPackagesToElementsInPackagesDTO;
+	
+	Logger logger = LoggerFactory.getLogger(RestTrainingController.class);
 	
 	@RequestMapping(value = { "/packageList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
@@ -86,13 +91,21 @@ public class PackageController {
 	
 	@RequestMapping(value = {"/deletePackageElement/{id}"}, method = RequestMethod.GET)
 	public String deletePackageElement(@PathVariable String id) {
-		packageElementService.delete(Long.parseLong(id));
+		try {
+			packageElementService.delete(Long.parseLong(id));
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
+		}
 		return "redirect:/packageList";
 	}
 	
 	@RequestMapping(value = {"/deletePackage/{id}"}, method = RequestMethod.GET)
 	public String deletePackage(@PathVariable String id) {
-		packageService.delete(Long.parseLong(id));
+		try {
+			packageService.delete(Long.parseLong(id));
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
+		}
 		return "redirect:/packageList";
 	}
 }
