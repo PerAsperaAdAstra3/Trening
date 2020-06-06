@@ -50,7 +50,7 @@ public class PackageController {
 	@Autowired
 	ElementsInPackagesToElementsInPackagesDTO elementsInPackagesToElementsInPackagesDTO;
 	
-	Logger logger = LoggerFactory.getLogger(RestTrainingController.class);
+	Logger logger = LoggerFactory.getLogger(PackageController.class);
 	
 	@RequestMapping(value = { "/packageList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
@@ -93,8 +93,10 @@ public class PackageController {
 	public String deletePackageElement(@PathVariable String id) {
 		try {
 			packageElementService.delete(Long.parseLong(id));
-		} catch (Exception e) {
-			LoggingUtil.LoggingMethod(logger, e);
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
 		}
 		return "redirect:/packageList";
 	}

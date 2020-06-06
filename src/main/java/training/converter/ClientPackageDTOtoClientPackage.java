@@ -36,9 +36,9 @@ public class ClientPackageDTOtoClientPackage implements Converter<ClientPackageD
 		clientPackage.setPayed(source.getPayed());
 		
 		if(source.getClientPackageActive().equals(ClientPackageStateEnum.ACTIVE.getNameText())) {
-			clientPackage.setClientPackageActive(ClientPackageStateEnum.ACTIVE); //true);
+			clientPackage.setClientPackageActive(ClientPackageStateEnum.ACTIVE);
 		} else {
-			clientPackage.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE); //false);
+			clientPackage.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE);
 		}
 	
 		return clientPackage;

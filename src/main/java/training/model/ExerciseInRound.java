@@ -31,7 +31,6 @@ public class ExerciseInRound {
 	private String exerciseName;
 	
 	@ManyToOne
-	//@Cascade(CascadeType.REMOVE)
 	@JoinColumn(name="roundExerciseInRound")
 	private Round round;
 	

@@ -125,8 +125,8 @@ public class RestClientManagementController {
 		obj.put("clientPackageId", clientPackage.getId());
 		obj.put("clientPackagePayed", clientPackage.isPayed());
 		
-		obj.put("clientPackageActive", clientPackage.getClientPackageActive()); //clientPackage.isClientPackageActive());
-		if(clientPackage.getClientPackageActive() == ClientPackageStateEnum.ACTIVE) { //isClientPackageActive()) {
+		obj.put("clientPackageActive", clientPackage.getClientPackageActive());
+		if(clientPackage.getClientPackageActive() == ClientPackageStateEnum.ACTIVE) {
 			obj.put("clientPackageActive", ClientPackageStateEnum.ACTIVE.getNameText());
 		} else {
 			obj.put("clientPackageActive", ClientPackageStateEnum.NOTACTIVE.getNameText());

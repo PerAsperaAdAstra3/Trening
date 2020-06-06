@@ -103,7 +103,7 @@ public class TrainingController {
 	@Autowired
 	private TrainingRepository trainingRepository;
 	
-	Logger logger = LoggerFactory.getLogger(RestTrainingController.class);
+	Logger logger = LoggerFactory.getLogger(TrainingController.class);
 	
 	@RequestMapping(value = { "/trainingList/{isThereError}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable int isThereError) {
@@ -129,18 +129,20 @@ public class TrainingController {
 	public String getTrainings(Model model, @PathVariable String id) {
 		int isThereError = 0;
 	try {
-
 		Training training = trainingRepository.findOne(Long.parseLong(id));
 
-		
 		trainingService.delete(Long.parseLong(id));
-
+		
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingRepository.findAllByClientIdOrderByIdDesc(training.getClient().getId())));
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		model.addAttribute("clientId", training.getClient().getId());
 		model.addAttribute("idOfCopiedTraining","");
 		model.addAttribute("idOfClientToCopyTo","");
 		
+	} catch(NumberFormatException numberFormatException) {
+		LoggingUtil.LoggingMethod(logger, numberFormatException);
+	} catch(IllegalArgumentException illegalArgumentException) {
+		LoggingUtil.LoggingMethod(logger, illegalArgumentException);
 	} catch(Exception e) {
 		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
@@ -471,6 +473,8 @@ public class TrainingController {
 			model.addAttribute("exercisesInRound", listExerciseInRound);
 			model.addAttribute("exercises", getExercisesForModel(training));
 		
+		} catch(NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
 		} catch(Exception e) {
 			LoggingUtil.LoggingMethod(logger, e);
 			List<String> messageList = new ArrayList<>();
@@ -509,6 +513,8 @@ public class TrainingController {
 			model.addAttribute("exercises", getExercisesForModel(training));
 			model.addAttribute("circularYN", true);
 		
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
 		} catch(Exception e) {
 			LoggingUtil.LoggingMethod(logger, e);
 			List<String> messageList = new ArrayList<>();
@@ -561,6 +567,8 @@ public class TrainingController {
 		 		 		 
 		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 
+	} catch (NumberFormatException numberFormatException) {
+		LoggingUtil.LoggingMethod(logger, numberFormatException);
 	} catch(Exception e) {
 		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();
@@ -613,6 +621,8 @@ public class TrainingController {
 		 		 		 
 		 isThereError = pdfGenaratorUtil.createPdf("PDFTemplate",data); 
 		 
+	} catch (NumberFormatException numberFormatException) {
+		LoggingUtil.LoggingMethod(logger, numberFormatException);
 	} catch(Exception e) {
 		LoggingUtil.LoggingMethod(logger, e);
 		List<String> messageList = new ArrayList<>();

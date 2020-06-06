@@ -1,5 +1,7 @@
 package training.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import training.model.Client;
 import training.model.ClientPackage;
 import training.service.ClientPackageService;
 import training.service.ClientService;
+import training.util.LoggingUtil;
 
 @Controller
 public class ClientController {
@@ -34,6 +37,8 @@ public class ClientController {
 	
 	@Autowired
 	ClientDTOtoClient clientDTOtoClient;
+	
+	Logger logger = LoggerFactory.getLogger(ClientController.class);
 	
 	@RequestMapping(value = { "/clientList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
@@ -68,14 +73,26 @@ public class ClientController {
 	
 	@RequestMapping(value = {"/deleteClient/{id}"}, method = RequestMethod.GET)
 	public String deleteClient(@PathVariable String id) {
+	try {
 		clientService.delete(Long.parseLong(id));
+	} catch (NumberFormatException numberFormatException) {
+		LoggingUtil.LoggingMethod(logger, numberFormatException);
+	} catch (IllegalArgumentException illegalArgumentException) {
+		LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+	}
 		return "redirect:/clientList";
 	}
 	
 	@RequestMapping(value = {"/clientDetail/{id}"}, method = RequestMethod.GET)
 	public String clientDetail(Model model, @PathVariable String id) {
 		Client client = clientService.findOne(Long.parseLong(id));
-		ClientPackage clientPackage = clientPackageService.findOne(Long.parseLong(id));
+		try {
+			ClientPackage clientPackage = clientPackageService.findOne(Long.parseLong(id));
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		}
 		model.addAttribute("clientDTO", clientToClientDTO.convert(client));
 		model.addAttribute("clientPackage", new ClientPackageDTO());
 		model.addAttribute("clientPackages", client.getClientPackages());

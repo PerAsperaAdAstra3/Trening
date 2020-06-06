@@ -37,7 +37,7 @@ public class RestPackageController {
 	@Autowired
 	ElementsInPackagesService elementsInPackagesService;
 
-	Logger logger = LoggerFactory.getLogger(RestTrainingController.class);
+	Logger logger = LoggerFactory.getLogger(RestPackageController.class);
 	
 	@PostMapping(value = { "/addPackagePackageElement"})
 	public ResponseEntity<?> addPackagePackageElement(@Valid @RequestBody PackageDTOAjax packageDTOAjax) {

@@ -3,6 +3,8 @@ package training.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +25,7 @@ import training.emailService.MailService;
 import training.enumerations.Roles;
 import training.model.Operator;
 import training.service.OperatorService;
+import training.util.LoggingUtil;
 import training.util.PasswordGenUtil;
 
 @Controller
@@ -46,6 +49,8 @@ public class OperatorController {
 	private boolean nameTaken = false;
 	private boolean emailTaken = false;
 	private boolean emailFormatBad = false;
+	
+	Logger logger = LoggerFactory.getLogger(OperatorController.class);
 	
 	@RequestMapping(value = { "/operatorList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
@@ -115,7 +120,13 @@ public class OperatorController {
 		nameTaken = false;
 		emailTaken = false;
 		emailFormatBad = false;
-		operatorService.delete(Long.parseLong(id));
+		try {
+			operatorService.delete(Long.parseLong(id));
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		}
 		return "redirect:/operatorList";
 	}
 	

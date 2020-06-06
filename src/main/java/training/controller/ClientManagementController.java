@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +30,7 @@ import training.service.ClientPackageService;
 import training.service.ClientService;
 import training.service.ElementsInPackagesService;
 import training.service.PackageService;
+import training.util.LoggingUtil;
 
 @Controller
 public class ClientManagementController {
@@ -71,6 +74,8 @@ ElementsInPackagesToElementsInPackagesDTO elementsInPackagesToElementsInPackages
 @Autowired
 ElementsInPackagesService elementsInPackagesService;
 
+Logger logger = LoggerFactory.getLogger(ClientManagementController.class);
+
 	@RequestMapping(value = { "/clientManagement/{id}" }, method = RequestMethod.GET)
 	public String clientManagement(Model model, @PathVariable String id) {
 
@@ -86,7 +91,11 @@ ElementsInPackagesService elementsInPackagesService;
 		}
 		 
 		model.addAttribute("clientId", id);
-		model.addAttribute("client", clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));//Information of client in question.
+		try {
+			model.addAttribute("client", clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));//Information of client in question.
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		}
 		model.addAttribute("allPackages", packageToPackageDTO.convert(packageList));	//List of all packages that exist in the system. These can be added to client.
 		model.addAttribute("clientPackages", clientPackageDTOList);	// List of client packages.
 		
