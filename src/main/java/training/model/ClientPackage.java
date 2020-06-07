@@ -28,7 +28,6 @@ public class ClientPackage {
 	private Package packageUnitCP;
 	
 	@Column(name = "clientPackageStatus")
-//	private boolean clientPackageActive;
 	private ClientPackageStateEnum clientPackageActive;
 	
 	@Column(name = "clientPackagePayed")
@@ -59,14 +58,6 @@ public class ClientPackage {
 	public void setClientPackagePrice(Long clientPackagePrice) {
 		this.clientPackagePrice = clientPackagePrice;
 	}
-
-/*	public boolean isClientPackageActive() {
-		return clientPackageActive;
-	}
-
-	public void setClientPackageActive(boolean clientPackageActive) {
-		this.clientPackageActive = clientPackageActive;
-	}*/
 
 	public Long getId() {
 		return id;

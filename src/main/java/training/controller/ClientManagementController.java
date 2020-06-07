@@ -95,6 +95,10 @@ Logger logger = LoggerFactory.getLogger(ClientManagementController.class);
 			model.addAttribute("client", clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));//Information of client in question.
 		} catch (NumberFormatException numberFormatException) {
 			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		model.addAttribute("allPackages", packageToPackageDTO.convert(packageList));	//List of all packages that exist in the system. These can be added to client.
 		model.addAttribute("clientPackages", clientPackageDTOList);	// List of client packages.

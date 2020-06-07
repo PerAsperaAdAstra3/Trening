@@ -126,6 +126,8 @@ public class OperatorController {
 			LoggingUtil.LoggingMethod(logger, numberFormatException);
 		} catch (IllegalArgumentException illegalArgumentException) {
 			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		return "redirect:/operatorList";
 	}

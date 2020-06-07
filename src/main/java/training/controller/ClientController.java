@@ -79,19 +79,24 @@ public class ClientController {
 		LoggingUtil.LoggingMethod(logger, numberFormatException);
 	} catch (IllegalArgumentException illegalArgumentException) {
 		LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+	} catch (Exception e) {
+		LoggingUtil.LoggingMethod(logger, e);
 	}
 		return "redirect:/clientList";
 	}
 	
 	@RequestMapping(value = {"/clientDetail/{id}"}, method = RequestMethod.GET)
 	public String clientDetail(Model model, @PathVariable String id) {
-		Client client = clientService.findOne(Long.parseLong(id));
+		Client client = new Client();
 		try {
+			client = clientService.findOne(Long.parseLong(id));
 			ClientPackage clientPackage = clientPackageService.findOne(Long.parseLong(id));
 		} catch (NumberFormatException numberFormatException) {
 			LoggingUtil.LoggingMethod(logger, numberFormatException);
 		} catch (IllegalArgumentException illegalArgumentException) {
 			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		model.addAttribute("clientDTO", clientToClientDTO.convert(client));
 		model.addAttribute("clientPackage", new ClientPackageDTO());

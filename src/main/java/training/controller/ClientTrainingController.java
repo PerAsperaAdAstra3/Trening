@@ -36,6 +36,10 @@ public class ClientTrainingController {
 			model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingRepository.findAllByClientIdOrderByIdDesc(Long.parseLong(id))));
 		} catch (NumberFormatException numberFormatException) {
 			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		model.addAttribute("clientId", id);

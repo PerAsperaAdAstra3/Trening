@@ -57,6 +57,10 @@ public class ExerciseGroupController {
 			exerciseGroupService.delete(Long.parseLong(id));
 		} catch (NumberFormatException numberFormatException) {
 			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		return "redirect:/exerciseGroupList";
 	}
@@ -69,6 +73,10 @@ public class ExerciseGroupController {
 			exerciseGroup = exerciseGroupService.findOne(Long.parseLong(id));
 		} catch (NumberFormatException numberFormatException) {
 			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		exerciseList.add(exerciseGroup);
 		model.addAttribute("exerciseDTO", new ExerciseDTO());

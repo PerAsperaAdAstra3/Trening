@@ -87,6 +87,10 @@ public class ExerciseController {
 			exerciseService.delete(Long.parseLong(id));
 		} catch (NumberFormatException numberFormatException) {
 			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
 		}
 		return "redirect:/exerciseList/"+hiddenExerciseGroupId;
 	}
