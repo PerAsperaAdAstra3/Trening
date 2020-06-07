@@ -1,3 +1,15 @@
+var COLOR_GREEN = 'rgb(192, 248, 185)';
+	
+var COLOR_YELLOW = 'rgb(239, 244, 138)';
+
+var COLOR_GREEN_HEX = '#c0f8b9';
+
+var COLOR_YELLOW_HEX = '#eff48a';
+
+var COLOR_RED_HEX = '#ff8080';
+
+var COLOR_GRAY_HEX = '#bfc0bf';
+	
 function forgotEmail(emailAddress){
 //send password with email
 	var operatorDTO = {}
@@ -39,15 +51,15 @@ function changeClientPackageStatus(row){
 			var payed = $(row).find(".payedTable").prop("checked");
 			if(state == 'Aktivan'){	
 				if(payed){
-					$(row).css('background-color', '#c0f8b9');
+					$(row).css('background-color', COLOR_GREEN_HEX);
 				} else {
-					$(row).css('background-color', '#eff48a');
+					$(row).css('background-color', COLOR_YELLOW_HEX);
 				}
 			} else {
 				if(payed){
-					$(row).css('background-color', '#bfc0bf');
+					$(row).css('background-color', COLOR_GRAY_HEX);
 				} else {
-					$(row).css('background-color', '#ff8080');
+					$(row).css('background-color', COLOR_RED_HEX);
 				}
 			}
 
@@ -120,15 +132,15 @@ function useClientPackageElement(row){
 
 						if(state == 'Aktivan'){	
 							if(payed){
-								$(this).parent().css('background-color', '#c0f8b9');
+								$(this).parent().css('background-color', COLOR_GREEN_HEX);
 							} else {
-								$(this).parent().css('background-color', '#eff48a');
+								$(this).parent().css('background-color', COLOR_YELLOW_HEX);
 							}
 						} else {
 							if(payed){
-								$(this).parent().css('background-color', '#bfc0bf');
+								$(this).parent().css('background-color', COLOR_GRAY_HEX);
 							} else {
-								$(this).parent().css('background-color', '#ff8080');
+								$(this).parent().css('background-color', COLOR_RED_HEX);
 							}
 						}
 					}
@@ -144,7 +156,7 @@ function useClientPackageElement(row){
 }
 
 function ajaxAddPackageToClient(packageId, packagePrice){
-//	import { COLOR_GREEN, COLOR_YELLOW } from 'constants';
+
 //Add package to client
 	var clientPackageDTO = {}
 	clientPackageDTO["clientId"] = $("#clientId").val();
@@ -171,11 +183,10 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 			}
 			var state = data["clientPackageJSON"]["clientPackageActive"]
 			var payed = data["clientPackageJSON"]["payed"];
-				
 			if(payed == "true"){
-				colorVar = '"background-color: rgb(192, 248, 185);"'
+				colorVar = '"background-color: '+ COLOR_GREEN +';"'
 			} else {
-				colorVar = '"background-color: rgb(239, 244, 138);"'
+				colorVar = '"background-color: '+ COLOR_YELLOW +';"'
 			}
 			
 			var rowCountClientPackage = $('#clientPackageBody tr').length;
