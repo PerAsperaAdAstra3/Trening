@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import training.converter.ClientDTOtoClient;
+import training.converter.ClientPackageToClientPackageDTO;
 import training.converter.ClientToClientDTO;
 import training.dto.ClientDTO;
 import training.dto.ClientPackageDTO;
@@ -37,6 +38,9 @@ public class ClientController {
 	
 	@Autowired
 	ClientDTOtoClient clientDTOtoClient;
+
+	@Autowired
+	ClientPackageToClientPackageDTO clientPackageToClientPackageDTO;
 	
 	Logger logger = LoggerFactory.getLogger(ClientController.class);
 	

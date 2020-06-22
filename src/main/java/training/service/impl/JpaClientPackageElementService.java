@@ -25,8 +25,8 @@ public class JpaClientPackageElementService implements ClientPackageElementServi
 	}
 
 	@Override
-	public List<ClientPackageElement> filter(ClientPackage clientPackage){
-		return clientPackageElementRepository.findByClientPackage(clientPackage) ;
+	public List<ClientPackageElement> filter(List<ClientPackage> clientPackage){
+		return clientPackageElementRepository.findByClientPackageIn(clientPackage) ;
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +26,7 @@ public class Round {
 	@OneToMany(mappedBy = "round", cascade = CascadeType.ALL)
 	private List<ExerciseInRound> roundExerciseInRound = new ArrayList<ExerciseInRound>();
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trainingRound")
 	private Training trainingRound;
 

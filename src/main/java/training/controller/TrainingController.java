@@ -110,7 +110,7 @@ public class TrainingController {
 	try {
 		
 		model.addAttribute("trainingDTO", new TrainingDTO());
-		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingService.findAll()));
+		//model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingService.findAll()));
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		model.addAttribute("idOfCopiedTraining","");
 		model.addAttribute("idOfClientToCopyTo","");
@@ -261,6 +261,37 @@ public class TrainingController {
 		return trainingListTest;
 	}
 	
+	private List<Training> tablesShowingOldTrainingsClientObject(Client client, String trainingId){//String clientId, String trainingId){
+		 //clientService.findOne(Long.parseLong(clientId));
+		List<Training> trainingList = client.getTrainingList();
+		
+		Training training = trainingService.findOne(Long.parseLong(trainingId));
+		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
+		for(int ii = 0; ii < trainingList.size() ; ii++) {
+				if(trainingList.get(ii).getId() > training.getId()) {
+				trainingList.remove(ii);
+			}
+		}
+		
+		if(!trainingId.equals("") || trainingId != null) {
+			trainingList.remove(trainingList.size() - 1);
+		}
+		List<Training> trainingListTest = new ArrayList<Training>();
+		
+		if (trainingList.size() >= 1) {
+			if(trainingList.size() <= 3) {
+				for (int i = 0; i < trainingList.size(); i++) {
+						trainingListTest.add(0, trainingList.get(i));
+				}
+			} else {
+				for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
+					trainingListTest.add(0, trainingList.get(i));
+				}
+			}
+		}
+		return trainingListTest;
+	}
+	
 	@RequestMapping(value = { "/saveTraining"}, method = RequestMethod.POST)
 	public String saveTraining(Model model, @ModelAttribute("trainingDTO") TrainingDTO trainingDTO, @RequestParam String mode) {
 		Long id = -1l;
@@ -370,6 +401,8 @@ public class TrainingController {
 	
 	private List<ExerciseDTO> getExercisesForModel(Training training){
 		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
+		long elapsed = System.currentTimeMillis();
+		System.out.println("PRE POZIVA - exercisesLastTraining : "+elapsed);
 		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(training);
 		for(ExerciseDTO exerciseDTO : exercisesForModal) {
 			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
@@ -454,6 +487,8 @@ public class TrainingController {
 	
 	@RequestMapping(value = {"/getTraining/{id}"}, method = RequestMethod.GET)
 	public String getTraining(Model model, @PathVariable String id){
+		long elapsed = System.currentTimeMillis();
+		System.out.println("PgetTraining - POZVI IZMENI-a : "+elapsed);
 		try {
 			Training training = trainingService.findOne(Long.parseLong(id));
 			
@@ -465,7 +500,8 @@ public class TrainingController {
 			model.addAttribute("hiddenExerciseGroupId", "-1");
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
 			
-			model.addAttribute("trainingListTest", tablesShowingOldTrainings(training.getClient().getId().toString(), training.getId().toString()));
+			model.addAttribute("trainingListTest", tablesShowingOldTrainingsClientObject(training.getClient(), training.getId().toString()));
+					//tablesShowingOldTrainings(training.getClient().getId().toString(), training.getId().toString()));
 			model.addAttribute("id", id);
 			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
 			model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
@@ -504,7 +540,8 @@ public class TrainingController {
 			model.addAttribute("hiddenExerciseGroupId", "-1");
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
 			
-			model.addAttribute("trainingListTest", tablesShowingOldTrainings(training.getClient().getId().toString(), training.getId().toString()));
+			model.addAttribute("trainingListTest", tablesShowingOldTrainingsClientObject(training.getClient(), training.getId().toString()));
+					//(training.getClient().getId().toString(), training.getId().toString()));
 			model.addAttribute("id", id);
 			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
 			model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());

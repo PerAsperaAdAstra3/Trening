@@ -24,8 +24,8 @@ public class JpaClientPackageService implements ClientPackageService {
 	}
 
 	@Override
-	public List<ClientPackage> filter(Client client) {
-		return clientPackageRepository.findByClient(client);
+	public List<ClientPackage> filter(Long id) {
+		return clientPackageRepository.findByClientId(id);//client);
 	}
 
 	@Override

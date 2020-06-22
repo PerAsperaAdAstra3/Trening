@@ -64,6 +64,7 @@ $(document).ready(function(){
 				return false;
 		}
 	});
+	enableAddRound();
 });
 
 
@@ -311,7 +312,7 @@ function sortTable() {
       y = $(this).next().find("td")[5];
       if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
         shouldSwitch = true;
-        break;
+        return;//break;
       }
     });
     if (shouldSwitch) {
@@ -536,7 +537,7 @@ function sync2(item){
 
 	</script>
 </head>
-<body class="gradient" onLoad="enableAddRound()">
+<body class="gradient">
 	<div class="alert div1" role="alert">
 	
 	<div th:include="fragments/header :: header"></div>

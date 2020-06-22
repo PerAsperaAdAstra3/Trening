@@ -60,9 +60,10 @@ $(document).on("click", "#tr-entity-listAllPackages", function(event) {
 
 $(document).on("click", ".addPackageToClient", function(event) {
 
+	var packageName = $(this).parent().parent().find(".packageName").html();
 	var packageId = $(this).parent().parent().find(".packageId").html();
 	var packagePrice = $(this).parent().parent().find(".priceOfPackage").html();
-	ajaxAddPackageToClient(packageId, packagePrice);
+	ajaxAddPackageToClient(packageId, packagePrice, packageName);
 });
 
 $(document).on("click", "#setNumber", function(event) {

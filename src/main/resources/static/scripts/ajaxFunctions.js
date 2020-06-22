@@ -155,7 +155,7 @@ function useClientPackageElement(row){
 	})
 }
 
-function ajaxAddPackageToClient(packageId, packagePrice){
+function ajaxAddPackageToClient(packageId, packagePrice, packageName){
 
 //Add package to client
 	var clientPackageDTO = {}
@@ -163,6 +163,7 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 	clientPackageDTO["packageId"] = packageId;
 	clientPackageDTO["payed"] = $(".payed").prop("checked");
 	clientPackageDTO["priceOfClientPackage"] = packagePrice;
+	clientPackageDTO["nameOfPackage"] = packageName;
 	
 	$.ajax({
 		type: "POST",

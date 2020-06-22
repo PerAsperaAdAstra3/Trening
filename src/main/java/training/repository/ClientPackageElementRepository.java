@@ -10,5 +10,5 @@ import training.model.ClientPackageElement;
 
 @Repository
 public interface ClientPackageElementRepository extends JpaRepository<ClientPackageElement, Long> {
-	List<ClientPackageElement> findByClientPackage(ClientPackage clientPackage);
+	List<ClientPackageElement> findByClientPackageIn(List<ClientPackage> clientPackage);
 }

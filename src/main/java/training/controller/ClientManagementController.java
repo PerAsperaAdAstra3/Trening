@@ -80,7 +80,7 @@ Logger logger = LoggerFactory.getLogger(ClientManagementController.class);
 	public String clientManagement(Model model, @PathVariable String id) {
 
 		List<Package> packageList = packageService.findAll();
-		List<ClientPackage> clientPackageForClient = clientPackageService.filter(clientService.findOne(Long.parseLong(id))); 
+		List<ClientPackage> clientPackageForClient = clientPackageService.filter(Long.parseLong(id)); 
 		List<ClientPackageDTO> clientPackageDTOList = clientPackageToClientPackageDTO.convert(clientPackageForClient);
 		Collections.reverse(clientPackageDTOList);
 		 
@@ -105,9 +105,9 @@ Logger logger = LoggerFactory.getLogger(ClientManagementController.class);
 		
 		List<ClientPackageElement> clientPackageElementList = new ArrayList<ClientPackageElement>();
 		
-		for(ClientPackage clientPackageTemp : clientPackageForClient){
-			clientPackageElementList.addAll(clientPackageElementService.filter(clientPackageTemp));
-		}
+	//	for(ClientPackage clientPackageTemp : clientPackageForClient){
+			clientPackageElementList.addAll(clientPackageElementService.filter(clientPackageForClient)); //clientPackageTemp));
+		//}
 		
 		model.addAttribute("clientPackageElements", clientPackageElementToClientPackageElementDTO.convert(clientPackageElementList));
 		model.addAttribute("elementsInPackages", elementsInPackagesToElementsInPackagesDTO.convert(elementsInPackagesService.findAll()));

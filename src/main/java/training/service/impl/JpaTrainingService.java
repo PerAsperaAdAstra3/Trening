@@ -82,7 +82,7 @@ public class JpaTrainingService implements TrainingService {
 		trainingRepository.save(newTraining);
 		return newTraining;
 	}
-
+/*
 	@Override
 	public Map<Long, Integer> exercisesLastTraining(Training training) {
 		
@@ -151,6 +151,109 @@ public class JpaTrainingService implements TrainingService {
 						}
 					}
 				}
+		}
+
+		return mapExerciseIndexes;
+	}*/
+	
+	@Override
+	public Map<Long, Integer> exercisesLastTraining(Training training) {
+		long start = System.currentTimeMillis();
+		System.out.println(start);
+		/* do your algorithm iteration */
+		
+		List<Training> lastTrainings = trainingRepository.findTop10ByClientIdAndIdLessThanOrderByIdDesc(training.getClient().getId(), training.getId());
+		List<Long> lastTrainingsId = new ArrayList<Long>();
+		for(Training trainingx : lastTrainings) {
+			lastTrainingsId.add(trainingx.getId());
+		}
+		
+		long elapsed = System.currentTimeMillis();
+		System.out.println("Posle vadjenja top 10 treninga : "+elapsed);
+		List<Exercise> exercisesInTraining =  exerciseRepository.getAllExerciseGroupsFortraining(lastTrainingsId);
+		elapsed = System.currentTimeMillis();
+		System.out.println("Sve vezbe iz treninga : "+elapsed);
+	//	elapsed = System.currentTimeMillis() - elapsed;
+		Map<Long, Integer> mapExerciseIndexes = new HashMap<Long, Integer>();
+		Map<Long, Integer> currentGroupIndexes = new HashMap<Long, Integer>();
+		List<Long> allIdsInExerciseTable = new ArrayList<>();
+		
+	//	List<ExerciseInRound> allExercises =  exerciseInRoundRepository.findByRoundTrainingRoundIn(lastTrainings);
+		List<Exercise> allExercisesList = exerciseService.findAll();
+		for(Exercise exerciseTemp : allExercisesList) {
+			allIdsInExerciseTable.add(exerciseTemp.getId());
+		}
+		elapsed = System.currentTimeMillis();
+		System.out.println("Posle vadjenja svih vezbi : "+elapsed);
+		for (Training currentTraining : lastTrainings) {
+
+			List<Long> groupsInTraining = new ArrayList<Long>();
+
+			for (Round round : currentTraining.getRounds())
+				for (ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
+					Integer index = -1;
+				
+					if (allIdsInExerciseTable.contains(exerciseInRound.getExerciseId())) {
+						Long exerciseGroupId = -1l;
+						for(Exercise exerciseTemp : exercisesInTraining) {
+							if(exerciseTemp.getId() == exerciseInRound.getExerciseId()) {
+								exerciseGroupId = exerciseTemp.getExerciseGroup().getId();
+							}
+						}
+						
+						if (groupsInTraining.contains(exerciseGroupId)) {
+							index = currentGroupIndexes.get(exerciseGroupId);
+						} else {
+							groupsInTraining.add(exerciseGroupId);
+							if (!currentGroupIndexes.containsKey(exerciseGroupId)) {
+								index = 1;
+							} else {
+								index = currentGroupIndexes.get(exerciseGroupId) + 1;
+							}
+							currentGroupIndexes.put(exerciseGroupId, index);
+						}
+						if (!mapExerciseIndexes.containsKey(exerciseInRound.getExerciseId()))
+							mapExerciseIndexes.put(exerciseInRound.getExerciseId(), index.intValue());
+					} else { // Doing the check based on Exercise NAME instead of ID
+						exerciseInRound.getExerciseName();
+						
+						Exercise exerciseOfInterest = null;
+						for(Exercise exerciseTemp : exercisesInTraining) {
+							if(exerciseTemp.getName().equals(exerciseInRound.getExerciseName())) {
+								exerciseOfInterest = exerciseTemp;
+							}
+						}
+
+						
+						if(exerciseOfInterest != null)
+						if (allIdsInExerciseTable.contains(exerciseOfInterest.getId())) {
+
+							Long exerciseGroupId = -1l;
+
+							for(Exercise exerciseTemp : exercisesInTraining) {
+								if(exerciseTemp.getId() == exerciseInRound.getExerciseId()) {
+									exerciseGroupId = exerciseTemp.getExerciseGroup().getId();
+								}
+							}
+
+							if (groupsInTraining.contains(exerciseGroupId)) {
+								index = currentGroupIndexes.get(exerciseGroupId);
+							} else {
+								groupsInTraining.add(exerciseGroupId);
+								if (!currentGroupIndexes.containsKey(exerciseGroupId)) {
+									index = 1;
+								} else {
+									index = currentGroupIndexes.get(exerciseGroupId) + 1;
+								}
+								currentGroupIndexes.put(exerciseGroupId, index);
+							}
+							if (!mapExerciseIndexes.containsKey(exerciseOfInterest.getId()))
+								mapExerciseIndexes.put(exerciseOfInterest.getId(), index.intValue());
+						}
+					}
+				}
+			elapsed = System.currentTimeMillis();
+			System.out.println("Prolaz kroz treninge : "+elapsed);
 		}
 
 		return mapExerciseIndexes;

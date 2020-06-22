@@ -2,6 +2,7 @@ package training.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,14 +22,14 @@ public class ClientPackageElement {
 	@Column(name="activeLeft")
 	private Integer activeLeft;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="clientPackage")
 	private ClientPackage clientPackage;
 	
 	@Column(name="clientPackageElementStatus")
 	private boolean clientPackageElementStatus;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="elementsInPackages")
 	private ElementsInPackages elementsInPackages;
 	
