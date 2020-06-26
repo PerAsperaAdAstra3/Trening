@@ -2,25 +2,16 @@ package training.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,6 +35,8 @@ import training.model.Client;
 import training.model.ExerciseInRound;
 import training.model.Round;
 import training.model.Training;
+import training.repository.ExerciseGroupRepository;
+import training.repository.ExerciseRepository;
 import training.repository.TrainingRepository;
 import training.service.ClientService;
 import training.service.ExerciseGroupService;
@@ -102,6 +95,12 @@ public class TrainingController {
 	
 	@Autowired
 	private TrainingRepository trainingRepository;
+	
+	@Autowired
+	private ExerciseGroupRepository exerciseGroupRepository;
+	
+	@Autowired
+	private ExerciseRepository exerciseRepository;
 	
 	Logger logger = LoggerFactory.getLogger(TrainingController.class);
 	
@@ -261,11 +260,12 @@ public class TrainingController {
 		return trainingListTest;
 	}
 	
-	private List<Training> tablesShowingOldTrainingsClientObject(Client client, String trainingId){//String clientId, String trainingId){
+	private List<Training> tablesShowingOldTrainingsClientObject(Client client, Training trainingAttr){
 		 //clientService.findOne(Long.parseLong(clientId));
 		List<Training> trainingList = client.getTrainingList();
-		
-		Training training = trainingService.findOne(Long.parseLong(trainingId));
+		long elapsed = System.currentTimeMillis();
+		System.out.println("USLI SMO U - tablesShowingOldTrainingsClientObject : "+elapsed);
+		Training training = trainingAttr;
 		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
 		for(int ii = 0; ii < trainingList.size() ; ii++) {
 				if(trainingList.get(ii).getId() > training.getId()) {
@@ -273,7 +273,7 @@ public class TrainingController {
 			}
 		}
 		
-		if(!trainingId.equals("") || trainingId != null) {
+		if(trainingAttr.getId() != null) {
 			trainingList.remove(trainingList.size() - 1);
 		}
 		List<Training> trainingListTest = new ArrayList<Training>();
@@ -400,10 +400,14 @@ public class TrainingController {
 	}
 	
 	private List<ExerciseDTO> getExercisesForModel(Training training){
-		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseService.findAll());
 		long elapsed = System.currentTimeMillis();
-		System.out.println("PRE POZIVA - exercisesLastTraining : "+elapsed);
+		System.out.println("PRE Vadjenje svih All Exercises-a : "+elapsed);
+		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(exerciseRepository.getAllExercises());//exerciseService.findAll());
+		elapsed = System.currentTimeMillis();
+		System.out.println("POCETAK ZA - getExercisesForModel : "+elapsed);
 		Map<Long,Integer> mapOfExercisesForClient = trainingService.exercisesLastTraining(training);
+		elapsed = System.currentTimeMillis();
+		System.out.println("DIREKTNO - posle getExercisesForModel : "+elapsed);
 		for(ExerciseDTO exerciseDTO : exercisesForModal) {
 			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
 				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
@@ -411,6 +415,8 @@ public class TrainingController {
 				exerciseDTO.setColorCode(60);
 			}
 		}
+		elapsed = System.currentTimeMillis();
+		System.out.println("KRAJ - getExercisesForModel : "+elapsed);
 		return exercisesForModal;
 	}
 	
@@ -487,20 +493,31 @@ public class TrainingController {
 	
 	@RequestMapping(value = {"/getTraining/{id}"}, method = RequestMethod.GET)
 	public String getTraining(Model model, @PathVariable String id){
-		long elapsed = System.currentTimeMillis();
-		System.out.println("PgetTraining - POZVI IZMENI-a : "+elapsed);
+		long elapsed = 0l;
+		
 		try {
-			Training training = trainingService.findOne(Long.parseLong(id));
-			
+		
+			elapsed = System.currentTimeMillis();
+			System.out.println("PRE - FindONE-a - SERVICE : "+elapsed);
+		
+			Training training = trainingRepository.getOneTrainingById(Long.parseLong(id));
+		
 			List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
 			for (Round roundIter : training.getRounds()) {
 				listExerciseInRound.addAll(roundIter.getExerciseInRound());
+				elapsed = System.currentTimeMillis();
+				System.out.println("For za vadjenje exercises in Round : "+elapsed);
 			}
 			model.addAttribute("exerciseDTO", new ExerciseDTO());
 			model.addAttribute("hiddenExerciseGroupId", "-1");
-			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
 			
-			model.addAttribute("trainingListTest", tablesShowingOldTrainingsClientObject(training.getClient(), training.getId().toString()));
+			elapsed = System.currentTimeMillis();
+			System.out.println("*****************NEW****************** - REPOSITORY - PRE exerciseGroup findAll-a: "+elapsed);
+			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupRepository.getExerciseGroupTest()));
+			elapsed = System.currentTimeMillis();
+			System.out.println("POSLE exerciseGroup findAll-a: "+elapsed);
+			
+			model.addAttribute("trainingListTest", tablesShowingOldTrainingsClientObject(training.getClient(), training));
 					//tablesShowingOldTrainings(training.getClient().getId().toString(), training.getId().toString()));
 			model.addAttribute("id", id);
 			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
@@ -521,7 +538,8 @@ public class TrainingController {
 			model.addAttribute("errorMessage", messageList);
 			return "errorPage";
 		}
-		
+		elapsed = System.currentTimeMillis();
+		System.out.println("KRAJ - getTraining : "+elapsed);
 		return "trainingCreation";
 	}
 	
@@ -540,7 +558,7 @@ public class TrainingController {
 			model.addAttribute("hiddenExerciseGroupId", "-1");
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
 			
-			model.addAttribute("trainingListTest", tablesShowingOldTrainingsClientObject(training.getClient(), training.getId().toString()));
+			model.addAttribute("trainingListTest", tablesShowingOldTrainingsClientObject(training.getClient(), training));
 					//(training.getClient().getId().toString(), training.getId().toString()));
 			model.addAttribute("id", id);
 			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));

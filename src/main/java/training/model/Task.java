@@ -27,8 +27,8 @@ public class Task {
 	@JoinColumn(name = "trainingTask")
 	private Training trainingTask;
 	
-	@OneToMany(mappedBy = "task")
-	private List<ExerciseGroup> exercisesGroup = new ArrayList<ExerciseGroup>();
+//	@OneToMany(mappedBy = "task")
+//	private List<ExerciseGroup> exercisesGroup = new ArrayList<ExerciseGroup>();
 
 	public Long getId() {
 		return id;
@@ -50,13 +50,13 @@ public class Task {
 		this.trainingTask = training;
 	}
 
-	public List<ExerciseGroup> getExercisesInRound() {
+/*	public List<ExerciseGroup> getExercisesInRound() {
 		return exercisesGroup;
 	}
 
 	public void addExercisesInRound(ExerciseGroup exerciseGroup) {
 		exercisesGroup.add(exerciseGroup);
-	}
+	}*/
 
 	public Task() {}
 	
