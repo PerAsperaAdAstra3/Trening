@@ -1,5 +1,7 @@
 package training.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,6 +34,28 @@ public class ClientPackageElement {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="elementsInPackages")
 	private ElementsInPackages elementsInPackages;
+	
+	@Column(name="isprotected")
+	private boolean isProtected = false;
+	
+	@Column(name="dateofchange")
+	private Date dateOfChanged;
+	
+	public Date getDateOfChanged() {
+		return dateOfChanged;
+	}
+
+	public void setDateOfChanged(Date dateOfChanged) {
+		this.dateOfChanged = dateOfChanged;
+	}
+
+	public boolean isIsProtected() {
+		return isProtected;
+	}
+
+	public void setIsProtected(boolean isProtected) {
+		this.isProtected = isProtected;
+	}
 	
 	public Integer getActiveLeft() {
 		return activeLeft;

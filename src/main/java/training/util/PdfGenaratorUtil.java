@@ -1,5 +1,6 @@
 package training.util;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,6 +42,7 @@ public class PdfGenaratorUtil {
 		
 		String processedHtml = templateEngine.process(templateName, ctx);
 		  FileOutputStream os = null;
+		  String filePath = "";
 		  String fileName = UUID.randomUUID().toString();
 	        try {
 
@@ -59,8 +61,11 @@ public class PdfGenaratorUtil {
 	        	String fileNameString = map.get("name").toString()+" " +map.get("trainingNumber").toString() + ".pdf";
 	        	java.nio.file.Path path = java.nio.file.Paths.get(pathTest.toString(), fileNameString);
 	        	File outputFile = new File(path.toString());
+	        	
+	        	boolean exists = outputFile.exists();
+	        	System.out.println("Da li je fajl vec bio odstampan : "+ exists);
 	        	os = new FileOutputStream(outputFile);
-
+	        	filePath = path.toString();
 	            ITextRenderer renderer = new ITextRenderer();
 	            renderer.setDocumentFromString(processedHtml);
 	            renderer.layout();
@@ -74,6 +79,8 @@ public class PdfGenaratorUtil {
 	            if (os != null) {
 	                try {
 	                    os.close();
+	      	          ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "explorer " + filePath);
+	      	          processBuilder.start();
 	                } catch (IOException e) {
 	        			LoggingUtil.LoggingMethod(logger, e);
 	        		}

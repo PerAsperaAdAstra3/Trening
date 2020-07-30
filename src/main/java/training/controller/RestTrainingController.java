@@ -246,7 +246,11 @@ public class RestTrainingController {
 		JSONObject obj = new JSONObject();
 		//TODO add logging for error in future PR.
 		try {
-			obj.put("exerciseInRoundExerciseName", eir.getExerciseName());
+			if(eir.getExercise() != null) {
+				obj.put("exerciseInRoundExerciseName", eir.getExercise().getName()); //eir.getExerciseName());
+			} else {
+				obj.put("exerciseInRoundExerciseName", eir.getExerciseName());
+			}
 			obj.put("exerciseInRoundDifficulty", eir.getDifficulty());
 			obj.put("exerciseInRoundNote", eir.getNote());
 			obj.put("exerciseInRoundNumberOfRepetitions", eir.getNumberOfRepetitions());
@@ -258,6 +262,7 @@ public class RestTrainingController {
 	
 	private Long addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
 		ExerciseInRound exerciseInRound;
+		exerciseInRoundDTO.setExercise(exerciseService.findOne(exerciseInRoundDTO.getExerciseInRoundExerciseId()));
 		exerciseInRound = exerciseInRoundService.save(exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
 		newExerciseInRoundExecId = exerciseInRound.getExecInRound_Id();
 		return exerciseInRound.getRound().getId();
@@ -274,6 +279,7 @@ public class RestTrainingController {
 
 	@PostMapping(value = { "/changeExerciseInRoundAjax" })
 	public ResponseEntity<?> changeExerciseInRound(@Valid @RequestBody ExerciseInRoundDTOAjax exerciseInRoundDTOAjax) {
+		System.out.println("---ChangeExerciseInRound---");
 		JSONObject obj = new JSONObject();
 		try {
 			obj.put("exerciseInRoundExerciseName", exerciseInRoundDTOAjax.getExerciseInRoundExerciseName());
@@ -291,6 +297,12 @@ public class RestTrainingController {
 			exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseInRoundDTOAjax.getExerciseInRoundExerciseName());
 			exerciseInRoundDTO.setExerciseInRoundExerciseId(Long.parseLong(exerciseInRoundDTOAjax.getExerciseInRoundExerciseId()));
 			exerciseInRoundDTO.setNote(exerciseInRoundDTOAjax.getExerciseInRoundNote());
+			System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundNote());
+			System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundDifficulty());
+			System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundNumberOfRepetitions());
+			
+			//exerciseInRoundRepository.findOne(exerciseInRoundDTOAjax.getExerciseExecId());
+			
 			exerciseInRoundDTO.setNumberOfRepetitions(exerciseInRoundDTOAjax.getExerciseInRoundNumberOfRepetitions());
 			exerciseInRoundDTO.setDifficulty(exerciseInRoundDTOAjax.getExerciseInRoundDifficulty());
 			exerciseInRoundDTO.setRoundId(Long.parseLong(exerciseInRoundDTOAjax.getRoundId()));
@@ -394,7 +406,7 @@ public class RestTrainingController {
 					} else {
 						exerciseInRound.setDifficulty(filterLocalCharacters(""));
 					}
-					exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExerciseName()));
+					exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExercise().getName())); //exerciseInRound.getExerciseName()));
 					if(null != exerciseInRound.getNumberOfRepetitions()) {
 						exerciseInRound.setNote(filterLocalCharacters(exerciseInRound.getNote()));
 					} else {

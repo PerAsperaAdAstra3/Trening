@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import training.converter.PackageElementDTOtoPackageElement;
+import training.converter.PackageElementToPackageElementDTO;
 import training.dto.ElementsInPackagesDTO;
 import training.dto.ElementsInPackagesDTOAjax;
 import training.dto.PackageDTOAjax;
+import training.dto.PackageElementDTO;
 import training.model.ElementsInPackages;
 import training.model.Package;
 import training.model.PackageElement;
@@ -37,7 +40,52 @@ public class RestPackageController {
 	@Autowired
 	ElementsInPackagesService elementsInPackagesService;
 
+	@Autowired
+	PackageElementDTOtoPackageElement packageElementDTOtoPackageElement;
+	
+	@Autowired
+	PackageElementToPackageElementDTO packageElementToPackageElementDTO;
+	
 	Logger logger = LoggerFactory.getLogger(RestPackageController.class);
+	
+
+	
+	@PostMapping(value = { "/deletePackageElementRest"})
+	public ResponseEntity<?> deletePackageElementRest(@Valid @RequestBody PackageElementDTO packageElementDTO) {
+		JSONObject obj = new JSONObject();
+		
+		System.out.println("DELETE!!!!");
+		packageElementService.delete(packageElementDTO.getPackageElementID());
+	
+		return ResponseEntity.ok(obj.toString());
+	}
+	
+	@PostMapping(value = { "/addNewPackageElement"})
+	public ResponseEntity<?> addNewPackageElement(@Valid @RequestBody PackageElementDTO packageElementDTO) {
+		JSONObject obj = new JSONObject();
+		
+		System.out.println(packageElementDTO.getPackageElementName());
+		System.out.println(packageElementDTO.getDescription());
+		
+		packageElementDTO.setPackageElementID(null);
+		PackageElement packageElement = packageElementService.save(packageElementDTOtoPackageElement.convert(packageElementDTO));
+
+		obj.put("packageElementAJAX", packageElementToPackageElementDTO.convert(packageElement));
+		
+		obj.put("elementName", packageElement.getPackageElementName());
+		obj.put("elementDescriptions", packageElement.getDescription());
+		obj.put("elementID", packageElement.getPackageElementID());
+//		obj.put("packageElementAJAX", packageElementToPackageElementDTO.convert(packageElement));
+	//	obj.put("packageElementAJAX", packageElementToPackageElementDTO.convert(packageElement));
+		
+		/*		Long trainingId = -1l;
+
+		List<ElementsInPackagesDTO> elementsInPackagesDTOList = new ArrayList<ElementsInPackagesDTO>();
+		
+		PackageElement packageElement = packageElementService.findOne(packageDTOAjax.getPackageElementId() );
+	*/	
+		return ResponseEntity.ok(obj.toString());
+	}
 	
 	@PostMapping(value = { "/addPackagePackageElement"})
 	public ResponseEntity<?> addPackagePackageElement(@Valid @RequestBody PackageDTOAjax packageDTOAjax) {

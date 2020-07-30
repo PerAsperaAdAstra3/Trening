@@ -21,5 +21,5 @@ public interface TrainingService {
 	
 	Training edit(Long id, Training training);
 	
-	Map<Long,Integer> exercisesLastTraining(Training training);
+	Map<Long,Integer> exercisesLastTraining(Training training, List<Exercise> allExercisesList);
 }

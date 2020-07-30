@@ -60,6 +60,7 @@ public class JpaPackageElementService implements PackageElementService {
 		PackageElement oldPackageElement = packageElementRepository.findOne(id);
 		oldPackageElement.setDescription(packageElement.getDescription());
 		oldPackageElement.setPackageElementName(packageElement.getPackageElementName());
+		oldPackageElement.setIsProtected(packageElement.isIsProtected());
 		packageElementRepository.save(oldPackageElement);
 		return null;
 	}

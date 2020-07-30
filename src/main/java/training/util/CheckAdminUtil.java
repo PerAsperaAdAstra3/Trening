@@ -45,10 +45,6 @@ public class CheckAdminUtil {
 			operatorx.setPassword(passwordEncoder.encode(newPassword));
 			operatorx.setAuthorities("ADMIN");
 			operatorx.setEmail(this.environment.getProperty("business.mail"));
-			System.out.println(operatorx.getUserName());
-			System.out.println(operatorx.getPassword());
-			System.out.println(operatorx.getAuthorities());
-			System.out.println(operatorx.getEmail());
 			operatorService.save(operatorx);
 			
 			mailService.sendEmail(operatorx, newPassword);

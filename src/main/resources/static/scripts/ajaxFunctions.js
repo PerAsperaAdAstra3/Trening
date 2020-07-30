@@ -10,6 +10,61 @@ var COLOR_RED_HEX = '#ff8080';
 
 var COLOR_GRAY_HEX = '#bfc0bf';
 	
+function deletePackageElement(packageId){
+		var packageElementDTO = {}
+		
+		packageElementDTO["packageElementID"] = packageId;
+		
+		$.ajax({
+			type: "POST",
+			contentType: "application/json",
+			url:	"/deletePackageElementRest",
+			data: JSON.stringify(packageElementDTO),
+			dataType: 'json',
+			cache: false,
+			timeout: 600000,
+			success: function (data){
+
+			},
+			error: function (e) {
+				alert('Desila se greska prilikom brisanja elementa paketa!')
+			}
+		})
+	}
+
+
+function addPackageElement(name, description, isProtected){
+
+		var packageDTO = {}
+		
+		packageDTO["packageElementName"] = name;
+		packageDTO["description"] = description;
+		packageDTO["isProtected"] = isProtected;
+		
+		$.ajax({
+			type: "POST",
+			contentType: "application/json",
+			url:	"/addNewPackageElement",
+			data: JSON.stringify(packageDTO),
+			dataType: 'json',
+			cache: false,
+			timeout: 600000,
+			success: function (data){
+				$(".trPE").removeClass("highlighted");
+				$('#packageElementBody').append('<tr id="tr-entity-listPE" class="trPE highlighted">'+
+						'<td class="packageElementName tdPE">'+ data["elementName"] +'</td>'+
+						'<td class="packageElementDescription tdPE">'+ data["elementDescriptions"] +'</td>'+
+						'<td scope="row" class="packageElementId" style="display:none;">'+ data["elementID"] +'</td>'+
+						'<td scope="row" class="packageElementPackageId" style="display:none;">'+ data["packageElementAJAX"]["packageId"] +'</td>'+
+						'<td><button type="button" class="btn btn-danger deletePackageElement">Briši</button></td>'+
+						'<td><button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#packagePageModal">Dodaj u paket</button></td></tr>');
+			},
+			error: function (e) {
+				alert('Desila se greska prilikom rešavanja problema zaboravljene lozinke!')
+			}
+		})
+	}
+
 function forgotEmail(emailAddress){
 //send password with email
 	var operatorDTO = {}

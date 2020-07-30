@@ -19,6 +19,7 @@ public class ExerciseInRoundToExerciseInRoundDTO implements Converter<ExerciseIn
 		exerciseInRoundDTO.setDifficulty(source.getDifficulty());
 		exerciseInRoundDTO.setExerciseInRoundExerciseName(source.getExerciseName());
 		exerciseInRoundDTO.setExerciseInRoundExerciseId(source.getExerciseId());
+		exerciseInRoundDTO.setExercise(source.getExercise());
 		exerciseInRoundDTO.setRoundId(source.getRound().getId());
 		exerciseInRoundDTO.addRoundName(String.valueOf(source.getRound().getRoundSequenceNumber()));
 		exerciseInRoundDTO.setNote(source.getNote());

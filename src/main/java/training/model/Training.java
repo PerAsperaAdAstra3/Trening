@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import training.enumerations.TrainingStatusEnum;
 
 @Entity(name = "Training")
 public class Training {
@@ -38,6 +42,17 @@ public class Training {
     @OneToMany(mappedBy = "trainingRound", cascade = CascadeType.ALL)
 	private List<Round> rounds = new ArrayList<Round>();
 	
+    @Enumerated(EnumType.STRING)
+    private TrainingStatusEnum status = TrainingStatusEnum.DONE;
+    
+	public TrainingStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(TrainingStatusEnum status) {
+		this.status = status;
+	}
+
 	public Long getId() {
 		return id;
 	}

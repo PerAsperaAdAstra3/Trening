@@ -25,6 +25,7 @@ public class TrainingToTrainingDTO implements Converter<Training,TrainingDTO> {
 	    String strDate = formatter.format(source.getDate());
 		trainingDTO.setDate(strDate);
 		trainingDTO.setNumberOfTrainings(source.getNumberOfTrainings());
+		trainingDTO.setStatus(source.getStatus());
 		if(source.getClient() != null) {
 			trainingDTO.setClient(source.getClient().getName());
 			trainingDTO.setClientFamilyName(source.getClient().getFamilyName());

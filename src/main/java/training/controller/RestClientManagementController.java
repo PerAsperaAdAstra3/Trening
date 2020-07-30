@@ -1,6 +1,7 @@
 package training.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -65,7 +66,7 @@ public class RestClientManagementController {
 			clientPackageElement.setActiveLeft(Integer.parseInt(elementsInPackages.getNumber()+""));
 			clientPackageElement.setElementsInPackages(elementsInPackages);
 			clientPackageElement.setClientPackageElementStatus(true);
-			
+			clientPackageElement.setIsProtected(elementsInPackages.getPackageElementEIP().isIsProtected());
 			clientPackage.addClientPackageElements(clientPackageElement);
 			
 			clientPackageElementService.save(clientPackageElement);
@@ -98,14 +99,24 @@ public class RestClientManagementController {
 	public ResponseEntity<?> useUpAPackageElement(@Valid @RequestBody ClientPackageElementDTO clientPackageElementDTO) {
 		JSONObject obj = new JSONObject();	
 		ClientPackageElement clientPackageElement = clientPackageElementService.findOne(clientPackageElementDTO.getId()) ;
-		if(clientPackageElement.getActiveLeft() > 0) {
-			clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() - 1);
+		System.out.println("Trebalo bi da umanji!");
+		Date todaysDate = new Date();
+		System.out.println("Todays date : " + todaysDate);
+		Date oldDateVar = new Date(1990,1,1);
+		System.out.println("OldDate : " + oldDateVar);
+		if(clientPackageElement.getDateOfChanged() != null) {
+			oldDateVar = clientPackageElement.getDateOfChanged();
 		}
+		if(todaysDate.before(oldDateVar)) {
+			if(clientPackageElement.getActiveLeft() > 0) {
+				clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() - 1);
+				clientPackageElement.setDateOfChanged(new Date());
+			}
 		
-		if(clientPackageElement.getActiveLeft() < 1) {
-			clientPackageElement.setClientPackageElementStatus(false);
+			if(clientPackageElement.getActiveLeft() < 1) {
+				clientPackageElement.setClientPackageElementStatus(false);
+			}
 		}
-		
 		clientPackageElementService.save(clientPackageElement);
 		
 		ClientPackage clientPackage = clientPackageElement.getClientPackage();

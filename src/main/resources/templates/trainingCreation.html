@@ -574,6 +574,15 @@ function sync2(item){
 			<input type="text" id="trainingClient" class="form-control" th:field="*{client}" disabled="disabled"/>
 		</div>
 	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width" for="trainingClient">Status:</label>
+			<select class="selectpicker form-control" name="planet" th:field="*{status}">
+		        <option th:each="status : ${T(training.enumerations.TrainingStatusEnum).values()}"
+		                th:value="${status}" th:text="${status}"></option>
+		    </select>
+		</div>
+	</div>
 	<input type="hidden" class="idTraining" th:field="*{id}"/>
 	<input type="hidden" class="id" th:field="*{clientId}"/>
 

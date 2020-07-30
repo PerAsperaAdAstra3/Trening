@@ -1,5 +1,7 @@
 package training.dto;
 
+import training.enumerations.TrainingStatusEnum;
+
 public class TrainingDTO {
 
 	private Long id;
@@ -13,6 +15,8 @@ public class TrainingDTO {
 	private String clientFamilyName;
 
 	private String clientId;
+	
+	private TrainingStatusEnum status;
 
 	public String getClientFamilyName() {
 		return clientFamilyName;
@@ -60,6 +64,14 @@ public class TrainingDTO {
 
 	public void setClient(String client) {
 		this.client = client;
+	}
+
+	public TrainingStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(TrainingStatusEnum status) {
+		this.status = status;
 	}
 
 	public TrainingDTO() {}

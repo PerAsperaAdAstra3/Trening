@@ -44,6 +44,7 @@ public class TrainingDTOtoTraining implements Converter<TrainingDTO,Training>{
 	
 		training.setNumberOfTrainings(source.getNumberOfTrainings());
 		training.setClient(clientService.findOne(Long.parseLong(source.getClientId())));
+		training.setStatus(source.getStatus());
 		return training;
 	}
 
