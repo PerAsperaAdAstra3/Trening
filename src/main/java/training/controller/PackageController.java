@@ -98,7 +98,6 @@ public class PackageController {
 	
 	@RequestMapping(value = {"/deletePackageElement/{id}"}, method = RequestMethod.GET)
 	public String deletePackageElement(@PathVariable String id) {
-		System.out.println("BRISANJE POZVANO");
 		try {
 			packageElementService.delete(Long.parseLong(id));
 		} catch (NumberFormatException numberFormatException) {

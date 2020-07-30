@@ -22,9 +22,6 @@ public class PackageElementToPackageElementDTO implements Converter<PackageEleme
 		
 		ModelMapper modelMapper = new ModelMapper();
 		PackageElementDTO packageElementDTO = modelMapper.map(source, PackageElementDTO.class);
-		System.out.println("*******************");
-		System.out.println("Name : "+packageElementDTO.getPackageElementName());
-		System.out.println("Description : "+packageElementDTO.getDescription());
 		return packageElementDTO;
 	}
 

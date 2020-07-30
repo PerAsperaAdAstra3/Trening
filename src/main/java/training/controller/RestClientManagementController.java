@@ -99,11 +99,8 @@ public class RestClientManagementController {
 	public ResponseEntity<?> useUpAPackageElement(@Valid @RequestBody ClientPackageElementDTO clientPackageElementDTO) {
 		JSONObject obj = new JSONObject();	
 		ClientPackageElement clientPackageElement = clientPackageElementService.findOne(clientPackageElementDTO.getId()) ;
-		System.out.println("Trebalo bi da umanji!");
 		Date todaysDate = new Date();
-		System.out.println("Todays date : " + todaysDate);
 		Date oldDateVar = new Date(1990,1,1);
-		System.out.println("OldDate : " + oldDateVar);
 		if(clientPackageElement.getDateOfChanged() != null) {
 			oldDateVar = clientPackageElement.getDateOfChanged();
 		}

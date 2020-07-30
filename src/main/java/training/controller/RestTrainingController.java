@@ -279,7 +279,6 @@ public class RestTrainingController {
 
 	@PostMapping(value = { "/changeExerciseInRoundAjax" })
 	public ResponseEntity<?> changeExerciseInRound(@Valid @RequestBody ExerciseInRoundDTOAjax exerciseInRoundDTOAjax) {
-		System.out.println("---ChangeExerciseInRound---");
 		JSONObject obj = new JSONObject();
 		try {
 			obj.put("exerciseInRoundExerciseName", exerciseInRoundDTOAjax.getExerciseInRoundExerciseName());
@@ -297,12 +296,6 @@ public class RestTrainingController {
 			exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseInRoundDTOAjax.getExerciseInRoundExerciseName());
 			exerciseInRoundDTO.setExerciseInRoundExerciseId(Long.parseLong(exerciseInRoundDTOAjax.getExerciseInRoundExerciseId()));
 			exerciseInRoundDTO.setNote(exerciseInRoundDTOAjax.getExerciseInRoundNote());
-			System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundNote());
-			System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundDifficulty());
-			System.out.println(exerciseInRoundDTOAjax.getExerciseInRoundNumberOfRepetitions());
-			
-			//exerciseInRoundRepository.findOne(exerciseInRoundDTOAjax.getExerciseExecId());
-			
 			exerciseInRoundDTO.setNumberOfRepetitions(exerciseInRoundDTOAjax.getExerciseInRoundNumberOfRepetitions());
 			exerciseInRoundDTO.setDifficulty(exerciseInRoundDTOAjax.getExerciseInRoundDifficulty());
 			exerciseInRoundDTO.setRoundId(Long.parseLong(exerciseInRoundDTOAjax.getRoundId()));

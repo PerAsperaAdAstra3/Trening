@@ -88,21 +88,13 @@ public class JpaTrainingService implements TrainingService {
 	private void changeClientPackageElementState(Training training, Training oldTraining) {
 		Client client = training.getClient();
 		TrainingStatusEnum tse = training.getStatus();
-		
-		System.out.println("Uslo smo u changeClientPackageElementState");
 		List<ClientPackage> clientPackages = client.getClientPackages();
-		System.out.println("New status : " + training.getStatus());
-		System.out.println("Old status : " + oldTraining.getStatus());
 		if(training.getStatus() != oldTraining.getStatus()) {
-			System.out.println("Status je razlicit!! Usli smo u IF");
 			for(ClientPackage clientPackage : clientPackages) {
 				ClientPackageStateEnum clientPackageStateEnum = clientPackage.getClientPackageActive();
 				if(clientPackageStateEnum == clientPackageStateEnum.ACTIVE) {
-					System.out.println("Klijentov paket aktivan!");
 					List<ClientPackageElement> clientPackageElements = clientPackage.getClientPackageElements();
 					for(ClientPackageElement clientPackageElement : clientPackageElements) {
-						System.out.println("Is protected - clientPackageElement : "+clientPackageElement.isIsProtected());
-						System.out.println("Status - clientPackageElement : "+clientPackageElement.isClientPackageElementStatus());
 						if(clientPackageElement.isIsProtected() && clientPackageElement.isClientPackageElementStatus()) {
 							System.out.println("Trebalo bi da umanji!");
 							Date todaysDate = new Date();
@@ -154,7 +146,6 @@ public class JpaTrainingService implements TrainingService {
 		if(!lastTrainingsId.isEmpty()) {
 			List<Object[]> rs = exerciseRepository.getAllExerciseGroupsFortrainingMULTIPLE(lastTrainingsId);
 
-		//List<Exercise> allExercisesList = exerciseService.findAll();
 		for(Exercise exerciseTemp : allExercisesList) {
 			allIdsInExerciseTable.add(exerciseTemp.getId());
 		}

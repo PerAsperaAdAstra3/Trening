@@ -53,37 +53,19 @@ public class RestPackageController {
 	@PostMapping(value = { "/deletePackageElementRest"})
 	public ResponseEntity<?> deletePackageElementRest(@Valid @RequestBody PackageElementDTO packageElementDTO) {
 		JSONObject obj = new JSONObject();
-		
-		System.out.println("DELETE!!!!");
 		packageElementService.delete(packageElementDTO.getPackageElementID());
-	
 		return ResponseEntity.ok(obj.toString());
 	}
 	
 	@PostMapping(value = { "/addNewPackageElement"})
 	public ResponseEntity<?> addNewPackageElement(@Valid @RequestBody PackageElementDTO packageElementDTO) {
 		JSONObject obj = new JSONObject();
-		
-		System.out.println(packageElementDTO.getPackageElementName());
-		System.out.println(packageElementDTO.getDescription());
-		
 		packageElementDTO.setPackageElementID(null);
 		PackageElement packageElement = packageElementService.save(packageElementDTOtoPackageElement.convert(packageElementDTO));
-
-		obj.put("packageElementAJAX", packageElementToPackageElementDTO.convert(packageElement));
-		
+		obj.put("packageElementAJAX", packageElementToPackageElementDTO.convert(packageElement));		
 		obj.put("elementName", packageElement.getPackageElementName());
 		obj.put("elementDescriptions", packageElement.getDescription());
 		obj.put("elementID", packageElement.getPackageElementID());
-//		obj.put("packageElementAJAX", packageElementToPackageElementDTO.convert(packageElement));
-	//	obj.put("packageElementAJAX", packageElementToPackageElementDTO.convert(packageElement));
-		
-		/*		Long trainingId = -1l;
-
-		List<ElementsInPackagesDTO> elementsInPackagesDTOList = new ArrayList<ElementsInPackagesDTO>();
-		
-		PackageElement packageElement = packageElementService.findOne(packageDTOAjax.getPackageElementId() );
-	*/	
 		return ResponseEntity.ok(obj.toString());
 	}
 	
