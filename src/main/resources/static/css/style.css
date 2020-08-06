@@ -12,6 +12,21 @@ h2 {
 	color: red;
 }
 
+.messageText {
+	font-weight: bold;
+	color: green;
+	font-size: 25px;
+}
+
+.divBorder {
+	border-style: solid;
+	border-width: 6px;
+	border-color: green;
+	padding-left: 15px;
+	padding-right: 15px;
+	border-radius: 0.25rem;
+}
+
 .successText {
 	font-weight: bold;
 	color: green;

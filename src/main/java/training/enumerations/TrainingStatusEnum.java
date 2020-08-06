@@ -20,5 +20,6 @@ public enum TrainingStatusEnum {
 	
 	TrainingStatusEnum(final String name, final String localisedName){
 		this.name = name;
+		this.localisedName = localisedName;
 	}
 }

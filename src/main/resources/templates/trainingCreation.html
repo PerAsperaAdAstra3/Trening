@@ -12,10 +12,15 @@
 	<link rel="stylesheet" type="text/css" th:href="@{../../css/bootstrap.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{../../css/style.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{../../css/custom-dropdown.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{../../css/stylePackage.css}"/>
 
 <script>
 
 $(document).ready(function(){
+	$("#dialogStatusChange").hide();
+	var parentDiv = $("#dialogStatusChange").parent();
+	parentDiv.removeClass("divBorder");
+	
 	selectedRound = $("#selectedRoundId").val()
 	if (selectedRound != ''){
 		$("#roundsTable tr").each(function() {
@@ -38,7 +43,6 @@ $(document).ready(function(){
 //	$("#round-id-sync:first").addClass("highlighted");
 //	sync1($("#round-id-sync:first"));
 	selectRoundIdOnRowClick($("#round-id-sync:first"));
-
 	
 	$('#addExerciseInRoundForm').submit(function(){
 		var areFieldsFilledIn = true;
@@ -65,8 +69,10 @@ $(document).ready(function(){
 		}
 	});
 	enableAddRound();
-});
 
+//Timed message for when 
+	statusChangeMessage()
+});
 
 $(document).on("click", "#button1", function(){
 	determineButton("button1")
@@ -533,9 +539,32 @@ function sync2(item){
     $("#exerciseInRoundDifficulty").val(difficulty);
 	    
 }
-	
+
+$(document).on("click", "#editTraining", function(event) { 
+
+	var alert =	alert('Alert');
+	setTimeout(function() {alert.dialog('close');},5000);
+});
 
 	</script>
+	
+	
+<script th:inline="javascript">
+/*<![CDATA[*/    
+
+function statusChangeMessage(){
+var statusChangedToDone = /*[[${statusChangedToDone}]]*/;
+
+    if(statusChangedToDone){
+    	$('#dialogStatusChange').show();
+    	var parentDiv = $("#dialogStatusChange").parent();
+    	parentDiv.addClass("divBorder");
+    	setTimeout(function() { $('#dialogStatusChange').hide(); parentDiv.removeClass("divBorder"); }, 13000);
+    }
+}
+
+/*]]>*/
+</script>
 </head>
 <body class="gradient">
 	<div class="alert div1" role="alert">
@@ -547,8 +576,6 @@ function sync2(item){
 
 <h2>Dodavanje i izmena treninga</h2>
 
-
-
 <div class="form-group row">
 
 		<div class="col-xs-2">
@@ -556,6 +583,11 @@ function sync2(item){
 <form style="padding-left:3em" th:action="@{/saveTraining}" th:object="${trainingDTO}" method="POST">
 	<a id="callGetTraining" style="visibility: hidden" th:href="@{/getTraining/{id}/(id=${trainingDTO.id})}">callGetTraining</a>
 	<a id="callGetTrainingCircular" style="visibility: hidden" th:href="@{/getTrainingCircular/{id}/(id=${trainingDTO.id})}">callGetTrainingCircular</a>
+	<div class="form-group row">
+		<div class="col-xs-2 divBorder">
+			<label id="dialogStatusChange" class="messageText">Promenom statusa na urađen broj stavki treninga je umanjen za jedan.</label>
+		</div>
+	</div>
 	<div class="form-group row">
 		<div class="col-xs-2">
 			<label class="label-width" for="trainingDate">Datum:</label>
@@ -579,7 +611,7 @@ function sync2(item){
 			<label class="label-width" for="trainingClient">Status:</label>
 			<select class="selectpicker form-control" name="planet" th:field="*{status}">
 		        <option th:each="status : ${T(training.enumerations.TrainingStatusEnum).values()}"
-		                th:value="${status}" th:text="${status}"></option>
+		                th:value="${status}" th:utext="${status.localisedName}"/>
 		    </select>
 		</div>
 	</div>

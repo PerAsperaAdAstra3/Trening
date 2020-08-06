@@ -66,6 +66,11 @@ $(document).on('focusout', '.packElNumber', function(event) {
 	ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, $(this))
 });
 
+$(document).on('click', '.buttonDelete', function(event) {
+	elementsInPackagesId = $(this).parent().parent().find(".elemInPackagesId").html();
+	newNumber = 0;
+	ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, $(this))
+});
 	
 $(document).on("click", "#tr-entity-list-package", function(event) {
 	selectPackageIdOnRowClick(this)
@@ -233,6 +238,7 @@ $(document).on("click", ".deletePackageElement", function(event) {
 			<th scope="col">Opis</th>
 			<th scope="col">Količina</th>
 			<th scope="col"></th>
+			<th scope="col"></th>
 		</tr>
 	</thead>
 	<tbody class="elementsInPackagesTbody">
@@ -244,6 +250,7 @@ $(document).on("click", ".deletePackageElement", function(event) {
 			<td scope="row" class="packElId" th:utext="${elementsInPackage.packageElementId}" style="display:none;"></td>
 			<td scope="row" class="packElpackageId" th:utext="${elementsInPackage.packageId}" style="display:none;"></td>
 			<td scope="row" class="elemInPackagesId" th:utext="${elementsInPackage.elemInPackagesId}" style="display:none;"></td>
+			<td><button type="button" class="btn btn-danger buttonDelete">Briši</button></td>
 		</tr>
 	</tbody>
 </table>

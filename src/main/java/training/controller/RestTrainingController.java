@@ -141,26 +141,28 @@ public class RestTrainingController {
 	}
 	
 	private void autoNewExercisefieldsWithValuesFromPrevious(ExerciseInRoundDTO exerciseInRoundDTO, ExerciseInRound eir) {
-		try {
-			if(null != eir.getDifficulty()) {
-				exerciseInRoundDTO.setDifficulty(eir.getDifficulty());
+		if(eir != null) {
+			try {
+				if(null != eir.getDifficulty()) {
+					exerciseInRoundDTO.setDifficulty(eir.getDifficulty());
+				}
+			} catch(Exception e){
+				LoggingUtil.LoggingMethod(logger, e);
 			}
-		} catch(Exception e){
-			LoggingUtil.LoggingMethod(logger, e);
-		}
-		try {
-			if(null != eir.getNumberOfRepetitions()) {	
-				exerciseInRoundDTO.setNumberOfRepetitions(eir.getNumberOfRepetitions());
+			try {
+				if(null != eir.getNumberOfRepetitions()) {	
+					exerciseInRoundDTO.setNumberOfRepetitions(eir.getNumberOfRepetitions());
+				}
+			} catch(Exception e){
+				LoggingUtil.LoggingMethod(logger, e);
 			}
-		} catch(Exception e){
-			LoggingUtil.LoggingMethod(logger, e);
-		}
-		try {
-			if(null != eir.getNote()) {
-				exerciseInRoundDTO.setNote(eir.getNote()); 
+			try {
+				if(null != eir.getNote()) {
+					exerciseInRoundDTO.setNote(eir.getNote()); 
+				}
+			} catch(Exception e){
+				LoggingUtil.LoggingMethod(logger, e);
 			}
-		} catch(Exception e){
-			LoggingUtil.LoggingMethod(logger, e);
 		}
 	}
 	
@@ -246,14 +248,16 @@ public class RestTrainingController {
 		JSONObject obj = new JSONObject();
 		//TODO add logging for error in future PR.
 		try {
-			if(eir.getExercise() != null) {
-				obj.put("exerciseInRoundExerciseName", eir.getExercise().getName()); //eir.getExerciseName());
-			} else {
-				obj.put("exerciseInRoundExerciseName", eir.getExerciseName());
+			if(eir != null) {
+				if(eir.getExercise() != null) {
+					obj.put("exerciseInRoundExerciseName", eir.getExercise().getName()); //eir.getExerciseName());
+				} else {
+					obj.put("exerciseInRoundExerciseName", eir.getExerciseName());
+				}
+				obj.put("exerciseInRoundDifficulty", eir.getDifficulty());
+				obj.put("exerciseInRoundNote", eir.getNote());
+				obj.put("exerciseInRoundNumberOfRepetitions", eir.getNumberOfRepetitions());
 			}
-			obj.put("exerciseInRoundDifficulty", eir.getDifficulty());
-			obj.put("exerciseInRoundNote", eir.getNote());
-			obj.put("exerciseInRoundNumberOfRepetitions", eir.getNumberOfRepetitions());
 		} catch (Exception e) {
 			LoggingUtil.LoggingMethod(logger, e);
 		}
@@ -399,7 +403,7 @@ public class RestTrainingController {
 					} else {
 						exerciseInRound.setDifficulty(filterLocalCharacters(""));
 					}
-					exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExercise().getName())); //exerciseInRound.getExerciseName()));
+					exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExerciseName()));
 					if(null != exerciseInRound.getNumberOfRepetitions()) {
 						exerciseInRound.setNote(filterLocalCharacters(exerciseInRound.getNote()));
 					} else {

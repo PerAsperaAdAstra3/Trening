@@ -338,7 +338,7 @@ function packageAddPackageElementNumber(packageElementId){
 			if(data.modOfOperation == "add"){
 				$("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list" class="trow"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +
 						'</td><td><input type="number" class="packElNumber" name="quantity" min="1" max="99" value="' + data.elementsInPackagesNumber + '"/></td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +
-						'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
+						'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td><td><button type="button" class="btn btn-danger buttonDelete">Briši</button></td></tr>');
 			} else {
 				$("#tr-entity-list .elemInPackagesId").each(function(){
 					if($(this).html() == data.elemInPackagesId){

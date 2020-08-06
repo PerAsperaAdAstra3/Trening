@@ -96,11 +96,8 @@ public class JpaTrainingService implements TrainingService {
 					List<ClientPackageElement> clientPackageElements = clientPackage.getClientPackageElements();
 					for(ClientPackageElement clientPackageElement : clientPackageElements) {
 						if(clientPackageElement.isIsProtected() && clientPackageElement.isClientPackageElementStatus()) {
-							System.out.println("Trebalo bi da umanji!");
 							Date todaysDate = new Date();
-							System.out.println("Todays date : " + todaysDate);
 							Date oldDateVar = new Date(1990,1,1);
-							System.out.println("OldDate : " + oldDateVar);
 							if(clientPackageElement.getDateOfChanged() != null) {
 								oldDateVar = clientPackageElement.getDateOfChanged();
 							}
@@ -109,14 +106,12 @@ public class JpaTrainingService implements TrainingService {
 
 								if(clientPackageElement.getActiveLeft() < clientPackageElement.getCounter()) {
 									clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() + 1);
-									System.out.println("Active left - povecan za jedan");
 									clientPackageElement.setDateOfChanged(todaysDate);
 								}
 							
 							} else {
 								if(clientPackageElement.getActiveLeft() > 0) {
 									clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() - 1);
-									System.out.println("Active left - umanjen za jedan");
 									clientPackageElement.setDateOfChanged(todaysDate);
 								}
 								

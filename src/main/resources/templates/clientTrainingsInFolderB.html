@@ -160,11 +160,6 @@ xmlns=http://www.w3.org/1999/xhtml"
 		sortTable();
 	});
 
-	$(document).on("click", "#PDFButton", function() {
-		var trainingId = $(this).parent().parent().find(".trainingId").html();
-		PDFprintAjaxListPage(trainingId);
-	});
-
 	function sync(item) {
 		name = item.find(".clientName").html()
 		familyName = item.find(".clientFamilyName").html()

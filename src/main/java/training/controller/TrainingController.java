@@ -108,6 +108,8 @@ public class TrainingController {
 	
 	Logger logger = LoggerFactory.getLogger(TrainingController.class);
 	
+	private boolean statusChangedToDone = false;
+
 	@RequestMapping(value = { "/trainingList/{isThereError}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable int isThereError) {
 	try {
@@ -130,10 +132,12 @@ public class TrainingController {
 	
 	@RequestMapping(value = { "/deleteTraining/{id}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable String id) {
-		int isThereError = 0;
+		//int isThereError = 0;
 	try {
 		Training training = trainingRepository.findOne(Long.parseLong(id));
-
+		System.out.println(id);
+		Long longId = Long.parseLong(id);
+		System.out.println("Long parsed id : "+longId);
 		trainingService.delete(Long.parseLong(id));
 		
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingRepository.findAllByClientIdOrderByIdDesc(training.getClient().getId())));
@@ -479,6 +483,10 @@ public class TrainingController {
 			trainingDTO.setId(null);
 			training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
 		} else {
+			TrainingStatusEnum trainingStatusEnumOld = trainingRepository.findOne(trainingDTO.getId()).getStatus();
+			if(trainingStatusEnumOld != trainingDTO.getStatus() && trainingDTO.getStatus() == TrainingStatusEnum.DONE) {
+				statusChangedToDone = true;
+			}
 			training =	trainingService.edit(trainingDTO.getId(), trainingDTOtoTraining.convert(trainingDTO));
 		training.getId();
 		}
@@ -503,7 +511,7 @@ public class TrainingController {
 			model.addAttribute("hiddenExerciseGroupId", "-1");
 			
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupRepository.getExerciseGroupTest()));
-			
+			model.addAttribute("statusChangedToDone", statusChangedToDone);
 			model.addAttribute("trainingListTest", tablesShowingOldTrainingsClientObject(training.getClient(), training));
 			model.addAttribute("id", id);
 			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
@@ -524,6 +532,7 @@ public class TrainingController {
 			model.addAttribute("errorMessage", messageList);
 			return "errorPage";
 		}
+		statusChangedToDone = false;
 		return "trainingCreation";
 	}
 	

@@ -32,7 +32,7 @@ public class ExerciseInRound {
 	@Column(name="ExerciseName")
 	private String exerciseName;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne() //cascade = CascadeType.ALL)
 	private Exercise exercise;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
