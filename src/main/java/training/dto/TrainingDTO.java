@@ -1,6 +1,9 @@
 package training.dto;
 
+import javax.persistence.ManyToOne;
+
 import training.enumerations.TrainingStatusEnum;
+import training.model.Operator;
 
 public class TrainingDTO {
 
@@ -17,6 +20,26 @@ public class TrainingDTO {
 	private String clientId;
 	
 	private TrainingStatusEnum status;
+
+    private Operator trainingCreator;
+
+    private Operator trainingExecutor;
+
+	public Operator getTrainingCreator() {
+		return trainingCreator;
+	}
+
+	public void setTrainingCreator(Operator trainingCreator) {
+		this.trainingCreator = trainingCreator;
+	}
+
+	public Operator getTrainingExecutor() {
+		return trainingExecutor;
+	}
+
+	public void setTrainingExecutor(Operator trainingExecutor) {
+		this.trainingExecutor = trainingExecutor;
+	}
 
 	public String getClientFamilyName() {
 		return clientFamilyName;

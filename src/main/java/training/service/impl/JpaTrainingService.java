@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import training.model.ClientPackageElement;
 import training.model.Exercise;
 import training.model.Training;
 import training.repository.ExerciseRepository;
+import training.repository.OperatorRepository;
 import training.repository.TrainingRepository;
 import training.service.ExerciseService;
 import training.service.TrainingService;
@@ -35,6 +38,9 @@ public class JpaTrainingService implements TrainingService {
 	
 	@Autowired
 	private ExerciseRepository exerciseRepository;
+	
+	@Autowired
+	private OperatorRepository operatorRepository;
 
 	@Override
 	public Training findOne(Long id) {
@@ -81,6 +87,15 @@ public class JpaTrainingService implements TrainingService {
 		newTraining.setNumberOfTrainings(training.getNumberOfTrainings());
 		newTraining.setClient(training.getClient());
 		newTraining.setStatus(training.getStatus());
+		newTraining.setTrainingExecutor(training.getTrainingExecutor());
+				
+		if(newTraining.getTrainingCreator() == null ) {
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if (principal instanceof UserDetails) {
+			  newTraining.setTrainingCreator(operatorRepository.findOneByUserName(((UserDetails)principal).getUsername()));			  
+			}
+		}
+
 		trainingRepository.save(newTraining);
 		return newTraining;
 	}

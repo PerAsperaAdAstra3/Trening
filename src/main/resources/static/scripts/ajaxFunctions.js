@@ -10,6 +10,31 @@ var COLOR_RED_HEX = '#ff8080';
 
 var COLOR_GRAY_HEX = '#bfc0bf';
 	
+function clientTrainingsReport(intervalStartDate, intervalEndDate, highlightedClientID, trainingPrice){
+	var clientTrainingReportDTO = {}
+	
+	clientTrainingReportDTO["highlightedClientId"] = highlightedClientID;
+	clientTrainingReportDTO["startDate"] = intervalStartDate;
+	clientTrainingReportDTO["endDate"] = intervalEndDate;
+	clientTrainingReportDTO["trainingPrice"] = trainingPrice;
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/clientTrainingsReport",
+		data: JSON.stringify(clientTrainingReportDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom !')
+		}
+	})
+}
+
 function deletePackageElement(packageId){
 		var packageElementDTO = {}
 		

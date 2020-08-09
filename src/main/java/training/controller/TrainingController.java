@@ -12,6 +12,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,15 +34,18 @@ import training.dto.ExerciseDTO;
 import training.dto.ExerciseInRoundDTO;
 import training.dto.TrainingDTO;
 import training.enumerations.ClientPackageStateEnum;
+import training.enumerations.Roles;
 import training.enumerations.TrainingStatusEnum;
 import training.model.Client;
 import training.model.ClientPackage;
 import training.model.Exercise;
 import training.model.ExerciseInRound;
+import training.model.Operator;
 import training.model.Round;
 import training.model.Training;
 import training.repository.ExerciseGroupRepository;
 import training.repository.ExerciseRepository;
+import training.repository.OperatorRepository;
 import training.repository.TrainingRepository;
 import training.service.ClientService;
 import training.service.ExerciseGroupService;
@@ -106,6 +111,9 @@ public class TrainingController {
 	@Autowired
 	private ExerciseRepository exerciseRepository;
 	
+	@Autowired
+	private OperatorRepository operatorRepository;
+	
 	Logger logger = LoggerFactory.getLogger(TrainingController.class);
 	
 	private boolean statusChangedToDone = false;
@@ -115,7 +123,6 @@ public class TrainingController {
 	try {
 		
 		model.addAttribute("trainingDTO", new TrainingDTO());
-		//model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingService.findAll()));
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		model.addAttribute("idOfCopiedTraining","");
 		model.addAttribute("idOfClientToCopyTo","");
@@ -132,7 +139,6 @@ public class TrainingController {
 	
 	@RequestMapping(value = { "/deleteTraining/{id}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable String id) {
-		//int isThereError = 0;
 	try {
 		Training training = trainingRepository.findOne(Long.parseLong(id));
 		System.out.println(id);
@@ -170,6 +176,14 @@ public class TrainingController {
 	
 	try {
 		TrainingDTO trainingDTO = createTraining(clientId);
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+		  Operator operator = operatorRepository.findOneByUserName(((UserDetails)principal).getUsername());
+		  trainingDTO.setTrainingCreator(operator);
+		  trainingDTO.setTrainingExecutor(operator);
+		}
+		trainingDTO.setStatus(TrainingStatusEnum.READY);
 		Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
 		trainingDTO = trainingToTrainingDTO.convert(training);
 		
@@ -177,10 +191,13 @@ public class TrainingController {
 		training.addRound(round);
 		roundService.save(round);
 		trainingService.save(training);
+				
+		List<Operator> operators = operatorRepository.findAll();
 		
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId, training.getId().toString()));
 		model.addAttribute("trainingDTO", trainingDTO);
+		model.addAttribute("operators", operators);
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("selectedRoundId", training.getRounds().get(0).getId());
@@ -214,6 +231,8 @@ public class TrainingController {
 		roundService.save(round);
 		trainingService.save(training);
 		
+		List<Operator> operators = operatorRepository.findAll();
+		
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId, training.getId().toString()));
 		model.addAttribute("trainingDTO", trainingDTO);
@@ -223,6 +242,7 @@ public class TrainingController {
 		model.addAttribute("exercises", getExercisesForModel(training));
 		model.addAttribute("circularYesNo", "Kružni trening");
 		model.addAttribute("circularYN", true);
+		model.addAttribute("operators", operators);
 		
 	} catch(Exception e) {
 		LoggingUtil.LoggingMethod(logger, e);
@@ -455,11 +475,20 @@ public class TrainingController {
 		// uzeti od njih max rednog broja i to je to
 
 		TrainingDTO trainingDTO = new TrainingDTO();
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+			Operator operator = operatorRepository.findOneByUserName(((UserDetails)principal).getUsername());
+		    trainingDTO.setTrainingCreator(operator);
+		    trainingDTO.setTrainingExecutor(operator);			  
+		}
+		
 		trainingDTO.setClient(client.getName());
 		trainingDTO.setClientFamilyName(client.getFamilyName());
 		trainingDTO.setClientId(clientId);
 		trainingDTO.setNumberOfTrainings((int) (getNumberOfTrainings(clinetId) + 1));
 		trainingDTO.setDate(strDate);
+		trainingDTO.setStatus(TrainingStatusEnum.READY);
 		
 		return trainingDTO;
 	}
@@ -507,8 +536,16 @@ public class TrainingController {
 			for (Round roundIter : training.getRounds()) {
 				listExerciseInRound.addAll(roundIter.getExerciseInRound());
 			}
+			
+			List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText()); //findAll();
+			
+			for(Operator operator :operators) {
+				System.out.println(operator.getUserName());
+			}
 			model.addAttribute("exerciseDTO", new ExerciseDTO());
 			model.addAttribute("hiddenExerciseGroupId", "-1");
+			
+			model.addAttribute("operators", operators);
 			
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupRepository.getExerciseGroupTest()));
 			model.addAttribute("statusChangedToDone", statusChangedToDone);

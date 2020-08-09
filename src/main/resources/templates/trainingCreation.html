@@ -230,7 +230,7 @@ $(document).on("click", "#selectExercises", function(event) {
 	var highlightedRound = $("#round-id-sync").parent().find(".highlighted");
 	var highlightedRoundID = $(highlightedRound).find("#roundIdDel").text();
 
-	$( ".trainingChk" ).each(function( index ) {
+	$(".trainingChk").each(function( index ) {
 		if ($(this).is(":checked"))
 		{			
 		id = $(this).parent().parent().find(".exerciseId").html()
@@ -612,6 +612,15 @@ var statusChangedToDone = /*[[${statusChangedToDone}]]*/;
 			<select class="selectpicker form-control" name="planet" th:field="*{status}">
 		        <option th:each="status : ${T(training.enumerations.TrainingStatusEnum).values()}"
 		                th:value="${status}" th:utext="${status.localisedName}"/>
+		    </select>
+		</div>
+	</div>
+	<div class="form-group row">
+		<div class="col-xs-2">
+			<label class="label-width" for="trainingClient">Održao trening:</label>
+			<select class="selectpicker form-control" name="planet" th:field="*{trainingExecutor}">
+		        <option th:each="operator : ${operators}"
+		                th:value="${operator.id}" th:utext="${operator.userName}"/>
 		    </select>
 		</div>
 	</div>

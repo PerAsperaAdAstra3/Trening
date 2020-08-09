@@ -45,6 +45,28 @@ public class Training {
     @Enumerated(EnumType.STRING)
     private TrainingStatusEnum status = TrainingStatusEnum.DONE;
     
+    @ManyToOne()
+    private Operator trainingCreator;
+    
+    @ManyToOne()
+    private Operator trainingExecutor;
+    
+	public Operator getTrainingCreator() {
+		return trainingCreator;
+	}
+
+	public void setTrainingCreator(Operator trainingCreator) {
+		this.trainingCreator = trainingCreator;
+	}
+
+	public Operator getTrainingExecutor() {
+		return trainingExecutor;
+	}
+
+	public void setTrainingExecutor(Operator trainingExecutor) {
+		this.trainingExecutor = trainingExecutor;
+	}
+
 	public TrainingStatusEnum getStatus() {
 		return status;
 	}
