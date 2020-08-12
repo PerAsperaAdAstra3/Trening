@@ -127,6 +127,7 @@ public class TrainingController {
 		model.addAttribute("idOfCopiedTraining","");
 		model.addAttribute("idOfClientToCopyTo","");
 		model.addAttribute("errorMessage",isThereError);
+		model.addAttribute("pageTitle", "Treninzi u sistemu");
 			
 	} catch(Exception e) {
 		LoggingUtil.LoggingMethod(logger, e);

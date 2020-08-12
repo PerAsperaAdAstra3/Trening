@@ -5,9 +5,14 @@
 </head>
 <body>
 	<header th:fragment="header">
-		<div>
-			<a href="/" class="home">Početna</a>
-			<div style="float:right" class="dropdown">
+		<div class="RowDiv">
+			<div style="float:left" class="ColumnDiv">
+				<a href="/" class="home">Početna</a>
+			</div>
+			<div  class="ColumnDiv">
+				<h1 align="center" th:text="${pageTitle}"></h1>
+			</div>
+			<div style="float:right" class="dropdown ColumnDiv">
 				<img src="/images/COG2a2.png"/>
 				<div class="dropdown-content">
 				    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
@@ -15,6 +20,9 @@
 				</div>
 			</div>
 		</div>
+	<!--		<div class="centerDiv"> -->
+				<img class="centerIMG" src="/images/Logo5-small.png"/>
+		<!--	</div> -->
     </header>
 </body>
 </html>

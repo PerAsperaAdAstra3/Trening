@@ -22,6 +22,7 @@ import training.converter.ElementsInPackagesToElementsInPackagesDTO;
 import training.converter.PackageDTOtoPackage;
 import training.converter.PackageToPackageDTO;
 import training.dto.ClientPackageDTO;
+import training.model.Client;
 import training.model.ClientPackage;
 import training.model.ClientPackageElement;
 import training.model.Package;
@@ -89,10 +90,11 @@ Logger logger = LoggerFactory.getLogger(ClientManagementController.class);
 				var1.setPriceOfClientPackage(0l);
 			}
 		}
-		 
+		Client client = new Client();
 		model.addAttribute("clientId", id);
 		try {
-			model.addAttribute("client", clientToClientDTO.convert(clientService.findOne(Long.parseLong(id))));//Information of client in question.
+			client = clientService.findOne(Long.parseLong(id));
+			model.addAttribute("client", clientToClientDTO.convert(client));//Information of client in question.
 		} catch (NumberFormatException numberFormatException) {
 			LoggingUtil.LoggingMethod(logger, numberFormatException);
 		} catch (IllegalArgumentException illegalArgumentException) {
@@ -102,7 +104,7 @@ Logger logger = LoggerFactory.getLogger(ClientManagementController.class);
 		}
 		model.addAttribute("allPackages", packageToPackageDTO.convert(packageList));	//List of all packages that exist in the system. These can be added to client.
 		model.addAttribute("clientPackages", clientPackageDTOList);	// List of client packages.
-		
+		model.addAttribute("pageTitle", client.getName() + " " + client.getFamilyName() + " - Paketi"); 
 		List<ClientPackageElement> clientPackageElementList = new ArrayList<ClientPackageElement>();
 		
 	//	for(ClientPackage clientPackageTemp : clientPackageForClient){

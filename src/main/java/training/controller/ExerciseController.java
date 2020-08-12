@@ -44,7 +44,7 @@ public class ExerciseController {
 	public String getExercises(Model model, @PathVariable String hiddenExerciseGroupId) {		
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
-		
+		model.addAttribute("pageTitle", "Vežbe u sistemu : ");
 		if(hiddenExerciseGroupId.equals("-1")|| hiddenExerciseGroupId == null) {
 			model.addAttribute("hiddenExerciseGroupId", "-1");
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));

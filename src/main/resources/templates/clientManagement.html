@@ -132,7 +132,6 @@ $(document).on("click", ".payedTable", function(event) {
 <body>
 <div class="alert div1" role="alert">
 	<div th:include="fragments/header :: header"></div>
-	<h1 align="center"><span th:utext="${client.name + ' ' + client.familyName}"></span> - Paketi</h1>
 </div>
 <h2 class = "activeNotPayed visibleClientPackage" style="color:#f5d142">Imate aktivne neplaćene pakete! <img src="/images/Exclamation2.png"/></h2>
 <h2 class = "inactiveNotPayed visibleClientPackage" style="color:red">Imate neaktivne neplaćene pakete! <img src="/images/redWarning1.png"/></h2>

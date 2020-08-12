@@ -49,19 +49,17 @@ $(document).on("click", "#intervalSelect", function(event) {
 	var intervalStartDate = $("#intervalStartDate").val();
 	var intervalEndDate = $("#intervalEndDate").val();
 	var trainingPrice = $("#trainingPrice").val();
+	var bonusTraining = $("#bonusTraining").val();
 
-	clientTrainingsReport(intervalStartDate, intervalEndDate, highlightedClientID, trainingPrice)
+	
+	clientTrainingsReport(intervalStartDate, intervalEndDate, highlightedClientID, trainingPrice, bonusTraining)
 });
 	
 	</script>
 </head>
 <body class="gradient">
 	<div class="alert div1" role="alert">
-	
 		<div th:include="fragments/header :: header"></div>
-		
-		<h1 align="center">Klijenti u sistemu</h1>
-		
 	</div>
 <br/>
 <div style="width:100%" class="form-group row">
@@ -174,6 +172,7 @@ $(document).on("click", "#intervalSelect", function(event) {
 						<td><input type="date" id="intervalEndDate" class="form-control"/></td>
 					</tr>
 					<tr><td>Cena treninga : </td><td><input type="number" id="trainingPrice" class="form-control" min="1" max="50000"/></td></tr>
+					<tr><td>Broj bonus treninga : </td><td><input type="number" id="bonusTraining" class="form-control" min="0" max="50000"/></td></tr>
 					<tr>
 					<td><button id="intervalSelect" class="btn btn-default">Izaberi</button><button type="button" class="btn btn-default left-spacing-nbsp" data-dismiss="modal">Zatvori</button></td></tr>
 				</tbody>

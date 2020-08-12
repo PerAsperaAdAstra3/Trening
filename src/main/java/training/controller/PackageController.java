@@ -68,6 +68,7 @@ public class PackageController {
 		model.addAttribute("packages", packageToPackageDTO.convert(packageListReversed));
 		model.addAttribute("packageElements", packageElementToPackageElementDTO.convert(packageElementService.findAll()));
 		model.addAttribute("elementsInPackages", elementsInPackagesToElementsInPackagesDTO.convert(elementsInPackagesService.findAll()));
+		model.addAttribute("pageTitle", "Paketi u sistemu");
 		return "packagePage";
 	}
 	

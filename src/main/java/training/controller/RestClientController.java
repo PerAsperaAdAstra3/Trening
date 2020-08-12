@@ -38,6 +38,9 @@ public class RestClientController {
 	public ResponseEntity<?> clientTrainingsReport(@Valid @RequestBody ClientTrainingReportDTO clientTrainingReportDTO) {
 		JSONObject obj = new JSONObject();
 		int isThereError = -1;
+		
+		if(clientTrainingReportDTO.getStartDate() != null && clientTrainingReportDTO.getEndDate() != null && clientTrainingReportDTO.getTrainingPrice() != null && clientTrainingReportDTO.getBonusTraining() != null && clientTrainingReportDTO.getHighlightedClientId() != null) {
+
 		String startDateString = clientTrainingReportDTO.getStartDate().toString();
 		String endDateString = clientTrainingReportDTO.getEndDate().toString();		
 		String[] startDateStringArray = startDateString.split(" ");
@@ -49,7 +52,7 @@ public class RestClientController {
 		List<Training> listTrainings = trainingRepository.getForClientInInterval(clientTrainingReportDTO.getHighlightedClientId(), clientTrainingReportDTO.getStartDate(),  clientTrainingReportDTO.getEndDate());
 		Map<String, Object> data = new HashMap<String, Object>();
 		Client clientInQuestion = clientRepository.findOne(clientTrainingReportDTO.getHighlightedClientId());
-		Long trainingPrice = clientTrainingReportDTO.getTrainingPrice() * listTrainings.size();
+		Long trainingPrice = clientTrainingReportDTO.getTrainingPrice() * (listTrainings.size() - clientTrainingReportDTO.getBonusTraining());
 		
 		data.put("name", clientInQuestion.getName() + " "  + clientInQuestion.getFamilyName());
 		data.put("startDate", startDateStringRework);
@@ -69,6 +72,7 @@ public class RestClientController {
 			isThereError = pdfGenaratorUtil.clientReportPdf("PDFTemplateClientTrainings",data);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
 		}
 		return ResponseEntity.ok(obj.toString());
 	}

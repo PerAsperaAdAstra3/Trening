@@ -62,6 +62,7 @@ public class OperatorController {
 		model.addAttribute("emailFormatBad", emailFormatBad);
 		model.addAttribute("usernameTaken", nameTaken);
 		model.addAttribute("emailTaken", emailTaken);
+		model.addAttribute("pageTitle", "Korisnici u sistemu");
 		return "operator";
 	}
 	

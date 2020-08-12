@@ -48,6 +48,7 @@ public class ExerciseGroupController {
 		model.addAttribute("exerciseGroupDTO", new ExerciseGroupDTO());
 		model.addAttribute("exerciseGroupDTOSearch", new ExerciseGroupDTO());
 		model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
+		model.addAttribute("pageTitle", "Grupe vežbi:");
 		return "exerciseGroup";
 	}
 	

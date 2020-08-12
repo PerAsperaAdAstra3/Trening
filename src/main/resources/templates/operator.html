@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<script src="scripts/jquery-3.2.1.min.js"></script>
-<script src="scripts/functions.js"></script>
-<script src="scripts/filterTable.js"></script>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../scripts/functions.js"></script>
+<script src="../../scripts/filterTable.js"></script>
+<script src="../../scripts/filterPackageTable.js"></script>
+<script src="../../scripts/ajaxFunctions.js"></script>
 <meta charset="utf-8"/>
 <title>Users</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -98,12 +101,21 @@ function sync(item){
     $("#email").val(email);
 }
 /*]]>*/
+
+$(document).on("click", "#intervalSelect", function(event) {
+	
+    var operatorTableRow = $('#operatorTable').find(".highlighted");
+	var highlightedOperatorID = $(operatorTableRow).find(".operatorId").text();
+	var intervalStartDate = $("#intervalStartDate").val();
+	var intervalEndDate = $("#intervalEndDate").val();
+
+	trainerTrainingsReport(intervalStartDate, intervalEndDate, highlightedOperatorID)
+});
 </script>
 </head>
 <body>
 	<div class="alert div1" role="alert">
 		<div th:include="fragments/header :: header"></div>
-		<h1 align="center">Korisnici u sistemu</h1>
 	</div>
 	
 <h2>Dodavanje i izmena operatera</h2>
@@ -168,7 +180,7 @@ function sync(item){
 </div>
 <br/>
 <div class="panel">
-<form method="POST">
+<form>
 <div style="padding-left:3em">
 	<p><b> Filtriranje: </b></p>
 		<input type="text" id="inputFilterName" onkeyup="filterTable(0,1)" placeholder="Filtriranje po nazivu.."/>
@@ -177,7 +189,7 @@ function sync(item){
 	<br/>
 	<br/>
 </div>
-<table id="clientTable" class="table">
+<table id="operatorTable" class="table">
 	<thead>
 		<tr>
 			<th scope="col">Korisničko ime : </th>
@@ -200,9 +212,36 @@ function sync(item){
 			<td scope="row" class="operatorId" th:utext="${operator.id}" style="display:none;"></td>
 			<td>
 				<a th:href="@{/deleteOperator/{id}(id=${operator.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
+			<td><button id="modalButtonIzvestaj" type="button" class="btn btn-success reportButton" data-toggle="modal" data-target="#dateIntervalPickerModal">Izveštaj</button></td>
 		</tr>
 	</tbody>
 </table>
+
+<div id="dateIntervalPickerModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+	<div class="modal-content">
+		<div class="modal-body">
+			<div class="container-responsive">
+			<h4 align="center" class="modal-title">Interval koji izveštaj obuhvata : </h4>
+			<table  id = "myTableExercises">
+				<thead>
+				</thead>
+				<tbody>
+					<tr class="modal-table-coloring" id="tr-entity-list-modal">
+						<td><label class="label-width" for="trainingDate">Datum:</label></td>
+						<td><input type="date" id="intervalStartDate" class="form-control"/></td>
+						<td><input type="date" id="intervalEndDate" class="form-control"/></td>
+					</tr>
+					<tr>
+					<td><button id="intervalSelect" class="btn btn-default">Izaberi</button><button type="button" class="btn btn-default left-spacing-nbsp" data-dismiss="modal">Zatvori</button></td></tr>
+				</tbody>
+			</table>
+	    </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </form>
 <br/>
 </div>

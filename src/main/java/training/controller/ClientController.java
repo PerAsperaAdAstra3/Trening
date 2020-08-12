@@ -49,6 +49,7 @@ public class ClientController {
 		model.addAttribute("clientDTOSearch", new ClientDTO());
 		model.addAttribute("clientDTO", new ClientDTO());
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
+		model.addAttribute("pageTitle", "Klijenti u sistemu");
 		return "client";
 	}
 	

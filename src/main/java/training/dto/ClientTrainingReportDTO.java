@@ -8,7 +8,14 @@ public class ClientTrainingReportDTO {
 	private Date startDate;
 	private Date endDate;
 	private Long trainingPrice;
+	private Long bonusTraining;
 	
+	public Long getBonusTraining() {
+		return bonusTraining;
+	}
+	public void setBonusTraining(Long bonusTraining) {
+		this.bonusTraining = bonusTraining;
+	}
 	public Long getTrainingPrice() {
 		return trainingPrice;
 	}
@@ -36,10 +43,11 @@ public class ClientTrainingReportDTO {
 	
 	public ClientTrainingReportDTO() {}
 	
-	public ClientTrainingReportDTO(Long highlightedClientId, Date startDate, Date endDate, Long trainingPrice) {
+	public ClientTrainingReportDTO(Long highlightedClientId, Date startDate, Date endDate, Long trainingPrice, Long bonusTraining) {
 		this.highlightedClientId = highlightedClientId;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.trainingPrice = trainingPrice;
+		this.bonusTraining = bonusTraining;
 	}
 }

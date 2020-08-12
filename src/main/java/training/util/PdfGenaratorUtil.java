@@ -1,6 +1,5 @@
 package training.util;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,8 +16,6 @@ import org.springframework.util.Assert;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
-
-import training.controller.indexController;
 
 
 @Component
@@ -54,7 +51,7 @@ public class PdfGenaratorUtil {
 	        	if (Files.notExists(pathTest)) {
 	        		File directory = new File(pathTest.toString());
 	        	    if (! directory.exists()){
-	        	        directory.mkdir();
+	        	        directory.mkdirs();
 	        	    }
 	        	}
 	        	
@@ -105,6 +102,7 @@ public class PdfGenaratorUtil {
 		  FileOutputStream os = null;
 		  String filePath = "";
 		  String fileName = UUID.randomUUID().toString();
+		  File outputFile = null;
 	        try {
 
 	        	String home = System.getProperty("user.home");
@@ -115,18 +113,25 @@ public class PdfGenaratorUtil {
 	        	if (Files.notExists(pathTest)) {
 	        		File directory = new File(pathTest.toString());
 	        	    if (! directory.exists()){
-	        	        directory.mkdir();
+	        	        directory.mkdirs();
 	        	    }
 	        	}
 	        	
-	        	String fileNameString = map.get("name").toString()+" " +map.get("startDate") +" " +map.get("endDate") + ".pdf";
+	        	//String fileNameString = map.get("name").toString()+" " +map.get("startDate") +" " +map.get("endDate") + ".pdf";
+	        	String fileNameString = map.get("name").toString()+" " +map.get("startDate") +" " +map.get("endDate"); // + ".pdf";
 	        	java.nio.file.Path path = java.nio.file.Paths.get(pathTest.toString(), fileNameString);
-	        	File outputFile = new File(path.toString());
+	        	//File outputFile = new File(path.toString());
+	        	System.out.println(fileNameString);
+	        	System.out.println(path);
+	       	    outputFile = File.createTempFile(fileNameString, ".pdf");
 	        	
 	        	boolean exists = outputFile.exists();
 	        	System.out.println("Da li je fajl vec bio odstampan : "+ exists);
 	        	os = new FileOutputStream(outputFile);
-	        	filePath = path.toString();
+	       // 	filePath = path.toString();
+	        	
+	        	filePath = outputFile.getAbsolutePath();
+	        	System.out.println(filePath);
 	            ITextRenderer renderer = new ITextRenderer();
 	            renderer.setDocumentFromString(processedHtml);
 	            renderer.layout();
@@ -146,6 +151,9 @@ public class PdfGenaratorUtil {
 	        			LoggingUtil.LoggingMethod(logger, e);
 	        		}
 	            }
+	        }
+	        if(outputFile != null) {
+	            outputFile.deleteOnExit();
 	        }
 	   return isThereError;
 	}

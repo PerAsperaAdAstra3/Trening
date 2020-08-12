@@ -19,6 +19,11 @@ public interface TrainingRepository extends JpaRepository<Training, Long>{
 			value ="select * from training where training_list = :clientId and date < :endDate and date > :startDate",
 			nativeQuery = true)
 	List<Training> getForClientInInterval(@Param("clientId")Long clientId, @Param("startDate")Date startDate, @Param("endDate")Date endDate);
+	
+	@Query(
+			value ="select * from training where training_executor_id = :executorId and date < :endDate and date > :startDate",
+			nativeQuery = true)
+	List<Training> getForTrainerInInterval(@Param("executorId")Long executorId, @Param("startDate")Date startDate, @Param("endDate")Date endDate);
 
 	@Query(
 			value ="select * from training where id = :id",
