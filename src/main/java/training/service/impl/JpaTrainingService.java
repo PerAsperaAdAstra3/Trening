@@ -99,15 +99,13 @@ public class JpaTrainingService implements TrainingService {
 		trainingRepository.save(newTraining);
 		return newTraining;
 	}
-	
+	//Funcktion that changes the number of available client package elements of type Training.
 	private void changeClientPackageElementState(Training training, Training oldTraining) {
 		Client client = training.getClient();
 		TrainingStatusEnum tse = training.getStatus();
 		List<ClientPackage> clientPackages = client.getClientPackages();
 		if(training.getStatus() != oldTraining.getStatus()) {
 			for(ClientPackage clientPackage : clientPackages) {
-				ClientPackageStateEnum clientPackageStateEnum = clientPackage.getClientPackageActive();
-				if(clientPackageStateEnum == clientPackageStateEnum.ACTIVE) {
 					List<ClientPackageElement> clientPackageElements = clientPackage.getClientPackageElements();
 					for(ClientPackageElement clientPackageElement : clientPackageElements) {
 						if(clientPackageElement.isIsProtected() && clientPackageElement.isClientPackageElementStatus()) {
@@ -117,8 +115,7 @@ public class JpaTrainingService implements TrainingService {
 								oldDateVar = clientPackageElement.getDateOfChanged();
 							}
 
-							if(training.getStatus() == TrainingStatusEnum.READY) {
-
+							if(training.getStatus() != TrainingStatusEnum.DONE) {
 								if(clientPackageElement.getActiveLeft() < clientPackageElement.getCounter()) {
 									clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() + 1);
 									clientPackageElement.setDateOfChanged(todaysDate);
@@ -135,8 +132,47 @@ public class JpaTrainingService implements TrainingService {
 									clientPackageElement.setDateOfChanged(todaysDate);
 								}
 							} 
+						} else {
+							Date todaysDate = new Date();
+							Date oldDateVar = new Date(1990,1,1);
+							if(clientPackageElement.getDateOfChanged() != null) {
+								oldDateVar = clientPackageElement.getDateOfChanged();
+							}
+
+							if(training.getStatus() != TrainingStatusEnum.DONE) {
+								if(clientPackageElement.getActiveLeft() < clientPackageElement.getCounter()) {
+									clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() + 1);
+									clientPackageElement.setDateOfChanged(todaysDate);
+								}
+								
+								if(clientPackageElement.getActiveLeft() > 0) {
+									clientPackageElement.setClientPackageElementStatus(true);
+									clientPackageElement.setDateOfChanged(todaysDate);
+								}
+							
+							} else {
+								if(clientPackageElement.getActiveLeft() > 0) {
+									clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() - 1);
+									clientPackageElement.setDateOfChanged(todaysDate);
+								}
+								
+								if(clientPackageElement.getActiveLeft() < 1) {
+									clientPackageElement.setClientPackageElementStatus(false);
+									clientPackageElement.setDateOfChanged(todaysDate);
+								}
+							} 
 						}
 					}
+				boolean packageActivityState = false;
+				for(ClientPackageElement clientPackageElement : clientPackage.getClientPackageElements()) {
+					if(clientPackageElement.isClientPackageElementStatus()) {
+						packageActivityState = true;
+					}
+				}
+				if(packageActivityState) {
+					clientPackage.setClientPackageActive(ClientPackageStateEnum.ACTIVE);
+				} else {
+					clientPackage.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE);
 				}
 			}
 		}

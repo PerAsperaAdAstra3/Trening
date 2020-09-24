@@ -1,6 +1,7 @@
 package training.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -43,6 +44,17 @@ public class ClientPackage {
 	
 	@OneToMany(mappedBy = "clientPackage" , cascade = CascadeType.ALL)
 	private List<ClientPackageElement> clientPackageElementsCP = new ArrayList<ClientPackageElement>();
+
+	@Column(name="purchaseDate")
+	private Date purchaseDate;
+	
+	public Date getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
 
 	public boolean isPayed() {
 		return payed;

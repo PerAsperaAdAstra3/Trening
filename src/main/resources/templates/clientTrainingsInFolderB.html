@@ -200,13 +200,10 @@ xmlns=http://www.w3.org/1999/xhtml"
 
 	//
 </script>
-<body>
+<body class="gradient">
 	<br/>
 
 	<div th:include="fragments/header :: header"></div>
-	
-    <h2 id="pageTitle" class="modal-title"></h2>
-  
   <br/>  
     <input id="clientIdSel" type="hidden" th:value="${clientId}" name="clientIdSel"/>
 	<div class = "twoButtonsDiv"><a th:href="@{/trainingCreationHandler/{clientId}(clientId=${clientId})}"><button type="button" class="btn btn-success">Dodaj trening</button></a>

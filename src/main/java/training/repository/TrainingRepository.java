@@ -16,7 +16,7 @@ public interface TrainingRepository extends JpaRepository<Training, Long>{
 	List<Training> findAllByClientIdOrderByIdDesc(Long clientId);
 	
 	@Query(
-			value ="select * from training where training_list = :clientId and date < :endDate and date > :startDate",
+			value ="select * from training where training_list = :clientId and date < :endDate and date > :startDate and status = \"DONE\" ",
 			nativeQuery = true)
 	List<Training> getForClientInInterval(@Param("clientId")Long clientId, @Param("startDate")Date startDate, @Param("endDate")Date endDate);
 	

@@ -3,7 +3,8 @@ package training.enumerations;
 public enum Roles {
 	TRAINER("TRENER"),
 	ADMIN("ADMIN"),
-	FRONTDESK("RECEPCIJA");
+	FRONTDESK("RECEPCIJA"),
+	SUPERUSER("SUPERUSER");
 	
 	private String nameText;
 

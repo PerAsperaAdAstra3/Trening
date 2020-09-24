@@ -170,7 +170,7 @@ table {
 
 .gradient {background: linear-gradient(to top left, white 10%, #B8B8B8 70%);}
 
-.gradient1 {background: linear-gradient(to left, white 10%, #B8B8B8 70%);}
+.gradient1 {background: #B8B8B8;}
 
 .tableX, .tdX {
 	border-collapse: collapse;
@@ -261,4 +261,19 @@ table {
   margin-left: auto;
   margin-right: auto;
   width: 15%;
+}
+
+.headerTable {
+	width: 98%;
+}
+
+.headerTD {
+	width: 33%;
+}
+
+hr {
+	position: relative; 
+	border: none; 
+	height: 2px; 
+	background: black; 
 }

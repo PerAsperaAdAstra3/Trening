@@ -2,27 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
 	<header th:fragment="header">
-		<div class="RowDiv">
-			<div style="float:left" class="ColumnDiv">
-				<a href="/" class="home">Početna</a>
-			</div>
-			<div  class="ColumnDiv">
-				<h1 align="center" th:text="${pageTitle}"></h1>
-			</div>
-			<div style="float:right" class="dropdown ColumnDiv">
-				<img src="/images/COG2a2.png"/>
-				<div class="dropdown-content">
-				    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
-				    <a th:href="@{/logout}">Odlogujte se</a>
+	
+	<table class="headerTable">
+	<thead></thead>
+	<tbody>
+		<tr>
+			<td class="headerTD"><a href="/"><img src="/images/Logo5-small-4.png"/></a></td>
+			<td class="headerTD"><h1 align="center" th:text="${pageTitle}"></h1></td>
+			<td class="headerTD">
+			<div style="float:right">
+				<div style="float:right" class="dropdown">
+					<img src="/images/COG2a2.png"/>
+					<div class="dropdown-content">
+					    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
+					    <a th:href="@{/logout}">Odlogujte se</a>
+					</div>
 				</div>
-			</div>
-		</div>
-	<!--		<div class="centerDiv"> -->
-				<img class="centerIMG" src="/images/Logo5-small.png"/>
-		<!--	</div> -->
+				</div>
+			</td>
+		</tr>
+	</tbody>
+	</table>
+<hr></hr>
     </header>
 </body>
 </html>

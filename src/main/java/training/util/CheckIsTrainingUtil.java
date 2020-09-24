@@ -19,7 +19,6 @@ public class CheckIsTrainingUtil {
 	@PostConstruct
 	public void checkIsTraining() throws Exception {
 		List<PackageElement> packageElements = packageElementService.findAll();
-		System.out.println("Check is training!");
 		boolean isTrainingElementPresent = false;
 		for(PackageElement packageElement : packageElements) {
 			if(packageElement != null) {

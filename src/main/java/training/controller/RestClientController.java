@@ -1,6 +1,7 @@
 package training.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import training.dto.ClientTrainingReportDTO;
+import training.dto.ClientTrainingReportDataDTO;
 import training.model.Client;
 import training.model.ExerciseInRound;
 import training.model.Training;
@@ -37,7 +39,23 @@ public class RestClientController {
 	@PostMapping(value = { "/clientTrainingsReport"})
 	public ResponseEntity<?> clientTrainingsReport(@Valid @RequestBody ClientTrainingReportDTO clientTrainingReportDTO) {
 		JSONObject obj = new JSONObject();
+
 		int isThereError = -1;
+		if(clientTrainingReportDTO.getBonusTraining() == null) {
+			clientTrainingReportDTO.setBonusTraining(0l);
+		}
+		
+		if(clientTrainingReportDTO.getEndDate() == null) {
+			clientTrainingReportDTO.setEndDate(new Date()); 
+		}
+		
+		if(clientTrainingReportDTO.getStartDate() == null) {
+			clientTrainingReportDTO.setStartDate(clientTrainingReportDTO.getEndDate());
+		}
+		
+		if(clientTrainingReportDTO.getTrainingPrice() == null) {
+			clientTrainingReportDTO.setTrainingPrice(0l);
+		}
 		
 		if(clientTrainingReportDTO.getStartDate() != null && clientTrainingReportDTO.getEndDate() != null && clientTrainingReportDTO.getTrainingPrice() != null && clientTrainingReportDTO.getBonusTraining() != null && clientTrainingReportDTO.getHighlightedClientId() != null) {
 
@@ -53,27 +71,80 @@ public class RestClientController {
 		Map<String, Object> data = new HashMap<String, Object>();
 		Client clientInQuestion = clientRepository.findOne(clientTrainingReportDTO.getHighlightedClientId());
 		Long trainingPrice = clientTrainingReportDTO.getTrainingPrice() * (listTrainings.size() - clientTrainingReportDTO.getBonusTraining());
-		
+		if(trainingPrice < 0) {
+			trainingPrice = 0l;
+		}
 		data.put("name", clientInQuestion.getName() + " "  + clientInQuestion.getFamilyName());
 		data.put("startDate", startDateStringRework);
 		data.put("endDate", endDateStringRework);
 		data.put("trainingPrice", trainingPrice);		
-		List<String> dateList = new ArrayList<String>();
+		//List<String> dateList = new ArrayList<String>();
+		String dateList = "";
 		for(Training training : listTrainings) {
-			System.out.println(training.getDate());
 			String[] iteratedTrainingDate = training.getDate().toString().split(" ");
 			String dateWithoutTime = iteratedTrainingDate[0];
 			String[] dayMontheYear = dateWithoutTime.split("-");
-			dateList.add(dayMontheYear[2] + "." + dayMontheYear[1] + "." + dayMontheYear[0]);
+			//dateList.add(dayMontheYear[2] + "." + dayMontheYear[1] + "." + dayMontheYear[0]);
+			dateList += dayMontheYear[2] + "." + dayMontheYear[1] + "." + dayMontheYear[0]+",";
 		}
 		data.put("listOfTrainings", dateList); //listTrainings);
-		data.put("numberOfTrainings", listTrainings.size());		 		 
-		try {
-			isThereError = pdfGenaratorUtil.clientReportPdf("PDFTemplateClientTrainings",data);
-		} catch (Exception e) {
-			e.printStackTrace();
+		data.put("numberOfTrainings", listTrainings.size());
+		data.put("oneTrainingPrice", clientTrainingReportDTO.getTrainingPrice());		
+		data.put("numberOfBonusTrainings", clientTrainingReportDTO.getBonusTraining());
+		//
+		obj.put("name", clientInQuestion.getName() + " "  + clientInQuestion.getFamilyName());
+		obj.put("startDate", startDateStringRework);
+		obj.put("endDate", endDateStringRework);
+		obj.put("trainingPrice", trainingPrice);
+		obj.put("listOfTrainings", dateList);
+		obj.put("numberOfTrainings", listTrainings.size());
+		obj.put("oneTrainingPrice", clientTrainingReportDTO.getTrainingPrice());
+		obj.put("numberOfBonusTrainings", clientTrainingReportDTO.getBonusTraining());
+		//
+	    if(listTrainings.size() == 0) {
+	    	obj.put("successMessage", "Klijent još nema urađenih treninga!");
+			return ResponseEntity.ok(obj.toString());
 		}
+	    /*	try {
+				isThereError = pdfGenaratorUtil.clientReportPdf("PDFTemplateClientTrainings",data);
+				obj.put("successMessage", "Štampanje PDF-a je u toku molimo sačekajte.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}*/
+	    obj.put("successMessage", "Štampanje PDF-a je u toku molimo sačekajte.");
 		}
+		return ResponseEntity.ok(obj.toString());
+	}
+	
+	@PostMapping(value = { "/clientTrainingsReportPrint"})
+	public ResponseEntity<?> clientTrainingsReportPrint(@Valid @RequestBody ClientTrainingReportDataDTO clientTrainingReportDataDTO) {
+		JSONObject obj = new JSONObject();
+		int isThereError = -1;
+		Map<String, Object> data = new HashMap<String, Object>();
+		
+		data.put("name", clientTrainingReportDataDTO.getName());
+		data.put("startDate", clientTrainingReportDataDTO.getStartDate());
+		data.put("endDate", clientTrainingReportDataDTO.getEndDate());
+		data.put("trainingPrice", clientTrainingReportDataDTO.getTrainingPrice());	
+		
+		String[] stringArray = clientTrainingReportDataDTO.getListOfTrainings().split(",");
+		List<String> stringList = new ArrayList<String>();
+		for(int k = 0; k < stringArray.length; k++) {
+			stringList.add(stringArray[k]);
+		}
+		
+		data.put("listOfTrainings", stringList);//clientTrainingReportDataDTO.getListOfTrainings());
+		data.put("numberOfTrainings", clientTrainingReportDataDTO.getNumberOfTrainings());
+		data.put("oneTrainingPrice", clientTrainingReportDataDTO.getOneTrainingPrice());		
+		data.put("numberOfBonusTrainings", clientTrainingReportDataDTO.getNumberOfBonusTrainings());
+		
+	    	try {
+				isThereError = pdfGenaratorUtil.clientReportPdf("PDFTemplateClientTrainings",data);
+				obj.put("successMessage", "Štampanje PDF-a je u toku molimo sačekajte.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
 		return ResponseEntity.ok(obj.toString());
 	}
 }

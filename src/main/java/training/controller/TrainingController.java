@@ -142,9 +142,7 @@ public class TrainingController {
 	public String getTrainings(Model model, @PathVariable String id) {
 	try {
 		Training training = trainingRepository.findOne(Long.parseLong(id));
-		System.out.println(id);
 		Long longId = Long.parseLong(id);
-		System.out.println("Long parsed id : "+longId);
 		trainingService.delete(Long.parseLong(id));
 		
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingRepository.findAllByClientIdOrderByIdDesc(training.getClient().getId())));
@@ -193,7 +191,14 @@ public class TrainingController {
 		roundService.save(round);
 		trainingService.save(training);
 				
-		List<Operator> operators = operatorRepository.findAll();
+		List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText());
+		
+		for(Operator operator : operators) {
+			if(operator.getAuthorities().equals(Roles.SUPERUSER.getNameText())) {
+				
+				operators.remove(operator);
+			}
+		}
 		
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId, training.getId().toString()));
@@ -232,7 +237,14 @@ public class TrainingController {
 		roundService.save(round);
 		trainingService.save(training);
 		
-		List<Operator> operators = operatorRepository.findAll();
+		List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText());
+		
+		for(Operator operator : operators) {
+			if(operator.getAuthorities().equals(Roles.SUPERUSER.getNameText())) {
+				
+				operators.remove(operator);
+			}
+		}
 		
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 		model.addAttribute("trainingListTest", tablesShowingOldTrainings(clientId, training.getId().toString()));
@@ -540,9 +552,13 @@ public class TrainingController {
 			
 			List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText()); //findAll();
 			
-			for(Operator operator :operators) {
-				System.out.println(operator.getUserName());
+			for(Operator operator : operators) {
+				if(operator.getAuthorities().equals(Roles.SUPERUSER.getNameText())) {
+					
+					operators.remove(operator);
+				}
 			}
+			
 			model.addAttribute("exerciseDTO", new ExerciseDTO());
 			model.addAttribute("hiddenExerciseGroupId", "-1");
 			

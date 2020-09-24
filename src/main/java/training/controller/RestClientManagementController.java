@@ -1,5 +1,7 @@
 package training.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +11,7 @@ import javax.validation.Valid;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.joda.DateTimeFormatterFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,12 +53,14 @@ public class RestClientManagementController {
 	ClientPackageElementToClientPackageElementDTO clientPackageElementToClientPackageElementDTO;
 	
 	@PostMapping(value = { "/addPackageToClient" })
-	public ResponseEntity<?> addPackageToClientPackage(@Valid @RequestBody ClientPackageDTO clientPackageDTO) {
+	public ResponseEntity<?> addPackageToClientPackage(@Valid @RequestBody ClientPackageDTO clientPackageDTO) throws Exception {
 		JSONObject obj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		
 		clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.ACTIVE.getNameText());
 		ClientPackage clientPackage = clientPackageDTOtoClientPackage.convert(clientPackageDTO);
+
+		clientPackage.setPurchaseDate(new Date());
 		clientPackageService.save(clientPackage);
 		List<ClientPackageElement> clientPackageElementsList = new ArrayList<ClientPackageElement>();
 		List<ElementsInPackages> elementsInPackagesList = packageService.findOne(clientPackageDTO.getPackageId()).getElementsInPackages();
@@ -104,7 +109,7 @@ public class RestClientManagementController {
 		if(clientPackageElement.getDateOfChanged() != null) {
 			oldDateVar = clientPackageElement.getDateOfChanged();
 		}
-		if(todaysDate.before(oldDateVar)) {
+	//	if(todaysDate.before(oldDateVar)) {
 			if(clientPackageElement.getActiveLeft() > 0) {
 				clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() - 1);
 				clientPackageElement.setDateOfChanged(new Date());
@@ -113,7 +118,7 @@ public class RestClientManagementController {
 			if(clientPackageElement.getActiveLeft() < 1) {
 				clientPackageElement.setClientPackageElementStatus(false);
 			}
-		}
+		//}
 		clientPackageElementService.save(clientPackageElement);
 		
 		ClientPackage clientPackage = clientPackageElement.getClientPackage();

@@ -10,6 +10,32 @@ var COLOR_RED_HEX = '#ff8080';
 
 var COLOR_GRAY_HEX = '#bfc0bf';
 	
+function trainerTrainingsReportPrint(name, startDate, endDate, listOfTrainings, numberOfTrainings){
+	var trainerTrainingReportDTO = {}
+	
+	clientTrainingReportDTO["highlightedTrainingId"] = name;
+	clientTrainingReportDTO["startDate"] = startDate;
+	clientTrainingReportDTO["endDate"] = endDate;
+	clientTrainingReportDTO["trainingPrice"] = listOfTrainings;
+	clientTrainingReportDTO["trainingPrice"] = numberOfTrainings;
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/trainerTrainingsReportPrint",
+		data: JSON.stringify(TrainerTrainingReportDataDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			$("#modalVaitMessage").hide();
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom !')
+		}
+	})
+}
+
 function trainerTrainingsReport(intervalStartDate, intervalEndDate, highlightedTrainingId, trainingPrice){
 	var clientTrainingReportDTO = {}
 	
@@ -27,10 +53,48 @@ function trainerTrainingsReport(intervalStartDate, intervalEndDate, highlightedT
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-
+			//alert(data.successMessage)
+			$("#modalVaitMessage").hide();
+			$(".modal-title").text(data.successMessage);
+			$("#modalVaitMessage").show();
+			setTimeout(function() { $("#modalVaitMessage").show(); $("#modalVaitMessage").hide(); }, 8000);
+			if(data.numberOfTrainings != "0"){
+				trainerTrainingsReportPrint(data.name, data.startDate, data.endDate, data.listOfTrainings, data.numberOfTrainings)
+			}
 		},
 		error: function (e) {
 			alert('Desila se greska prilikom !')
+		}
+	})
+}
+
+function clientTrainingsReportPrint(name, startDate, endDate, trainingPrice, listOfTrainings, numberOfTrainings, oneTrainingPrice, numberOfBonusTrainings){
+	var clientTrainingReportDataDTO = {}
+	console.log(listOfTrainings);
+	console.log(name);
+	console.log(startDate);
+	clientTrainingReportDataDTO["name"] = name;
+	clientTrainingReportDataDTO["startDate"] = startDate;
+	clientTrainingReportDataDTO["endDate"] = endDate;
+	clientTrainingReportDataDTO["trainingPrice"] = trainingPrice;
+	clientTrainingReportDataDTO["listOfTrainings"] = listOfTrainings;
+	clientTrainingReportDataDTO["numberOfTrainings"] = numberOfTrainings;
+	clientTrainingReportDataDTO["oneTrainingPrice"] = oneTrainingPrice;
+	clientTrainingReportDataDTO["numberOfBonusTrainings"] = numberOfBonusTrainings;
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/clientTrainingsReportPrint",
+		data: JSON.stringify(clientTrainingReportDataDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			$("#modalVaitMessage").hide();
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom štampanja PDF-a!')
 		}
 	})
 }
@@ -43,7 +107,6 @@ function clientTrainingsReport(intervalStartDate, intervalEndDate, highlightedCl
 	clientTrainingReportDTO["endDate"] = intervalEndDate;
 	clientTrainingReportDTO["trainingPrice"] = trainingPrice;
 	clientTrainingReportDTO["bonusTraining"] = bonusTraining;
-	
 	$.ajax({
 		type: "POST",
 		contentType: "application/json",
@@ -53,10 +116,16 @@ function clientTrainingsReport(intervalStartDate, intervalEndDate, highlightedCl
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-
+			$("#modalVaitMessage").hide();
+			$(".modal-title").text(data.successMessage);
+			$("#modalVaitMessage").show();
+			setTimeout(function() { $("#modalVaitMessage").show(); $("#modalVaitMessage").hide(); }, 8000);
+			if(data.numberOfTrainings != "0"){
+				clientTrainingsReportPrint(data.name, data.startDate, data.endDate, data.trainingPrice, data.listOfTrainings, data.numberOfTrainings, data.oneTrainingPrice, data.numberOfBonusTrainings)
+			}
 		},
 		error: function (e) {
-			alert('Desila se greska prilikom !')
+			alert('Desila se greska prilikom štampanja PDF-a!')
 		}
 	})
 }
@@ -301,12 +370,12 @@ function ajaxAddPackageToClient(packageId, packagePrice, packageName){
 			if(rowCountClientPackage == 0){
 				$('#clientPackageBody').append('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +
 						'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +
-						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +
+						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td style="width:15%;" class="packagePurchaseDate">'+ data["clientPackageJSON"]["purchaseDate"] +
 						'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
 			} else {
 				$('#clientPackageBody tr:nth-child(1)').before('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +
 						'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +
-						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +
+						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td style="width:15%;" class="packagePurchaseDate">'+ data["clientPackageJSON"]["purchaseDate"] +
 						'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
 			}
 					

@@ -129,10 +129,8 @@ $(document).on("click", ".payedTable", function(event) {
 
 </script>
 </head>
-<body>
-<div class="alert div1" role="alert">
+<body class="gradient">
 	<div th:include="fragments/header :: header"></div>
-</div>
 <h2 class = "activeNotPayed visibleClientPackage" style="color:#f5d142">Imate aktivne neplaćene pakete! <img src="/images/Exclamation2.png"/></h2>
 <h2 class = "inactiveNotPayed visibleClientPackage" style="color:red">Imate neaktivne neplaćene pakete! <img src="/images/redWarning1.png"/></h2>
 <div style="width:100%" class="form-group row">
@@ -265,7 +263,7 @@ $(document).on("click", ".payedTable", function(event) {
 </div>
 
 <div style="width:100%" class="form-group row">
-<div style="width:40%" class="col-xs-2 divPackage roundedEdges">
+<div style="width:60%" class="col-xs-2 divPackage roundedEdges">
 <h2>Stari paketi klijenta: </h2>
 <form method="POST">
 	<br/>
@@ -282,6 +280,7 @@ $(document).on("click", ".payedTable", function(event) {
 			<th style="width:15%;" scope="col">Aktivan</th>
 			<th style="width:15%;" scope="col">Plaćen</th>
 			<th style="width:15%;" scope="col">Cena</th>
+			<th style="width:15%;" scope="col">Datum</th>
 			<th style="width:15%;" scope="col"></th>
 		</tr>
 	</thead>
@@ -289,8 +288,9 @@ $(document).on("click", ".payedTable", function(event) {
 		<tr	class="tr-entity-listAllClientPackages tableEdges" th:each = "clientPackage : ${clientPackages}">
 			<td style="width:15%;" class="packageName" th:utext="${clientPackage.nameOfPackage}"></td>
 			<td style="width:15%;" class="packageStatus" th:utext="${clientPackage.clientPackageActive}"></td>
-			<td sec:authorize="hasAuthority('RECEPCIJA') or hasAuthority('ADMIN')"><input type="checkbox" name="payedTable" class="payedTable" th:checked="${clientPackage.payed}"/></td>
+			<td sec:authorize="hasAuthority('RECEPCIJA') or hasAuthority('ADMIN') or hasAuthority('SUPERUSER')"><input type="checkbox" name="payedTable" class="payedTable" th:checked="${clientPackage.payed}"/></td>
 			<td style="width:15%;" class="packagePrice" th:utext="${clientPackage.priceOfClientPackage}"></td>
+			<td style="width:15%;" class="packagePurchaseDate" th:utext="${clientPackage.purchaseDate}"></td>
 			<td scope="row" class="clientPackageId" th:utext="${clientPackage.id}" style="display:none;"></td>
 			<td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td>
 		</tr>

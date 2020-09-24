@@ -55,9 +55,18 @@ public class OperatorController {
 	@RequestMapping(value = { "/operatorList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
 		
+		List<Operator> operators = operatorService.findAll();
+		
+		for(Operator operator : operators) {
+			if(operator.getAuthorities().equals(Roles.SUPERUSER.getNameText())) {
+				
+				operators.remove(operator);
+			}
+		}
+
 		model.addAttribute("operatorDTOSearch", new OperatorDTO());
 		model.addAttribute("operatorDTO", new OperatorDTO());
-		model.addAttribute("operators", operatorToOperatorDTO.convert(operatorService.findAll()));
+		model.addAttribute("operators", operatorToOperatorDTO.convert(operators));
 		model.addAttribute("authorities", authorities());
 		model.addAttribute("emailFormatBad", emailFormatBad);
 		model.addAttribute("usernameTaken", nameTaken);
@@ -145,6 +154,7 @@ public class OperatorController {
 		
 		model.addAttribute("operatorDTO", operatorToOperatorDTO.convert(operatorService.findOneByUserName(username)));
 		model.addAttribute("authorities", authorities());
+		model.addAttribute("pageTitle", "Lična podešavanja");
 		return "personalInfoManagement";
 	}
 	
@@ -205,7 +215,7 @@ public class OperatorController {
 		}
 		PasswordChangeDTO passwordChangeDTO1 = new PasswordChangeDTO();
 		model.addAttribute("passwordChangeDTO", passwordChangeDTO1);
-		
+		model.addAttribute("pageTitle", "Promena lozinke");
 		return "changePassword";
 	}
 	

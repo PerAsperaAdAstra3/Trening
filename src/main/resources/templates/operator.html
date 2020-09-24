@@ -20,6 +20,7 @@ $(document).ready(function(){
 	
 	$("#errorEmailAddress").hide();
 	$("#errorUsername").hide();
+	setMaxDate();
 });
 
 $(document).on("change keyup paste", "#email", function(event) {
@@ -108,15 +109,22 @@ $(document).on("click", "#intervalSelect", function(event) {
 	var highlightedOperatorID = $(operatorTableRow).find(".operatorId").text();
 	var intervalStartDate = $("#intervalStartDate").val();
 	var intervalEndDate = $("#intervalEndDate").val();
-
+	$("#modalVaitMessage").show();
 	trainerTrainingsReport(intervalStartDate, intervalEndDate, highlightedOperatorID)
+});
+
+function setMaxDate(){
+	intervalEndDate.max = new Date().toISOString().split("T")[0];
+	intervalStartDate.max = new Date().toISOString().split("T")[0];
+}
+
+$(document).on("click", "#hideModal", function(event) {
+	$("#modalVaitMessage").hide();
 });
 </script>
 </head>
-<body>
-	<div class="alert div1" role="alert">
+<body class="gradient">
 		<div th:include="fragments/header :: header"></div>
-	</div>
 	
 <h2>Dodavanje i izmena operatera</h2>
 	
@@ -203,7 +211,7 @@ $(document).on("click", "#intervalSelect", function(event) {
 		</tr>
 	</thead>
 	<tbody>
-		<tr	id="tr-entity-list" th:each = "operator : ${operators}">
+		<tr	id="tr-entity-list" class="operators" th:each = "operator : ${operators}">
 			<td class="userName" th:utext="${operator.userName}"></td>
 			<td class="authorities" th:utext="${operator.authorities}"></td>
 			<td class="personalName" th:utext="${operator.personalName}"></td>
@@ -233,7 +241,7 @@ $(document).on("click", "#intervalSelect", function(event) {
 						<td><input type="date" id="intervalEndDate" class="form-control"/></td>
 					</tr>
 					<tr>
-					<td><button id="intervalSelect" class="btn btn-default">Izaberi</button><button type="button" class="btn btn-default left-spacing-nbsp" data-dismiss="modal">Zatvori</button></td></tr>
+					<td><button id="intervalSelect" class="btn btn-default" data-dismiss="modal">Izaberi</button><button type="button" class="btn btn-default left-spacing-nbsp" data-dismiss="modal">Zatvori</button></td></tr>
 				</tbody>
 			</table>
 	    </div>
@@ -241,6 +249,23 @@ $(document).on("click", "#intervalSelect", function(event) {
     </div>
   </div>
 </div>
+
+<div id="modalVaitMessage" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:300px;">
+    <!-- Modal content-->
+   <div class="modal-content">
+	   <div class="modal-header">
+   </div>
+   <div class="modal-body">
+   <div class="container-responsive">
+      <h4 align="center" class="modal-title">Proces štampanja pokrenut!</h4>
+	  <br/><br/>
+	<div align="center"><button id="hideModal" type="button" class="btn btn-success" data-dismiss="modal">Zatvori</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>	
 
 </form>
 <br/>
