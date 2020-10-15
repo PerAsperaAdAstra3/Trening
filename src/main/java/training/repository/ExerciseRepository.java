@@ -21,6 +21,12 @@ public interface ExerciseRepository extends JpaRepository<Exercise,Long> {
 	List<Object[]> getAllExerciseGroupsFortrainingMULTIPLE(@Param("topTrainingsIds")List<Long> topTrainingsIds);
 	
 	@Query(
+			value ="select * from exercise where id in :id",
+			nativeQuery = true)
+//	List<Object[]> getAllExerciseThatAreInList(@Param("exerciseIds")List<Long> exerciseIds);
+	List<Exercise> getAllExerciseThatAreInList(@Param("id")List<Long> id);
+	
+	@Query(
 			value ="select * from exercise;",
 			nativeQuery = true)
 	List<Exercise> getAllExercises();

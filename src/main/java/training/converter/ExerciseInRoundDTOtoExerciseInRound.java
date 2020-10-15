@@ -1,5 +1,8 @@
 package training.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -36,6 +39,15 @@ public class ExerciseInRoundDTOtoExerciseInRound implements Converter<ExerciseIn
 		exerciseInRound.setNote(source.getNote());
 		exerciseInRound.setRound(roundService.findOne(source.getRoundId()));
 		return exerciseInRound;
+	}
+	
+//	@Override
+	public List<ExerciseInRound> convert(List<ExerciseInRoundDTO> source) {
+		List<ExerciseInRound> exerciseInRoundList = new ArrayList<ExerciseInRound>();
+		for(ExerciseInRoundDTO execInRoundDTO : source) {
+			exerciseInRoundList.add(convert(execInRoundDTO));
+		}
+		return exerciseInRoundList;
 	}
 	
 }
