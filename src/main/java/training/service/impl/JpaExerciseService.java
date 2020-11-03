@@ -19,7 +19,7 @@ public class JpaExerciseService implements ExerciseService {
 
 	@Override
 	public Exercise findOne(Long id) {
-		return exerciseRepository.findOne(id);
+		return exerciseRepository.findById(id).get();
 	}
 
 	@Override
@@ -34,12 +34,12 @@ public class JpaExerciseService implements ExerciseService {
 
 	@Override
 	public List<Exercise> save(List<Exercise> exercises) {
-		return exerciseRepository.save(exercises);
+		return exerciseRepository.saveAll(exercises);
 	}
 
 	@Override
 	public Exercise delete(Long id) {
-		Exercise exercise = exerciseRepository.findOne(id);
+		Exercise exercise = exerciseRepository.findById(id).get();
 		if(exercise == null){
 			throw new IllegalStateException("Exercise does not exists");
 		}
@@ -56,7 +56,7 @@ public class JpaExerciseService implements ExerciseService {
 	@Override
 	public Exercise edit(Long id, Exercise exercise) {
 		
-		Exercise exerciseOld = exerciseRepository.findOne(id);
+		Exercise exerciseOld = exerciseRepository.findById(id).get();
 		exerciseOld.setName(exercise.getName());
 		exerciseOld.setDescription(exercise.getDescription());
 		exerciseRepository.save(exerciseOld);

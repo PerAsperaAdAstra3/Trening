@@ -20,7 +20,7 @@ public class JpaRoundService implements RoundService {
 	
 	@Override
 	public Round findOne(Long id) {
-		return roundRepository.findOne(id);
+		return roundRepository.findById(id).get();
 	}
 
 	@Override
@@ -35,12 +35,12 @@ public class JpaRoundService implements RoundService {
 
 	@Override
 	public List<Round> save(List<Round> rounds) {
-		return roundRepository.save(rounds) ;
+		return roundRepository.saveAll(rounds) ;
 	}
 
 	@Override
 	public Round delete(Long id) {
-		Round round = roundRepository.findOne(id);
+		Round round = roundRepository.findById(id).get();
 		if(round == null){
 			throw new IllegalStateException("Round does not exist");
 		}
@@ -56,7 +56,7 @@ public class JpaRoundService implements RoundService {
 	
 	@Override
 	public Round edit(Long id, Round round) {
-		Round oldRound = roundRepository.findOne(id);
+		Round oldRound = roundRepository.findById(id).get();
 		oldRound.setRoundSequenceNumber(round.getRoundSequenceNumber());
 		for(ExerciseInRound exerciseInRound : round.getExerciseInRound()) {
 			oldRound.setExerciseInRound(exerciseInRound);

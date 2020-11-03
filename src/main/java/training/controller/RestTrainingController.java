@@ -83,12 +83,12 @@ public class RestTrainingController {
 		Training training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
 		int sizeDifference =  multipleExercisetoRoundDTO.getExerciseIDList().size() - training.getRounds().size();
 		if(null != multipleExercisetoRoundDTO.getCircularRoundYN() && multipleExercisetoRoundDTO.getCircularRoundYN()) {
-			training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
+		//	training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
 			Long newRoundId = -1l;
 			List<ExerciseInRoundDTO> exercisesInRoundDTO = new ArrayList<ExerciseInRoundDTO>();
 			for(int j=0; j< multipleExercisetoRoundDTO.getExerciseIDList().size(); j++) {
 				ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
-			//	Long trainingId = -1l;
+				Long trainingId = -1l;
 				ExerciseInRound eir =  exerciseInRoundRepository.previousExerciseOfSameTypeForClient(training.getClient().getId().toString(), multipleExercisetoRoundDTO.getExerciseIDList().get(j).toString());
 				exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseService.findOne(multipleExercisetoRoundDTO.getExerciseIDList().get(j)).getName());
 				exerciseInRoundDTO.setExerciseInRoundExerciseId(multipleExercisetoRoundDTO.getExerciseIDList().get(j));
@@ -96,9 +96,9 @@ public class RestTrainingController {
 				autoNewExercisefieldsWithValuesFromPrevious(exerciseInRoundDTO, eir);
 				
 				exerciseInRoundDTO.setRoundId(training.getRounds().get(0).getId());
-				//newRoundId = addExerciseInRound(exerciseInRoundDTO, "add");
-				//trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
-				//obj.put("roundId", newRoundId);
+			//  newRoundId = addExerciseInRound(exerciseInRoundDTO, "add");
+			//	trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
+			//	obj.put("roundId", newRoundId);
 				System.out.println("Exercise In Round DTO - getId : " + exerciseInRoundDTO.getExerciseInRoundExerciseId());
 				exercisesInRoundDTO.add(exerciseInRoundDTO);
 				obj.put("exerciseExecId", newExerciseInRoundExecId);
@@ -115,7 +115,7 @@ public class RestTrainingController {
 				commonElementsAddMeltipleExercisesInRound(obj, multipleExercisetoRoundDTO, training);
 			} else if(multipleExercisetoRoundDTO.getExerciseIDList().size() == 1) {
 				ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
-				training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
+				//training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
 				ExerciseInRound eir =  exerciseInRoundRepository.previousExerciseOfSameTypeForClient(training.getClient().getId().toString(), multipleExercisetoRoundDTO.getExerciseIDList().get(0).toString());					
 				Long trainingId = -1l;
 				exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseService.findOne(multipleExercisetoRoundDTO.getExerciseIDList().get(0)).getName());
@@ -140,7 +140,7 @@ public class RestTrainingController {
 		ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
 		training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
 		for(int j=0; j< multipleExercisetoRoundDTO.getExerciseIDList().size(); j++) {
-			Long trainingId = -1l;
+		//	Long trainingId = -1l;
 			ExerciseInRound eir =  exerciseInRoundRepository.previousExerciseOfSameTypeForClient(training.getClient().getId().toString(), multipleExercisetoRoundDTO.getExerciseIDList().get(0).toString());					
 			exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseService.findOne(multipleExercisetoRoundDTO.getExerciseIDList().get(j)).getName());
 			exerciseInRoundDTO.setExerciseInRoundExerciseId(multipleExercisetoRoundDTO.getExerciseIDList().get(j));
@@ -149,7 +149,7 @@ public class RestTrainingController {
 			autoNewExercisefieldsWithValuesFromPrevious(exerciseInRoundDTO, eir);
 			
 			Long newRoundId = addExerciseInRound(exerciseInRoundDTO, "add");
-			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
+		//	trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
 			obj.put("roundId", newRoundId);
 			obj.put("exerciseExecId", newExerciseInRoundExecId);
 		} 
@@ -305,7 +305,7 @@ public class RestTrainingController {
 		
 	//	exerciseInRoundRepository.sa
 	//	exercisesInRound = exerciseInRoundService.save(exerciseInRoundDTOtoExerciseInRound.convert(exercisesInRoundDTO));
-		exercisesInRound = (List<ExerciseInRound>) exerciseInRoundRepositroy.save(exerciseInRoundDTOtoExerciseInRound.convert(exercisesInRoundDTO));
+		exercisesInRound = (List<ExerciseInRound>) exerciseInRoundRepositroy.saveAll(exerciseInRoundDTOtoExerciseInRound.convert(exercisesInRoundDTO));
 		
 	//	newExerciseInRoundExecId = exerciseInRound.getExecInRound_Id();
 		return exercisesInRound.get(0).getRound().getId();

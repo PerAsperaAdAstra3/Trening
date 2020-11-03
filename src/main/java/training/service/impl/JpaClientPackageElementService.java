@@ -21,7 +21,7 @@ public class JpaClientPackageElementService implements ClientPackageElementServi
 	
 	@Override
 	public ClientPackageElement findOne(Long id) {
-		return clientPackageElementRepository.findOne(id);
+		return clientPackageElementRepository.findById(id).get();
 	}
 
 	@Override
@@ -41,12 +41,12 @@ public class JpaClientPackageElementService implements ClientPackageElementServi
 
 	@Override
 	public List<ClientPackageElement> save(List<ClientPackageElement> clientPackageElements) {
-		return clientPackageElementRepository.save(clientPackageElements);
+		return clientPackageElementRepository.saveAll(clientPackageElements);
 	}
 
 	@Override
 	public ClientPackageElement delete(Long id) {
-		ClientPackageElement clientPackageElement = clientPackageElementRepository.findOne(id);
+		ClientPackageElement clientPackageElement = clientPackageElementRepository.findById(id).get();
 		if(clientPackageElement == null) {
 			throw new IllegalStateException("ClientPackageElement does not exist!");
 		}
@@ -63,7 +63,7 @@ public class JpaClientPackageElementService implements ClientPackageElementServi
 
 	@Override
 	public ClientPackageElement edit(Long id, ClientPackageElement clientPackageElement) {
-		ClientPackageElement oldClientPackageElement = clientPackageElementRepository.findOne(id);
+		ClientPackageElement oldClientPackageElement = clientPackageElementRepository.findById(id).get();
 		oldClientPackageElement.setCounter(clientPackageElement.getCounter());
 		oldClientPackageElement.setClientPackage(clientPackageElement.getClientPackage());
 		clientPackageElementRepository.save(oldClientPackageElement);

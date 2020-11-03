@@ -20,7 +20,7 @@ public class JpaClientPackageService implements ClientPackageService {
 	
 	@Override
 	public ClientPackage findOne(Long id) {
-		return clientPackageRepository.findOne(id);
+		return clientPackageRepository.findById(id).get();
 	}
 
 	@Override
@@ -40,12 +40,12 @@ public class JpaClientPackageService implements ClientPackageService {
 
 	@Override
 	public List<ClientPackage> save(List<ClientPackage> clientPackages) {
-		return clientPackageRepository.save(clientPackages);
+		return clientPackageRepository.saveAll(clientPackages);
 	}
 
 	@Override
 	public ClientPackage delete(Long id) {
-		ClientPackage clientPackage = clientPackageRepository.findOne(id);
+		ClientPackage clientPackage = clientPackageRepository.findById(id).get();
 		if(clientPackage == null) {
 			throw new IllegalStateException("ClientPackage not found!");
 		}
@@ -62,7 +62,7 @@ public class JpaClientPackageService implements ClientPackageService {
 
 	@Override
 	public ClientPackage edit(Long id, ClientPackage clientPackage) {
-		ClientPackage oldClientPackage = clientPackageRepository.findOne(id);
+		ClientPackage oldClientPackage = clientPackageRepository.findById(id).get();
 		oldClientPackage.setClient(clientPackage.getClient());
 		oldClientPackage.setPackageUnit(clientPackage.getPackageUnit());
 		clientPackageRepository.save(oldClientPackage);

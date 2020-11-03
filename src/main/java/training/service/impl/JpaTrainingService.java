@@ -44,7 +44,7 @@ public class JpaTrainingService implements TrainingService {
 
 	@Override
 	public Training findOne(Long id) {
-		return trainingRepository.findOne(id);
+		return trainingRepository.findById(id).get();
 	}
 
 	@Override
@@ -59,12 +59,12 @@ public class JpaTrainingService implements TrainingService {
 
 	@Override
 	public List<Training> save(List<Training> trainings) {
-		return trainingRepository.save(trainings);
+		return trainingRepository.saveAll(trainings);
 	}
 
 	@Override
 	public Training delete(Long id) {
-		Training training = trainingRepository.findOne(id);
+		Training training = trainingRepository.findById(id).get();
 		if(training == null){
 			throw new IllegalArgumentException("Training does not exist");
 		}
@@ -81,7 +81,7 @@ public class JpaTrainingService implements TrainingService {
 
 	@Override
 	public Training edit(Long id, Training training) {
-		Training newTraining = trainingRepository.findOne(id);
+		Training newTraining = trainingRepository.findById(id).get();
 		changeClientPackageElementState(training, newTraining);
 		newTraining.setDate(training.getDate());
 		newTraining.setNumberOfTrainings(training.getNumberOfTrainings());

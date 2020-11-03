@@ -19,7 +19,7 @@ public class JpaTaskService implements TaskService {
 
 	@Override
 	public Task findOne(Long id) {
-		return taskRepository.findOne(id);
+		return taskRepository.findById(id).get();
 	}
 
 	@Override
@@ -34,12 +34,12 @@ public class JpaTaskService implements TaskService {
 
 	@Override
 	public List<Task> save(List<Task> tasks) {
-		return taskRepository.save(tasks);
+		return taskRepository.saveAll(tasks);
 	}
 
 	@Override
 	public Task delete(Long id) {
-		Task task = taskRepository.findOne(id);
+		Task task = taskRepository.findById(id).get();
 		if(task == null){
 			throw new IllegalArgumentException("Missing task!");
 		}
@@ -55,7 +55,7 @@ public class JpaTaskService implements TaskService {
 	
 	@Override
 	public Task edit(Long id, Task task) {
-		Task oldTask = taskRepository.findOne(id);
+		Task oldTask = taskRepository.findById(id).get();
 		oldTask.setRound(task.isRound());
 		oldTask.setTraining(task.getTraining());
 		taskRepository.save(oldTask);

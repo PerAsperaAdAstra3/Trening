@@ -88,7 +88,7 @@ public class RestOperatorController {
 		
 		List<Training> listTrainings = trainingRepository.getForTrainerInInterval(trainerTrainingReportDTO.getHighlightedTrainingId(), trainerTrainingReportDTO.getStartDate(), trainerTrainingReportDTO.getEndDate());
 		Map<String, Object> data = new HashMap<String, Object>();
-		Operator operatorInQuestion = operatorRepository.findOne(trainerTrainingReportDTO.getHighlightedTrainingId());
+		Operator operatorInQuestion = operatorRepository.findById(trainerTrainingReportDTO.getHighlightedTrainingId()).get();
 
 		if(operatorInQuestion.getPersonalName() != null && operatorInQuestion.getFamilyName() != null) {
 			data.put("name", operatorInQuestion.getPersonalName() + " " + operatorInQuestion.getFamilyName());

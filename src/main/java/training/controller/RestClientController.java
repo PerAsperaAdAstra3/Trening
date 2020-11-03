@@ -69,7 +69,7 @@ public class RestClientController {
 		
 		List<Training> listTrainings = trainingRepository.getForClientInInterval(clientTrainingReportDTO.getHighlightedClientId(), clientTrainingReportDTO.getStartDate(),  clientTrainingReportDTO.getEndDate());
 		Map<String, Object> data = new HashMap<String, Object>();
-		Client clientInQuestion = clientRepository.findOne(clientTrainingReportDTO.getHighlightedClientId());
+		Client clientInQuestion = clientRepository.findById(clientTrainingReportDTO.getHighlightedClientId()).get();
 		Long trainingPrice = clientTrainingReportDTO.getTrainingPrice() * (listTrainings.size() - clientTrainingReportDTO.getBonusTraining());
 		if(trainingPrice < 0) {
 			trainingPrice = 0l;

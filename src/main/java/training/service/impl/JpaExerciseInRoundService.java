@@ -19,7 +19,7 @@ public class JpaExerciseInRoundService implements ExerciseInRoundService {
 
 	@Override
 	public ExerciseInRound findOne(Long id) {
-		return exerciseInRoundRepository.findOne(id);
+		return exerciseInRoundRepository.findById(id).get();
 	}
 
 	@Override
@@ -34,12 +34,12 @@ public class JpaExerciseInRoundService implements ExerciseInRoundService {
 
 	@Override
 	public List<ExerciseInRound> save(List<ExerciseInRound> exercisesInRound) {
-		return exerciseInRoundRepository.save(exercisesInRound);
+		return exerciseInRoundRepository.saveAll(exercisesInRound);
 	}
 
 	@Override
 	public ExerciseInRound delete(Long id) {
-		ExerciseInRound exerciseInRound = exerciseInRoundRepository.findOne(id);
+		ExerciseInRound exerciseInRound = exerciseInRoundRepository.findById(id).get();
 		if (exerciseInRound == null) {
 			throw new IllegalStateException("Exercise in round does not exist");
 		}

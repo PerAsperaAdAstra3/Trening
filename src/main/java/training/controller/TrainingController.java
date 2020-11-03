@@ -43,9 +43,11 @@ import training.model.ExerciseInRound;
 import training.model.Operator;
 import training.model.Round;
 import training.model.Training;
+import training.repository.ClientRepository;
 import training.repository.ExerciseGroupRepository;
 import training.repository.ExerciseRepository;
 import training.repository.OperatorRepository;
+import training.repository.RoundRepository;
 import training.repository.TrainingRepository;
 import training.service.ClientService;
 import training.service.ExerciseGroupService;
@@ -65,6 +67,9 @@ public class TrainingController {
 
 	@Autowired
 	private ClientService clientService;
+	
+	@Autowired
+	private ClientRepository clientRepository;
 
 	@Autowired
 	private ExerciseService exerciseService;
@@ -77,6 +82,9 @@ public class TrainingController {
 
 	@Autowired
 	private RoundService roundService;
+	
+	@Autowired
+	private RoundRepository roundRepository;
 
 	@Autowired
 	private RoundToRoundDTO roundToRoundDTO;
@@ -141,12 +149,13 @@ public class TrainingController {
 	@RequestMapping(value = { "/deleteTraining/{id}" }, method = RequestMethod.GET)
 	public String getTrainings(Model model, @PathVariable String id) {
 	try {
-		Training training = trainingRepository.findOne(Long.parseLong(id));
+		Training training = trainingRepository.findById(Long.parseLong(id)).get();
 		Long longId = Long.parseLong(id);
 		trainingService.delete(Long.parseLong(id));
 		
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingRepository.findAllByClientIdOrderByIdDesc(training.getClient().getId())));
-		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
+		//model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
+		model.addAttribute("clients", clientToClientDTO.convert(clientRepository.findAll()));
 		model.addAttribute("clientId", training.getClient().getId());
 		model.addAttribute("idOfCopiedTraining","");
 		model.addAttribute("idOfClientToCopyTo","");
@@ -172,7 +181,8 @@ public class TrainingController {
 	
 	@RequestMapping(value = { "/trainingCreationHandler/{clientId}" }, method = RequestMethod.GET)
 	public String createTraining(Model model, @PathVariable String clientId) {
-	
+	System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+	System.out.println(new Date());
 	try {
 		TrainingDTO trainingDTO = createTraining(clientId);
 		
@@ -183,13 +193,16 @@ public class TrainingController {
 		  trainingDTO.setTrainingExecutor(operator);
 		}
 		trainingDTO.setStatus(TrainingStatusEnum.READY);
-		Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
+		//Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
+		Training training = trainingRepository.save(trainingDTOtoTraining.convert(trainingDTO));
 		trainingDTO = trainingToTrainingDTO.convert(training);
 		
 		Round round = new Round(training.getRounds().size() + 1);
 		training.addRound(round);
-		roundService.save(round);
-		trainingService.save(training);
+		//roundService.save(round);
+		roundRepository.save(round);
+		//trainingService.save(training);
+		trainingRepository.save(training);
 				
 		List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText());
 		
@@ -220,6 +233,8 @@ public class TrainingController {
 		model.addAttribute("errorMessage", messageList);
 		return "errorPage";
 	}
+	System.out.println(new Date());
+	System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
 		return "trainingCreation";
 	}
 	
@@ -271,10 +286,12 @@ public class TrainingController {
 	}
 	//TODO pretvoriti u "Query method"
 	private List<Training> tablesShowingOldTrainings(String clientId, String trainingId){
-		Client client = clientService.findOne(Long.parseLong(clientId));
+	//	Client client = clientService.findOne(Long.parseLong(clientId));
+		Client client = clientRepository.findById(Long.parseLong(clientId)).get();
 		List<Training> trainingList = client.getTrainingList();
 		
-		Training training = trainingService.findOne(Long.parseLong(trainingId));
+	//	Training training = trainingService.findOne(Long.parseLong(trainingId));
+		Training training = trainingRepository.findById(Long.parseLong(trainingId)).get();
 		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
 		for(int ii = 0; ii < trainingList.size() ; ii++) {
 				if(trainingList.get(ii).getId() > training.getId()) {
@@ -525,7 +542,7 @@ public class TrainingController {
 			trainingDTO.setId(null);
 			training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
 		} else {
-			TrainingStatusEnum trainingStatusEnumOld = trainingRepository.findOne(trainingDTO.getId()).getStatus();
+			TrainingStatusEnum trainingStatusEnumOld = trainingRepository.findById(trainingDTO.getId()).get().getStatus();
 			if(trainingStatusEnumOld != trainingDTO.getStatus() && trainingDTO.getStatus() == TrainingStatusEnum.DONE) {
 				statusChangedToDone = true;
 			}
