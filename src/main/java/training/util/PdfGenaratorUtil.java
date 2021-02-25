@@ -60,7 +60,6 @@ public class PdfGenaratorUtil {
 	        	File outputFile = new File(path.toString());
 	        	
 	        	boolean exists = outputFile.exists();
-	        	System.out.println("Da li je fajl vec bio odstampan : "+ exists);
 	        	os = new FileOutputStream(outputFile);
 	        	filePath = path.toString();
 	            ITextRenderer renderer = new ITextRenderer();
@@ -121,17 +120,13 @@ public class PdfGenaratorUtil {
 	        	String fileNameString = map.get("name").toString()+" " +map.get("startDate") +" " +map.get("endDate"); // + ".pdf";
 	        	java.nio.file.Path path = java.nio.file.Paths.get(pathTest.toString(), fileNameString);
 	        	//File outputFile = new File(path.toString());
-	        	System.out.println(fileNameString);
-	        	System.out.println(path);
 	       	    outputFile = File.createTempFile(fileNameString, ".pdf");
 	        	
 	        	boolean exists = outputFile.exists();
-	        	System.out.println("Da li je fajl vec bio odstampan : "+ exists);
 	        	os = new FileOutputStream(outputFile);
 	       // 	filePath = path.toString();
 	        	
 	        	filePath = outputFile.getAbsolutePath();
-	        	System.out.println(filePath);
 	            ITextRenderer renderer = new ITextRenderer();
 	            renderer.setDocumentFromString(processedHtml);
 	            renderer.layout();

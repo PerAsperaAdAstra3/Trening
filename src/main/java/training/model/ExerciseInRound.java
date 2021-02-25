@@ -1,6 +1,5 @@
 package training.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,6 +13,7 @@ import javax.persistence.ManyToOne;
 public class ExerciseInRound {
 
 	@Id
+	//@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long ExecInRound_Id;
 	

@@ -1,7 +1,5 @@
 package training.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +9,6 @@ import javax.validation.Valid;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.datetime.joda.DateTimeFormatterFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +56,6 @@ public class RestClientManagementController {
 		
 		clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.ACTIVE.getNameText());
 		ClientPackage clientPackage = clientPackageDTOtoClientPackage.convert(clientPackageDTO);
-
 		clientPackage.setPurchaseDate(new Date());
 		clientPackageService.save(clientPackage);
 		List<ClientPackageElement> clientPackageElementsList = new ArrayList<ClientPackageElement>();

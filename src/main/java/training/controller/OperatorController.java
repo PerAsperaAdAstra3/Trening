@@ -1,11 +1,13 @@
 package training.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,6 +47,18 @@ public class OperatorController {
 
 	@Autowired
 	private MailService mailService;
+	
+	@Value("${logging.path}")
+	private String loggingPath;
+	
+	@Value("${logging.file}")
+	private String loggingFile;
+	
+	@Value("${pdf.folder}")
+	private String pdfFolder;
+	
+	@Value("${log.file}")
+	private String logFile;
 	
 	private boolean nameTaken = false;
 	private boolean emailTaken = false;
@@ -157,6 +171,44 @@ public class OperatorController {
 		model.addAttribute("pageTitle", "Lična podešavanja");
 		return "personalInfoManagement";
 	}
+	
+/*	@RequestMapping(value = {"/openLogFile"}, method = RequestMethod.GET)
+	public String openLogFile(Model model) {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = "";
+		
+		System.out.println(loggingPath);
+		System.out.println(loggingFile);
+		System.out.println(pdfFolder);		
+		System.out.println(logFile);
+
+		try {
+			Runtime.getRuntime().exec("explorer.exe /open," + loggingPath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value = {"/openPDFFolder"}, method = RequestMethod.GET)
+	public String openPDFFolder(Model model) {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = "";
+		
+		System.out.println(loggingPath);
+		System.out.println(loggingFile);
+		System.out.println(pdfFolder);		
+		System.out.println(logFile);
+
+		try {
+			Runtime.getRuntime().exec("explorer.exe /open," + pdfFolder);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "redirect:/";
+	}*/
 	
 	@RequestMapping(value = {"/editSelf"}, method = RequestMethod.POST)
 	public String editSelf(Model model, @ModelAttribute("operatorDTO") OperatorDTO operatorDTO, @RequestParam String mode){

@@ -42,7 +42,6 @@ public class ClientPackageDTOtoClientPackage implements Converter<ClientPackageD
 			purchaseDateString = source.getPurchaseDate();
 			String[] arrayString = purchaseDateString.split("-");
 			purchaseDateGenerated = new Date(arrayString[2]+"-"+arrayString[1]+"-"+arrayString[0]);
-			System.out.println(purchaseDateGenerated);
 		}
 		clientPackage.setPurchaseDate(purchaseDateGenerated);
 		

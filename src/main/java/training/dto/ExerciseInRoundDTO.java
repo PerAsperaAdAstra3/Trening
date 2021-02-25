@@ -18,16 +18,16 @@ public class ExerciseInRoundDTO {
 
 	private Long roundId;
 	
-	private Exercise exercise;
+	private ExerciseDTO exerciseDTO;
 	
 	private String note;
 	
-	public Exercise getExercise() {
-		return exercise;
+	public ExerciseDTO getExercise() {
+		return exerciseDTO;
 	}
 
-	public void setExercise(Exercise exercise) {
-		this.exercise = exercise;
+	public void setExercise(ExerciseDTO exercise) {
+		this.exerciseDTO = exercise;
 	}
 
 	public Long getId() {
@@ -87,8 +87,8 @@ public class ExerciseInRoundDTO {
 	}	
 	
 	public String getExerciseInRoundExerciseName() {
-		if(exercise != null) {
-			return exercise.getName();
+		if(exerciseDTO != null) {
+			return exerciseDTO.getName();
 		}
 		else {
 			return exerciseInRoundExerciseName;

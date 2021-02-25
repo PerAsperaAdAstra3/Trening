@@ -1,7 +1,5 @@
 package training.dto;
 
-import javax.persistence.ManyToOne;
-
 import training.enumerations.TrainingStatusEnum;
 import training.model.Operator;
 
@@ -24,6 +22,16 @@ public class TrainingDTO {
     private Operator trainingCreator;
 
     private Operator trainingExecutor;
+    
+    private Boolean circularYN;
+    
+	public Boolean isCircularYN() {
+		return circularYN;
+	}
+
+	public void setCircularYN(Boolean circularYN) {
+		this.circularYN = circularYN;
+	}
 
 	public Operator getTrainingCreator() {
 		return trainingCreator;

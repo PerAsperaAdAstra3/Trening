@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/ajaxFunctions.js"></script>
 <meta charset="utf-8"/>
 <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+
 </head>
 <body>
 	<header th:fragment="header">
-	
+	<script>
+		$(document).on("click", "#logFolder", function(event) {
+			openLogFileLocation();
+		});
+		$(document).on("click", "#pdfFolder", function(event) {
+			openPDFFolder();
+		});
+	</script>
 	<table class="headerTable">
 	<thead></thead>
 	<tbody>
@@ -19,6 +30,8 @@
 					<img src="/images/COG2a2.png"/>
 					<div class="dropdown-content">
 					    <a th:href="@{/personalInfoManagementCtrl}">Lična podešavanja</a>
+					    <a id="logFolder" th:href="@{#}">Otvori LOG lokaciju</a>
+					    <a id="pdfFolder" th:href="@{#}">Otvori PDF lokaciju</a>
 					    <a th:href="@{/logout}">Odlogujte se</a>
 					</div>
 				</div>

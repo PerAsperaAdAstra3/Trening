@@ -1,4 +1,6 @@
 package training.controller;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import training.converter.ClientToClientDTO;
 import training.converter.TrainingToTrainingDTO;
+import training.model.Training;
 import training.repository.TrainingRepository;
 import training.service.ClientService;
 import training.util.LoggingUtil;
@@ -33,7 +36,13 @@ public class ClientTrainingController {
 	@RequestMapping(value = {"/clientTrainingSubmit/{id}"}, method = RequestMethod.GET)
 	public String selectPage(Model model, @PathVariable String id) {
 		try {
-			model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingRepository.findAllByClientIdOrderByIdDesc(Long.parseLong(id))));
+			List<Training> trainingList = trainingRepository.findAllByClientIdOrderByIdDesc(Long.parseLong(id));
+			for(Training training : trainingList) {
+				if(training.isCircularYN() == null) {
+					training.setCircularYN(false);
+				}
+			}
+			model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingList));
 		} catch (NumberFormatException numberFormatException) {
 			LoggingUtil.LoggingMethod(logger, numberFormatException);
 		} catch (IllegalArgumentException illegalArgumentException) {

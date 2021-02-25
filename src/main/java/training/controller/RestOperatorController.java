@@ -1,5 +1,6 @@
 package training.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,10 +11,15 @@ import javax.validation.Valid;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import training.converter.OperatorDTOtoOperator;
@@ -50,6 +56,18 @@ public class RestOperatorController {
 	
 	@Autowired
 	private PdfGenaratorUtil pdfGenaratorUtil;
+	
+	@Value("${logging.path}")
+	private String loggingPath;
+	
+	@Value("${logging.file}")
+	private String loggingFile;
+	
+	@Value("${pdf.folder}")
+	private String pdfFolder;
+	
+	@Value("${log.file}")
+	private String logFile;
 	
 	@PostMapping(value = { "/sendPasswordToEmail" })
 	public ResponseEntity<?> sendPasswordToEmail(@Valid @RequestBody OperatorDTO operatorDTO) {
@@ -158,4 +176,29 @@ public class RestOperatorController {
 		
 		return ResponseEntity.ok(obj.toString());
 	}
+	
+	@PostMapping(value = { "/openPDFFolder" })
+	public ResponseEntity<?> openPDFFolder() {
+		JSONObject obj = new JSONObject();
+		System.out.println("Open PDF folder");
+		try {
+			Runtime.getRuntime().exec("explorer.exe /open," + pdfFolder);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+		return ResponseEntity.ok(obj.toString());
+	}
+	
+	@PostMapping(value = { "/openLogFile" })
+	public ResponseEntity<?> openLogFile() {
+		JSONObject obj = new JSONObject();
+		System.out.println("Open log folder");
+		try {
+			Runtime.getRuntime().exec("explorer.exe /open," + loggingPath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+		return ResponseEntity.ok(obj.toString());
+	}
+	
 }

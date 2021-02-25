@@ -19,6 +19,11 @@ public interface ExerciseInRoundRepository extends JpaRepository<ExerciseInRound
 	ExerciseInRound previousExerciseOfSameTypeForClient(@Param("clientId") String clientId, @Param("exerciseId") String exerciseId);
 	
 	@Query(
+	  value = "select * from exercise_in_round er join round r on r.id = er.round_exercise_in_round join training tr on tr.id = r.training_round where er.exerciseid in :exerciseIds and tr.training_list = :clientId ORDER BY tr.date desc;", 
+	  nativeQuery = true)
+	List<ExerciseInRound> previousExerciseOfSameTypeForClientList(@Param("clientId") String clientId, @Param("exerciseIds") List<Long> exerciseIds);
+	
+	@Query(
 			  value = "select * from exercise_in_round where round_exercise_in_round in (select id from round where training_round in :topTrainingsIds)",
 			  nativeQuery = true)
 	List<ExerciseInRound> getAllExercisesInRound(@Param("topTrainingsIds")List<Long> topTrainingsIds);

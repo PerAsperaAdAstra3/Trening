@@ -218,6 +218,7 @@ table {
 .dropdown-content {
   display: none;
   width: 150px;
+  z-index: 1;
   position: absolute;
   right: 0px;
   background-color: #f1f1f1;

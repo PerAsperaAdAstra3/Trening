@@ -51,6 +51,17 @@ public class Training {
     @ManyToOne()
     private Operator trainingExecutor;
     
+    @Column(name="circularYN")
+    private Boolean circularYN;
+    
+	public Boolean isCircularYN() {
+		return circularYN;
+	}
+
+	public void setCircularYN(Boolean circularYN) {
+		this.circularYN = circularYN;
+	}
+
 	public Operator getTrainingCreator() {
 		return trainingCreator;
 	}

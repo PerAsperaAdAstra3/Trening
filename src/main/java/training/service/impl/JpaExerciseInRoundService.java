@@ -54,7 +54,7 @@ public class JpaExerciseInRoundService implements ExerciseInRoundService {
 	}
 	
 	public ExerciseInRound edit(Long id, ExerciseInRound exerciseInRound) {
-		ExerciseInRound newExerciseInRound = exerciseInRoundRepository.getOne(id);
+		ExerciseInRound newExerciseInRound = exerciseInRoundRepository.findById(id).get(); //getOne(id);
 		newExerciseInRound.setNote(exerciseInRound.getNote());
 		newExerciseInRound.setRound(exerciseInRound.getRound());
 		if(exerciseInRound.getExercise() != null) {

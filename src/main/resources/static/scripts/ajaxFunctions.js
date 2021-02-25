@@ -9,7 +9,43 @@ var COLOR_YELLOW_HEX = '#eff48a';
 var COLOR_RED_HEX = '#ff8080';
 
 var COLOR_GRAY_HEX = '#bfc0bf';
-	
+
+function openPDFFolder(){
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/openPDFFolder",
+		data: JSON.stringify(),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom !')
+		}
+	})
+}
+
+function openLogFileLocation(){
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/openLogFile",
+		data: JSON.stringify(),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom !')
+		}
+	})
+}
+
 function trainerTrainingsReportPrint(name, startDate, endDate, listOfTrainings, numberOfTrainings){
 	var trainerTrainingReportDTO = {}
 	
@@ -523,13 +559,50 @@ function ajaxAddMultipleExerciseInRound(attrList , attr, highlightedRoundID){
 		success: function (data){
 			//TODO Transform in to standard AJAX success handling - remove code related to this current solution.
 			
-			var isItCircular = $('#circularYN').val()
+
+
+			if(data["circularYN"] != "yes"){
+				if(data["roundIds"] != null){
+				console.log(data["sizeDifference"])
+				console.log(data["roundSecNumber"])
+				for(i = data["roundIds"].length - data["sizeDifference"]; i <= data["roundIds"].length - 1; i++){
+			
+				$("#roundsTable tr:last").after('<tr id="round-id-sync" class="highlighted"><td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber">'+ data["roundSecNumber"][i] +
+						'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data["roundIds"][i] +'</td><td><button id="roundDeleteButton" type="button" class="btn btn-danger">Briši</button></td></tr>');
+				selectRoundIdOnRowClick($(".highlighted"));
+				}
+				}
+			}
+			var idTraining = $(".idTraining").val();
+			if(data["exerciseInRoundJSON"] != null){
+				for(i = 0; i <= data["exerciseInRoundJSON"].length - 1; i++){ 
+					$("#exercisesInRoundTable tr:last").after('<tr class="hidden_input tr-entity-list" id="tr-entity-list"><td class="exerciseName">'+ data["exerciseInRoundJSON"][i]["exerciseInRoundExerciseName"] +'</td><td class="exerciseInRoundId" style="display:none;">'+ data["exerciseInRoundJSON"][i]["id"] +
+			    			'</td><td class="numberOfRepetitions">'+ data["exerciseInRoundJSON"][i]["numberOfRepetitions"]  +'</td><td class="difficulty">'+ data["exerciseInRoundJSON"][i]["difficulty"] +'</td><td class="note">'+ data["exerciseInRoundJSON"][i]["note"] +
+			    			'</td><td class="roundId" style="display:none;">'+ data["exerciseInRoundJSON"][i]["roundId"] +'</td><td class="exerciseExecId" style="display:none;">' + data["exerciseInRoundJSON"][i]["exerciseInRoundExerciseId"] + '</td><td><button id="deleteExerciseInRound" type="button" class="btn btn-danger">Briši</button></td></tr>');
+					$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
+				}
+			} else {
+				$("#exercisesInRoundTable tr:last").after('<tr class="hidden_input tr-entity-list" id="tr-entity-list"><td class="exerciseName">'+ data["exercInRound"]["exerciseInRoundExerciseName"] +'</td><td class="exerciseInRoundId" style="display:none;">'+ data["exercInRound"]["id"] +
+		    			'</td><td class="numberOfRepetitions">'+ data["exercInRound"]["numberOfRepetitions"]  +'</td><td class="difficulty">'+ data["exercInRound"]["difficulty"] +'</td><td class="note">'+ data["exercInRound"]["note"] +
+		    			'</td><td class="roundId" style="display:none;">'+ data["exercInRound"]["roundId"] +'</td><td class="exerciseExecId" style="display:none;">' + data["exercInRound"]["exerciseInRoundExerciseId"] + '</td><td><button id="deleteExerciseInRound" type="button" class="btn btn-danger">Briši</button></td></tr>');
+				$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
+			}
+
+			$("#round-id-sync").parent().find(".highlighted").removeClass("highlighted");
+			$("#round-id-sync").removeClass("highlighted");
+		//	}
+		/*	var isItCircular = $('#circularYN').val()
 
 			if(isItCircular){
 				$('#callGetTrainingCircular')[0].click();
 			} else {
-				$('#callGetTraining')[0].click();
-			}
+				$('#callGetTraining')[0].click();*/
+			
+
+			$(".trainingChk").prop('checked', false);
+			
+			// Restpre cursor to normal
+			document.body.style.cursor  = 'default';
 		},
 		error: function (e) {
 			 var json = "<h4>Ajax Response</h4>";
@@ -568,7 +641,7 @@ function ajaxExerciseInRoundAddExercise(){
 		var idTraining = $(".idTraining").val();
 	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +
 	    		'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +
-	    		'</td><td class="roundId" style="display:none;">'+ data.roundId +'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+	    		'</td><td class="roundId" style="display:none;">'+ data.roundId +'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><button id="deleteExerciseInRound" type="button" class="btn btn-danger">Briši</button></td></tr>');
        	$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
 		$("#exerciseInRoundExerciseId").val(data.exerciseInRoundExerciseId);
 		},
@@ -635,9 +708,9 @@ function ajaxExerciseInRound(){
 	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +
 	    		'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +
 	    		'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +'</td><td class="roundId" style="display:none;">'+ data.roundId +
-	    		'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+	    		'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><button id="deleteExerciseInRound" type="button" class="btn btn-danger">Briši</button></td></tr>');
        	$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
-			
+       	document.body.style.cursor  = 'default';
 		},
 		error: function (e) {
 			 var json = "<h4>Ajax Response</h4>";
@@ -701,7 +774,7 @@ function ajaxExerciseInRoundChange(){
 			if(difficultyTest != data.exerciseInRoundDifficulty){
 				tableRow.find(".difficulty").html(data.exerciseInRoundDifficulty);
 			}
-			
+			document.body.style.cursor  = 'default';
 		},
 		error: function (e) {
 			var json = "<h4>Ajax Response</h4>";
@@ -730,7 +803,7 @@ function ajaxAddRound(){
 					removeHighlights(this)
 				});
 		    $("#roundsTable tr:last").after('<tr id="round-id-sync" class="highlighted"><td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber">'+ data.roundRoundSequenceNumber +
-		    		'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><a href="/deleteRound/'+data.selectedRoundId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+		    		'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><button id="roundDeleteButton" type="button" class="btn btn-danger">Briši</button></td></tr>');
 		    selectRoundIdOnRowClick($(".highlighted"));
 		},
 		error: function (e) {
@@ -762,9 +835,17 @@ function ajaxDeleteRound(roundId, thisObject){
 		timeout: 600000,
 		success: function (data){
 			thisObject.parent().parent().remove();
+			
+			$(".tr-entity-list").each(function() {
+				if ($(this).find(".roundId").text() == roundId)
+				{			
+					$(this).remove();
+				} else {
+				}
+			});
 		},
 		error: function (e) {
-			alert('Desila se greska prilikom brisanja kruga iz Ajax-a!')
+			//alert('Desila se greska prilikom brisanja kruga iz Ajax-a!')
 		}
 	})
 }
@@ -786,7 +867,7 @@ function ajaxDeleteExerciseInRound(roundId, thisObject){
 			thisObject.parent().parent().remove();
 		},
 		error: function (e) {
-			alert('Desila se greska prilikom brisanja vežbe u krugu!')
+		//	alert('Desila se greska prilikom brisanja vežbe u krugu!')
 		}
 	})
 }

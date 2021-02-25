@@ -1,10 +1,13 @@
 package training.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import training.converter.ExerciseDTOtoExercise;
 import training.converter.ExerciseInRoundDTOtoExerciseInRound;
+import training.converter.ExerciseInRoundToExerciseInRoundDTO;
+import training.converter.ExerciseToExerciseDTO;
 import training.dto.ExerciseDTO;
 import training.dto.ExerciseInRoundDTO;
 import training.dto.ExerciseInRoundDTOAjax;
@@ -30,6 +35,8 @@ import training.model.Training;
 import training.repository.ExerciseInRoundCrudRepository;
 import training.repository.ExerciseInRoundRepository;
 import training.repository.ExerciseRepository;
+import training.repository.RoundRepository;
+import training.repository.TrainingRepository;
 import training.service.ExerciseInRoundService;
 import training.service.ExerciseService;
 import training.service.RoundService;
@@ -50,6 +57,9 @@ public class RestTrainingController {
 	
 	@Autowired
 	private RoundService roundService;
+	
+	@Autowired
+	private RoundRepository roundRepository;
 
 	@Autowired
 	private ExerciseInRoundService exerciseInRoundService;
@@ -72,6 +82,15 @@ public class RestTrainingController {
 	@Autowired
 	private ExerciseRepository exerciseRepository;
 
+	@Autowired
+	private ExerciseInRoundToExerciseInRoundDTO exerciseInRoundToExerciseInRoundDTO;
+	
+	@Autowired
+	private ExerciseToExerciseDTO exerciseToExerciseDTO;
+	
+	@Autowired
+	private TrainingRepository trainingRepository;
+	
 	Logger logger = LoggerFactory.getLogger(RestTrainingController.class);
 	
 	// Add Exercise In Round #######################################################
@@ -79,80 +98,171 @@ public class RestTrainingController {
 	@PostMapping(value = { "/addMultipleExerciseInRound" })
 	public ResponseEntity<?> addMultipleExerciseInRound(@Valid @RequestBody MultipleExercisetoRoundDTO multipleExercisetoRoundDTO) {
 		JSONObject obj = new JSONObject();
-		System.out.println("Rest training controller");
 		Training training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
 		int sizeDifference =  multipleExercisetoRoundDTO.getExerciseIDList().size() - training.getRounds().size();
 		if(null != multipleExercisetoRoundDTO.getCircularRoundYN() && multipleExercisetoRoundDTO.getCircularRoundYN()) {
 		//	training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
 			Long newRoundId = -1l;
+			List<ExerciseInRound> roundsList;
 			List<ExerciseInRoundDTO> exercisesInRoundDTO = new ArrayList<ExerciseInRoundDTO>();
+			
+			List<ExerciseInRound> eirList =  exerciseInRoundRepository.previousExerciseOfSameTypeForClientList(training.getClient().getId().toString(), multipleExercisetoRoundDTO.getExerciseIDList());
+			List<ExerciseInRound> exerciseInRoundLatestOnes = new ArrayList<ExerciseInRound>();
+		
+			List<Exercise> exerciseListForNames = exerciseRepository.findAllById(multipleExercisetoRoundDTO.getExerciseIDList());
+			List<String> exerciseNames = new ArrayList<String>();
+			
+			for(int j=0; j< multipleExercisetoRoundDTO.getExerciseIDList().size(); j++) {
+				for(int i =0; i < eirList.size(); i++) {
+					if(eirList.get(i).getExerciseId().longValue() ==  multipleExercisetoRoundDTO.getExerciseIDList().get(j).longValue()) {
+						exerciseInRoundLatestOnes.add(eirList.get(i));
+						break;
+					}
+				}
+				for(int z=0; z < exerciseListForNames.size() ; z++) {
+					if(exerciseListForNames.get(z).getId().longValue() ==  multipleExercisetoRoundDTO.getExerciseIDList().get(j).longValue()) {
+						exerciseNames.add(exerciseListForNames.get(z).getName());
+					}
+				}
+			}	
 			for(int j=0; j< multipleExercisetoRoundDTO.getExerciseIDList().size(); j++) {
 				ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
 				Long trainingId = -1l;
-				ExerciseInRound eir =  exerciseInRoundRepository.previousExerciseOfSameTypeForClient(training.getClient().getId().toString(), multipleExercisetoRoundDTO.getExerciseIDList().get(j).toString());
-				exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseService.findOne(multipleExercisetoRoundDTO.getExerciseIDList().get(j)).getName());
+
+				exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseNames.get(j));
 				exerciseInRoundDTO.setExerciseInRoundExerciseId(multipleExercisetoRoundDTO.getExerciseIDList().get(j));
 				
-				autoNewExercisefieldsWithValuesFromPrevious(exerciseInRoundDTO, eir);
-				
+				for(int k=0; k < exerciseInRoundLatestOnes.size(); k++) {
+					if(exerciseInRoundLatestOnes.get(k).getExercise() != null) {
+						if(multipleExercisetoRoundDTO.getExerciseIDList().get(j) == exerciseInRoundLatestOnes.get(k).getExercise().getId()) {
+							autoNewExercisefieldsWithValuesFromPrevious(exerciseInRoundDTO, exerciseInRoundLatestOnes.get(k));
+						}
+					}
+					if(exerciseInRoundLatestOnes.get(k).getExercise() == null && exerciseInRoundLatestOnes.get(k).getExerciseId() != null) {
+						if(multipleExercisetoRoundDTO.getExerciseIDList().get(j) == exerciseInRoundLatestOnes.get(k).getExerciseId()) {
+							autoNewExercisefieldsWithValuesFromPrevious(exerciseInRoundDTO, exerciseInRoundLatestOnes.get(k));
+						}
+					}
+				}
 				exerciseInRoundDTO.setRoundId(training.getRounds().get(0).getId());
-			//  newRoundId = addExerciseInRound(exerciseInRoundDTO, "add");
-			//	trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
-			//	obj.put("roundId", newRoundId);
-				System.out.println("Exercise In Round DTO - getId : " + exerciseInRoundDTO.getExerciseInRoundExerciseId());
+
 				exercisesInRoundDTO.add(exerciseInRoundDTO);
 				obj.put("exerciseExecId", newExerciseInRoundExecId);
 			}
-			newRoundId = addExercisesInRound(exercisesInRoundDTO, "add");
-			obj.put("roundId", newRoundId);
+
+			roundsList = addExercisesInRound(exercisesInRoundDTO, "add");
+
+			List<Long> roundIds = new ArrayList<Long>();
+			for(ExerciseInRound exerciseInRound : roundsList) {
+				roundIds.add(exerciseInRound.getRound().getId());
+			}
+			JSONArray jsonArray = new JSONArray();
+			for(int i = 0; i < roundsList.size() ; i++) {
+
+				ExerciseInRoundDTO exInRound = exerciseInRoundToExerciseInRoundDTO.convert(roundsList.get(i));
+				JSONObject exerciseInRoundJSON = new JSONObject(exInRound);
+				jsonArray.put(i, exerciseInRoundJSON);
+
+			}
+
+			obj.put("exerciseInRoundJSON", jsonArray);
+			obj.put("roundId", roundsList.get(0).getRound().getId());
+			obj.put("roundSecNumber", roundsList.get(0).getRound().getRoundSequenceNumber());
+			obj.put("circularYN", "yes");
+			//obj.put("roundIds", roundIds);
 		}
 		else {
 			if (training.getRounds().size() < multipleExercisetoRoundDTO.getExerciseIDList().size() ) {
 				/** Size difference - sizeDifference - shows how many new rounds need to be added when the number of exercises selected is greater then the number of rounds that currently exist in a training*/
-				for(int i = 0; i < sizeDifference ; i++ ) {
-					Long roundId = addRoundCalc(multipleExercisetoRoundDTO.getTrainingId().toString());
-				}
-				commonElementsAddMeltipleExercisesInRound(obj, multipleExercisetoRoundDTO, training);
+				List<Long> trainingsIdList = new ArrayList<Long>();
+				addRoundsCalc(training, sizeDifference);
+				commonElementsAddMeltipleExercisesInRound(obj, multipleExercisetoRoundDTO, training, sizeDifference);
 			} else if(multipleExercisetoRoundDTO.getExerciseIDList().size() == 1) {
 				ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
-				//training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
 				ExerciseInRound eir =  exerciseInRoundRepository.previousExerciseOfSameTypeForClient(training.getClient().getId().toString(), multipleExercisetoRoundDTO.getExerciseIDList().get(0).toString());					
 				Long trainingId = -1l;
 				exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseService.findOne(multipleExercisetoRoundDTO.getExerciseIDList().get(0)).getName());
 				exerciseInRoundDTO.setExerciseInRoundExerciseId(multipleExercisetoRoundDTO.getExerciseIDList().get(0));
-				exerciseInRoundDTO.setRoundId(multipleExercisetoRoundDTO.getHighlightedRoundId());
-			
+				if(multipleExercisetoRoundDTO.getHighlightedRoundId() == null) {
+					exerciseInRoundDTO.setRoundId(training.getRounds().get(0).getId());
+				} else {
+					exerciseInRoundDTO.setRoundId(multipleExercisetoRoundDTO.getHighlightedRoundId());
+				}
 				autoNewExercisefieldsWithValuesFromPrevious(exerciseInRoundDTO, eir);
 				
-				Long newRoundId = addExerciseInRound(exerciseInRoundDTO, "add");
-				trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
-				obj.put("roundId", newRoundId);
+				//Long newRoundId 
+				
+				ExerciseInRoundDTO exInRound = exerciseInRoundToExerciseInRoundDTO.convert(addExerciseInRoundReturn(exerciseInRoundDTO, "add")); //addExerciseInRound(exerciseInRoundDTO, "add");
+			//	trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
+				
+				JSONObject exerciseInRoundJSON = new JSONObject(exInRound); //exerciseInRoundDTO);
+				obj.put("exercInRound", exerciseInRoundJSON);
+				obj.put("roundId", exInRound.getRoundId());
 				obj.put("exerciseExecId", newExerciseInRoundExecId);
 			} else {
-				commonElementsAddMeltipleExercisesInRound(obj, multipleExercisetoRoundDTO, training);
+				commonElementsAddMeltipleExercisesInRound(obj, multipleExercisetoRoundDTO, training, sizeDifference);
 			}
 		}
 		Long trainingId = -1l;
 		return ResponseEntity.ok(obj.toString());
 	}
 	
-	private void commonElementsAddMeltipleExercisesInRound(JSONObject obj, MultipleExercisetoRoundDTO multipleExercisetoRoundDTO, Training training) {
-		ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
-		training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
+	private void commonElementsAddMeltipleExercisesInRound(JSONObject obj, MultipleExercisetoRoundDTO multipleExercisetoRoundDTO, Training training, int sizeDifference) {
+		//training = trainingService.findOne(multipleExercisetoRoundDTO.getTrainingId());
+		List<ExerciseInRound> roundsList;
+		List<ExerciseInRoundDTO> exercisesInRoundDTO = new ArrayList<ExerciseInRoundDTO>();
+		
+		List<ExerciseInRound> eirList =  exerciseInRoundRepository.previousExerciseOfSameTypeForClientList(training.getClient().getId().toString(), multipleExercisetoRoundDTO.getExerciseIDList());
+		List<ExerciseInRound> exerciseInRoundLatestOnes = new ArrayList<ExerciseInRound>();
+		
+		List<Exercise> exerciseListForNames = exerciseRepository.findAllById(multipleExercisetoRoundDTO.getExerciseIDList());
+		List<String> exerciseNames = new ArrayList<String>();
 		for(int j=0; j< multipleExercisetoRoundDTO.getExerciseIDList().size(); j++) {
-		//	Long trainingId = -1l;
-			ExerciseInRound eir =  exerciseInRoundRepository.previousExerciseOfSameTypeForClient(training.getClient().getId().toString(), multipleExercisetoRoundDTO.getExerciseIDList().get(0).toString());					
-			exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseService.findOne(multipleExercisetoRoundDTO.getExerciseIDList().get(j)).getName());
+			for(int i =0; i < eirList.size(); i++) {
+				if(eirList.get(i).getExerciseId().longValue() == multipleExercisetoRoundDTO.getExerciseIDList().get(j).longValue()) {
+					exerciseInRoundLatestOnes.add(eirList.get(i));
+					//break;
+				}
+			}
+
+			for(int z=0; z < exerciseListForNames.size() ; z++) {
+				if(exerciseListForNames.get(z).getId().longValue() == multipleExercisetoRoundDTO.getExerciseIDList().get(j).longValue()) {
+					exerciseNames.add(exerciseListForNames.get(z).getName());
+				}
+			}
+		}
+		for(int j=0; j< multipleExercisetoRoundDTO.getExerciseIDList().size(); j++) {
+			ExerciseInRoundDTO exerciseInRoundDTO = new ExerciseInRoundDTO();
+			exerciseInRoundDTO.setExerciseInRoundExerciseName(exerciseNames.get(j));
 			exerciseInRoundDTO.setExerciseInRoundExerciseId(multipleExercisetoRoundDTO.getExerciseIDList().get(j));
 			exerciseInRoundDTO.setRoundId(training.getRounds().get(j).getId());
-			
-			autoNewExercisefieldsWithValuesFromPrevious(exerciseInRoundDTO, eir);
-			
-			Long newRoundId = addExerciseInRound(exerciseInRoundDTO, "add");
-		//	trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
-			obj.put("roundId", newRoundId);
+			for(int jj = 0; jj < exerciseInRoundLatestOnes.size(); jj++) {
+				if(exerciseInRoundDTO.getExerciseInRoundExerciseId() == exerciseInRoundLatestOnes.get(jj).getExerciseId().longValue()) {
+					autoNewExercisefieldsWithValuesFromPrevious(exerciseInRoundDTO, exerciseInRoundLatestOnes.get(jj));
+				}
+			}
+			exercisesInRoundDTO.add(exerciseInRoundDTO);
 			obj.put("exerciseExecId", newExerciseInRoundExecId);
 		} 
+		roundsList = addExercisesInRound(exercisesInRoundDTO, "add");
+		List<Long> roundIds = new ArrayList<Long>();
+		List<Integer> roundSecNumber = new ArrayList<Integer>();
+		
+		JSONArray jsonArray = new JSONArray();
+				
+		for(int i = 0; i < roundsList.size() ; i++) {
+			
+			ExerciseInRoundDTO exInRound = exerciseInRoundToExerciseInRoundDTO.convert(roundsList.get(i));
+			JSONObject exerciseInRoundJSON = new JSONObject(exInRound);
+			jsonArray.put(i, exerciseInRoundJSON);
+			roundIds.add(roundsList.get(i).getRound().getId());
+			roundSecNumber.add(roundsList.get(i).getRound().getRoundSequenceNumber());
+		}
+		obj.put("roundIds", roundIds);
+		obj.put("roundSecNumber", roundSecNumber);
+		obj.put("exerciseInRoundJSON", jsonArray);
+		obj.put("sizeDifference", sizeDifference);
+		obj.put("circularYN", "no");
 	}
 	
 	private void autoNewExercisefieldsWithValuesFromPrevious(ExerciseInRoundDTO exerciseInRoundDTO, ExerciseInRound eir) {
@@ -204,7 +314,7 @@ public class RestTrainingController {
 			exerciseInRoundDTO.setDifficulty(exerciseInRoundDTOAjax.getExerciseInRoundDifficulty());
 			exerciseInRoundDTO.setRoundId(Long.parseLong(exerciseInRoundDTOAjax.getRoundId()));
 			Long newRoundId = addExerciseInRound(exerciseInRoundDTO, "add");
-			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
+		//	trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
 			obj.put("roundId", newRoundId);
 			obj.put("exerciseExecId", newExerciseInRoundExecId);
 
@@ -245,7 +355,7 @@ public class RestTrainingController {
 			exerciseInRoundDTO.setDifficulty(exerciseInRoundDTOAjaxAddRound.getExerciseInRoundDifficulty());
 			exerciseInRoundDTO.setRoundId(Long.parseLong(exerciseInRoundDTOAjaxAddRound.getRoundId()));
 			Long newRoundId = addExerciseInRound(exerciseInRoundDTO, "add");
-			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
+		//	trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
 			obj.put("roundId", newRoundId);
 			obj.put("exerciseExecId", newExerciseInRoundExecId);
 		} catch (Exception e) {
@@ -281,34 +391,34 @@ public class RestTrainingController {
 	
 	private Long addExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
 		ExerciseInRound exerciseInRound;
-		exerciseInRoundDTO.setExercise(exerciseService.findOne(exerciseInRoundDTO.getExerciseInRoundExerciseId()));
+		exerciseInRoundDTO.setExercise(exerciseToExerciseDTO.convert(exerciseRepository.findById(exerciseInRoundDTO.getExerciseInRoundExerciseId()).get())); //exerciseService .findOne(exerciseInRoundDTO.getExerciseInRoundExerciseId())));
 		exerciseInRound = exerciseInRoundService.save(exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
 		newExerciseInRoundExecId = exerciseInRound.getExecInRound_Id();
 		return exerciseInRound.getRound().getId();
 	}
 	
-	private Long addExercisesInRound(List<ExerciseInRoundDTO> exercisesInRoundDTO, String mode) {
-		System.out.println("Usli smo u exercises in round.");
-		List<ExerciseInRound> exercisesInRound;
+	private ExerciseInRound addExerciseInRoundReturn(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
+		ExerciseInRound exerciseInRound;
+		exerciseInRoundDTO.setExercise(exerciseToExerciseDTO.convert(exerciseRepository.findById(exerciseInRoundDTO.getExerciseInRoundExerciseId()).get())); //exerciseService .findOne(exerciseInRoundDTO.getExerciseInRoundExerciseId())));
+		exerciseInRound = exerciseInRoundService.save(exerciseInRoundDTOtoExerciseInRound.convert(exerciseInRoundDTO));
+		newExerciseInRoundExecId = exerciseInRound.getExecInRound_Id();
+		return exerciseInRound;
+	}
+	
+	private List<ExerciseInRound> addExercisesInRound(List<ExerciseInRoundDTO> exercisesInRoundDTO, String mode) {
+		List<ExerciseInRound> exercisesInRound = new ArrayList<ExerciseInRound>();
 		List<Long> id = new ArrayList<Long>();
 		for(int j =0; j < exercisesInRoundDTO.size(); j++) {
-			System.out.println("getExerciseInRoundExerciseId() - ");
-			System.out.println(exercisesInRoundDTO.get(j).getExerciseInRoundExerciseId());
 			id.add(exercisesInRoundDTO.get(j).getExerciseInRoundExerciseId());
-			System.out.println("listOf IDS size: " + id.size());
 		}
-		List<Exercise> exercisesInList = exerciseRepository.getAllExerciseThatAreInList(id); //exerciseInRoundDTO.getExerciseInRoundExerciseId()));
-		
+		List<Exercise> exercisesInList = exerciseRepository.getAllExerciseInIds(id); //exerciseInRoundDTO.getExerciseInRoundExerciseId()));
 		for(int i =0; i < exercisesInRoundDTO.size(); i++) {
-			exercisesInRoundDTO.get(i).setExercise(exercisesInList.get(i)); //exerciseService.findOne(exerciseInRoundDTO.getExerciseInRoundExerciseId()));
+			exercisesInRoundDTO.get(i).setExercise(exerciseToExerciseDTO.convert(exercisesInList.get(i))); //exerciseService.findOne(exerciseInRoundDTO.getExerciseInRoundExerciseId()));
 		}
-		
-	//	exerciseInRoundRepository.sa
-	//	exercisesInRound = exerciseInRoundService.save(exerciseInRoundDTOtoExerciseInRound.convert(exercisesInRoundDTO));
-		exercisesInRound = (List<ExerciseInRound>) exerciseInRoundRepositroy.saveAll(exerciseInRoundDTOtoExerciseInRound.convert(exercisesInRoundDTO));
-		
+		List<ExerciseInRound> exerciseInRoundList = exerciseInRoundDTOtoExerciseInRound.convert(exercisesInRoundDTO);
+		exercisesInRound = (List<ExerciseInRound>) exerciseInRoundRepositroy.saveAll(exerciseInRoundList);
 	//	newExerciseInRoundExecId = exerciseInRound.getExecInRound_Id();
-		return exercisesInRound.get(0).getRound().getId();
+		return exercisesInRound;//exercisesInRound.get(0).getRound().getId();
 	}
 	
 	private Long editExerciseInRound(ExerciseInRoundDTO exerciseInRoundDTO, String mode) {
@@ -344,7 +454,7 @@ public class RestTrainingController {
 			exerciseInRoundDTO.setRoundId(Long.parseLong(exerciseInRoundDTOAjax.getRoundId()));
 			exerciseInRoundDTO.setId(Long.parseLong(exerciseInRoundDTOAjax.getExerciseExecId()));
 			Long newRoundId = editExerciseInRound(exerciseInRoundDTO, "edit");
-			trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
+	//		trainingId = roundService.findOne(exerciseInRoundDTO.getRoundId()).getTraining().getId();
 			obj.put("roundId", newRoundId);
 			obj.put("exerciseExecId", exerciseInRoundDTOAjax.getExerciseExecId());
 		} catch (Exception e) {
@@ -379,6 +489,24 @@ public class RestTrainingController {
 		roundService.save(round);
 		trainingService.save(training);
 		return round.getId();
+	}
+	
+	/**Input is training ID - adds Round and returns round ID*/
+	//private void addRoundsCalc(Long id, int sizeDifference) {
+	
+	private void addRoundsCalc(Training training, int sizeDifference) {
+	//	Training training = trainingService.findOne(id);
+	//	Training training = trainingRepository.getOneTrainingById(id);
+		List<Round> roundList = new ArrayList<Round>();
+		for(int i=0; i < sizeDifference; i++) {
+			Round round = new Round(training.getRounds().size() + 1);
+			training.addRound(round);
+			roundList.add(round);
+			
+		}
+		roundRepository.saveAll(roundList);
+		trainingRepository.save(training);
+		//return round.getId();
 	}
 
 	//DELETE ROUND
