@@ -44,7 +44,7 @@ public class ExerciseDTOtoExercise implements Converter<ExerciseDTO,Exercise> {
 		List<ExerciseGroup> exerciseGroupList = new ArrayList<ExerciseGroup>();
 		
 		for(ExerciseDTO exerciseDTOiter : source) {
-			exerciseGroupIdList.add(exerciseDTOiter.getExerciseGroupId()); // issues with remote database response time fix atempt.
+			exerciseGroupIdList.add(exerciseDTOiter.getExerciseGroupId());
 		}
 		exerciseGroupList = exerciseGroupRepository.getExerciseGroupsInIdList(exerciseGroupIdList);
 		

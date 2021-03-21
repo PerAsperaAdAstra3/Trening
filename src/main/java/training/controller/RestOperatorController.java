@@ -132,17 +132,11 @@ public class RestOperatorController {
 			return ResponseEntity.ok(obj.toString());
 		}
 		
-//		obj.put("name", clientInQuestion.getName() + " "  + clientInQuestion.getFamilyName());
 		obj.put("startDate", startDateStringRework);
 		obj.put("endDate", endDateStringRework);
-//		obj.put("trainingPrice", trainingPrice);
 		obj.put("listOfTrainings", dateList);
 		obj.put("numberOfTrainings", listTrainings.size());
-//		obj.put("oneTrainingPrice", clientTrainingReportDTO.getTrainingPrice());
-//		obj.put("numberOfBonusTrainings", clientTrainingReportDTO.getBonusTraining());
-		
-
-		 obj.put("successMessage", "Štampanje PDF-a je u toku molimo sačekajte.");
+		obj.put("successMessage", "Štampanje PDF-a je u toku molimo sačekajte.");
 		}
 
 		return ResponseEntity.ok(obj.toString());
@@ -164,7 +158,7 @@ public class RestOperatorController {
 			stringList.add(stringArray[k]);
 		}
 		
-		data.put("listOfTrainings", stringList);//clientTrainingReportDataDTO.getListOfTrainings());
+		data.put("listOfTrainings", stringList);
 		data.put("numberOfTrainings", trainerTrainingReportDataDTO.getNumberOfTrainings());
 		
 			try {

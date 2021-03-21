@@ -171,45 +171,7 @@ public class OperatorController {
 		model.addAttribute("pageTitle", "Lična podešavanja");
 		return "personalInfoManagement";
 	}
-	
-/*	@RequestMapping(value = {"/openLogFile"}, method = RequestMethod.GET)
-	public String openLogFile(Model model) {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username = "";
 		
-		System.out.println(loggingPath);
-		System.out.println(loggingFile);
-		System.out.println(pdfFolder);		
-		System.out.println(logFile);
-
-		try {
-			Runtime.getRuntime().exec("explorer.exe /open," + loggingPath);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "redirect:/";
-	}
-	
-	@RequestMapping(value = {"/openPDFFolder"}, method = RequestMethod.GET)
-	public String openPDFFolder(Model model) {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username = "";
-		
-		System.out.println(loggingPath);
-		System.out.println(loggingFile);
-		System.out.println(pdfFolder);		
-		System.out.println(logFile);
-
-		try {
-			Runtime.getRuntime().exec("explorer.exe /open," + pdfFolder);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "redirect:/";
-	}*/
-	
 	@RequestMapping(value = {"/editSelf"}, method = RequestMethod.POST)
 	public String editSelf(Model model, @ModelAttribute("operatorDTO") OperatorDTO operatorDTO, @RequestParam String mode){
 		

@@ -116,15 +116,12 @@ public class PdfGenaratorUtil {
 	        	    }
 	        	}
 	        	
-	        	//String fileNameString = map.get("name").toString()+" " +map.get("startDate") +" " +map.get("endDate") + ".pdf";
-	        	String fileNameString = map.get("name").toString()+" " +map.get("startDate") +" " +map.get("endDate"); // + ".pdf";
+	        	String fileNameString = map.get("name").toString()+" " +map.get("startDate") +" " +map.get("endDate");
 	        	java.nio.file.Path path = java.nio.file.Paths.get(pathTest.toString(), fileNameString);
-	        	//File outputFile = new File(path.toString());
 	       	    outputFile = File.createTempFile(fileNameString, ".pdf");
 	        	
 	        	boolean exists = outputFile.exists();
 	        	os = new FileOutputStream(outputFile);
-	       // 	filePath = path.toString();
 	        	
 	        	filePath = outputFile.getAbsolutePath();
 	            ITextRenderer renderer = new ITextRenderer();

@@ -43,10 +43,7 @@ public class ExerciseInRoundToExerciseInRoundDTO implements Converter<ExerciseIn
 			exerciseInRoundDTO.setExerciseInRoundExerciseName("");
 		}
 		
-
 		exerciseInRoundDTO.setId(source.getExecInRound_Id());
-	//	exerciseInRoundDTO.setDifficulty(source.getDifficulty());
-	//	exerciseInRoundDTO.setExerciseInRoundExerciseName(source.getExerciseName());
 		if(source.getExerciseId() != null) {
 			exerciseInRoundDTO.setExerciseInRoundExerciseId(source.getExerciseId());
 		} else {
@@ -61,12 +58,9 @@ public class ExerciseInRoundToExerciseInRoundDTO implements Converter<ExerciseIn
 		} else {
 			exerciseInRoundDTO.setRoundId(-1l);
 		}
-	//	if(source.getExerciseName() != null) {
-			exerciseInRoundDTO.addRoundName(String.valueOf(source.getRound().getRoundSequenceNumber()));
-	//	} else {
-	//		exerciseInRoundDTO.setExerciseInRoundExerciseName("");
-	//	}
-	//	exerciseInRoundDTO.setNote(source.getNote());
+
+		exerciseInRoundDTO.addRoundName(String.valueOf(source.getRound().getRoundSequenceNumber()));
+
 		return exerciseInRoundDTO;
 	}
 

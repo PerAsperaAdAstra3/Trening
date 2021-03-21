@@ -54,11 +54,11 @@ public class JpaExerciseInRoundService implements ExerciseInRoundService {
 	}
 	
 	public ExerciseInRound edit(Long id, ExerciseInRound exerciseInRound) {
-		ExerciseInRound newExerciseInRound = exerciseInRoundRepository.findById(id).get(); //getOne(id);
+		ExerciseInRound newExerciseInRound = exerciseInRoundRepository.findById(id).get();
 		newExerciseInRound.setNote(exerciseInRound.getNote());
 		newExerciseInRound.setRound(exerciseInRound.getRound());
 		if(exerciseInRound.getExercise() != null) {
-			newExerciseInRound.setExerciseName(exerciseInRound.getExercise().getName()); //exerciseInRound.getExerciseName());
+			newExerciseInRound.setExerciseName(exerciseInRound.getExercise().getName());
 		} else {
 			newExerciseInRound.setExerciseName(exerciseInRound.getExerciseName());
 		}

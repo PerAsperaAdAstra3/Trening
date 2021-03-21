@@ -40,17 +40,16 @@ public class ExerciseInRoundDTOtoExerciseInRound implements Converter<ExerciseIn
 	
 		ExerciseInRound exerciseInRound = new ExerciseInRound();
 		exerciseInRound.setDifficulty(source.getDifficulty());
-	//	exerciseInRound.setExerciseName(source.getExercise().getName()); //getExerciseInRoundExerciseName());
 		exerciseInRound.setExerciseId(source.getExerciseInRoundExerciseId());
 		if(source.getExercise() == null ) {
-			exerciseInRound.setExercise(exerciseRepository.findById(source.getExerciseInRoundExerciseId()).get()); //getOne(source.getExerciseInRoundExerciseId()));
+			exerciseInRound.setExercise(exerciseRepository.findById(source.getExerciseInRoundExerciseId()).get());
 		} else {
 			exerciseInRound.setExercise(exerciseDTOtoExercise.convert(source.getExercise()));
 		}
 
 		exerciseInRound.setNumberOfRepetitions(source.getNumberOfRepetitions());
 		exerciseInRound.setNote(source.getNote());
-		exerciseInRound.setRound(roundRepository.findById(source.getRoundId()).get()); //roundService.findOne(source.getRoundId()));
+		exerciseInRound.setRound(roundRepository.findById(source.getRoundId()).get());
 		return exerciseInRound;
 	}
 	
@@ -58,21 +57,19 @@ public class ExerciseInRoundDTOtoExerciseInRound implements Converter<ExerciseIn
 		
 		ExerciseInRound exerciseInRound = new ExerciseInRound();
 		exerciseInRound.setDifficulty(source.getDifficulty());
-	//	exerciseInRound.setExerciseName(source.getExercise().getName()); //getExerciseInRoundExerciseName());
 		exerciseInRound.setExerciseId(source.getExerciseInRoundExerciseId());
 		if(source.getExercise() == null ) {
-			exerciseInRound.setExercise(exerciseRepository.findById(source.getExerciseInRoundExerciseId()).get()); //getOne(source.getExerciseInRoundExerciseId()));
+			exerciseInRound.setExercise(exerciseRepository.findById(source.getExerciseInRoundExerciseId()).get());
 		} else {
 			exerciseInRound.setExercise(exerciseDTOtoExercise.convert(source.getExercise()));
 		}
 
 		exerciseInRound.setNumberOfRepetitions(source.getNumberOfRepetitions());
 		exerciseInRound.setNote(source.getNote());
-		exerciseInRound.setRound(roundRepository.findById(source.getRoundId()).get()); //roundService.findOne(source.getRoundId()));
+		exerciseInRound.setRound(roundRepository.findById(source.getRoundId()).get());
 		return exerciseInRound;
 	}
 	
-//	@Override
 	public List<ExerciseInRound> convert(List<ExerciseInRoundDTO> source) {
 		List<ExerciseInRound> exerciseInRoundList = new ArrayList<ExerciseInRound>();
 		
@@ -84,7 +81,7 @@ public class ExerciseInRoundDTOtoExerciseInRound implements Converter<ExerciseIn
 		
 		for(ExerciseInRoundDTO execInRoundDTO : source) {
 			if(execInRoundDTO.getExercise() == null) {
-				exerciseIdsToGet.add(execInRoundDTO.getExercise().getId());//getExerciseInRoundExerciseId());
+				exerciseIdsToGet.add(execInRoundDTO.getExercise().getId());
 			}
 			roundsToGetIds.add(execInRoundDTO.getRoundId());
 		}
@@ -125,7 +122,7 @@ public class ExerciseInRoundDTOtoExerciseInRound implements Converter<ExerciseIn
 			exerciseInRound.setNote(source.get(y).getNote());
 			for(Round round : roundsToGet) {
 				if(round.getId() == source.get(y).getRoundId()) {
-					exerciseInRound.setRound(round);//roundsToGet.get(y));
+					exerciseInRound.setRound(round);
 				}
 			}
 			exerciseInRoundList.add(exerciseInRound);

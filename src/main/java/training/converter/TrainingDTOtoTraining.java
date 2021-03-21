@@ -48,7 +48,7 @@ public class TrainingDTOtoTraining implements Converter<TrainingDTO,Training>{
 		}
 	
 		training.setNumberOfTrainings(source.getNumberOfTrainings());
-		training.setClient(clientRepository.findById(Long.parseLong(source.getClientId())).get()); //getOne(Long.parseLong(source.getClientId()))); //clientService.findOne(Long.parseLong(source.getClientId())));
+		training.setClient(clientRepository.findById(Long.parseLong(source.getClientId())).get());
 		training.setStatus(source.getStatus());
 		training.setTrainingCreator(source.getTrainingCreator());
 		training.setTrainingExecutor(source.getTrainingExecutor());
@@ -73,7 +73,7 @@ public Training convertAlternate(TrainingDTO source, Client client) {
 		}
 	
 		training.setNumberOfTrainings(source.getNumberOfTrainings());
-		training.setClient(client); //clientRepository.getOne(Long.parseLong(source.getClientId()))); //clientService.findOne(Long.parseLong(source.getClientId())));
+		training.setClient(client);
 		training.setStatus(source.getStatus());
 		training.setCircularYN(source.isCircularYN());
 		training.setTrainingCreator(source.getTrainingCreator());

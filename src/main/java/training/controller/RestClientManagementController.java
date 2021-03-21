@@ -105,16 +105,14 @@ public class RestClientManagementController {
 		if(clientPackageElement.getDateOfChanged() != null) {
 			oldDateVar = clientPackageElement.getDateOfChanged();
 		}
-	//	if(todaysDate.before(oldDateVar)) {
-			if(clientPackageElement.getActiveLeft() > 0) {
-				clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() - 1);
-				clientPackageElement.setDateOfChanged(new Date());
-			}
+		if(clientPackageElement.getActiveLeft() > 0) {
+			clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() - 1);
+			clientPackageElement.setDateOfChanged(new Date());
+		}
 		
-			if(clientPackageElement.getActiveLeft() < 1) {
-				clientPackageElement.setClientPackageElementStatus(false);
-			}
-		//}
+		if(clientPackageElement.getActiveLeft() < 1) {
+			clientPackageElement.setClientPackageElementStatus(false);
+		}
 		clientPackageElementService.save(clientPackageElement);
 		
 		ClientPackage clientPackage = clientPackageElement.getClientPackage();

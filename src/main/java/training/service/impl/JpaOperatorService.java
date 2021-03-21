@@ -19,7 +19,7 @@ public class JpaOperatorService implements OperatorService {
 	
 	@Override
 	public Operator findOne(Long id) {
-		return operatorRepository.findById(id).get(); //getOne(id);
+		return operatorRepository.findById(id).get();
 	}
 
 	@Override

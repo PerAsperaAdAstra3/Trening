@@ -154,7 +154,6 @@ public class TrainingController {
 		trainingService.delete(Long.parseLong(id));
 		
 		model.addAttribute("trainings", trainingToTrainingDTO.convert(trainingRepository.findAllByClientIdOrderByIdDesc(training.getClient().getId())));
-		//model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
 		model.addAttribute("clients", clientToClientDTO.convert(clientRepository.findAll()));
 		model.addAttribute("clientId", training.getClient().getId());
 		model.addAttribute("idOfCopiedTraining","");
@@ -190,23 +189,16 @@ public class TrainingController {
 			 operator = operatorRepository.findOneByUserName(((UserDetails)principal).getUsername());
 		}
 		Long clinetId = Long.parseLong(clientId);
-		Client client = clientRepository.findById(clinetId).get(); //getOne(clinetId);
+		Client client = clientRepository.findById(clinetId).get();
 		TrainingDTO trainingDTO = createTraining(client, operator, principal);
 		trainingDTO.setCircularYN(false);
-		/*if (principal instanceof UserDetails) { 
-		  trainingDTO.setTrainingCreator(operator);
-		  trainingDTO.setTrainingExecutor(operator);
-		}*/
 		trainingDTO.setStatus(TrainingStatusEnum.READY);
-		//Training training = trainingService.save(trainingDTOtoTraining.convert(trainingDTO));
-		training = trainingRepository.save(trainingDTOtoTraining.convertAlternate(trainingDTO, client)); //.convert(trainingDTO));
+		training = trainingRepository.save(trainingDTOtoTraining.convertAlternate(trainingDTO, client));
 		trainingDTO = trainingToTrainingDTO.convert(training);
 		
 		Round round = new Round(training.getRounds().size() + 1);
 		training.addRound(round);
-		//roundService.save(round);
 		roundRepository.save(round);
-		//trainingService.save(training);
 		trainingRepository.save(training);
 		List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText());
 		
@@ -236,7 +228,6 @@ public class TrainingController {
 		model.addAttribute("errorMessage", messageList);
 		return "errorPage";
 	}
-		//return "trainingCreation";
 		return "redirect:/changeTrainingChoice/"+ training.getId() +"/"+ false;
 	}
 	
@@ -249,13 +240,11 @@ public class TrainingController {
 		if (principal instanceof UserDetails) {
 			 operator = operatorRepository.findOneByUserName(((UserDetails)principal).getUsername());
 		}
-	//	TrainingDTO trainingDTO = createTraining(clientId);
 		Long clinetId = Long.parseLong(clientId);
-		Client client = clientRepository.findById(clinetId).get(); //getOne(clinetId);
-	//	client.toString();
+		Client client = clientRepository.findById(clinetId).get();
 		TrainingDTO trainingDTO = createTraining(client, operator, principal);
 		trainingDTO.setCircularYN(true);
-		training = trainingService.save(trainingDTOtoTraining.convertAlternate(trainingDTO, client)); //convert(trainingDTO));
+		training = trainingService.save(trainingDTOtoTraining.convertAlternate(trainingDTO, client));
 		trainingDTO = trainingToTrainingDTO.convert(training);
 		Round round = new Round(training.getRounds().size() + 1);
 		training.addRound(round);
@@ -270,7 +259,7 @@ public class TrainingController {
 		}
 		model.addAttribute("roundsInTraining", roundToRoundDTO.convert(training.getRounds()));
 		//TODO
-		model.addAttribute("trainingListTest", tablesShowingOldTrainings(client, training)); //tablesShowingOldTrainings(clientId, training.getId().toString()));
+		model.addAttribute("trainingListTest", tablesShowingOldTrainings(client, training));
 		model.addAttribute("trainingDTO", trainingDTO);
 		model.addAttribute("exerciseInRoundDTO", new ExerciseInRoundDTO());
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
@@ -290,17 +279,11 @@ public class TrainingController {
 		model.addAttribute("errorMessage", messageList);
 		return "errorPage";
 	}
-		//return "trainingCreation";
 		return "redirect:/changeTrainingChoice/"+ training.getId() +"/"+ true;
 	}
 	//TODO pretvoriti u "Query method"
 	private List<Training> tablesShowingOldTrainings(Client client, Training training){
-	//	Client client = clientService.findOne(Long.parseLong(clientId));
-		//Client client = clientRepository.findById(Long.parseLong(clientId)).get();
 		List<Training> trainingList = client.getTrainingList();
-		
-	//	Training training = trainingService.findOne(Long.parseLong(trainingId));
-	//	Training training = trainingRepository.findById(Long.parseLong(trainingId)).get();
 		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
 		for(int ii = 0; ii < trainingList.size() ; ii++) {
 				if(trainingList.get(ii).getId() > training.getId()) {
@@ -308,7 +291,6 @@ public class TrainingController {
 			}
 		}
 		
-		//if(!trainingId.equals("") || trainingId != null) {
 		if(training.getId() != null) {
 			trainingList.remove(trainingList.size() - 1);
 		}
@@ -382,42 +364,8 @@ public class TrainingController {
 		}
 		return mapExerciseIndexes;
 	}
-	
-/*	private List<Training> tablesShowingOldTrainings(String clientId, String trainingId){
-	//	Client client = clientService.findOne(Long.parseLong(clientId));
-		Client client = clientRepository.findById(Long.parseLong(clientId)).get();
-		List<Training> trainingList = client.getTrainingList();
 		
-	//	Training training = trainingService.findOne(Long.parseLong(trainingId));
-		Training training = trainingRepository.findById(Long.parseLong(trainingId)).get();
-		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
-		for(int ii = 0; ii < trainingList.size() ; ii++) {
-				if(trainingList.get(ii).getId() > training.getId()) {
-				trainingList.remove(ii);
-			}
-		}
-		
-		if(!trainingId.equals("") || trainingId != null) {
-			trainingList.remove(trainingList.size() - 1);
-		}
-		List<Training> trainingListTest = new ArrayList<Training>();
-		
-		if (trainingList.size() >= 1) {
-			if(trainingList.size() <= 3) {
-				for (int i = 0; i < trainingList.size(); i++) {
-						trainingListTest.add(0, trainingList.get(i));
-				}
-			} else {
-				for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
-					trainingListTest.add(0, trainingList.get(i));
-				}
-			}
-		}
-		return trainingListTest;
-	}*/
-	
 	private List<Training> tablesShowingOldTrainingsClientObject(Client client, Training trainingAttr){
-		 //clientService.findOne(Long.parseLong(clientId));
 		List<Training> trainingList = client.getTrainingList();
 		Training training = trainingAttr;
 		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
@@ -554,9 +502,9 @@ public class TrainingController {
 	}
 	
 	private List<ExerciseDTO> getExercisesForModel(Training training){
-		List<Exercise> listOfAllExercises = exerciseRepository.findAll(); //getAllExercises();
+		List<Exercise> listOfAllExercises = exerciseRepository.findAll();
 		List<ExerciseDTO> exercisesForModal = exerciseToExerciseDTO.convert(listOfAllExercises);
-		Map<Long,Integer> mapOfExercisesForClient = /* trainingService. */ exercisesLastTraining(training, listOfAllExercises);
+		Map<Long,Integer> mapOfExercisesForClient = exercisesLastTraining(training, listOfAllExercises);
 		for(ExerciseDTO exerciseDTO : exercisesForModal) {
 			if(mapOfExercisesForClient.get(exerciseDTO.getId()) != null) {
 				exerciseDTO.setColorCode(mapOfExercisesForClient.get(exerciseDTO.getId()));
@@ -593,7 +541,7 @@ public class TrainingController {
 	
 	private TrainingDTO createTraining(String clientId) {
 		Long clinetId = Long.parseLong(clientId);
-		Client client = clientRepository.findById(clinetId).get();	//getOne(clinetId); //clientService.findOne(clinetId);
+		Client client = clientRepository.findById(clinetId).get();
 		
 	    Date date = new Date();
 	    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -619,8 +567,6 @@ public class TrainingController {
 	}
 	
 	private TrainingDTO createTraining(Client client, Operator operator, Object principal) {
-		 //clientService.findOne(clinetId);
-		
 	    Date date = new Date();
 	    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 	    String strDate = formatter.format(date);
@@ -629,12 +575,8 @@ public class TrainingController {
 		// uzeti od njih max rednog broja i to je to
 
 		TrainingDTO trainingDTO = new TrainingDTO();
-	//	Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		//if (principal instanceof UserDetails) {
-		//	operator = operatorRepository.findOneByUserName(((UserDetails)principal).getUsername());
-		    trainingDTO.setTrainingCreator(operator);
-		    trainingDTO.setTrainingExecutor(operator);			  
-	//	}
+		trainingDTO.setTrainingCreator(operator);
+		trainingDTO.setTrainingExecutor(operator);			  
 		trainingDTO.setClient(client.getName());
 		trainingDTO.setClientFamilyName(client.getFamilyName());
 		trainingDTO.setClientId(client.getId().toString());
@@ -688,26 +630,20 @@ public class TrainingController {
 		long elapsed = 0l;
 		try {
 			Training training = trainingRepository.getOneTrainingById(Long.parseLong(id));
-		
 			List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
 			for (Round roundIter : training.getRounds()) {
 				listExerciseInRound.addAll(roundIter.getExerciseInRound());
 			}
-			
-			List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText()); //findAll();
-			
+			List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText());
 			for(Operator operator : operators) {
 				if(operator.getAuthorities().equals(Roles.SUPERUSER.getNameText())) {
-					
 					operators.remove(operator);
 				}
 			}
 			
 			model.addAttribute("exerciseDTO", new ExerciseDTO());
 			model.addAttribute("hiddenExerciseGroupId", "-1");
-			
 			model.addAttribute("operators", operators);
-			
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupRepository.getExerciseGroupTest()));
 			model.addAttribute("statusChangedToDone", statusChangedToDone);
 			model.addAttribute("trainingListTest", tablesShowingOldTrainingsClientObject(training.getClient(), training));
@@ -731,7 +667,6 @@ public class TrainingController {
 			return "errorPage";
 		}
 		statusChangedToDone = false;
-		System.out.println("Training creation end !! " + new Date());
 		return "trainingCreation";
 	}
 	
@@ -741,13 +676,12 @@ public class TrainingController {
 	public String getTrainingCircular(Model model, @PathVariable String id){
 		try {
 			Training training = trainingService.findOne(Long.parseLong(id));
-			
 			List<ExerciseInRound> listExerciseInRound = new ArrayList<ExerciseInRound>();
 			for (Round roundIter : training.getRounds()) {
 				listExerciseInRound.addAll(roundIter.getExerciseInRound());
 			}
 			
-			List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText()); //findAll();
+			List<Operator> operators = operatorRepository.findByAuthoritiesNot(Roles.FRONTDESK.getNameText());
 			for(Operator operator : operators) {
 				if(operator.getAuthorities().equals(Roles.SUPERUSER.getNameText())) {
 					
@@ -758,9 +692,7 @@ public class TrainingController {
 			model.addAttribute("exerciseDTO", new ExerciseDTO());
 			model.addAttribute("hiddenExerciseGroupId", "-1");
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
-			
-			model.addAttribute("operators", operators);
-			
+			model.addAttribute("operators", operators);		
 			model.addAttribute("trainingListTest", tablesShowingOldTrainingsClientObject(training.getClient(), training));
 			model.addAttribute("id", id);
 			model.addAttribute("trainingDTO", trainingToTrainingDTO.convert(training));
@@ -803,7 +735,7 @@ public class TrainingController {
 		 for(Round roundIter : rounds) {
 			 for(ExerciseInRound exerciseInRound : roundIter.getExerciseInRound()) {
 				 exerciseInRound.setDifficulty(filterLocalCharacters(exerciseInRound.getDifficulty()));
-				 exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExercise().getName()));  //exerciseInRound.getExerciseName()));
+				 exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExercise().getName()));
 				 exerciseInRound.setNote(filterLocalCharacters(exerciseInRound.getNote()));
 				 exerciseInRound.setNumberOfRepetitions(filterLocalCharacters(exerciseInRound.getNumberOfRepetitions()));
 			 }
@@ -857,7 +789,7 @@ public class TrainingController {
 		 for(Round roundIter : rounds) {
 			 for(ExerciseInRound exerciseInRound : roundIter.getExerciseInRound()) {
 				 exerciseInRound.setDifficulty(filterLocalCharacters(exerciseInRound.getDifficulty()));
-				 exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExercise().getName())); //getExerciseName()));
+				 exerciseInRound.setExerciseName(filterLocalCharacters(exerciseInRound.getExercise().getName()));
 				 exerciseInRound.setNote(filterLocalCharacters(exerciseInRound.getNote()));
 				 exerciseInRound.setNumberOfRepetitions(filterLocalCharacters(exerciseInRound.getNumberOfRepetitions()));
 			 }
@@ -909,7 +841,7 @@ public class TrainingController {
 
 		trainingNew.setTrainingCreator(copiedTraining.getTrainingCreator());
 		trainingNew.setTrainingExecutor(copiedTraining.getTrainingExecutor());
-		trainingNew.setCircularYN(copiedTraining.isCircularYN()); //setTrainingExecutor(copiedTraining.getTrainingExecutor());
+		trainingNew.setCircularYN(copiedTraining.isCircularYN());
 		trainingNew.setStatus(TrainingStatusEnum.READY);
 		
 		for(Round round : copiedTraining.getRounds()) {
@@ -921,10 +853,10 @@ public class TrainingController {
 				ExerciseInRound newExerciseInRound = new ExerciseInRound();
 				exerciseInRoundService.save(newExerciseInRound);
 				newExerciseInRound.setDifficulty(exerciseInRound.getDifficulty());
-				newExerciseInRound.setExerciseName(exerciseInRound.getExercise().getName()); //getExerciseName());
+				newExerciseInRound.setExerciseName(exerciseInRound.getExercise().getName());
 				newExerciseInRound.setNumberOfRepetitions(exerciseInRound.getNumberOfRepetitions());
 
-				newExerciseInRound.setExerciseName(exerciseInRound.getExercise().getName()); //(exerciseInRound.getExerciseName());
+				newExerciseInRound.setExerciseName(exerciseInRound.getExercise().getName());
 				newExerciseInRound.setExerciseId(exerciseInRound.getExerciseId());
 				newExerciseInRound.setExercise(exerciseInRound.getExercise());
 				
@@ -969,26 +901,8 @@ public class TrainingController {
 	}
 	
 	private Long getNumberOfTrainings(Long clientId) {
-	//	List<Training> trainingList = trainingService.findAll();
-		
 		Long max = trainingRepository.getClientsTrainings(clientId);
-	/*	Long max = 0l;
-		for (Training training : trainingList) {
-			if (training.getClient().getId() == clinetId)
-				max = Math.max(training.getNumberOfTrainings(), max);
-		}*/
 		return max;
 	}
 	
-	/*private Long getNumberOfTrainings(Long clinetId) {
-		System.out.println("Shiiiiit " + new Date());
-		List<Training> trainingList = trainingService.findAll();
-		Long max = 0l;
-		for (Training training : trainingList) {
-			if (training.getClient().getId() == clinetId)
-				max = Math.max(training.getNumberOfTrainings(), max);
-		}
-		System.out.println("Shiiiiit " + new Date());
-		return max;
-	}*/
 }

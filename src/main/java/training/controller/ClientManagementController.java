@@ -107,10 +107,9 @@ Logger logger = LoggerFactory.getLogger(ClientManagementController.class);
 		model.addAttribute("pageTitle", client.getName() + " " + client.getFamilyName() + " - Paketi"); 
 		List<ClientPackageElement> clientPackageElementList = new ArrayList<ClientPackageElement>();
 		
-	//	for(ClientPackage clientPackageTemp : clientPackageForClient){
-			clientPackageElementList.addAll(clientPackageElementService.filter(clientPackageForClient)); //clientPackageTemp));
-		//}
-		
+
+		clientPackageElementList.addAll(clientPackageElementService.filter(clientPackageForClient));
+				
 		model.addAttribute("clientPackageElements", clientPackageElementToClientPackageElementDTO.convert(clientPackageElementList));
 		model.addAttribute("elementsInPackages", elementsInPackagesToElementsInPackagesDTO.convert(elementsInPackagesService.findAll()));
 		

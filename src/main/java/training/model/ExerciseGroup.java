@@ -26,10 +26,6 @@ public class ExerciseGroup {
 
 	@OneToMany(mappedBy = "exerciseGroup")
 	private List<Exercise> exercises = new ArrayList<Exercise>();
-		
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinTable(name = "task")
-//	private Task task;
 	
 	public Long getId() {
 		return id;

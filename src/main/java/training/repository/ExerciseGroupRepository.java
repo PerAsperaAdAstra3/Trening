@@ -17,7 +17,7 @@ public interface ExerciseGroupRepository extends JpaRepository<ExerciseGroup ,Lo
 			value ="select * from exercise_group;",
 			nativeQuery = true)
 	List<ExerciseGroup> getExerciseGroupTest();
-	//value ="select * from exercise as ex where ex.id in :exerciseIdsToGet order by ex.id asc;",
+
 	@Query( 
 			value ="select * from exercise_group as eg where eg.id in :exerciseGroupIdsToGet order by eg.id asc;",
 			nativeQuery = true)

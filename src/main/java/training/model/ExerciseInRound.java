@@ -13,7 +13,6 @@ import javax.persistence.ManyToOne;
 public class ExerciseInRound {
 
 	@Id
-	//@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long ExecInRound_Id;
 	
@@ -32,7 +31,7 @@ public class ExerciseInRound {
 	@Column(name="ExerciseName")
 	private String exerciseName;
 
-	@ManyToOne() //cascade = CascadeType.ALL)
+	@ManyToOne()
 	private Exercise exercise;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

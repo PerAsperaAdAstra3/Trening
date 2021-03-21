@@ -78,20 +78,18 @@ public class RestClientController {
 		data.put("startDate", startDateStringRework);
 		data.put("endDate", endDateStringRework);
 		data.put("trainingPrice", trainingPrice);		
-		//List<String> dateList = new ArrayList<String>();
 		String dateList = "";
 		for(Training training : listTrainings) {
 			String[] iteratedTrainingDate = training.getDate().toString().split(" ");
 			String dateWithoutTime = iteratedTrainingDate[0];
 			String[] dayMontheYear = dateWithoutTime.split("-");
-			//dateList.add(dayMontheYear[2] + "." + dayMontheYear[1] + "." + dayMontheYear[0]);
 			dateList += dayMontheYear[2] + "." + dayMontheYear[1] + "." + dayMontheYear[0]+",";
 		}
-		data.put("listOfTrainings", dateList); //listTrainings);
+		data.put("listOfTrainings", dateList);
 		data.put("numberOfTrainings", listTrainings.size());
 		data.put("oneTrainingPrice", clientTrainingReportDTO.getTrainingPrice());		
 		data.put("numberOfBonusTrainings", clientTrainingReportDTO.getBonusTraining());
-		//
+
 		obj.put("name", clientInQuestion.getName() + " "  + clientInQuestion.getFamilyName());
 		obj.put("startDate", startDateStringRework);
 		obj.put("endDate", endDateStringRework);
@@ -100,17 +98,11 @@ public class RestClientController {
 		obj.put("numberOfTrainings", listTrainings.size());
 		obj.put("oneTrainingPrice", clientTrainingReportDTO.getTrainingPrice());
 		obj.put("numberOfBonusTrainings", clientTrainingReportDTO.getBonusTraining());
-		//
+
 	    if(listTrainings.size() == 0) {
 	    	obj.put("successMessage", "Klijent još nema urađenih treninga!");
 			return ResponseEntity.ok(obj.toString());
 		}
-	    /*	try {
-				isThereError = pdfGenaratorUtil.clientReportPdf("PDFTemplateClientTrainings",data);
-				obj.put("successMessage", "Štampanje PDF-a je u toku molimo sačekajte.");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}*/
 	    obj.put("successMessage", "Štampanje PDF-a je u toku molimo sačekajte.");
 		}
 		return ResponseEntity.ok(obj.toString());
@@ -133,7 +125,7 @@ public class RestClientController {
 			stringList.add(stringArray[k]);
 		}
 		
-		data.put("listOfTrainings", stringList);//clientTrainingReportDataDTO.getListOfTrainings());
+		data.put("listOfTrainings", stringList);
 		data.put("numberOfTrainings", clientTrainingReportDataDTO.getNumberOfTrainings());
 		data.put("oneTrainingPrice", clientTrainingReportDataDTO.getOneTrainingPrice());		
 		data.put("numberOfBonusTrainings", clientTrainingReportDataDTO.getNumberOfBonusTrainings());
