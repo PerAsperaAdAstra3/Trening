@@ -27,6 +27,17 @@ public class PackageElement {
 	@OneToMany(mappedBy = "packageElementEIP", cascade = CascadeType.ALL)
 	private List<ElementsInPackages> elementsInPackagesPE;
 	
+	@Column(name="isprotected")
+	private Boolean isProtected = false;
+	
+	public Boolean isIsProtected() {
+		return isProtected;
+	}
+
+	public void setIsProtected(Boolean isProtected) {
+		this.isProtected = isProtected;
+	}
+
 	public Long getPackageElementID() {
 		return packageElementID;
 	}

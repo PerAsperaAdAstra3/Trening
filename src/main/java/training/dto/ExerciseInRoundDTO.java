@@ -1,5 +1,7 @@
 package training.dto;
 
+import training.model.Exercise;
+
 public class ExerciseInRoundDTO {
 
 	private Long id;
@@ -16,8 +18,18 @@ public class ExerciseInRoundDTO {
 
 	private Long roundId;
 	
+	private ExerciseDTO exerciseDTO;
+	
 	private String note;
 	
+	public ExerciseDTO getExercise() {
+		return exerciseDTO;
+	}
+
+	public void setExercise(ExerciseDTO exercise) {
+		this.exerciseDTO = exercise;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -75,7 +87,12 @@ public class ExerciseInRoundDTO {
 	}	
 	
 	public String getExerciseInRoundExerciseName() {
-		return exerciseInRoundExerciseName;
+		if(exerciseDTO != null) {
+			return exerciseDTO.getName();
+		}
+		else {
+			return exerciseInRoundExerciseName;
+		}
 	}
 
 	public void setExerciseInRoundExerciseName(String exerciseName) {

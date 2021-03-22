@@ -10,7 +10,7 @@ public interface ClientPackageElementService {
 
 	ClientPackageElement findOne(Long id);
 	
-	List<ClientPackageElement> filter(ClientPackage clientPackage);
+	List<ClientPackageElement> filter(List<ClientPackage> clientPackage);
 	
 	List<ClientPackageElement> findAll();
 	

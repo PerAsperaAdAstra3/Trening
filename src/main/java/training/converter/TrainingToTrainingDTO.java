@@ -25,6 +25,10 @@ public class TrainingToTrainingDTO implements Converter<Training,TrainingDTO> {
 	    String strDate = formatter.format(source.getDate());
 		trainingDTO.setDate(strDate);
 		trainingDTO.setNumberOfTrainings(source.getNumberOfTrainings());
+		trainingDTO.setStatus(source.getStatus());
+		trainingDTO.setTrainingCreator(source.getTrainingCreator());
+		trainingDTO.setTrainingExecutor(source.getTrainingExecutor());
+		trainingDTO.setCircularYN(source.isCircularYN());
 		if(source.getClient() != null) {
 			trainingDTO.setClient(source.getClient().getName());
 			trainingDTO.setClientFamilyName(source.getClient().getFamilyName());

@@ -1,5 +1,6 @@
 package training.converter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +26,17 @@ public class ClientPackageToClientPackageDTO implements Converter<ClientPackage,
 		ClientPackageDTO clientPackageDTO = modelMapper.map(source, ClientPackageDTO.class);
 		clientPackageDTO.setPriceOfClientPackage(source.getClientPackagePrice());
 		clientPackageDTO.setPayed(source.isPayed());
-
-		if(source.isClientPackageActive()) {
+		clientPackageDTO.setNameOfPackage(source.getPackageUnit().getPackageName());
+		String date = "";
+		if(source.getPurchaseDate() != null) {
+			String pattern = "dd-MM-yyyy";
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+			date = simpleDateFormat.format(source.getPurchaseDate());
+		}
+		clientPackageDTO.setPurchaseDate(date);
+		if(source.getClientPackageActive() == ClientPackageStateEnum.ACTIVE) {
 			clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.ACTIVE.getNameText());
-		} else { 
+		} else {
 			clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE.getNameText());
 		}
 

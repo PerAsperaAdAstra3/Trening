@@ -9,7 +9,7 @@ public interface ClientPackageService {
 
 	ClientPackage findOne(Long id);
 	
-	List<ClientPackage> filter(Client client);
+	List<ClientPackage> filter(Long id);
 	
 	List<ClientPackage> findAll();
 	

@@ -12,6 +12,21 @@ h2 {
 	color: red;
 }
 
+.messageText {
+	font-weight: bold;
+	color: green;
+	font-size: 25px;
+}
+
+.divBorder {
+	border-style: solid;
+	border-width: 6px;
+	border-color: green;
+	padding-left: 15px;
+	padding-right: 15px;
+	border-radius: 0.25rem;
+}
+
 .successText {
 	font-weight: bold;
 	color: green;
@@ -155,7 +170,7 @@ table {
 
 .gradient {background: linear-gradient(to top left, white 10%, #B8B8B8 70%);}
 
-.gradient1 {background: linear-gradient(to left, white 10%, #B8B8B8 70%);}
+.gradient1 {background: #B8B8B8;}
 
 .tableX, .tdX {
 	border-collapse: collapse;
@@ -203,6 +218,7 @@ table {
 .dropdown-content {
   display: none;
   width: 150px;
+  z-index: 1;
   position: absolute;
   right: 0px;
   background-color: #f1f1f1;
@@ -223,3 +239,42 @@ table {
 .dropdown:hover .dropdown-content {display: block;}
 
 .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+.RowDiv {
+    display: table;
+    width: 100%; /*Optional*/
+    table-layout: fixed; /*Optional*/
+    border-spacing: 10px; /*Optional*/
+}
+.ColumnDiv {
+    display: table-cell;
+}
+
+.centerDiv {
+  margin: auto;
+  width: 50%;
+  border: 3px solid #73AD21;
+  padding: 10px;
+}
+
+.centerIMG {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 15%;
+}
+
+.headerTable {
+	width: 98%;
+}
+
+.headerTD {
+	width: 33%;
+}
+
+hr {
+	position: relative; 
+	border: none; 
+	height: 2px; 
+	background: black; 
+}

@@ -66,6 +66,11 @@ $(document).on('focusout', '.packElNumber', function(event) {
 	ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, $(this))
 });
 
+$(document).on('click', '.buttonDelete', function(event) {
+	elementsInPackagesId = $(this).parent().parent().find(".elemInPackagesId").html();
+	newNumber = 0;
+	ajaxDeleteElementsInPackages(elementsInPackagesId, newNumber, $(this))
+});
 	
 $(document).on("click", "#tr-entity-list-package", function(event) {
 	selectPackageIdOnRowClick(this)
@@ -87,19 +92,42 @@ $(document).on("click", "#resetButton", function(event) {
 $(document).on("click", "#resetButtonPackage", function(event) {
 	$("#editButtonPackage").prop('disabled', true);
 });
+
+$(document).on("click", "#addPackageElement", function(event){
+	//alert('Add package pushed');
+	
+	var name = $("#name").val();
+	var description = $("#description").val();
+	var isProtected = false;
+	
+	if ($('#isProtected').is(":checked"))
+	{
+		isProtected = true;
+	}
+	addPackageElement(name, description, isProtected);
+});
 	
 function sync(item){
 	packageElementName = item.find(".packageElementName").html()
     packageElementDescription = item.find(".packageElementDescription").html()
     packageElementId = item.find(".packageElementId").html()
 	packageElementPackageId = item.find(".packageElementPackageId").html()
-
+	var isProtected = false;
+	
+	if (item.find(".packageElementProtected").is(":checked"))
+		{
+		    $("#isProtected").prop('checked', true);
+		} else {
+		    $("#isProtected").prop('checked', false);
+		}
+		
 	$("#editButton").prop('disabled', false);
 		
     $("#name").val(packageElementName);
 	$("#description").val(packageElementDescription);
     $("#id").val(packageElementId);
     $("#packageId").val(packageElementPackageId);
+//    $("#packageElementProtected").val(isProtected);
 }
 
 function syncPackage(item){
@@ -117,14 +145,27 @@ function syncPackage(item){
 $(document).on("change keyup paste", "#numberOfElements", function(event) {
 	$("#setNumber").prop("disabled", false);
 });
+
+$(document).on("click", ".deletePackageElement", function(event) {
+	var tableRow = $(this).parent().parent();
+
+	if (tableRow.find(".packageElementProtected").is(":checked"))
+		{
+			alert('Trening je zaštićena kategorija, ne moze se brisati.');
+		} else {
+			if (confirm('Da li ste sigurni da želite da brišete?')) {
+				var packElemID = tableRow.find(".packageElementId").html();
+				tableRow.hide();
+				deletePackageElement(packElemID);
+			}
+		}
+});
 	
 	</script>
 </head>
-<body>
-	<div class="alert div1" role="alert">
+<body class="gradient">
+
 	<div th:include="fragments/header :: header"></div>
-		<h1 align="center">Paketi u sistemu</h1>
-	</div>
 
 <div style="width:100%" class="form-group row">
 
@@ -195,6 +236,7 @@ $(document).on("change keyup paste", "#numberOfElements", function(event) {
 			<th scope="col">Opis</th>
 			<th scope="col">Količina</th>
 			<th scope="col"></th>
+			<th scope="col"></th>
 		</tr>
 	</thead>
 	<tbody class="elementsInPackagesTbody">
@@ -206,6 +248,7 @@ $(document).on("change keyup paste", "#numberOfElements", function(event) {
 			<td scope="row" class="packElId" th:utext="${elementsInPackage.packageElementId}" style="display:none;"></td>
 			<td scope="row" class="packElpackageId" th:utext="${elementsInPackage.packageId}" style="display:none;"></td>
 			<td scope="row" class="elemInPackagesId" th:utext="${elementsInPackage.elemInPackagesId}" style="display:none;"></td>
+			<td><button type="button" class="btn btn-danger buttonDelete">Briši</button></td>
 		</tr>
 	</tbody>
 </table>
@@ -232,11 +275,12 @@ $(document).on("change keyup paste", "#numberOfElements", function(event) {
 			<input  type="text" th:field="*{description}" id="description" class="form-control" />
 		</div>
   	</div>
+  	
 	<input type="hidden" th:field="*{packageId}" id="packageId" />
 	
 	<div class="form-group row">
 		<div class="col-xs-2">
-			<button type="submit" class="btn btn-success fontWeightBold" name="mode" value="add">Dodaj novu</button>
+			<button id="addPackageElement" type="button" class="btn btn-success fontWeightBold" name="mode" value="add">Dodaj novu</button>
 			<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
 			<button id="resetButton" type="reset" class="btn btn-success">Isčisti</button>
 		</div>
@@ -287,14 +331,15 @@ $(document).on("change keyup paste", "#numberOfElements", function(event) {
 			<th scope="col"></th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody id="packageElementBody">
 		<tr	id="tr-entity-listPE" class="trPE" th:each = "packageElement : ${packageElements}">
 			<td class="packageElementName tdPE" th:utext="${packageElement.packageElementName}"></td>
 			<td class="packageElementDescription tdPE" th:utext="${packageElement.description}"></td>
+			<td scope="row" style="display:none;"><input type="checkbox" class="packageElementProtected" th:checked="${packageElement.isProtected}"/></td>
 			<td scope="row" class="packageElementId" th:utext="${packageElement.packageElementID}" style="display:none;"></td>
 			<td scope="row" class="packageElementPackageId" th:utext="${packageElement.packageId}" style="display:none;"></td>
 			<td>
-				<a th:href="@{/deletePackageElement/{id}(id=${packageElement.packageElementID})}" onclick="return confirm('Da li ste sigurni da želite da brišete?')"><button type="button" class="btn btn-danger">Briši</button></a></td>
+				<button type="button" class="btn btn-danger deletePackageElement">Briši</button></td>
 			<td><button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#packagePageModal">Dodaj u paket</button></td>
 		</tr>
 	</tbody>

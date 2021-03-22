@@ -2,6 +2,7 @@ package training.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,12 +30,22 @@ public class ExerciseInRound {
 	
 	@Column(name="ExerciseName")
 	private String exerciseName;
+
+	@ManyToOne()
+	private Exercise exercise;
 	
-	@ManyToOne
-	//@Cascade(CascadeType.REMOVE)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="roundExerciseInRound")
 	private Round round;
 	
+	public Exercise getExercise() {
+		return exercise;
+	}
+
+	public void setExercise(Exercise exercise) {
+		this.exercise = exercise;
+	}
+
 	public String getNote() {
 		return note;
 	}
@@ -44,7 +55,11 @@ public class ExerciseInRound {
 	}
 
 	public String getExerciseName() {
-		return exerciseName;
+		if(exercise != null) {
+			return exercise.getName();
+		} else {
+			return exerciseName;
+		}
 	}
 
 	public void setExerciseName(String exerciseName) {

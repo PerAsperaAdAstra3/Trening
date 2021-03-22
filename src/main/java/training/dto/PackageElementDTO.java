@@ -9,6 +9,16 @@ public class PackageElementDTO {
 	private String description;
 	
 	private Long packageId;
+	
+	private boolean isProtected = false;
+	
+	public boolean isIsProtected() {
+		return isProtected;
+	}
+
+	public void setIsProtected(boolean isProtected) {
+		this.isProtected = isProtected;
+	}
 
 	public Long getPackageElementID() {
 		return packageElementID;

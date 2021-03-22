@@ -19,7 +19,7 @@ public class JpaExerciseInRoundService implements ExerciseInRoundService {
 
 	@Override
 	public ExerciseInRound findOne(Long id) {
-		return exerciseInRoundRepository.findOne(id);
+		return exerciseInRoundRepository.findById(id).get();
 	}
 
 	@Override
@@ -34,12 +34,12 @@ public class JpaExerciseInRoundService implements ExerciseInRoundService {
 
 	@Override
 	public List<ExerciseInRound> save(List<ExerciseInRound> exercisesInRound) {
-		return exerciseInRoundRepository.save(exercisesInRound);
+		return exerciseInRoundRepository.saveAll(exercisesInRound);
 	}
 
 	@Override
 	public ExerciseInRound delete(Long id) {
-		ExerciseInRound exerciseInRound = exerciseInRoundRepository.findOne(id);
+		ExerciseInRound exerciseInRound = exerciseInRoundRepository.findById(id).get();
 		if (exerciseInRound == null) {
 			throw new IllegalStateException("Exercise in round does not exist");
 		}
@@ -54,13 +54,18 @@ public class JpaExerciseInRoundService implements ExerciseInRoundService {
 	}
 	
 	public ExerciseInRound edit(Long id, ExerciseInRound exerciseInRound) {
-		ExerciseInRound newExerciseInRound = exerciseInRoundRepository.getOne(id);
+		ExerciseInRound newExerciseInRound = exerciseInRoundRepository.findById(id).get();
 		newExerciseInRound.setNote(exerciseInRound.getNote());
 		newExerciseInRound.setRound(exerciseInRound.getRound());
-		newExerciseInRound.setExerciseName(exerciseInRound.getExerciseName());
+		if(exerciseInRound.getExercise() != null) {
+			newExerciseInRound.setExerciseName(exerciseInRound.getExercise().getName());
+		} else {
+			newExerciseInRound.setExerciseName(exerciseInRound.getExerciseName());
+		}
 		newExerciseInRound.setDifficulty(exerciseInRound.getDifficulty());
 		newExerciseInRound.setNumberOfRepetitions(exerciseInRound.getNumberOfRepetitions());
 		newExerciseInRound.setExerciseId(exerciseInRound.getExerciseId());
+		newExerciseInRound.setExercise(exerciseInRound.getExercise());
 		exerciseInRoundRepository.save(newExerciseInRound);
 		return newExerciseInRound;
 	}

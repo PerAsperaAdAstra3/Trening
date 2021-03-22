@@ -1,9 +1,13 @@
 package training.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +27,7 @@ import training.emailService.MailService;
 import training.enumerations.Roles;
 import training.model.Operator;
 import training.service.OperatorService;
+import training.util.LoggingUtil;
 import training.util.PasswordGenUtil;
 
 @Controller
@@ -43,20 +48,44 @@ public class OperatorController {
 	@Autowired
 	private MailService mailService;
 	
+	@Value("${logging.path}")
+	private String loggingPath;
+	
+	@Value("${logging.file}")
+	private String loggingFile;
+	
+	@Value("${pdf.folder}")
+	private String pdfFolder;
+	
+	@Value("${log.file}")
+	private String logFile;
+	
 	private boolean nameTaken = false;
 	private boolean emailTaken = false;
 	private boolean emailFormatBad = false;
 	
+	Logger logger = LoggerFactory.getLogger(OperatorController.class);
+	
 	@RequestMapping(value = { "/operatorList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
 		
+		List<Operator> operators = operatorService.findAll();
+		
+		for(Operator operator : operators) {
+			if(operator.getAuthorities().equals(Roles.SUPERUSER.getNameText())) {
+				
+				operators.remove(operator);
+			}
+		}
+
 		model.addAttribute("operatorDTOSearch", new OperatorDTO());
 		model.addAttribute("operatorDTO", new OperatorDTO());
-		model.addAttribute("operators", operatorToOperatorDTO.convert(operatorService.findAll()));
+		model.addAttribute("operators", operatorToOperatorDTO.convert(operators));
 		model.addAttribute("authorities", authorities());
 		model.addAttribute("emailFormatBad", emailFormatBad);
 		model.addAttribute("usernameTaken", nameTaken);
 		model.addAttribute("emailTaken", emailTaken);
+		model.addAttribute("pageTitle", "Korisnici u sistemu");
 		return "operator";
 	}
 	
@@ -115,7 +144,15 @@ public class OperatorController {
 		nameTaken = false;
 		emailTaken = false;
 		emailFormatBad = false;
-		operatorService.delete(Long.parseLong(id));
+		try {
+			operatorService.delete(Long.parseLong(id));
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
+		}
 		return "redirect:/operatorList";
 	}
 	
@@ -131,9 +168,10 @@ public class OperatorController {
 		
 		model.addAttribute("operatorDTO", operatorToOperatorDTO.convert(operatorService.findOneByUserName(username)));
 		model.addAttribute("authorities", authorities());
+		model.addAttribute("pageTitle", "Lična podešavanja");
 		return "personalInfoManagement";
 	}
-	
+		
 	@RequestMapping(value = {"/editSelf"}, method = RequestMethod.POST)
 	public String editSelf(Model model, @ModelAttribute("operatorDTO") OperatorDTO operatorDTO, @RequestParam String mode){
 		
@@ -191,7 +229,7 @@ public class OperatorController {
 		}
 		PasswordChangeDTO passwordChangeDTO1 = new PasswordChangeDTO();
 		model.addAttribute("passwordChangeDTO", passwordChangeDTO1);
-		
+		model.addAttribute("pageTitle", "Promena lozinke");
 		return "changePassword";
 	}
 	

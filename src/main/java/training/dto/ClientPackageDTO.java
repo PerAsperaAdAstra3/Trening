@@ -1,5 +1,6 @@
 package training.dto;
 
+import java.util.Date;
 import java.util.List;
 
 import training.model.ClientPackageElement;
@@ -21,6 +22,16 @@ public class ClientPackageDTO {
 	private String clientPackageActive;
 	
 	private List<ClientPackageElement> clientPackageElements;
+
+	private String purchaseDate;
+	
+	public String getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(String purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
 
 	public Long getPriceOfClientPackage() {
 		return priceOfClientPackage;

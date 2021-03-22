@@ -19,7 +19,7 @@ public class JpaOperatorService implements OperatorService {
 	
 	@Override
 	public Operator findOne(Long id) {
-		return operatorRepository.getOne(id);
+		return operatorRepository.findById(id).get();
 	}
 
 	@Override
@@ -44,12 +44,12 @@ public class JpaOperatorService implements OperatorService {
 
 	@Override
 	public List<Operator> save(List<Operator> operators) {
-		return operatorRepository.save(operators);
+		return operatorRepository.saveAll(operators);
 	}
 
 	@Override
 	public Operator delete(Long id) {
-		Operator operator = operatorRepository.findOne(id) ;
+		Operator operator = operatorRepository.findById(id).get();
 		if(id == null) {
 			throw new IllegalStateException("Round does not exist");
 		}
@@ -65,7 +65,7 @@ public class JpaOperatorService implements OperatorService {
 
 	@Override
 	public Operator edit(Long id, Operator operator) {
-		Operator oldOperator = operatorRepository.findOne(id);
+		Operator oldOperator = operatorRepository.findById(id).get();
 		oldOperator.setUserName(operator.getUserName());
 		if(operator.getPassword() != null && !operator.getPassword().equals("")) {
 			oldOperator.setPassword(operator.getPassword());

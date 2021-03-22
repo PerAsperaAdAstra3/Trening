@@ -1,5 +1,7 @@
 package training.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import training.converter.ClientDTOtoClient;
+import training.converter.ClientPackageToClientPackageDTO;
 import training.converter.ClientToClientDTO;
 import training.dto.ClientDTO;
 import training.dto.ClientPackageDTO;
@@ -19,6 +22,7 @@ import training.model.Client;
 import training.model.ClientPackage;
 import training.service.ClientPackageService;
 import training.service.ClientService;
+import training.util.LoggingUtil;
 
 @Controller
 public class ClientController {
@@ -34,12 +38,18 @@ public class ClientController {
 	
 	@Autowired
 	ClientDTOtoClient clientDTOtoClient;
+
+	@Autowired
+	ClientPackageToClientPackageDTO clientPackageToClientPackageDTO;
+	
+	Logger logger = LoggerFactory.getLogger(ClientController.class);
 	
 	@RequestMapping(value = { "/clientList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
 		model.addAttribute("clientDTOSearch", new ClientDTO());
 		model.addAttribute("clientDTO", new ClientDTO());
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));
+		model.addAttribute("pageTitle", "Klijenti u sistemu");
 		return "client";
 	}
 	
@@ -68,14 +78,31 @@ public class ClientController {
 	
 	@RequestMapping(value = {"/deleteClient/{id}"}, method = RequestMethod.GET)
 	public String deleteClient(@PathVariable String id) {
+	try {
 		clientService.delete(Long.parseLong(id));
+	} catch (NumberFormatException numberFormatException) {
+		LoggingUtil.LoggingMethod(logger, numberFormatException);
+	} catch (IllegalArgumentException illegalArgumentException) {
+		LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+	} catch (Exception e) {
+		LoggingUtil.LoggingMethod(logger, e);
+	}
 		return "redirect:/clientList";
 	}
 	
 	@RequestMapping(value = {"/clientDetail/{id}"}, method = RequestMethod.GET)
 	public String clientDetail(Model model, @PathVariable String id) {
-		Client client = clientService.findOne(Long.parseLong(id));
-		ClientPackage clientPackage = clientPackageService.findOne(Long.parseLong(id));
+		Client client = new Client();
+		try {
+			client = clientService.findOne(Long.parseLong(id));
+			ClientPackage clientPackage = clientPackageService.findOne(Long.parseLong(id));
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
+		}
 		model.addAttribute("clientDTO", clientToClientDTO.convert(client));
 		model.addAttribute("clientPackage", new ClientPackageDTO());
 		model.addAttribute("clientPackages", client.getClientPackages());

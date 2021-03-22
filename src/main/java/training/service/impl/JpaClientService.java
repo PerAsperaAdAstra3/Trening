@@ -19,7 +19,7 @@ public class JpaClientService implements ClientService {
 
 	@Override
 	public Client findOne(Long id) {
-		return clientRepository.findOne(id);
+		return clientRepository.findById(id).get();
 	}
 
 	@Override
@@ -34,12 +34,12 @@ public class JpaClientService implements ClientService {
 
 	@Override
 	public List<Client> save(List<Client> clients) {
-		return clientRepository.save(clients);
+		return clientRepository.saveAll(clients);
 	}
 
 	@Override
 	public Client delete(Long id) {
-		Client client = clientRepository.findOne(id);
+		Client client = clientRepository.findById(id).get();
 		if (client == null) {
 			throw new IllegalStateException("Client not found!");
 		}
@@ -56,7 +56,7 @@ public class JpaClientService implements ClientService {
 	
 	@Override
 	public Client edit(Long id, Client client) {
-		Client oldClient = clientRepository.findOne(id);
+		Client oldClient = clientRepository.findById(id).get();
 		oldClient.setName(client.getName());
 		oldClient.setFamilyName(client.getFamilyName());
 		oldClient.setEmail(client.getEmail());

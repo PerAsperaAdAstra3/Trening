@@ -1,16 +1,13 @@
 package training.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity(name = "Task")
 public class Task {
@@ -22,12 +19,9 @@ public class Task {
 	@Column(name = "ROUND")
 	private boolean round;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trainingTask")
 	private Training trainingTask;
-	
-	@OneToMany(mappedBy = "task")
-	private List<ExerciseGroup> exercisesGroup = new ArrayList<ExerciseGroup>();
 
 	public Long getId() {
 		return id;
@@ -47,14 +41,6 @@ public class Task {
 
 	public void setTraining(Training training) {
 		this.trainingTask = training;
-	}
-
-	public List<ExerciseGroup> getExercisesInRound() {
-		return exercisesGroup;
-	}
-
-	public void addExercisesInRound(ExerciseGroup exerciseGroup) {
-		exercisesGroup.add(exerciseGroup);
 	}
 
 	public Task() {}

@@ -1,6 +1,7 @@
 package training.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -49,12 +50,13 @@ public class RestClientManagementController {
 	ClientPackageElementToClientPackageElementDTO clientPackageElementToClientPackageElementDTO;
 	
 	@PostMapping(value = { "/addPackageToClient" })
-	public ResponseEntity<?> addPackageToClientPackage(@Valid @RequestBody ClientPackageDTO clientPackageDTO) {
+	public ResponseEntity<?> addPackageToClientPackage(@Valid @RequestBody ClientPackageDTO clientPackageDTO) throws Exception {
 		JSONObject obj = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
 		
 		clientPackageDTO.setClientPackageActive(ClientPackageStateEnum.ACTIVE.getNameText());
 		ClientPackage clientPackage = clientPackageDTOtoClientPackage.convert(clientPackageDTO);
+		clientPackage.setPurchaseDate(new Date());
 		clientPackageService.save(clientPackage);
 		List<ClientPackageElement> clientPackageElementsList = new ArrayList<ClientPackageElement>();
 		List<ElementsInPackages> elementsInPackagesList = packageService.findOne(clientPackageDTO.getPackageId()).getElementsInPackages();
@@ -65,7 +67,7 @@ public class RestClientManagementController {
 			clientPackageElement.setActiveLeft(Integer.parseInt(elementsInPackages.getNumber()+""));
 			clientPackageElement.setElementsInPackages(elementsInPackages);
 			clientPackageElement.setClientPackageElementStatus(true);
-			
+			clientPackageElement.setIsProtected(elementsInPackages.getPackageElementEIP().isIsProtected());
 			clientPackage.addClientPackageElements(clientPackageElement);
 			
 			clientPackageElementService.save(clientPackageElement);
@@ -98,22 +100,27 @@ public class RestClientManagementController {
 	public ResponseEntity<?> useUpAPackageElement(@Valid @RequestBody ClientPackageElementDTO clientPackageElementDTO) {
 		JSONObject obj = new JSONObject();	
 		ClientPackageElement clientPackageElement = clientPackageElementService.findOne(clientPackageElementDTO.getId()) ;
+		Date todaysDate = new Date();
+		Date oldDateVar = new Date(1990,1,1);
+		if(clientPackageElement.getDateOfChanged() != null) {
+			oldDateVar = clientPackageElement.getDateOfChanged();
+		}
 		if(clientPackageElement.getActiveLeft() > 0) {
 			clientPackageElement.setActiveLeft(clientPackageElement.getActiveLeft() - 1);
+			clientPackageElement.setDateOfChanged(new Date());
 		}
 		
 		if(clientPackageElement.getActiveLeft() < 1) {
 			clientPackageElement.setClientPackageElementStatus(false);
 		}
-		
 		clientPackageElementService.save(clientPackageElement);
 		
 		ClientPackage clientPackage = clientPackageElement.getClientPackage();
 		
-		clientPackage.setClientPackageActive(false);
+		clientPackage.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE);
 		for(ClientPackageElement clientPackageElementX : clientPackage.getClientPackageElements()) {
 			if(clientPackageElementX.isClientPackageElementStatus()) {
-				clientPackage.setClientPackageActive(true);
+				clientPackage.setClientPackageActive(ClientPackageStateEnum.ACTIVE);
 			}
 		}
 		
@@ -125,8 +132,8 @@ public class RestClientManagementController {
 		obj.put("clientPackageId", clientPackage.getId());
 		obj.put("clientPackagePayed", clientPackage.isPayed());
 		
-		obj.put("clientPackageActive", clientPackage.isClientPackageActive());
-		if(clientPackage.isClientPackageActive()) {
+		obj.put("clientPackageActive", clientPackage.getClientPackageActive());
+		if(clientPackage.getClientPackageActive() == ClientPackageStateEnum.ACTIVE) {
 			obj.put("clientPackageActive", ClientPackageStateEnum.ACTIVE.getNameText());
 		} else {
 			obj.put("clientPackageActive", ClientPackageStateEnum.NOTACTIVE.getNameText());

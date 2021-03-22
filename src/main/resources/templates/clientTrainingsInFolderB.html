@@ -139,6 +139,14 @@ xmlns=http://www.w3.org/1999/xhtml"
 	}
 	/*]]>*/
 
+	$(document).on("click", ".addTrening", function(event) {
+		document.body.style.cursor  = 'wait';
+	});
+	
+	$(document).on("click", ".addRoundTrening", function(event) {
+		document.body.style.cursor  = 'wait';
+	});
+	
 	$(document).on("click", "#copyTrainingButton", function(event) {
 		treID = item.find(".idOfCopiedTraining").html()
 	});
@@ -158,11 +166,6 @@ xmlns=http://www.w3.org/1999/xhtml"
 			$("#pdfErrorMessage").show();
 		}
 		sortTable();
-	});
-
-	$(document).on("click", "#PDFButton", function() {
-		var trainingId = $(this).parent().parent().find(".trainingId").html();
-		PDFprintAjaxListPage(trainingId);
 	});
 
 	function sync(item) {
@@ -202,20 +205,42 @@ xmlns=http://www.w3.org/1999/xhtml"
 		$("#name").val(name);
 		$("#familyName").val(familyName);
 	}
-
+	
+	$(document).on("click", ".changeTraining", function() {
+		document.body.style.cursor  = 'wait';
+	});
+/*	$(document).on("click", ".changeTraining", function() {
+	//	var isItCircular = $('#circularYN').val()
+//trainingCircularYN
+		var isItCircular = $(this).parent().parent().find(".trainingCircularYN").html();
+		var thisTrainingId = $(this).parent().parent().find(".trainingId").html();
+		alert(isItCircular)
+		alert(thisTrainingId)
+		if(isItCircular){
+			alert("@{/getTraining/{id}/(id="+thisTrainingId+")}");
+			$("#callGetTraining").attr('th:href', '@{/getTraining/{id}/(id="+thisTrainingId+")}');
+			$("#callGetTraining").click();
+			alert("callGetTraining");
+		} else {
+			alert("@{/getTrainingCircular/{id}/(id="+thisTrainingId+")}");
+			$("#callGetTrainingCircular").attr('th:href', '@{/getTrainingCircular/{id}/(id="+thisTrainingId+")}');
+			var link = $("#callGetTrainingCircular").attr('href');
+			alert(link);
+			$("#callGetTrainingCircular").click();
+			alert("callGetTrainingCircular");
+		}
+	});*/
 	//
 </script>
-<body>
+<body class="gradient">
 	<br/>
-
+	<a id="callGetTraining" style="visibility: hidden">callGetTraining</a>
+	<a id="callGetTrainingCircular" style="visibility: hidden">callGetTrainingCircular</a>
 	<div th:include="fragments/header :: header"></div>
-	
-    <h2 id="pageTitle" class="modal-title"></h2>
-  
   <br/>  
     <input id="clientIdSel" type="hidden" th:value="${clientId}" name="clientIdSel"/>
-	<div class = "twoButtonsDiv"><a th:href="@{/trainingCreationHandler/{clientId}(clientId=${clientId})}"><button type="button" class="btn btn-success">Dodaj trening</button></a>
-	<a th:href="@{/circularTrainingCreationHandler/{clientId}(clientId=${clientId})}"><button type="button" class="btn btn-success">Dodaj kružni trening</button></a></div>
+	<div class = "twoButtonsDiv"><a th:href="@{/trainingCreationHandler/{clientId}(clientId=${clientId})}"><button type="button" class="btn btn-success addTrening">Dodaj trening</button></a>
+	<a th:href="@{/circularTrainingCreationHandler/{clientId}(clientId=${clientId})}"><button type="button" class="btn btn-success addTrening addRoundTrening">Dodaj kružni trening</button></a></div>
   <br/>
   <br/>
   <br/>
@@ -280,7 +305,8 @@ xmlns=http://www.w3.org/1999/xhtml"
 			<td scope="row" class="clientId" th:utext="${training.date}"></td>
 			<td class="trainingNumberOfTra" th:utext="${training.numberOfTrainings}"></td>
 			<td class="trainingId" th:utext="${training.id}" style="display:none;"></td>
-			<td><a th:href="@{/getTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-success">Izmeni</button></a></td>
+			<td class="trainingCircularYN" th:utext="${training.circularYN}" style="display:none;"></td>
+			<td><a th:href="@{/changeTrainingChoice/{id}/{circularYN}(id=${training.id}, circularYN=${training.circularYN})}"><button type="button" class="btn btn-success changeTraining">Izmeni</button></a></td>
 			<td><a th:href="@{/deleteTraining/{id}/(id=${training.id})}"><button type="button" class="btn btn-danger">Briši</button></a></td>
 			<td><img id="PDFButton" src="/images/File_PDF3.png"/></td>
 			<td><button  id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Kopiraj</button></td>

@@ -1,5 +1,7 @@
 package training.converter;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -34,14 +36,21 @@ public class ClientPackageDTOtoClientPackage implements Converter<ClientPackageD
 		clientPackage.setClientPackagePrice(source.getPriceOfClientPackage());
 		
 		clientPackage.setPayed(source.getPayed());
+		String purchaseDateString = "";
+		Date purchaseDateGenerated = null;
+		if(source.getPurchaseDate() != null) {
+			purchaseDateString = source.getPurchaseDate();
+			String[] arrayString = purchaseDateString.split("-");
+			purchaseDateGenerated = new Date(arrayString[2]+"-"+arrayString[1]+"-"+arrayString[0]);
+		}
+		clientPackage.setPurchaseDate(purchaseDateGenerated);
 		
 		if(source.getClientPackageActive().equals(ClientPackageStateEnum.ACTIVE.getNameText())) {
-			clientPackage.setClientPackageActive(true);
+			clientPackage.setClientPackageActive(ClientPackageStateEnum.ACTIVE);
 		} else {
-			clientPackage.setClientPackageActive(false);
+			clientPackage.setClientPackageActive(ClientPackageStateEnum.NOTACTIVE);
 		}
 	
-		
 		return clientPackage;
 	}
 

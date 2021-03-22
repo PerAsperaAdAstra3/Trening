@@ -1,17 +1,21 @@
 package training.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import training.enumerations.ClientPackageStateEnum;
 
 
 @Entity(name="ClientPackage")
@@ -21,12 +25,12 @@ public class ClientPackage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "packageUnitCP")
 	private Package packageUnitCP;
 	
 	@Column(name = "clientPackageStatus")
-	private boolean clientPackageActive;
+	private ClientPackageStateEnum clientPackageActive;
 	
 	@Column(name = "clientPackagePayed")
 	private boolean payed = false;
@@ -34,12 +38,23 @@ public class ClientPackage {
 	@Column(name = "clientPackagePrice")
 	private Long clientPackagePrice;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "client")
 	private Client client;
 	
 	@OneToMany(mappedBy = "clientPackage" , cascade = CascadeType.ALL)
 	private List<ClientPackageElement> clientPackageElementsCP = new ArrayList<ClientPackageElement>();
+
+	@Column(name="purchaseDate")
+	private Date purchaseDate;
+	
+	public Date getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
 
 	public boolean isPayed() {
 		return payed;
@@ -57,16 +72,16 @@ public class ClientPackage {
 		this.clientPackagePrice = clientPackagePrice;
 	}
 
-	public boolean isClientPackageActive() {
+	public Long getId() {
+		return id;
+	}
+
+	public ClientPackageStateEnum getClientPackageActive() {
 		return clientPackageActive;
 	}
 
-	public void setClientPackageActive(boolean clientPackageActive) {
+	public void setClientPackageActive(ClientPackageStateEnum clientPackageActive) {
 		this.clientPackageActive = clientPackageActive;
-	}
-
-	public Long getId() {
-		return id;
 	}
 
 	public void setId(Long id) {

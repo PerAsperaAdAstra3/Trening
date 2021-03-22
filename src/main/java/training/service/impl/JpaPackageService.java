@@ -22,7 +22,7 @@ public class JpaPackageService implements PackageService {
 	
 	@Override
 	public Package findOne(Long id) {
-		return packageRepository.findOne(id);
+		return packageRepository.findById(id).get();
 	}
 
 	@Override
@@ -37,12 +37,12 @@ public class JpaPackageService implements PackageService {
 
 	@Override
 	public List<Package> save(List<Package> packages) {
-		return packageRepository.save(packages);
+		return packageRepository.saveAll(packages);
 	}
 
 	@Override
 	public Package delete(Long id) {
-		Package packageUnit = packageRepository.findOne(id);
+		Package packageUnit = packageRepository.findById(id).get();
 		if(packageUnit == null) {
 			throw new IllegalStateException("Package not found!");
 		}
@@ -59,7 +59,7 @@ public class JpaPackageService implements PackageService {
 
 	@Override
 	public Package edit(Long id, Package packageUnit) {
-		Package oldPackage = packageRepository.findOne(id);
+		Package oldPackage = packageRepository.findById(id).get();
 		
 		oldPackage.setPackageName(packageUnit.getPackageName());
 		oldPackage.setPrice((packageUnit.getPrice()));

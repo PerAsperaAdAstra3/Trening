@@ -1,5 +1,10 @@
 package training.controller;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +24,8 @@ import training.dto.PackageElementDTO;
 import training.service.ElementsInPackagesService;
 import training.service.PackageElementService;
 import training.service.PackageService;
+import training.util.LoggingUtil;
+import training.model.Package;
 
 @Controller
 public class PackageController {
@@ -47,6 +54,8 @@ public class PackageController {
 	@Autowired
 	ElementsInPackagesToElementsInPackagesDTO elementsInPackagesToElementsInPackagesDTO;
 	
+	Logger logger = LoggerFactory.getLogger(PackageController.class);
+	
 	@RequestMapping(value = { "/packageList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
 		
@@ -54,9 +63,12 @@ public class PackageController {
 		model.addAttribute("packageDTO", new PackageDTO());
 		model.addAttribute("packageElementDTOSearch", new PackageElementDTO());
 		model.addAttribute("packageElementDTO", new PackageElementDTO());
-		model.addAttribute("packages", packageToPackageDTO.convert(packageService.findAll()));
+		List<Package> packageListReversed = packageService.findAll();
+				Collections.reverse(packageListReversed);
+		model.addAttribute("packages", packageToPackageDTO.convert(packageListReversed));
 		model.addAttribute("packageElements", packageElementToPackageElementDTO.convert(packageElementService.findAll()));
 		model.addAttribute("elementsInPackages", elementsInPackagesToElementsInPackagesDTO.convert(elementsInPackagesService.findAll()));
+		model.addAttribute("pageTitle", "Paketi u sistemu");
 		return "packagePage";
 	}
 	
@@ -65,6 +77,7 @@ public class PackageController {
 
 		if("add".equals(mode)) {
 			packageElementDTO.setPackageElementID(null);
+			packageElementDTO.setIsProtected(false);
 			packageElementService.save(packageElementDTOtoPackageElement.convert(packageElementDTO));
 		} else {
 			packageElementService.edit(packageElementDTO.getPackageElementID(), packageElementDTOtoPackageElement.convert(packageElementDTO));
@@ -86,13 +99,25 @@ public class PackageController {
 	
 	@RequestMapping(value = {"/deletePackageElement/{id}"}, method = RequestMethod.GET)
 	public String deletePackageElement(@PathVariable String id) {
-		packageElementService.delete(Long.parseLong(id));
+		try {
+			packageElementService.delete(Long.parseLong(id));
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
+		}
 		return "redirect:/packageList";
 	}
 	
 	@RequestMapping(value = {"/deletePackage/{id}"}, method = RequestMethod.GET)
 	public String deletePackage(@PathVariable String id) {
-		packageService.delete(Long.parseLong(id));
+		try {
+			packageService.delete(Long.parseLong(id));
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
+		}
 		return "redirect:/packageList";
 	}
 }

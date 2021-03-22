@@ -7,12 +7,17 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import training.enumerations.TrainingStatusEnum;
 
 @Entity(name = "Training")
 public class Training {
@@ -27,7 +32,7 @@ public class Training {
 	@Column(name="NumberOfTrainings")
 	private int numberOfTrainings;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "trainingList")
 	private Client client;
 	
@@ -37,6 +42,50 @@ public class Training {
     @OneToMany(mappedBy = "trainingRound", cascade = CascadeType.ALL)
 	private List<Round> rounds = new ArrayList<Round>();
 	
+    @Enumerated(EnumType.STRING)
+    private TrainingStatusEnum status = TrainingStatusEnum.DONE;
+    
+    @ManyToOne()
+    private Operator trainingCreator;
+    
+    @ManyToOne()
+    private Operator trainingExecutor;
+    
+    @Column(name="circularYN")
+    private Boolean circularYN;
+    
+	public Boolean isCircularYN() {
+		return circularYN;
+	}
+
+	public void setCircularYN(Boolean circularYN) {
+		this.circularYN = circularYN;
+	}
+
+	public Operator getTrainingCreator() {
+		return trainingCreator;
+	}
+
+	public void setTrainingCreator(Operator trainingCreator) {
+		this.trainingCreator = trainingCreator;
+	}
+
+	public Operator getTrainingExecutor() {
+		return trainingExecutor;
+	}
+
+	public void setTrainingExecutor(Operator trainingExecutor) {
+		this.trainingExecutor = trainingExecutor;
+	}
+
+	public TrainingStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(TrainingStatusEnum status) {
+		this.status = status;
+	}
+
 	public Long getId() {
 		return id;
 	}

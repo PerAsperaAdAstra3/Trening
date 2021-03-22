@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,10 +26,6 @@ public class ExerciseGroup {
 
 	@OneToMany(mappedBy = "exerciseGroup")
 	private List<Exercise> exercises = new ArrayList<Exercise>();
-		
-	@ManyToOne
-	@JoinTable(name = "task")
-	private Task task;
 	
 	public Long getId() {
 		return id;

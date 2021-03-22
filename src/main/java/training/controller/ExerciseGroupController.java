@@ -3,6 +3,8 @@ package training.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import training.dto.ExerciseDTO;
 import training.dto.ExerciseGroupDTO;
 import training.model.ExerciseGroup;
 import training.service.ExerciseGroupService;
+import training.util.LoggingUtil;
 
 @Controller
 public class ExerciseGroupController {
@@ -38,24 +41,44 @@ public class ExerciseGroupController {
 	@Autowired
 	private ExerciseToExerciseDTO exerciseToExerciseDTO;
 	
+	Logger logger = LoggerFactory.getLogger(ExerciseGroupController.class);
+	
 	@RequestMapping(value = {"/exerciseGroupList"}, method = RequestMethod.GET)
 	public String listAll(Model model) {
 		model.addAttribute("exerciseGroupDTO", new ExerciseGroupDTO());
 		model.addAttribute("exerciseGroupDTOSearch", new ExerciseGroupDTO());
 		model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
+		model.addAttribute("pageTitle", "Grupe vežbi:");
 		return "exerciseGroup";
 	}
 	
 	@RequestMapping(value = {"/deleteExerciseGroup/{id}"}, method = RequestMethod.GET)
 	public String delete(@PathVariable String id){
-		exerciseGroupService.delete(Long.parseLong(id));
+		try {
+			exerciseGroupService.delete(Long.parseLong(id));
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
+		}
 		return "redirect:/exerciseGroupList";
 	}
 
 	@RequestMapping(value = {"/filterExcerInGroup/{id}"}, method = RequestMethod.GET)
 	public String filterExcerInGroup(Model model, @PathVariable String id){
 		List<ExerciseGroup> exerciseList = new ArrayList<ExerciseGroup>();
-		ExerciseGroup exerciseGroup = exerciseGroupService.findOne(Long.parseLong(id));
+		ExerciseGroup exerciseGroup = new ExerciseGroup();
+		try {
+			exerciseGroup = exerciseGroupService.findOne(Long.parseLong(id));
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
+		}
 		exerciseList.add(exerciseGroup);
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());

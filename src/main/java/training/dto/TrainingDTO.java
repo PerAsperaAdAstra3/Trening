@@ -1,5 +1,8 @@
 package training.dto;
 
+import training.enumerations.TrainingStatusEnum;
+import training.model.Operator;
+
 public class TrainingDTO {
 
 	private Long id;
@@ -13,6 +16,38 @@ public class TrainingDTO {
 	private String clientFamilyName;
 
 	private String clientId;
+	
+	private TrainingStatusEnum status;
+
+    private Operator trainingCreator;
+
+    private Operator trainingExecutor;
+    
+    private Boolean circularYN;
+    
+	public Boolean isCircularYN() {
+		return circularYN;
+	}
+
+	public void setCircularYN(Boolean circularYN) {
+		this.circularYN = circularYN;
+	}
+
+	public Operator getTrainingCreator() {
+		return trainingCreator;
+	}
+
+	public void setTrainingCreator(Operator trainingCreator) {
+		this.trainingCreator = trainingCreator;
+	}
+
+	public Operator getTrainingExecutor() {
+		return trainingExecutor;
+	}
+
+	public void setTrainingExecutor(Operator trainingExecutor) {
+		this.trainingExecutor = trainingExecutor;
+	}
 
 	public String getClientFamilyName() {
 		return clientFamilyName;
@@ -60,6 +95,14 @@ public class TrainingDTO {
 
 	public void setClient(String client) {
 		this.client = client;
+	}
+
+	public TrainingStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(TrainingStatusEnum status) {
+		this.status = status;
 	}
 
 	public TrainingDTO() {}

@@ -25,6 +25,7 @@ public class PackageElementDTOtoPackageElement implements Converter<PackageEleme
 		packageElement.setPackageElementID(source.getPackageElementID());
 		packageElement.setPackageElementName(source.getPackageElementName());
 		packageElement.setDescription(source.getDescription());
+		packageElement.setIsProtected(source.isIsProtected());
 		return packageElement;
 	}
 

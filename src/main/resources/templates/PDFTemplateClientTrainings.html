@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8"/>
+<title>Insert title here</title>
+</head>
+<body>
+<table style="width:100%">
+	<tr>
+		<td align="left"></td>
+		<td align="center"> Izveštaj o treninzima klijenta za odabrani interval </td>
+		<td align="right"></td>
+	</tr>
+	<tr>
+		<td align="left"><p th:text="'Klijent : ' + ${name}" /></td>
+		<td align="center"><p th:text="'Od datuma : '+ ${startDate}" /></td>
+		<td align="right"><p th:text="'do datuma : ' + ${endDate}" /></td>
+	</tr>
+</table>
+<br/>
+<br/>
+<br/>
+
+<table class="tableX" style="width:100%">
+	<thead>
+		<tr>
+			<th align="center"></th>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td>
+			<table style="width:100%">
+				<tr>
+					<td class="tdX" width="40%" align="left">Svi treninzi u datom intervalu :</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr th:each="training : ${listOfTrainings}">
+		<td width="40%" align="left" th:utext="${training}"></td>
+	</tr>
+	<tr>
+		<td>
+			<table style="width:100%">
+				<tr>
+					<td class="tdX" width="40%" align="left"><p th:text="'Ukupan broj treninga : ' + ${numberOfTrainings}" /></td>
+				</tr>
+				<tr>
+					<td class="tdX" width="40%" align="left"><p th:text="'Ukupna cena treninga : ' + ${trainingPrice}" /></td>
+				</tr>
+				<tr>
+					<td class="tdX" width="40%" align="left"><p th:text="'Cena po treningu : ' + ${oneTrainingPrice}" /></td>
+				</tr>
+				<tr>
+					<td class="tdX" width="40%" align="left"><p th:text="'Broj bonus treninga : ' + ${numberOfBonusTrainings}" /></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	</tbody>
+</table>
+</body>
+</html>

@@ -2,9 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<script src="scripts/jquery-3.2.1.min.js"></script>
-<script src="scripts/functions.js"></script>
-<script src="scripts/filterTable.js"></script>
+<script src="../../scripts/jquery-3.2.1.min.js"></script>
+<script src="../../scripts/bootstrap.min.js"></script>
+<script src="../../scripts/functions.js"></script>
+<script src="../../scripts/filterTable.js"></script>
+<script src="../../scripts/filterPackageTable.js"></script>
+<script src="../../scripts/ajaxFunctions.js"></script>
 <meta charset="utf-8"/>
 	<title>Klijenti</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -12,6 +15,10 @@
 <script>
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow(this)
+	});
+	
+	$(document).ready(function(){
+		setMaxDate();
 	});
 	
 	$(document).on("click", "#search", function(event) {
@@ -37,17 +44,34 @@
 	    $("#phoneNumber").val(phoneNumber);
 	    $("#email").val(email);
 	}
+
+function setMaxDate(){
+
+	intervalEndDate.max = new Date().toISOString().split("T")[0];
 	
+	intervalStartDate.max = new Date().toISOString().split("T")[0];
+}
+	
+$(document).on("click", "#intervalSelect", function(event) {
+	
+    var clientTableRow = $('#clientTable').find(".highlighted");
+	var highlightedClientID = $(clientTableRow).find(".clientId").text();
+
+	var intervalStartDate = $("#intervalStartDate").val();
+	var intervalEndDate = $("#intervalEndDate").val();
+	var trainingPrice = $("#trainingPrice").val();
+	var bonusTraining = $("#bonusTraining").val();
+	$("#modalVaitMessage").show();
+	clientTrainingsReport(intervalStartDate, intervalEndDate, highlightedClientID, trainingPrice, bonusTraining)
+});
+
+$(document).on("click", "#hideModal", function(event) {
+	$("#modalVaitMessage").hide();
+});
 	</script>
 </head>
 <body class="gradient">
-	<div class="alert div1" role="alert">
-	
 		<div th:include="fragments/header :: header"></div>
-		
-		<h1 align="center">Klijenti u sistemu</h1>
-		
-	</div>
 <br/>
 <div style="width:100%" class="form-group row">
 <div style="width:50%" class="panel col-xs-2">
@@ -96,7 +120,7 @@
 </div>
 <br/>
 <div class="panel">
-<form method="POST">
+<form>
 <div style="padding-left:3em">
 	<p><b> Filtriranje: </b></p>
 		<input type="text" id="inputFilterName" onkeyup="filterTable(0,1)" placeholder="Filtriranje po nazivu.."/>
@@ -136,11 +160,60 @@
 				<a th:href="@{/trainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj trening</button></a></td>
 			<td>
 				<a th:href="@{/circularTrainingCreationHandler/{clientId}(clientId=${client.id})}"><button type="button" class="btn btn-secondary">Dodaj kružni trening</button></a></td>
-			<td sec:authorize="hasAuthority('RECEPCIJA') or hasAuthority('ADMIN')">
+			<td sec:authorize="hasAuthority('RECEPCIJA') or hasAuthority('ADMIN') or hasAuthority('SUPERUSER')">
 				<a th:href="@{/clientManagement/{id}(id=${client.id})}"><button type="button" class="btn btn-secondary">Paketi klijenta</button></a></td>
+			<td><button id="modalButtonIzvestaj" type="button" class="btn btn-success reportButton" data-toggle="modal" data-target="#dateIntervalPickerModal">Izveštaj</button></td>
 		</tr>
 	</tbody>
 </table>
+
+<div id="dateIntervalPickerModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+	<div class="modal-content">
+		<div class="modal-body">
+			<div class="container-responsive">
+			<h4 align="center" class="modal-title">Interval koji izveštaj obuhvata : </h4>
+			<table  id = "myTableExercises">
+				<thead>
+				</thead>
+				<tbody>
+					<tr class="modal-table-coloring" id="tr-entity-list-modal">
+						<td><label class="label-width" for="trainingDate">Datum:</label></td>
+						<td><input type="date" placeholder="dd/mm/yyyy" id="intervalStartDate" class="form-control"/></td>
+						<td><input type="date" id="intervalEndDate" class="form-control"/></td>
+					</tr>
+					<tr><td>Cena treninga : </td><td><input type="number" id="trainingPrice" class="form-control" min="1" max="50000"/></td></tr>
+					<tr><td>Broj bonus treninga : </td><td><input type="number" id="bonusTraining" class="form-control" min="0" max="50000"/></td></tr>
+					<tr>
+					<td><button type="button" id="intervalSelect" class="btn btn-default" data-dismiss="modal">Izaberi</button><button type="button" class="btn btn-default left-spacing-nbsp" data-dismiss="modal">Zatvori</button></td></tr>
+				</tbody>
+			</table>
+	    </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modalVaitMessage" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:300px;">
+
+    <!-- Modal content-->
+<div class="modal-content">
+	<div class="modal-header">
+    </div>
+<div class="modal-body">
+
+<div class="container-responsive">
+<h4 align="center" class="modal-title">Proces štampanja pokrenut!</h4>
+	<br/><br/>
+	<div align="center"><button id="hideModal" type="button" class="btn btn-success" data-dismiss="modal">Zatvori</button></div>
+	
+</div>
+      </div>
+    </div>
+  </div>
+</div>	
+
 </form>
 <br/>
 </div>

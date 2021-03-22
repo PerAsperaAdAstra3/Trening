@@ -5,9 +5,11 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import training.emailService.MailService;
 import training.model.Operator;
 import training.service.OperatorService;
 
@@ -18,6 +20,12 @@ public class CheckAdminUtil {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
+	
+	@Autowired 
+	Environment environment;
+	
+	@Autowired
+	private MailService mailService;
 	
 	@PostConstruct
 	public void checkAdming() throws Exception {
@@ -32,10 +40,14 @@ public class CheckAdminUtil {
 		}
 		if(!isThereAdmin) {
 			Operator operatorx = new Operator();
-			operatorx.setUserName("ADMIN");
-			operatorx.setPassword(passwordEncoder.encode("ADMIN"));
+			String newPassword = PasswordGenUtil.alphaNumericString(10);
+			operatorx.setUserName(PasswordGenUtil.alphaNumericString(10)); //TODO Should this be random?
+			operatorx.setPassword(passwordEncoder.encode(newPassword));
 			operatorx.setAuthorities("ADMIN");
+			operatorx.setEmail(this.environment.getProperty("business.mail"));
 			operatorService.save(operatorx);
+			
+			mailService.sendEmail(operatorx, newPassword);
 		}
 	}
 }

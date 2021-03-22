@@ -59,6 +59,6 @@ public class ExerciseInRoundController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
 	public ResponseEntity<ExerciseInRoundDTO> edit(@PathVariable Long id, ExerciseInRound exerciseInRound){
 			ExerciseInRound exerciseInRoundOld = exerciseInRoundService.edit(id, exerciseInRound);
-			return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(exerciseInRoundOld), HttpStatus.OK );
+			return new ResponseEntity<>(exerciseInRoundToExerciseInRoundDTO.convert(exerciseInRoundOld), HttpStatus.OK);
 	}
 }

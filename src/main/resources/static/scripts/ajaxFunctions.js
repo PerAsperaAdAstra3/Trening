@@ -1,3 +1,226 @@
+var COLOR_GREEN = 'rgb(192, 248, 185)';
+	
+var COLOR_YELLOW = 'rgb(239, 244, 138)';
+
+var COLOR_GREEN_HEX = '#c0f8b9';
+
+var COLOR_YELLOW_HEX = '#eff48a';
+
+var COLOR_RED_HEX = '#ff8080';
+
+var COLOR_GRAY_HEX = '#bfc0bf';
+
+function openPDFFolder(){
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/openPDFFolder",
+		data: JSON.stringify(),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom !')
+		}
+	})
+}
+
+function openLogFileLocation(){
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/openLogFile",
+		data: JSON.stringify(),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom !')
+		}
+	})
+}
+
+function trainerTrainingsReportPrint(name, startDate, endDate, listOfTrainings, numberOfTrainings){
+	var trainerTrainingReportDTO = {}
+	
+	clientTrainingReportDTO["highlightedTrainingId"] = name;
+	clientTrainingReportDTO["startDate"] = startDate;
+	clientTrainingReportDTO["endDate"] = endDate;
+	clientTrainingReportDTO["trainingPrice"] = listOfTrainings;
+	clientTrainingReportDTO["trainingPrice"] = numberOfTrainings;
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/trainerTrainingsReportPrint",
+		data: JSON.stringify(TrainerTrainingReportDataDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			$("#modalVaitMessage").hide();
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom !')
+		}
+	})
+}
+
+function trainerTrainingsReport(intervalStartDate, intervalEndDate, highlightedTrainingId, trainingPrice){
+	var clientTrainingReportDTO = {}
+	
+	clientTrainingReportDTO["highlightedTrainingId"] = highlightedTrainingId;
+	clientTrainingReportDTO["startDate"] = intervalStartDate;
+	clientTrainingReportDTO["endDate"] = intervalEndDate;
+	clientTrainingReportDTO["trainingPrice"] = trainingPrice;
+
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/trainerTrainingsReport",
+		data: JSON.stringify(clientTrainingReportDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			//alert(data.successMessage)
+			$("#modalVaitMessage").hide();
+			$(".modal-title").text(data.successMessage);
+			$("#modalVaitMessage").show();
+			setTimeout(function() { $("#modalVaitMessage").show(); $("#modalVaitMessage").hide(); }, 8000);
+			if(data.numberOfTrainings != "0"){
+				trainerTrainingsReportPrint(data.name, data.startDate, data.endDate, data.listOfTrainings, data.numberOfTrainings)
+			}
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom !')
+		}
+	})
+}
+
+function clientTrainingsReportPrint(name, startDate, endDate, trainingPrice, listOfTrainings, numberOfTrainings, oneTrainingPrice, numberOfBonusTrainings){
+	var clientTrainingReportDataDTO = {}
+	console.log(listOfTrainings);
+	console.log(name);
+	console.log(startDate);
+	clientTrainingReportDataDTO["name"] = name;
+	clientTrainingReportDataDTO["startDate"] = startDate;
+	clientTrainingReportDataDTO["endDate"] = endDate;
+	clientTrainingReportDataDTO["trainingPrice"] = trainingPrice;
+	clientTrainingReportDataDTO["listOfTrainings"] = listOfTrainings;
+	clientTrainingReportDataDTO["numberOfTrainings"] = numberOfTrainings;
+	clientTrainingReportDataDTO["oneTrainingPrice"] = oneTrainingPrice;
+	clientTrainingReportDataDTO["numberOfBonusTrainings"] = numberOfBonusTrainings;
+	
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/clientTrainingsReportPrint",
+		data: JSON.stringify(clientTrainingReportDataDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			$("#modalVaitMessage").hide();
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom štampanja PDF-a!')
+		}
+	})
+}
+
+function clientTrainingsReport(intervalStartDate, intervalEndDate, highlightedClientID, trainingPrice, bonusTraining){
+	var clientTrainingReportDTO = {}
+	
+	clientTrainingReportDTO["highlightedClientId"] = highlightedClientID;
+	clientTrainingReportDTO["startDate"] = intervalStartDate;
+	clientTrainingReportDTO["endDate"] = intervalEndDate;
+	clientTrainingReportDTO["trainingPrice"] = trainingPrice;
+	clientTrainingReportDTO["bonusTraining"] = bonusTraining;
+	$.ajax({
+		type: "POST",
+		contentType: "application/json",
+		url:	"/clientTrainingsReport",
+		data: JSON.stringify(clientTrainingReportDTO),
+		dataType: 'json',
+		cache: false,
+		timeout: 600000,
+		success: function (data){
+			$("#modalVaitMessage").hide();
+			$(".modal-title").text(data.successMessage);
+			$("#modalVaitMessage").show();
+			setTimeout(function() { $("#modalVaitMessage").show(); $("#modalVaitMessage").hide(); }, 8000);
+			if(data.numberOfTrainings != "0"){
+				clientTrainingsReportPrint(data.name, data.startDate, data.endDate, data.trainingPrice, data.listOfTrainings, data.numberOfTrainings, data.oneTrainingPrice, data.numberOfBonusTrainings)
+			}
+		},
+		error: function (e) {
+			alert('Desila se greska prilikom štampanja PDF-a!')
+		}
+	})
+}
+
+function deletePackageElement(packageId){
+		var packageElementDTO = {}
+		
+		packageElementDTO["packageElementID"] = packageId;
+		
+		$.ajax({
+			type: "POST",
+			contentType: "application/json",
+			url:	"/deletePackageElementRest",
+			data: JSON.stringify(packageElementDTO),
+			dataType: 'json',
+			cache: false,
+			timeout: 600000,
+			success: function (data){
+
+			},
+			error: function (e) {
+				alert('Desila se greska prilikom brisanja elementa paketa!')
+			}
+		})
+	}
+
+
+function addPackageElement(name, description, isProtected){
+
+		var packageDTO = {}
+		
+		packageDTO["packageElementName"] = name;
+		packageDTO["description"] = description;
+		packageDTO["isProtected"] = isProtected;
+		
+		$.ajax({
+			type: "POST",
+			contentType: "application/json",
+			url:	"/addNewPackageElement",
+			data: JSON.stringify(packageDTO),
+			dataType: 'json',
+			cache: false,
+			timeout: 600000,
+			success: function (data){
+				$(".trPE").removeClass("highlighted");
+				$('#packageElementBody').append('<tr id="tr-entity-listPE" class="trPE highlighted">'+
+						'<td class="packageElementName tdPE">'+ data["elementName"] +'</td>'+
+						'<td class="packageElementDescription tdPE">'+ data["elementDescriptions"] +'</td>'+
+						'<td scope="row" class="packageElementId" style="display:none;">'+ data["elementID"] +'</td>'+
+						'<td scope="row" class="packageElementPackageId" style="display:none;">'+ data["packageElementAJAX"]["packageId"] +'</td>'+
+						'<td><button type="button" class="btn btn-danger deletePackageElement">Briši</button></td>'+
+						'<td><button id="modal_button" type="button" class="btn btn-success" data-toggle="modal" data-target="#packagePageModal">Dodaj u paket</button></td></tr>');
+			},
+			error: function (e) {
+				alert('Desila se greska prilikom rešavanja problema zaboravljene lozinke!')
+			}
+		})
+	}
+
 function forgotEmail(emailAddress){
 //send password with email
 	var operatorDTO = {}
@@ -39,15 +262,15 @@ function changeClientPackageStatus(row){
 			var payed = $(row).find(".payedTable").prop("checked");
 			if(state == 'Aktivan'){	
 				if(payed){
-					$(row).css('background-color', '#c0f8b9');
+					$(row).css('background-color', COLOR_GREEN_HEX);
 				} else {
-					$(row).css('background-color', '#eff48a');
+					$(row).css('background-color', COLOR_YELLOW_HEX);
 				}
 			} else {
 				if(payed){
-					$(row).css('background-color', '#bfc0bf');
+					$(row).css('background-color', COLOR_GRAY_HEX);
 				} else {
-					$(row).css('background-color', '#ff8080');
+					$(row).css('background-color', COLOR_RED_HEX);
 				}
 			}
 
@@ -120,15 +343,15 @@ function useClientPackageElement(row){
 
 						if(state == 'Aktivan'){	
 							if(payed){
-								$(this).parent().css('background-color', '#c0f8b9');
+								$(this).parent().css('background-color', COLOR_GREEN_HEX);
 							} else {
-								$(this).parent().css('background-color', '#eff48a');
+								$(this).parent().css('background-color', COLOR_YELLOW_HEX);
 							}
 						} else {
 							if(payed){
-								$(this).parent().css('background-color', '#bfc0bf');
+								$(this).parent().css('background-color', COLOR_GRAY_HEX);
 							} else {
-								$(this).parent().css('background-color', '#ff8080');
+								$(this).parent().css('background-color', COLOR_RED_HEX);
 							}
 						}
 					}
@@ -143,14 +366,15 @@ function useClientPackageElement(row){
 	})
 }
 
-function ajaxAddPackageToClient(packageId, packagePrice){
-	import { COLOR_GREEN, COLOR_YELLOW } from 'constants';
+function ajaxAddPackageToClient(packageId, packagePrice, packageName){
+
 //Add package to client
 	var clientPackageDTO = {}
 	clientPackageDTO["clientId"] = $("#clientId").val();
 	clientPackageDTO["packageId"] = packageId;
 	clientPackageDTO["payed"] = $(".payed").prop("checked");
 	clientPackageDTO["priceOfClientPackage"] = packagePrice;
+	clientPackageDTO["nameOfPackage"] = packageName;
 	
 	$.ajax({
 		type: "POST",
@@ -171,11 +395,10 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 			}
 			var state = data["clientPackageJSON"]["clientPackageActive"]
 			var payed = data["clientPackageJSON"]["payed"];
-				
 			if(payed == "true"){
 				colorVar = '"background-color: '+ COLOR_GREEN +';"'
 			} else {
-				colorVar = '"background-color: rgb(239, 244, 138);"'
+				colorVar = '"background-color: '+ COLOR_YELLOW +';"'
 			}
 			
 			var rowCountClientPackage = $('#clientPackageBody tr').length;
@@ -183,12 +406,12 @@ function ajaxAddPackageToClient(packageId, packagePrice){
 			if(rowCountClientPackage == 0){
 				$('#clientPackageBody').append('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +
 						'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +
-						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +
+						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td style="width:15%;" class="packagePurchaseDate">'+ data["clientPackageJSON"]["purchaseDate"] +
 						'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
 			} else {
 				$('#clientPackageBody tr:nth-child(1)').before('<tr class="tr-entity-listAllClientPackages" style=' + colorVar + '><td style="width:15%;" class="packageName">'+ data["clientPackageJSON"]["nameOfPackage"] +
 						'</td><td style="width:15%;" class="packageStatus">'+ data["clientPackageJSON"]["clientPackageActive"] +
-						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +
+						'</td><td><input type="checkbox" name="payedTable" class="payedTable" '+ checkedVarChar +'/></td><td style="width:15%;" class="packagePrice">'+ data["clientPackageJSON"]["priceOfClientPackage"] +'</td><td style="width:15%;" class="packagePurchaseDate">'+ data["clientPackageJSON"]["purchaseDate"] +
 						'</td><td scope="row" class="clientPackageId" style="display:none;">'+ data["clientPackageJSON"]["id"] +'</td><td><button type="button" class="btn btn-danger deleteClientPackage">Briši</button></td></tr>');
 			}
 					
@@ -271,7 +494,7 @@ function packageAddPackageElementNumber(packageElementId){
 			if(data.modOfOperation == "add"){
 				$("#elementsInPackagesTable tr:last").after('<tr id="tr-entity-list" class="trow"><td class="packElName">'+ data.packElName +'</td><td class="packElDescription">'+ data.packElDescription +
 						'</td><td><input type="number" class="packElNumber" name="quantity" min="1" max="99" value="' + data.elementsInPackagesNumber + '"/></td><td scope="row" class="packElId" style="display:none;">'+ data.packElId  +
-						'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td></tr>');
+						'</td><td scope="row" class="packElpackageId" style="display:none;">'+ data.packElpackageId +'</td><td scope="row" class="elemInPackagesId" style="display:none;">'+ data.elemInPackagesId +'</td><td><button type="button" class="btn btn-danger buttonDelete">Briši</button></td></tr>');
 			} else {
 				$("#tr-entity-list .elemInPackagesId").each(function(){
 					if($(this).html() == data.elemInPackagesId){
@@ -336,13 +559,50 @@ function ajaxAddMultipleExerciseInRound(attrList , attr, highlightedRoundID){
 		success: function (data){
 			//TODO Transform in to standard AJAX success handling - remove code related to this current solution.
 			
-			var isItCircular = $('#circularYN').val()
+
+
+			if(data["circularYN"] != "yes"){
+				if(data["roundIds"] != null){
+				console.log(data["sizeDifference"])
+				console.log(data["roundSecNumber"])
+				for(i = data["roundIds"].length - data["sizeDifference"]; i <= data["roundIds"].length - 1; i++){
+			
+				$("#roundsTable tr:last").after('<tr id="round-id-sync" class="highlighted"><td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber">'+ data["roundSecNumber"][i] +
+						'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data["roundIds"][i] +'</td><td><button id="roundDeleteButton" type="button" class="btn btn-danger">Briši</button></td></tr>');
+				selectRoundIdOnRowClick($(".highlighted"));
+				}
+				}
+			}
+			var idTraining = $(".idTraining").val();
+			if(data["exerciseInRoundJSON"] != null){
+				for(i = 0; i <= data["exerciseInRoundJSON"].length - 1; i++){ 
+					$("#exercisesInRoundTable tr:last").after('<tr class="hidden_input tr-entity-list" id="tr-entity-list"><td class="exerciseName">'+ data["exerciseInRoundJSON"][i]["exerciseInRoundExerciseName"] +'</td><td class="exerciseInRoundId" style="display:none;">'+ data["exerciseInRoundJSON"][i]["id"] +
+			    			'</td><td class="numberOfRepetitions">'+ data["exerciseInRoundJSON"][i]["numberOfRepetitions"]  +'</td><td class="difficulty">'+ data["exerciseInRoundJSON"][i]["difficulty"] +'</td><td class="note">'+ data["exerciseInRoundJSON"][i]["note"] +
+			    			'</td><td class="roundId" style="display:none;">'+ data["exerciseInRoundJSON"][i]["roundId"] +'</td><td class="exerciseExecId" style="display:none;">' + data["exerciseInRoundJSON"][i]["exerciseInRoundExerciseId"] + '</td><td><button id="deleteExerciseInRound" type="button" class="btn btn-danger">Briši</button></td></tr>');
+					$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
+				}
+			} else {
+				$("#exercisesInRoundTable tr:last").after('<tr class="hidden_input tr-entity-list" id="tr-entity-list"><td class="exerciseName">'+ data["exercInRound"]["exerciseInRoundExerciseName"] +'</td><td class="exerciseInRoundId" style="display:none;">'+ data["exercInRound"]["id"] +
+		    			'</td><td class="numberOfRepetitions">'+ data["exercInRound"]["numberOfRepetitions"]  +'</td><td class="difficulty">'+ data["exercInRound"]["difficulty"] +'</td><td class="note">'+ data["exercInRound"]["note"] +
+		    			'</td><td class="roundId" style="display:none;">'+ data["exercInRound"]["roundId"] +'</td><td class="exerciseExecId" style="display:none;">' + data["exercInRound"]["exerciseInRoundExerciseId"] + '</td><td><button id="deleteExerciseInRound" type="button" class="btn btn-danger">Briši</button></td></tr>');
+				$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
+			}
+
+			$("#round-id-sync").parent().find(".highlighted").removeClass("highlighted");
+			$("#round-id-sync").removeClass("highlighted");
+		//	}
+		/*	var isItCircular = $('#circularYN').val()
 
 			if(isItCircular){
 				$('#callGetTrainingCircular')[0].click();
 			} else {
-				$('#callGetTraining')[0].click();
-			}
+				$('#callGetTraining')[0].click();*/
+			
+
+			$(".trainingChk").prop('checked', false);
+			
+			// Restpre cursor to normal
+			document.body.style.cursor  = 'default';
 		},
 		error: function (e) {
 			 var json = "<h4>Ajax Response</h4>";
@@ -381,7 +641,7 @@ function ajaxExerciseInRoundAddExercise(){
 		var idTraining = $(".idTraining").val();
 	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +
 	    		'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +
-	    		'</td><td class="roundId" style="display:none;">'+ data.roundId +'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+	    		'</td><td class="roundId" style="display:none;">'+ data.roundId +'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><button id="deleteExerciseInRound" type="button" class="btn btn-danger">Briši</button></td></tr>');
        	$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
 		$("#exerciseInRoundExerciseId").val(data.exerciseInRoundExerciseId);
 		},
@@ -448,9 +708,9 @@ function ajaxExerciseInRound(){
 	    $("#exercisesInRoundTable tr:last").after('<tr class="hidden_input" id="tr-entity-list"><td class="exerciseName">'+ data.exerciseInRoundExerciseName +
 	    		'</td><td class="exerciseInRoundId" style="display:none;">'+ data.exerciseExecId +'</td><td class="numberOfRepetitions">'+ data.exerciseInRoundNumberOfRepetitions  +
 	    		'</td><td class="difficulty">'+ data.exerciseInRoundDifficulty +'</td><td class="note">'+ data.exerciseInRoundNote +'</td><td class="roundId" style="display:none;">'+ data.roundId +
-	    		'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><a href="/deleteExerciseInRound/'+data.exerciseExecId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+	    		'</td><td class="exerciseExecId" style="display:none;">' + data.exerciseInRoundExerciseId + '</td><td><button id="deleteExerciseInRound" type="button" class="btn btn-danger">Briši</button></td></tr>');
        	$("#testTable tr:last").after('<tr><td>PreviTestElement</td><td>DrugiTestElement</td></tr>');
-			
+       	document.body.style.cursor  = 'default';
 		},
 		error: function (e) {
 			 var json = "<h4>Ajax Response</h4>";
@@ -514,7 +774,7 @@ function ajaxExerciseInRoundChange(){
 			if(difficultyTest != data.exerciseInRoundDifficulty){
 				tableRow.find(".difficulty").html(data.exerciseInRoundDifficulty);
 			}
-			
+			document.body.style.cursor  = 'default';
 		},
 		error: function (e) {
 			var json = "<h4>Ajax Response</h4>";
@@ -543,7 +803,7 @@ function ajaxAddRound(){
 					removeHighlights(this)
 				});
 		    $("#roundsTable tr:last").after('<tr id="round-id-sync" class="highlighted"><td id="roundRoundSequenceNumberId" class="roundRoundSequenceNumber">'+ data.roundRoundSequenceNumber +
-		    		'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><a href="/deleteRound/'+data.selectedRoundId+'/'+idTraining+'"><button type="button" class="btn btn-danger">Briši</button></a></td></tr>');
+		    		'</td><td id="roundIdDel" class="roundId" style="display:none;">'+ data.selectedRoundId +'</td><td><button id="roundDeleteButton" type="button" class="btn btn-danger">Briši</button></td></tr>');
 		    selectRoundIdOnRowClick($(".highlighted"));
 		},
 		error: function (e) {
@@ -575,9 +835,17 @@ function ajaxDeleteRound(roundId, thisObject){
 		timeout: 600000,
 		success: function (data){
 			thisObject.parent().parent().remove();
+			
+			$(".tr-entity-list").each(function() {
+				if ($(this).find(".roundId").text() == roundId)
+				{			
+					$(this).remove();
+				} else {
+				}
+			});
 		},
 		error: function (e) {
-			alert('Desila se greska prilikom brisanja kruga iz Ajax-a!')
+			//alert('Desila se greska prilikom brisanja kruga iz Ajax-a!')
 		}
 	})
 }
@@ -599,7 +867,7 @@ function ajaxDeleteExerciseInRound(roundId, thisObject){
 			thisObject.parent().parent().remove();
 		},
 		error: function (e) {
-			alert('Desila se greska prilikom brisanja vežbe u krugu!')
+		//	alert('Desila se greska prilikom brisanja vežbe u krugu!')
 		}
 	})
 }

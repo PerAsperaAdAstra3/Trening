@@ -20,7 +20,7 @@ public class JpaPackageElementService implements PackageElementService {
 	
 	@Override
 	public PackageElement findOne(Long id) {
-		return packageElementRepository.findOne(id);
+		return packageElementRepository.findById(id).get();
 	}
 
 	@Override
@@ -35,12 +35,12 @@ public class JpaPackageElementService implements PackageElementService {
 
 	@Override
 	public List<PackageElement> save(List<PackageElement> packageElements) {
-		return packageElementRepository.save(packageElements);
+		return packageElementRepository.saveAll(packageElements);
 	}
 
 	@Override
 	public PackageElement delete(Long id) {
-		PackageElement packageElement = packageElementRepository.findOne(id);
+		PackageElement packageElement = packageElementRepository.findById(id).get();
 		if(packageElement == null) {
 			throw new IllegalStateException("Package element does not exist!");
 		}
@@ -57,9 +57,10 @@ public class JpaPackageElementService implements PackageElementService {
 
 	@Override
 	public PackageElement edit(Long id, PackageElement packageElement) {
-		PackageElement oldPackageElement = packageElementRepository.findOne(id);
+		PackageElement oldPackageElement = packageElementRepository.findById(id).get();
 		oldPackageElement.setDescription(packageElement.getDescription());
 		oldPackageElement.setPackageElementName(packageElement.getPackageElementName());
+		oldPackageElement.setIsProtected(packageElement.isIsProtected());
 		packageElementRepository.save(oldPackageElement);
 		return null;
 	}

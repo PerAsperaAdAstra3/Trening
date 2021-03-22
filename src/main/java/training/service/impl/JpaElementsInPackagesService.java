@@ -22,7 +22,7 @@ public class JpaElementsInPackagesService implements ElementsInPackagesService {
 	
 	@Override
 	public ElementsInPackages findOne(Long id) {
-		return elementsInPackagesRepository.findOne(id);
+		return elementsInPackagesRepository.findById(id).get();
 	}
 
 	@Override
@@ -37,12 +37,12 @@ public class JpaElementsInPackagesService implements ElementsInPackagesService {
 
 	@Override
 	public List<ElementsInPackages> save(List<ElementsInPackages> elementsInPackages) {
-		return elementsInPackagesRepository.save(elementsInPackages);
+		return elementsInPackagesRepository.saveAll(elementsInPackages);
 	}
 
 	@Override
 	public ElementsInPackages delete(Long id) {
-		ElementsInPackages elementsInPackages = elementsInPackagesRepository.findOne(id);
+		ElementsInPackages elementsInPackages = elementsInPackagesRepository.findById(id).get();
 		if(elementsInPackages == null) {
 			throw new IllegalStateException("Client not found!");
 		}
@@ -60,7 +60,7 @@ public class JpaElementsInPackagesService implements ElementsInPackagesService {
 
 	@Override
 	public ElementsInPackages edit(Long id, ElementsInPackages elementsInPackages) {
-		ElementsInPackages oldElementsInPackages = elementsInPackagesRepository.findOne(id);
+		ElementsInPackages oldElementsInPackages = elementsInPackagesRepository.findById(id).get();
 		oldElementsInPackages.setPackageElementEIP(elementsInPackages.getPackageElementEIP());
 		oldElementsInPackages.setPackage(elementsInPackages.getPackage());
 		oldElementsInPackages.setNumber(elementsInPackages.getNumber());

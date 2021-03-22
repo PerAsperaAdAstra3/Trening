@@ -1,5 +1,7 @@
 package training.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import training.dto.ExerciseDTO;
 import training.model.ExerciseGroup;
 import training.service.ExerciseGroupService;
 import training.service.ExerciseService;
+import training.util.LoggingUtil;
 
 @Controller
 public class ExerciseController {
@@ -34,12 +37,14 @@ public class ExerciseController {
 	
 	@Autowired
 	private ExerciseService exerciseService;
+	
+	Logger logger = LoggerFactory.getLogger(ExerciseController.class);
 
 	@RequestMapping(value = {"/exerciseList/{hiddenExerciseGroupId}"}, method=RequestMethod.GET)
 	public String getExercises(Model model, @PathVariable String hiddenExerciseGroupId) {		
 		model.addAttribute("exerciseDTO", new ExerciseDTO());
 		model.addAttribute("exerciseDTOSearch", new ExerciseDTO());
-		
+		model.addAttribute("pageTitle", "Vežbe u sistemu : ");
 		if(hiddenExerciseGroupId.equals("-1")|| hiddenExerciseGroupId == null) {
 			model.addAttribute("hiddenExerciseGroupId", "-1");
 			model.addAttribute("exerciseGroups", exerciseGroupToExerciseGroupDTO.convert(exerciseGroupService.findAll()));
@@ -78,7 +83,15 @@ public class ExerciseController {
 
 	@RequestMapping(value = {"/deleteExercise/{id}/{hiddenExerciseGroupId}"}, method = RequestMethod.GET)
 	public String delete(Model model, @PathVariable String id, @PathVariable String hiddenExerciseGroupId){
-		exerciseService.delete(Long.parseLong(id));
+		try {
+			exerciseService.delete(Long.parseLong(id));
+		} catch (NumberFormatException numberFormatException) {
+			LoggingUtil.LoggingMethod(logger, numberFormatException);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			LoggingUtil.LoggingMethod(logger, illegalArgumentException);
+		} catch (Exception e) {
+			LoggingUtil.LoggingMethod(logger, e);
+		}
 		return "redirect:/exerciseList/"+hiddenExerciseGroupId;
 	}
 	 

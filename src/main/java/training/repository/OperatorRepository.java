@@ -16,4 +16,5 @@ public interface OperatorRepository extends JpaRepository<Operator, Long> {
 	Operator findOneByEmail(String email);
 	
 	List<Operator> findByEmail(String email);
+	List<Operator> findByAuthoritiesNot(String authorities);
 }

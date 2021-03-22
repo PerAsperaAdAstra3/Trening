@@ -9,6 +9,14 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>	
 <script>
+	$(document).ready(function(){
+		var selectPicker =  $(".selectpicker").val();
+		if (selectPicker == null){
+			document.getElementById("addExercise").disabled = true;
+			alert('Ni jedna grupa vežbi nije uneta u sistem, dodavanje nije moguće dok ni jedna grupa vežbi ne postoji u sistemu.')
+		}
+	});
+
 	$(document).on("click", "#tr-entity-list", function(event) {
 		highlightRow(this)
 	});
@@ -38,10 +46,7 @@
 </script>
 </head>
 <body class="gradient">
-<div class="alert div1" role="alert">
 	<div th:include="fragments/header :: header"></div>
-	<h1 align = "center">Vežbe u sistemu : </h1>
-</div>
 <br/>
 <h2>Dodavanje i izmena vežbe</h2>
 
@@ -73,7 +78,7 @@
 		</div>
 		<div class="form-group row">
 			<div class="col-xs-2">
-				<button type="submit" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
+				<button type="submit" id="addExercise" class="btn btn-success" name="mode" value="add">Dodaj novu</button>
 				<button id="editButton" type="submit" disabled="disabled" class="btn btn-success" name="mode" value="edit">Izmeni</button>
 				<button id="resetButton" type="reset" class="btn btn-success">Isčisti</button>
 			</div>
