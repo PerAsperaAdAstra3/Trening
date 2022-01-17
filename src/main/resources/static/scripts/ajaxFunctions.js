@@ -89,7 +89,6 @@ function trainerTrainingsReport(intervalStartDate, intervalEndDate, highlightedT
 		cache: false,
 		timeout: 600000,
 		success: function (data){
-			//alert(data.successMessage)
 			$("#modalVaitMessage").hide();
 			$(".modal-title").text(data.successMessage);
 			$("#modalVaitMessage").show();
@@ -590,18 +589,7 @@ function ajaxAddMultipleExerciseInRound(attrList , attr, highlightedRoundID){
 
 			$("#round-id-sync").parent().find(".highlighted").removeClass("highlighted");
 			$("#round-id-sync").removeClass("highlighted");
-		//	}
-		/*	var isItCircular = $('#circularYN').val()
-
-			if(isItCircular){
-				$('#callGetTrainingCircular')[0].click();
-			} else {
-				$('#callGetTraining')[0].click();*/
-			
-
 			$(".trainingChk").prop('checked', false);
-			
-			// Restpre cursor to normal
 			document.body.style.cursor  = 'default';
 		},
 		error: function (e) {
@@ -654,7 +642,7 @@ function ajaxExerciseInRoundAddExercise(){
 	
 }
 
-function ajaxExerciseInRoundFill(dinamicSelectExerciseId){
+function ajaxExerciseInRoundFill(dinamicSelectExerciseId, myDropdownVar){
 	
 	var exerciseInRound = {}
 	
@@ -673,6 +661,7 @@ function ajaxExerciseInRoundFill(dinamicSelectExerciseId){
 		    $("#exerciseInRoundNote").val(data.exerciseInRoundNote);
 		    $("#exerciseInRoundNumberOfRepetitions").val(data.exerciseInRoundNumberOfRepetitions);
 		    $("#exerciseInRoundDifficulty").val(data.exerciseInRoundDifficulty);
+		    $(myDropdownVar).toggle("show");
 		},
 		error: function (e) {
 			 var json = "<h4>Ajax Response</h4>";

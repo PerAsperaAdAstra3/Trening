@@ -6,6 +6,7 @@
 <script src="../../scripts/functions.js"></script>
 <script src="../../scripts/filterTable.js"></script>
 <script src="../../scripts/ajaxFunctions.js"></script>
+<script src="../../scripts/filterTrainingClients.js"></script>
 <meta charset="UTF-8"/>
 <title>Treninzi</title>
 <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
@@ -178,7 +179,12 @@ function sync1(item){
 	
 	<div class="container-responsive">
 	<form id="clientTrainingFolder" th:action="@{/clientTrainingSubmit}" method="POST">
-	     <table style="width:100%" id = "myTableExercisesX" class = "table table-responsive">
+	<div>
+		<p class="fontWeightBold"> Filtriranje:
+			<input type="text" id="inputFilterNameClients" class="roundedEdges" onkeyup="filterTableTrainingClients(0,9)" placeholder="Ime klijenta.."/>
+		</p>
+	</div>
+	     <table style="width:100%" id = "myTableExercisesX" class = "table tableMinWidth table-responsive">
 		<thead>
 			<tr>
 				<th align="center" scope="col">Klijenti :</th>
@@ -186,11 +192,11 @@ function sync1(item){
 				<th scope="col"></th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody class="trainingTbody">
 			<tr align="center" class="modal-table-coloringX floating-box trBox" id="tr-entity-list-modalX" th:each = "client : ${clients}">
 				<td class="clientSelectNameFamilinameFolder">
 							<a class="folderName" th:href="@{/clientTrainingSubmit/{id}/(id=${client.id})}"><img src="/images/folder-170A.png"/><br/>
-							<span align="bottom" th:utext="${client.name + ' ' + client.familyName}"/></a></td>	
+							<span class="spanClass" align="bottom" th:utext="${client.name + ' ' + client.familyName}"/></a></td>	
 				<td class="clientSelectNameFolder" th:utext="${client.name}" style="display:none;"></td>
 				<td class="clientSelectId" th:utext="${client.id}" style="display:none;"></td>
 			</tr>

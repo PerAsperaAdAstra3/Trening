@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -367,27 +368,40 @@ public class TrainingController {
 		
 	private List<Training> tablesShowingOldTrainingsClientObject(Client client, Training trainingAttr){
 		List<Training> trainingList = client.getTrainingList();
+		List<Training> trainingList1 = new ArrayList<Training>();
 		Training training = trainingAttr;
 		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
-		for(int ii = 0; ii < trainingList.size() ; ii++) {
-				if(trainingList.get(ii).getId() > training.getId()) {
-				trainingList.remove(ii);
+		int trainingListSize = trainingList.size();
+		for(int ii = 0; ii < trainingListSize ; ii++) {
+	
+			if(trainingList.get(ii).getNumberOfTrainings() <= training.getNumberOfTrainings()) {
+				trainingList1.add(trainingList.get(ii));
+			}
+		}
+
+		for(int kk = 0; kk < trainingList1.size(); kk++) {
+			for(int hh = kk; hh < trainingList1.size(); hh++) {
+				if(trainingList1.get(hh).getNumberOfTrainings() < trainingList1.get(kk).getNumberOfTrainings()) {
+					Training temp = trainingList1.get(kk);
+					trainingList1.set(kk, trainingList1.get(hh));
+					trainingList1.set(hh, temp);
+				}
 			}
 		}
 		
 		if(trainingAttr.getId() != null) {
-			trainingList.remove(trainingList.size() - 1);
+			trainingList1.remove(trainingList1.size() - 1);
 		}
 		List<Training> trainingListTest = new ArrayList<Training>();
-		
-		if (trainingList.size() >= 1) {
-			if(trainingList.size() <= 3) {
-				for (int i = 0; i < trainingList.size(); i++) {
-						trainingListTest.add(0, trainingList.get(i));
+		System.out.println("Ater removals "+trainingList1.size());
+		if (trainingList1.size() >= 1) {
+			if(trainingList1.size() <= 3) {
+				for (int i = 0; i < trainingList1.size(); i++) {
+						trainingListTest.add(0, trainingList1.get(i));
 				}
 			} else {
-				for (int i = trainingList.size() - 3; i < trainingList.size(); i++) {
-					trainingListTest.add(0, trainingList.get(i));
+				for (int i = trainingList1.size() - 3; i < trainingList1.size(); i++) {
+					trainingListTest.add(0, trainingList1.get(i));
 				}
 			}
 		}
