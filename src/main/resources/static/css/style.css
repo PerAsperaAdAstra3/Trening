@@ -268,8 +268,23 @@ table {
 	width: 98%;
 }
 
-.headerTD {
+.headerTable1 {
+	width: 98%;
+	height: 5%;
+}
+
+.headerTable2 {
+	width: 50%;
+	height: 5%;
+}
+
+.headerTD1 {
 	width: 33%;
+}
+
+.headerTD2 {
+	width: 33%;
+	padding-bottom: 5%;
 }
 
 hr {
@@ -277,4 +292,152 @@ hr {
 	border: none; 
 	height: 2px; 
 	background: black; 
+}
+
+.modal-content1 {
+	position: relative;
+  	display: -ms-flexbox;
+  	display: flex;
+  	-ms-flex-direction: column;
+  	flex-direction: column;
+  	width: 100%;
+  	pointer-events: auto;
+  
+   
+    height: 77%;
+    
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    outline: 0;
+}
+
+.modal-content2 {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.modal-footer1 {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: end;
+  witdth : 100%;
+  background-color: #fff;
+  justify-content: flex-end;
+  padding: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.modal-header1 {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+}
+
+.modal2__header {
+    height: 13%;
+    background-color: #fff;
+}
+.modal2__footer {
+	position: absolute;
+    height: 10%;
+    width: 100%;
+    bottom: 0;
+    background-color: #fff;
+}
+
+.modal2__content {
+    overflow-y: auto;
+}
+
+.modal1 {
+    display: none;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.selectExercises {
+	margin-top: 50px;
+	margin-left: 50px;
+}
+
+.selectExercises {
+	margin-top: 50px;
+	margin-right: 50px;
+}
+
+.modal.open {
+   display: block;
+}
+
+.modal__header,
+.modal__footer {
+    height: 100px;
+}
+.modal__content,
+.modal__footer {
+    position: absolute;
+    width: 100%;
+}
+.modal__content {
+    bottom: 100px;
+    top: 100px;
+    overflow-y: auto;
+}
+.modal__footer {
+    bottom: 0;
+}
+
+.close1 {
+  float: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .5;
+}
+
+.leftButton {
+  margin-top: 1%;
+  margin-left: 1%;
+}
+
+.rightButton {
+  margin-top: 1%;
+  margin-right: 1%;	
+}
+
+.tableMinWidth {
+  min-width : 100%;
+}
+
+.trainingTbody {
+  min-width : 100%;
+  max-width : 100%;
+  width : 100%;
+  display: table;
 }

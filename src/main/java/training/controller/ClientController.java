@@ -46,6 +46,7 @@ public class ClientController {
 	
 	@RequestMapping(value = { "/clientList" }, method = RequestMethod.GET)
 	public String getClients(Model model) {
+		logger.info("Opening client page, listing clients.");
 		model.addAttribute("clientDTOSearch", new ClientDTO());
 		model.addAttribute("clientDTO", new ClientDTO());
 		model.addAttribute("clients", clientToClientDTO.convert(clientService.findAll()));

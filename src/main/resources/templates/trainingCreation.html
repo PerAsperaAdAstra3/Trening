@@ -198,7 +198,7 @@ $(document).on("click", "#exercisesInRoundTable tr", function(event) {
 		id = $(this).find(".roundId").html()
 	   	if (id == roundId){
 	    	selectRoundIdOnRowClick(this)
-	    return false //break
+	    return false
 	    }
 	});
 });
@@ -255,9 +255,6 @@ $(document).on("click", "#selectExercises", function(event) {
 	// Turn cursor to "hourglass"
 	document.body.style.cursor  = 'wait';
 	
-	if($("#myDropdown").is(":visible") == true){
-		document.getElementById("myDropdown").classList.toggle("show");
-	}
 	disableExerciseInRoundEdit()
 });
 	
@@ -307,32 +304,46 @@ function enableAddRound(item) {
 	}
 }
 	
-	  /*<![CDATA[*/	
- 
+	
 function sortTable() {
-  var table, rows, switching, i, x, y, shouldSwitch;
-  table = ("#exercisesInRoundTable");
-  switching = true;
+	 
+	  var table, rows, switching, i, x, y, shouldSwitch;
+	  table = $("#exercisesInRoundTable");
+	  switching = true;
 
-  while (switching) {
-    switching = false;
-    rows = table.rows;
-    rows.each(function(){
+	  while (switching) {
+	    switching = false;
+	    rows = table[0].rows;
 
-      shouldSwitch = false;
-      x = $(this).find("td")[5];
-      y = $(this).next().find("td")[5];
-      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-        shouldSwitch = true;
-        return;//break;
-      }
-    });
-    if (shouldSwitch) {
-      $(this).parentNode.insertBefore($(this).next(), $(this));
-      switching = true;
-    }
-  }
-}
+		for (i = 1; i < (rows.length - 1); i++){
+		
+	   x = rows[i].children[5];
+
+		if(x != null){	      
+	      
+	      	shouldSwitch = false;	      
+	    	y = rows[i + 1].children[5];
+	 		console.log(x.innerHTML);
+	 		console.log(y.innerHTML);
+	      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+	    	  console.log("should switch");
+	    	  shouldSwitch = true;
+	        break;
+	      }
+	      }
+		};
+
+	    if (shouldSwitch) {
+	    	console.log("Before insertBefore");
+	    	console.log($(rows[i]));
+	        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+	    	console.log("After insertBefore");
+	      switching = true;
+	    }
+	  }
+	}
+	
+	  /*<![CDATA[*/	
 
 function filterFunction() {
     var input, filter, ul, li, a, i;
@@ -394,16 +405,17 @@ $(document).on("click", "#modal_button", function(event) {
 				el.style.backgroundColor = "yellow"
 			}
 		});
-	document.getElementById("myDropdown").classList.toggle("show");
 });
 	
 $(document).on("click" , ".filterExercises", function(event){
 	
 	var dinamicSelectExerciseId = $(this).find(".dinamicSelectExerciseId").html()
 	var dinamicSelectExerciseName = $(this).find(".dinamicSelectExerciseName").html()
-
-	ajaxExerciseInRoundFill(dinamicSelectExerciseId)
-		
+	var myDropdownVar = $("#myDropdown");
+	//alert(myDropdownVar)
+	console.log(myDropdownVar)
+	ajaxExerciseInRoundFill(dinamicSelectExerciseId, myDropdownVar)
+	
 	$("#exerciseInRoundExerciseName").val(dinamicSelectExerciseName);
 	$("#exerciseInRoundExerciseId").val(dinamicSelectExerciseId);
 		
@@ -427,10 +439,10 @@ $(document).on("click" , "#exerciseInRoundExerciseName", function(event){
 	
 $(document).on("change keyup paste", "#exerciseInRoundExerciseName", function(event) {
 	if($("#myDropdown").is(":visible") == false){
-		document.getElementById("myDropdown").classList.toggle("show");
+		$("#myDropdown").toggle("show");
 	} else {
-		if($("#exerciseInRoundExerciseName").val() == ""){		
-			document.getElementById("myDropdown").classList.toggle("show");
+		if($("#exerciseInRoundExerciseName").val() == ""){
+			$("#myDropdown").toggle("show");
 		}
 	}
 });
@@ -825,19 +837,39 @@ var statusChangedToDone = /*[[${statusChangedToDone}]]*/;
 <br/>
 
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg" >
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Vežbe</h4>
+<div id="myModal" class="modal" role="dialog">
+ <!-- <div class="modal-dialog modal-lg" >  -->
+      <div class="modal2__header">
+      
+      <table class="headerTable1">
+		<thead></thead>
+		<tbody>
+		<tr>
+			<td class="headerTD1"></td>
+			<td class="headerTD1"><h4 class="modal-title" align="center">Vežbe</h4></td>
+			<td class="headerTD1"><div style="float:right"><button type="button" style="float: center;" class="close1" data-dismiss="modal">&times;</button></div></td>
+		</tr>
+		</tbody>
+      </table>
+ <!--      <h4 class="modal-title" align="center">Vežbe</h4>
+      	<button type="button" class="close" data-dismiss="modal">&times;</button>
+      -->	
+		<table class="headerTable1">
+		<thead></thead>
+		<tbody>
+			<tr>
+    	    <td class="headerTD2"><input type="text" id="inputFilterByName" onkeyup="filterTable(2,5)" placeholder="Filtriranje po nazivu.."/></td>
+			<td class="headerTD2"><input type="text" id="inputFilterByDescription" onkeyup="filterTable(3,5)" placeholder="Filtriranje po opisu.."/></td>
+			<td class="headerTD2"><input type="text" id="inputFilterByGroup" onkeyup="filterTable(4,5)" placeholder="Filtriranje po grupi.."/></td>
+			</tr>
+			</tbody>
+		</table>
       </div>
+    <!-- Modal content-->
+    <div class="modal-content1 modal2__content">
+
 <div class="modal-body">
-<input type="text" id="inputFilterByName" onkeyup="filterTable(2,5)" placeholder="Filtriranje po nazivu.."/>
-<input type="text" id="inputFilterByDescription" onkeyup="filterTable(3,5)" placeholder="Filtriranje po opisu.."/>
-<input type="text" id="inputFilterByGroup" onkeyup="filterTable(4,5)" placeholder="Filtriranje po grupi.."/>
+
 <div class="container-responsive">
 	<table  id = "myTableExercises" class = "table table-responsive">
 		<thead>
@@ -862,19 +894,21 @@ var statusChangedToDone = /*[[${statusChangedToDone}]]*/;
 			</tr>
 		</tbody>
 	</table>
-	      	<button type="button" class="btn btn-default" id="selectExercises">Selektuj</button>
+	      	
 	</div>
 </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Zatvori</button>
-      </div>
+      
     </div>
-  </div>
+    <div class="modal2__footer">
+        <button type="button" style="float: left;" class="btn btn-default leftButton" id="selectExercises">Selektuj</button>
+        <button type="button" style="float: right;" class="btn btn-default rightButton" data-dismiss="modal" id="closeModal">Zatvori</button>
+      </div>
+<!--  </div>  -->    
 </div>
 
 <!-- Modal - Add Exercise -->
 <div id="myModalAdd" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg" >
+  <div class="modal-dialog modal-lg" > 
 
     <!-- Modal content-->
     <div class="modal-content">
@@ -923,7 +957,7 @@ var statusChangedToDone = /*[[${statusChangedToDone}]]*/;
       <div class="modal-footer">
       </div>
     </div>
-  </div>
+  </div> 
 </div>
 
 <br/>
